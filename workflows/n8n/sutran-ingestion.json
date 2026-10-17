@@ -26,7 +26,7 @@
       "position": [320, 200],
       "parameters": {
         "method": "POST",
-        "url": "<__PLACEHOLDER_VALUE__Deployed HTTPS backend URL ending in /api/jobs/sutran__>",
+        "url": "https://peruroad-api-git-feat-api-foundation-gozlie.vercel.app/api/jobs/sutran",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpTemplatedCustomAuth",
         "sendBody": true,
@@ -51,7 +51,8 @@
         }
       },
       "executeOnce": true,
-      "onError": "stopWorkflow"
+      "onError": "stopWorkflow",
+      "retryOnFail": false
     },
     {
       "id": "6415854e-8717-48e1-a4ea-4d03668974cc",
@@ -114,7 +115,7 @@
       "typeVersion": 1,
       "position": [0, -320],
       "parameters": {
-        "content": "## Deployment pending \u2014 keep unpublished\nSet the HTTPS /api/jobs/sutran URL and configure the PeruRoad ingestion job credential to send Authorization: Bearer <ROAD_DATA_JOB_SECRET>. Keep database credentials in the backend.\n\nThe backend validates and archives PE-22 alerts and history. Only HTTP 200 with status complete succeeds; partial ingestion fails visibly. No automatic POST retries.\n\nAfter setup, run Manual verification twice with fresh execution IDs, confirm Supabase audit rows, then publish. Workflow timezone: America/Lima; execution timeout: 150 seconds. Weather/risk and alert evaluation are separate pending work.",
+        "content": "## Deployed API \u2014 credential setup pending\nThe HTTPS /api/jobs/sutran URL is configured. Select the PeruRoad ingestion job credential, sending Authorization: Bearer <ROAD_DATA_JOB_SECRET>. Keep database credentials in the backend and job secrets only in the credential store.\n\nThe backend validates and archives PE-22 alerts and history. Only HTTP 200 with status complete succeeds; partial ingestion fails visibly. No automatic POST retries.\n\nRun Manual verification twice with fresh execution IDs, confirm Supabase audit rows, then publish. Workflow timezone: America/Lima; execution timeout: 150 seconds. Weather/risk and alert evaluation are separate pending work.",
         "color": 5,
         "width": 1200,
         "height": 300

@@ -10,10 +10,12 @@ An unpublished workflow is saved in the account's personal project:
 [PeruRoad — SUTRAN ingestion (10 minutes)](https://gozlie.app.n8n.cloud/workflow/67O2kAY8fPtWjD9K).
 The API is deployed at
 `https://peruroad-api-git-feat-api-foundation-gozlie.vercel.app/api/jobs/sutran`
-and has passed direct
-authenticated HTTP ingestion checks. The cloud draft's HTTPS URL and HTTP
-credential still need configuration; publishing and live scheduled execution
-remain pending. Weather ingestion, risk recalculation, incident promotion, alert
+and has passed direct authenticated HTTP ingestion checks. The cloud draft's
+HTTPS URL is configured and its graph validates; the HTTP credential still needs
+to be saved before real n8n execution and publication. The MCP connection can
+list and attach credentials but provides no credential-creation tool, so this
+one credential must be saved through n8n's UI. Weather ingestion, risk
+recalculation, incident promotion, alert
 evaluation, and the weekly report are separate pending integrations.
 
 - `sutran-ingestion.sdk.js`: source for n8n's Workflow SDK/MCP builder. It is
@@ -120,6 +122,10 @@ retry pending enrichment during a later execution.
    `{"headers":{"Authorization":"Bearer {{api_key}}"}}` and store the job secret
    as `api_key`. Select that credential on the HTTP node; no credential value
    belongs in the graph export.
+   An existing **Header Auth** credential can also be reused: its header Name is
+   `Authorization` and its Value is `Bearer ` followed by the same job secret.
+   Match the HTTP node's generic authentication type to the saved credential
+   before testing; keep secret values exclusively in the credential store.
 4. Run **Manual verification** twice with different n8n execution IDs. Confirm
    HTTP 200, `status: complete`, two finished Supabase audit rows, and no duplicated
    revisions/history for unchanged source data. An empty valid source batch is a

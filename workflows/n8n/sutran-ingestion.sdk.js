@@ -3,7 +3,6 @@ import {
   node,
   trigger,
   sticky,
-  placeholder,
   newCredential,
   ifElse,
   expr,
@@ -42,7 +41,7 @@ const ingest = node({
     },
     parameters: {
       method: "POST",
-      url: placeholder("Deployed HTTPS backend URL ending in /api/jobs/sutran"),
+      url: "https://peruroad-api-git-feat-api-foundation-gozlie.vercel.app/api/jobs/sutran",
       authentication: "genericCredentialType",
       genericAuthType: "httpTemplatedCustomAuth",
       sendBody: true,
@@ -134,7 +133,7 @@ const failed = node({
 });
 
 const setup = sticky(
-  "## Deployment pending — keep unpublished\nSet the HTTPS /api/jobs/sutran URL and configure the PeruRoad ingestion job credential to send Authorization: Bearer <ROAD_DATA_JOB_SECRET>. Keep database credentials in the backend.\n\nThe backend validates and archives PE-22 alerts and history. Only HTTP 200 with status complete succeeds; partial ingestion fails visibly. No automatic POST retries.\n\nAfter setup, run Manual verification twice with fresh execution IDs, confirm Supabase audit rows, then publish. Workflow timezone: America/Lima; execution timeout: 150 seconds. Weather/risk and alert evaluation are separate pending work.",
+  "## Deployed API — credential setup pending\nThe HTTPS /api/jobs/sutran URL is configured. Select the PeruRoad ingestion job credential, sending Authorization: Bearer <ROAD_DATA_JOB_SECRET>. Keep database credentials in the backend and job secrets only in the credential store.\n\nThe backend validates and archives PE-22 alerts and history. Only HTTP 200 with status complete succeeds; partial ingestion fails visibly. No automatic POST retries.\n\nRun Manual verification twice with fresh execution IDs, confirm Supabase audit rows, then publish. Workflow timezone: America/Lima; execution timeout: 150 seconds. Weather/risk and alert evaluation are separate pending work.",
   undefined,
   { position: [0, -320], width: 1200, height: 300, color: 5 },
 );
