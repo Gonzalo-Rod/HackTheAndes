@@ -16,7 +16,8 @@
     "prebuild": "node scripts/copy-maplibre-worker.mjs",
     "data:snapshot": "tsx scripts/snapshot-sutran-alerts.ts",
     "db:seed-demo": "node --env-file-if-exists=.env.local --import tsx scripts/seed-demo.ts",
-    "test:db": "node --env-file-if-exists=.env.local --import tsx node_modules/vitest/vitest.mjs run --config vitest.database.config.mts"
+    "test:db": "node --env-file-if-exists=.env.local --import tsx node_modules/vitest/vitest.mjs run --config vitest.database.config.mts",
+    "zavu:send-test": "node --env-file-if-exists=.env.local --import tsx scripts/zavu-send-test.ts"
   },
   "dependencies": {
     "@peruroad/road-data": "file:packages/road-data",

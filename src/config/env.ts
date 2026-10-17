@@ -74,3 +74,17 @@ export function loadDemoSeedConfiguration(): { code: string } {
   if (!result.success) throw new Error("Invalid DEMO_ACCESS_CODE configuration");
   return { code: result.data.DEMO_ACCESS_CODE };
 }
+
+export interface ZavuConfiguration {
+  apiKey: string;
+  webhookSecret: string;
+  senderId: string;
+}
+export function loadZavuConfiguration(): ZavuConfiguration {
+  const result = z
+    .object({ ZAVU_API_KEY: z.string().min(1), ZAVU_WEBHOOK_SECRET: z.string().min(1), ZAVU_SENDER_ID: z.string().min(1) })
+    .safeParse(process.env);
+  if (!result.success)
+    throw new Error(`Invalid Zavu configuration: ${result.error.issues.map((issue) => issue.path.join(".")).join(", ")}`);
+  return { apiKey: result.data.ZAVU_API_KEY, webhookSecret: result.data.ZAVU_WEBHOOK_SECRET, senderId: result.data.ZAVU_SENDER_ID };
+}
