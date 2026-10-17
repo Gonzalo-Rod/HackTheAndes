@@ -100,3 +100,16 @@ administration are explicitly excluded.
 registry when checked. The suggested automatic fix downgrades Next's lint package
 across major versions; it is not applied. Do not run lint over untrusted glob
 patterns, and revisit the dependency when a compatible upstream patch is available.
+
+## Messaging and LLM credentials
+
+The root `.env.example` lists `ZAVU_API_KEY`, `ZAVU_WEBHOOK_SECRET`,
+`ZAVU_SENDER_ID` and `OPENAI_API_KEY`. Actual values belong in ignored root
+`.env.local` and Vercel sensitive environment variables, never browser-prefixed
+variables, source code or documentation. They are intended for the root
+`peruroad-climate` application; the independent `peruroad-api` ingestion project
+does not currently consume these providers. On October 17, 2026, all four were
+configured as sensitive variables for the `feat/data-model` Preview only.
+Provider adapters, validated runtime
+configuration and a signed Zavu webhook must be implemented before claiming a
+working messaging/LLM integration.
