@@ -11,11 +11,11 @@
     "typecheck": "tsc --noEmit",
     "sutran:check": "node scripts/check-sutran.ts",
     "lint": "eslint src tests scripts vitest*.config.ts --max-warnings=0",
-    "format": "prettier --write src tests scripts package.json package-lock.json tsconfig.json tsconfig.build.json vitest*.config.ts eslint.config.mjs .prettierrc.json README.md",
-    "format:check": "prettier --check src tests scripts package.json package-lock.json tsconfig.json tsconfig.build.json vitest*.config.ts eslint.config.mjs .prettierrc.json README.md",
+    "format": "prettier --write src tests scripts package.json package-lock.json tsconfig.json tsconfig.build.json vitest*.config.ts eslint.config.mjs .prettierrc.json README.md ../../workflows/n8n",
+    "format:check": "prettier --check src tests scripts package.json package-lock.json tsconfig.json tsconfig.build.json vitest*.config.ts eslint.config.mjs .prettierrc.json README.md ../../workflows/n8n",
     "build": "tsc --project tsconfig.build.json",
     "prepack": "npm run build",
-    "test:exports": "node --input-type=module -e \"await import('@peruroad/road-data'); await import('@peruroad/road-data/contracts'); await import('@peruroad/road-data/ingestion'); await import('@peruroad/road-data/geometry'); await import('@peruroad/road-data/geometry/contracts'); await import('@peruroad/road-data/database');\"",
+    "test:exports": "node --input-type=module -e \"await import('@peruroad/road-data'); await import('@peruroad/road-data/contracts'); await import('@peruroad/road-data/ingestion'); await import('@peruroad/road-data/geometry'); await import('@peruroad/road-data/geometry/contracts'); await import('@peruroad/road-data/database'); await import('@peruroad/road-data/jobs');\"",
     "pe22:prepare": "node scripts/prepare-pe22.ts",
     "senamhi:check": "node scripts/check-senamhi.ts",
     "db:migrate": "node --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/migrate-database.ts",
@@ -23,7 +23,8 @@
     "db:import-pe22": "node --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/import-pe22.ts",
     "sutran:ingest": "node --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/ingest-sutran.ts",
     "db:check": "node --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/check-database.ts",
-    "test:db": "node --env-file-if-exists=.env --env-file-if-exists=.env.local node_modules/vitest/vitest.mjs run --config vitest.database.config.ts"
+    "test:db": "node --env-file-if-exists=.env --env-file-if-exists=.env.local node_modules/vitest/vitest.mjs run --config vitest.database.config.ts",
+    "sutran:job:check": "node --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/check-sutran-job.ts"
   },
   "dependencies": {
     "@turf/length": "^7.4.0",
@@ -67,6 +68,10 @@
     "./database": {
       "types": "./dist/database.d.ts",
       "default": "./dist/database.js"
+    },
+    "./jobs": {
+      "types": "./dist/jobs.d.ts",
+      "default": "./dist/jobs.js"
     }
   },
   "files": [

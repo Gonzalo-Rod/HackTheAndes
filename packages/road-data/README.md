@@ -5,7 +5,8 @@ implementation reads and validates SUTRAN alerts and per-alert history, and
 provides an idempotent ingestion service behind a transactional repository
 interface, backed by a verified Postgres repository. It also prepares and imports
 PE-22 geometry and 1-km display segments and probes public SENAMHI warning-layer
-access. Scheduled polling, weather ingestion, and risk models remain future work
+access. An authenticated job handler and inactive n8n workflow are prepared;
+deployed scheduled polling, weather ingestion, and risk models remain future work
 under the [Team Plan](../../docs/team-plan.md).
 
 ## Development
@@ -71,6 +72,9 @@ import {
   createDatabasePool,
   createPostgresOfficialAlertRepository,
 } from "@peruroad/road-data/database";
+
+// Server-only scheduled job boundary, with durable execution deduplication.
+import { createPostgresSutranJobHandler } from "@peruroad/road-data/jobs";
 ```
 
 When integrating, member A adds the local dependency to the application's
@@ -145,3 +149,12 @@ The ingestion command runs once, records a safe run summary, and exits nonzero
 on partial/unavailable results. It does not enable continuous polling. Remote
 migrations and initial credential provisioning require the management token;
 runtime ingestion uses the scoped `peruroad_backend` login.
+
+## Scheduled ingestion handoff
+
+See [the n8n workflow guide](../../workflows/n8n/README.md) for the inactive workflow,
+`POST /api/jobs/sutran` integration, credential setup, and activation checks.
+`npm --prefix packages/road-data run sutran:job:check` explicitly checks real
+SUTRAN/Supabase persistence through the local handler, including denied missing
+credentials and repeated execution IDs. It requires `ROAD_DATA_JOB_SECRET` in
+the ignored environment file and does not deploy or start scheduled polling.

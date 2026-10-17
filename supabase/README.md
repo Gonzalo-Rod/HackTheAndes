@@ -136,7 +136,8 @@ publishable-key Auth access, and denied browser access to operational tables.
 Supabase may return HTTP 401 (SQL permission error) or 403 for the latter. Cached
 data/unavailable UI handling still belongs to application read APIs.
 
-Next, A exposes validated read APIs and a protected ingestion endpoint using
-these contracts, then C configures n8n's ten-minute job. Realtime/browser access
+The protected ingestion handler and inactive ten-minute n8n workflow are prepared;
+see [the scheduler handoff](../workflows/n8n/README.md). Next, A deploys that
+handler and validated read APIs, then C connects and verifies the schedule. Realtime/browser access
 policies and organization authorization need explicit application work; no
 anonymous table grants, paid-feature access, or schedule was enabled here.

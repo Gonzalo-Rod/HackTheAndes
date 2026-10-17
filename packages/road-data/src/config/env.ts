@@ -71,5 +71,18 @@ export function loadApiConfiguration() {
 export function loadOptionalDatabaseConfiguration() {
   return process.env.DATABASE_URL ? loadDatabaseConfiguration() : null;
 }
+const jobSchema = z.object({
+  ROAD_DATA_JOB_SECRET: z
+    .string()
+    .min(32)
+    .max(256)
+    .regex(/^[A-Za-z0-9_-]+$/),
+});
+export function parseJobConfiguration(input: unknown) {
+  return parseConfiguration(jobSchema, input);
+}
+export function loadJobConfiguration() {
+  return parseJobConfiguration(process.env);
+}
 export type DatabaseConfiguration = z.infer<typeof databaseSchema>;
 export type ManagementConfiguration = z.infer<typeof managementSchema>;

@@ -149,6 +149,8 @@ Postgres; see the shared database handoff for recorded live results.
 
 Supabase persistence and the initial schema are now configured and verified;
 `npm --prefix packages/road-data run sutran:ingest` performs a real one-off poll.
-Next, wire an authenticated server job and enable the ten-minute n8n schedule.
+An authenticated server handler and inactive ten-minute n8n workflow are prepared;
+see [the scheduler handoff](../../workflows/n8n/README.md). Next, mount and deploy
+the handler, configure its URL/credential in n8n, and verify before publishing.
 The default tests remain offline; `test:db` explicitly exercises the configured
 Postgres repository, including concurrency and rollback.
