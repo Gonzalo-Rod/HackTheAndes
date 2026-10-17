@@ -27,7 +27,7 @@ function rainFreshness(rain: CorridorRainResponse | null, error: string | null, 
   if (!rain) return error ? { text: "Pronóstico no disponible", warn: true } : undefined;
   const age = formatRelative(rain.fetchedAt, now);
   return rain.stale || error
-    ? { text: `Open-Meteo no responde · datos de ${age}`, warn: true }
+    ? { text: `Fuente no disponible o incompleta · datos de ${age}`, warn: true }
     : { text: `Open-Meteo · consultado ${age}`, warn: false };
 }
 

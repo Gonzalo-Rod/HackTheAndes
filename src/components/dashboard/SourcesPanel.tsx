@@ -73,7 +73,7 @@ export function SourcesPanel({ meta, corridor, rain }: SourcesPanelProps) {
           </div>
           <div className="pr-kv__row">
             <dt>Estado</dt>
-            <dd>{rain ? (rain.stale ? "Open-Meteo no respondió; se muestran los últimos datos" : "Al día") : "—"}</dd>
+            <dd>{rain ? (rain.stale ? "Fuente no disponible o incompleta; se muestra caché" : "Al día") : "—"}</dd>
           </div>
         </dl>
       </section>
