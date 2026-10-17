@@ -9,7 +9,8 @@ remain in `@peruroad/road-data`; n8n holds no database credentials.
 An unpublished workflow is saved in the account's personal project:
 [PeruRoad — SUTRAN ingestion (10 minutes)](https://gozlie.app.n8n.cloud/workflow/67O2kAY8fPtWjD9K).
 The API is deployed at
-`https://peruroad-api-gozlie.vercel.app/api/jobs/sutran` and has passed direct
+`https://peruroad-api-git-feat-api-foundation-gozlie.vercel.app/api/jobs/sutran`
+and has passed direct
 authenticated HTTP ingestion checks. The cloud draft's HTTPS URL and HTTP
 credential still need configuration; publishing and live scheduled execution
 remain pending. Weather ingestion, risk recalculation, incident promotion, alert

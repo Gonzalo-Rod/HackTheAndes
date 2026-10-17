@@ -102,22 +102,30 @@ using the committed `vercel.json` commands.
 
 - [Public health check](https://peruroad-api-gozlie.vercel.app/api/health).
 - Protected job: `POST https://peruroad-api-gozlie.vercel.app/api/jobs/sutran`.
+- [Feature-branch health check](https://peruroad-api-git-feat-api-foundation-gozlie.vercel.app/api/health).
+  Use this branch alias for n8n during development so successful branch pushes
+  update its backend; the short project alias above identifies the initial
+  staging deployment.
 - [Verified deployment](https://peruroad-fx5gynog9-gozlie.vercel.app/api/health):
   `dpl_4ZffbgG6qk8uLpqdwXN25JwT9MUv`, source commit `8dd3e33` on
   `feat/api-foundation`.
 
-Vercel's Git integration cannot currently access the private repository, so this
-deployment used an MCP upload of the 98 tracked API/data-package files at that
-commit, excluding all `.env*` files. Automatic Git deployments remain pending;
-the source snapshot does not update when the branch changes. Keep the PR stack
-unmerged and deploy later changes explicitly until Git access is configured.
+The initial Git-source request could not find the private repository, so the
+first successful deployment used an MCP upload of the 98 tracked API/data-package
+files at that commit, excluding all `.env*` files. A subsequent push at commit
+`1702435` triggered an automatic Git Preview, whose logs confirmed successful
+cloning of the private repository. Deployment `dpl_kYujd1gDn6srpYsUyTVn2EzQAJ4o`
+and its feature-branch alias passed health/authentication and saved-audit reuse
+checks, and all six PR checks passed. Automatic branch Previews now work; the PR
+stack remains unmerged.
 
 All three server variables are stored as sensitive variables targeting Preview
 only; their names, types, and targets were verified without displaying values.
-For API-created Preview deployments, explicitly use Vercel's `target: "staging"`
+For a manual staging deployment, explicitly use Vercel's `target: "staging"`
 value; the first request with an omitted target was classified as Production
 and cancelled before completion. The verified deployment uses `staging` and its
-stable project alias; Production variables have not been configured.
+stable project alias. Automatic Git Previews use a null deployment target and the
+feature-branch alias; Production variables have not been configured.
 
 Vercel's sign-in gate is disabled for this API project so the public health route
 and authenticated server-to-server job calls are reachable. The job's bearer
