@@ -57,7 +57,7 @@ export function SummaryPanel({ summary, scope, latestActionAt, now, filtered }: 
       </ul>
       <p className="pr-panel__foot">
         <Icon name="clock" size={12} />
-        Última acción publicada por SUTRAN: {now && latestActionAt ? formatRelative(latestActionAt, now) : "—"}
+        Última actualización registrada: {now && latestActionAt ? formatRelative(latestActionAt, now) : "—"}
       </p>
     </section>
   );

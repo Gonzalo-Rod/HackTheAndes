@@ -42,7 +42,7 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
 
 function History({ data }: { data: AlertDetailResponse }) {
   if (data.history === null) return <p className="pr-note">El historial no está disponible en este momento.</p>;
-  if (!data.history.length) return <p className="pr-note">SUTRAN no registra cambios para esta alerta.</p>;
+  if (!data.history.length) return <p className="pr-note">No hay cambios registrados para este incidente.</p>;
   return (
     <ol className="pr-history">
       {data.history.map((entry, index) => (
@@ -147,8 +147,8 @@ export function AlertDetail({ alert, detail, corridorContext, roadAlertCount, no
         <div className="pr-stale-note" role="note">
           <Icon name="restringido" size={14} />
           <span>
-            Sin novedades de SUTRAN hace {Math.round(hoursSinceAction(alert, now) ?? 0)} h (umbral: {STALE_ALERT_AFTER_HOURS} h). La alerta
-            sigue vigente, pero el estado podría haber cambiado; confirma antes de viajar.
+            Sin novedades de la fuente hace {Math.round(hoursSinceAction(alert, now) ?? 0)} h (umbral: {STALE_ALERT_AFTER_HOURS} h). La
+            alerta sigue vigente, pero el estado podría haber cambiado; confirma antes de viajar.
           </span>
         </div>
       )}

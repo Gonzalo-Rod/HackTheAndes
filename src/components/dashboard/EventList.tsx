@@ -38,7 +38,7 @@ export function EventList({
           Eventos
         </h2>
         <span className="pr-count pr-count--strong">{alerts.length}</span>
-        <span className="pr-events__hint">Última acción SUTRAN</span>
+        <span className="pr-events__hint">Última actualización</span>
       </header>
       {loading && (
         <ul className="pr-events__list" aria-busy="true">
@@ -50,9 +50,7 @@ export function EventList({
       {!loading && emptyReason && (
         <div className="pr-empty">
           <Icon name={emptyReason === "filters" ? "search" : "check"} size={18} />
-          <p>
-            {emptyReason === "filters" ? "Ninguna alerta coincide con los filtros." : "SUTRAN no reporta alertas vigentes en este ámbito."}
-          </p>
+          <p>{emptyReason === "filters" ? "Ninguna alerta coincide con los filtros." : "No hay incidentes registrados en este ámbito."}</p>
           {emptyReason === "filters" && (
             <button type="button" className="pr-btn pr-btn--link" onClick={onClearFilters}>
               Limpiar filtros
@@ -90,7 +88,7 @@ export function EventList({
                       {now && isStaleAlert(alert, now) && (
                         <>
                           {" "}
-                          <span className="pr-stale" title={`Sin novedades de SUTRAN hace más de ${STALE_ALERT_AFTER_HOURS} h`}>
+                          <span className="pr-stale" title={`Sin novedades de la fuente hace más de ${STALE_ALERT_AFTER_HOURS} h`}>
                             Sin novedades
                           </span>
                         </>

@@ -75,3 +75,16 @@
   border: 1px solid #a8b6ac;
   cursor: pointer;
 }
+
+.pr-topbar__community {
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 11px;
+}
+@media (max-width: 1450px) {
+  .pr-topbar__community {
+    display: none;
+  }
+}

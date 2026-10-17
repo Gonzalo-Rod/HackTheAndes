@@ -103,7 +103,7 @@ export function TopBar(props: TopBarProps) {
       <a className="pr-btn pr-btn--ghost" href="/empresa">
         Empresas
       </a>
-      <span className="pr-hide-md" role="status">
+      <span className="pr-topbar__community pr-hide-md" role="status" title={props.communityStatus}>
         {props.communityStatus}
       </span>
       <Freshness {...props} />
