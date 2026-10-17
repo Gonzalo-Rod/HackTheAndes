@@ -4,7 +4,7 @@ Member A's Node.js/Next.js API application, consuming C's compiled
 `@peruroad/road-data` package. It has its own dependencies, lockfile, and checks
 under `apps/api/` so teammates can integrate their root-level frontend separately.
 The current step mounts and verifies the existing SUTRAN ingestion handler;
-dashboard APIs, paid access, weather/model endpoints, and deployment are later
+dashboard APIs, paid access, and weather/model endpoints are later
 steps under the full [Team Plan](../../docs/team-plan.md).
 
 ## Install and build
@@ -89,29 +89,48 @@ See the [n8n handoff](../../workflows/n8n/README.md) for request shape, deduplic
 source failure handling, and activation checks.
 
 The API app exposes no dashboard data, customer records, or database connection
-details at this stage. There is no root UI; the health route is the local smoke
+details at this stage. There is no root UI; the health route is the public smoke
 check until dashboard integration is implemented.
 
-## Next step: Vercel preview deployment
+## Vercel deployment
 
-The user has a Vercel account; project creation and login remain pending. Create
-a project for this API with **Root Directory `apps/api`**, Node.js 24, and
-**Include source files outside the Root Directory** enabled. The committed
-`vercel.json` installs/builds the data package before installing/building the app.
-Deploy the feature branch as a preview; keep the current PR stack unmerged.
+The [peruroad-api project](https://vercel.com/gozlie/peruroad-api) was created in
+the Gozlie team through the authenticated Vercel MCP connection on October 17, 2026. Its configured root is `apps/api`, with Node.js 24, source files outside
+the root enabled, and Fluid compute with a 150-second default function timeout.
+The hosted build successfully installed/built the data package before the API
+using the committed `vercel.json` commands.
 
-Set the three server variables in that project's Preview environment. Use the
-hosting secret store rather than repository environment files. Verify the
-account's execution-duration support; a route declaration does not raise the
-hosting plan's limit. Confirm the preview permits n8n's server-to-server access:
-any deployment-protection requirement must be configured explicitly while the
-job endpoint continues to require its own secret.
+- [Public health check](https://peruroad-api-gozlie.vercel.app/api/health).
+- Protected job: `POST https://peruroad-api-gozlie.vercel.app/api/jobs/sutran`.
+- [Verified deployment](https://peruroad-fx5gynog9-gozlie.vercel.app/api/health):
+  `dpl_4ZffbgG6qk8uLpqdwXN25JwT9MUv`, source commit `8dd3e33` on
+  `feat/api-foundation`.
 
-After deployment, check the public health route, missing-credential rejection,
-and two authenticated real job executions with database audit evidence. Only
-then configure the existing n8n draft's HTTPS URL and credential and publish it
-in a separate step. No scheduled polling is enabled by installing or running
-this API application.
+Vercel's Git integration cannot currently access the private repository, so this
+deployment used an MCP upload of the 98 tracked API/data-package files at that
+commit, excluding all `.env*` files. Automatic Git deployments remain pending;
+the source snapshot does not update when the branch changes. Keep the PR stack
+unmerged and deploy later changes explicitly until Git access is configured.
+
+All three server variables are stored as sensitive variables targeting Preview
+only; their names, types, and targets were verified without displaying values.
+For API-created Preview deployments, explicitly use Vercel's `target: "staging"`
+value; the first request with an omitted target was classified as Production
+and cancelled before completion. The verified deployment uses `staging` and its
+stable project alias; Production variables have not been configured.
+
+Vercel's sign-in gate is disabled for this API project so the public health route
+and authenticated server-to-server job calls are reachable. The job's bearer
+authentication remains mandatory. On the hosted deployment, missing/wrong
+credentials returned 401, malformed input returned 400, and oversized input
+returned 413. Two real SUTRAN/Supabase executions each selected four unchanged
+alerts with no duplicate revisions/history; repeat requests reused their stored
+outcomes. Both completed audit rows were verified directly over verified database
+TLS, and the stable alias returned the same saved outcome.
+
+Next, configure the existing n8n draft's HTTPS URL and credential, verify two
+manual n8n executions, then publish and check scheduled runs in a separate step.
+The workflow remains inactive; deploying the API does not enable polling.
 
 Framework references: [Next.js Route Handlers](https://nextjs.org/docs/app/getting-started/route-handlers),
 [production file tracing](https://nextjs.org/docs/app/api-reference/config/next-config-js/output),

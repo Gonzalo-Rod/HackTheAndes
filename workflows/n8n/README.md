@@ -8,8 +8,10 @@ remain in `@peruroad/road-data`; n8n holds no database credentials.
 
 An unpublished workflow is saved in the account's personal project:
 [PeruRoad — SUTRAN ingestion (10 minutes)](https://gozlie.app.n8n.cloud/workflow/67O2kAY8fPtWjD9K).
-The HTTPS backend URL and HTTP credential are intentionally unconfigured because
-the application has not been deployed. Publishing and live scheduled execution
+The API is deployed at
+`https://peruroad-api-gozlie.vercel.app/api/jobs/sutran` and has passed direct
+authenticated HTTP ingestion checks. The cloud draft's HTTPS URL and HTTP
+credential still need configuration; publishing and live scheduled execution
 remain pending. Weather ingestion, risk recalculation, incident promotion, alert
 evaluation, and the weekly report are separate pending integrations.
 
@@ -30,8 +32,8 @@ test pin data. Import the JSON file through n8n's editor to restore it elsewhere
 ## Backend handoff for member A
 
 The handler is now mounted in the [API application](../../apps/api/README.md)
-at `apps/api/src/app/api/jobs/sutran/route.ts`; its public deployment remains
-pending. The example below also applies when integrating with another Node.js
+at `apps/api/src/app/api/jobs/sutran/route.ts` and deployed at the URL above.
+The example below also applies when integrating with another Node.js
 application.
 
 Add the local package dependency and build it as described in

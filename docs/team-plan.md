@@ -324,7 +324,13 @@ Road and stream geometry alone do not define where water comes from. We delineat
 
 Small quebradas below the resolution of the delineation are grouped and flagged as lower-confidence.
 
-### Model v1: transparent and rule-based, then calibrated
+### Model v1: trained machine learning with a transparent baseline
+
+**Participant decision, October 17, 2026:** train a machine-learning model for
+risk forecasting. Keep a transparent rainfall/rule-based model as the evaluation
+baseline. Before beginning the forecasting implementation, notify the participant
+and agree on the prediction target, labeled dataset, features, algorithm, and
+time-based validation split; these choices and the trained model remain pending.
 
 For each catchment, every hour:
 
@@ -340,7 +346,9 @@ For each catchment, every hour:
 **Output:** a level (verde / amarillo / naranja / rojo) for the next 24 h and 72 h, and for each 6-hour window of the next 72 h (used by the dispatch decision, F9), plus the top 2–3 reasons, e.g. *"72 mm forecast over the Quebrada X catchment in the next 48 h + soil already wet + high-susceptibility zone"*.
 
 - **Code computes the score; the LLM only writes the explanation** in plain Spanish. The score must be reproducible and auditable: each stored score records its inputs, model, grid and forecast issue time.
-- **Thresholds are calibrated on data, not guessed**, and frozen before evaluation.
+- **Model fitting, tuning, and risk-level thresholds use training/validation data
+  only**, and are frozen before evaluation on the held-out season. Historical
+  features must reflect information available at the forecast issue time.
 
 ### Evaluation
 
@@ -354,7 +362,7 @@ Reconstructing an event from rainfall that actually fell does not prove it could
 **B. Forecast evaluation (2024–2026 rainy seasons)** — the only basis for advance-warning claims.
 - **Inputs:** forecasts as they were issued **before** each day, from Open-Meteo's **Previous Runs API** (fixed lead times of 1–7 days, e.g. `precipitation_previous_day1`, `_previous_day2`, `_previous_day3`). Not the Historical Forecast API, which stitches the first hours of each run and so approximates observed conditions.
 - **Ground truth:** recorded huaicos and road closures on PE-22 with date and location (INDECI emergency records, SUTRAN, news archives). SUTRAN's public API only returns current alerts, so past seasons come from INDECI and news.
-- **Split:** calibrate thresholds on one rainy season (e.g. Jan–Apr 2024); evaluate on a different season (e.g. Jan–Apr 2025, and 2026 if records allow). No threshold changes after looking at the evaluation period.
+- **Split:** fit the ML model and tune its hyperparameters and risk thresholds within one rainy season (e.g. Jan–Apr 2024), using chronological training/validation subsets; evaluate on a different season (e.g. Jan–Apr 2025, and 2026 if records allow). No feature, model, or threshold changes after looking at the evaluation period.
 - **Metrics per lead time (1, 2, 3 days):** events flagged in advance / total events, false alarms per season, and comparison against a simple baseline (e.g. SENAMHI warning alone, or rainfall threshold only).
 - **Reporting:** results are published as they come out, including weak ones. If there are too few recorded events to measure skill, the report says so and makes no advance-warning claim.
 
@@ -667,10 +675,10 @@ The times assume work starts on Saturday at 13:30 and end at the Sunday 09:00 de
 | 0–1 | PE-22 geometry and 1-km segments with km references and elevation; place-to-km gazetteer for B | Segments in PostGIS; gazetteer merged |
 | 1 | Open-Meteo forecast pull for sample points; downloads of Previous Runs (Jan–Apr 2024 and 2025) and Historical Weather (Feb–Mar 2023) | Data stored |
 | 1–2 | Crossing points; catchment delineation (WhiteboxTools) or HydroBASINS fallback; rivers, susceptibility and SENAMHI layers exported as GeoJSON for D | Catchments linked to segments; layers load on the map |
-| 2 | Risk model v1: 24 h, 72 h and 6-hour windows, stored inputs, model, grid and reasons; hourly n8n job → recalculation → alert evaluation (B's engine) | Risk levels on every PE-22 segment, hourly |
+| 2 | Train risk model v1: 24 h, 72 h and 6-hour windows, stored inputs, model, grid and reasons; hourly n8n job → recalculation → alert evaluation (B's engine) | Risk levels on every PE-22 segment, hourly |
 | 2 | Yaku 2023 reconstruction series; list of dated PE-22 events for 2024 and 2025 | Data ready for the timeline and the evaluation |
 | 3 | **Dispatch decision engine (F9):** travel timing per vehicle type, risk at arrival time, decision rules, best departure window, cost at stake; unit tests for each rule | The engine returns a decision for any departure in the next 72 h |
-| 3 | Calibrate on 2024, evaluate on 2025 per lead time against a baseline; write the results, including weak ones | Evaluation documented in the repo |
+| 3 | Train/tune on 2024, evaluate on 2025 per lead time against the transparent baseline; write the results, including weak ones | Evaluation documented in the repo |
 | 3 | Indicator queries for D: km exposed per level, incidents by type and source, closure hours, rainfall per catchment, departure-chart matrix | Endpoints return real numbers |
 | 4 | **F6 weekly report:** n8n weekly workflow, report data endpoint, LLM summary written only from the computed numbers | One report generated |
 | 5 | Data documentation: sources, terms, retrieval method, resolution limits, evaluation; check that the scripts reproduce the outputs | Scripts run from a clean database |
