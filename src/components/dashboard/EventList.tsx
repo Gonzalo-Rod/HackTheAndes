@@ -3,6 +3,7 @@
 import { CAUSE_META, STATUS_META } from "@/components/alert-meta";
 import { Icon } from "@/components/icons";
 import type { RoadAlert } from "@/contracts/road-alerts";
+import { isStaleAlert, STALE_ALERT_AFTER_HOURS } from "@/domain/road-alerts/staleness";
 import { formatListTime } from "@/lib/format";
 
 interface EventListProps {
@@ -86,6 +87,14 @@ export function EventList({
                     </span>
                     <span className="pr-event__meta">
                       {status.label} · {CAUSE_META[alert.cause].short} · {alert.district || alert.region}
+                      {now && isStaleAlert(alert, now) && (
+                        <>
+                          {" "}
+                          <span className="pr-stale" title={`Sin novedades de SUTRAN hace más de ${STALE_ALERT_AFTER_HOURS} h`}>
+                            Sin novedades
+                          </span>
+                        </>
+                      )}
                     </span>
                   </span>
                   <span className="pr-event__time">{now ? formatListTime(alert.lastActionAt, now) : ""}</span>

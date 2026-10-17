@@ -4,6 +4,7 @@ import { STATUS_META } from "@/components/alert-meta";
 import { CONDITION_COLORS, CONDITION_FALLBACK, type LayerState } from "@/components/dashboard/types";
 import type { CorridorData } from "@/contracts/corridor";
 import { pointAtKm, sliceByKm } from "@/domain/geo/measure";
+import type { RainSegment } from "@/domain/weather/rain";
 import { AFFECTED_STRETCH_HALF_KM, type CorridorAlert } from "@/domain/road-alerts/corridor-placement";
 import { formatElevation } from "@/lib/format";
 
@@ -47,13 +48,13 @@ export function addThematicLayers(map: MLMap, origin: string): void {
   map.addSource("regions", { type: "geojson", data: `${origin}/data/regiones.geojson` });
   map.addSource("rivers", { type: "geojson", data: `${origin}/data/rios-quebradas.geojson` });
   map.addSource("network", { type: "geojson", data: `${origin}/data/red-vial-nacional.geojson`, tolerance: 0.5 });
-  for (const id of ["corridor", "corridor-stretches", "corridor-km", "corridor-places", "profile-point"]) {
+  for (const id of ["corridor", "corridor-rain", "corridor-stretches", "corridor-km", "corridor-places", "profile-point"]) {
     map.addSource(id, { type: "geojson", data: EMPTY });
   }
 
   // A light wash over Peru's regions, under the hillshade, so the country reads first.
   map.addLayer(
-    { id: "regions-spotlight", type: "fill", source: "regions", paint: { "fill-color": "#fffaf0", "fill-opacity": 0.32 } },
+    { id: "regions-spotlight", type: "fill", source: "regions", paint: { "fill-color": "#fffaf0", "fill-opacity": 0.14 } },
     HILLSHADE_LAYER,
   );
   map.addLayer({
@@ -75,7 +76,7 @@ export function addThematicLayers(map: MLMap, origin: string): void {
     source: "rivers",
     layout: { visibility: "none", "line-cap": "round", "line-join": "round" },
     paint: {
-      "line-color": ["match", ["get", "kind"], "quebrada", "#7fa7b8", "#5f93aa"],
+      "line-color": ["match", ["get", "kind"], "quebrada", "#5fa6c4", "#3b88ae"],
       "line-width": [
         "interpolate",
         ["linear"],
@@ -108,6 +109,18 @@ function addCorridorLayers(map: MLMap): void {
     source: "corridor",
     layout: round,
     paint: { "line-color": "#fffdf7", "line-width": ["interpolate", ["linear"], ["zoom"], 5, 3.5, 10, 7, 14, 13] },
+  });
+  // Rain ribbon: the corridor colored by 24 h rain, under the alert stretches and the road line.
+  map.addLayer({
+    id: "corridor-rain",
+    type: "line",
+    source: "corridor-rain",
+    layout: round,
+    paint: {
+      "line-color": ["get", "color"],
+      "line-width": ["interpolate", ["linear"], ["zoom"], 5, 8, 10, 14, 14, 22],
+      "line-opacity": 1,
+    },
   });
   map.addLayer({
     id: "corridor-stretches",
@@ -204,7 +217,7 @@ function addCorridorLabelLayers(map: MLMap): void {
 export function applyLayerState(map: MLMap, layers: LayerState): void {
   const visibility = (on: boolean) => (on ? "visible" : "none");
   map.setLayoutProperty(HILLSHADE_LAYER, "visibility", visibility(layers.hillshade));
-  const strength = (layers.satellite ? 0.3 : 0.62) * layers.hillshadeOpacity;
+  const strength = (layers.satellite ? 0.3 : 0.75) * layers.hillshadeOpacity;
   // Relief reads weaker at country scale, so it is boosted at low zoom.
   map.setPaintProperty(HILLSHADE_LAYER, "hillshade-exaggeration", [
     "interpolate",
@@ -217,7 +230,7 @@ export function applyLayerState(map: MLMap, layers: LayerState): void {
   ]);
   map.setLayoutProperty(SATELLITE_LAYER, "visibility", visibility(layers.satellite));
   map.setPaintProperty(SATELLITE_LAYER, "raster-opacity", layers.satelliteOpacity);
-  map.setPaintProperty("regions-spotlight", "fill-opacity", layers.satellite ? 0 : 0.32);
+  map.setPaintProperty("regions-spotlight", "fill-opacity", layers.satellite ? 0 : 0.14);
   map.setLayoutProperty("network-line", "visibility", visibility(layers.network));
   map.setPaintProperty("network-line", "line-opacity", layers.networkOpacity);
   const conditionColor: ExpressionSpecification = [
@@ -240,6 +253,7 @@ export function applyLayerState(map: MLMap, layers: LayerState): void {
   map.setPaintProperty("rivers-line", "line-opacity", layers.riversOpacity);
   map.setLayoutProperty("regions-line", "visibility", visibility(layers.regions));
   for (const id of CORRIDOR_LAYERS) map.setLayoutProperty(id, "visibility", visibility(layers.corridor));
+  map.setLayoutProperty("corridor-rain", "visibility", visibility(layers.corridor && layers.rain));
 }
 
 export function applyRegionHighlight(map: MLMap, regionKey: string | null): void {
@@ -270,6 +284,18 @@ export function setCorridorData(map: MLMap, corridor: CorridorData): void {
       geometry: { type: "Point", coordinates: [p.lng, p.lat] },
     })),
   });
+}
+
+/** Colors the corridor by rain level, one line per stretch between sample midpoints. */
+export function setCorridorRain(map: MLMap, corridor: CorridorData | null, segments: readonly RainSegment[]): void {
+  const features: GeoJSON.Feature[] = corridor
+    ? segments.map((segment) => ({
+        type: "Feature",
+        properties: { color: segment.level.color },
+        geometry: { type: "LineString", coordinates: sliceByKm(corridor.line, segment.kmStart, segment.kmEnd) },
+      }))
+    : [];
+  source(map, "corridor-rain")?.setData({ type: "FeatureCollection", features });
 }
 
 /** Highlights ±1.2 km of PE-22 around interrupted or restricted alerts that are visible. */

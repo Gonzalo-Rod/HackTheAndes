@@ -1,5 +1,6 @@
 import { CorridorDataSchema, type CorridorData } from "@/contracts/corridor";
 import { AlertDetailResponseSchema, AlertsResponseSchema, type AlertDetailResponse, type AlertsResponse } from "@/contracts/road-alerts";
+import { CorridorRainResponseSchema, type CorridorRainResponse } from "@/contracts/weather";
 import { getJson, UpstreamError } from "@/integrations/http/fetch-json";
 
 // Browser adapter for this app's own API and static data. Responses are validated
@@ -45,6 +46,16 @@ export async function fetchAlertDetail(id: string): Promise<AlertDetailResponse>
 export async function fetchCorridor(): Promise<CorridorData> {
   const body = await getJson("/data/pe22.json", { provider: PROVIDER, operation: "dashboard.corridor", retries: 1 });
   return parseOrThrow(CorridorDataSchema, body, "corredor");
+}
+
+export async function fetchCorridorRain(): Promise<CorridorRainResponse> {
+  const body = await getJson("/api/weather/pe22", {
+    provider: PROVIDER,
+    operation: "dashboard.corridorRain",
+    timeoutMs: API_TIMEOUT_MS,
+    retries: 0,
+  });
+  return parseOrThrow(CorridorRainResponseSchema, body, "lluvia");
 }
 
 /** User-facing (Spanish) explanation of a failed request. */

@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { STATUS_META } from "@/components/alert-meta";
 import type { CorridorData } from "@/contracts/corridor";
+import { rainBandAtKm, type RainSegment } from "@/domain/weather/rain";
 import { elevationAtKm, nearestPlace, type CorridorAlert } from "@/domain/road-alerts/corridor-placement";
 import { useElementSize } from "@/hooks/use-element-size";
 import { formatElevation } from "@/lib/format";
@@ -13,10 +14,12 @@ import { ChartCard, ChartTooltip } from "./ChartCard";
 const PAD = { top: 16, right: 12, bottom: 18, left: 38 };
 const ELEVATION_CEILING_M = 5000; // Ticlio is ~4,800 m; a round ceiling keeps ticks clean
 const MIN_PLACE_LABEL_GAP_PX = 58;
+const RAIN_BAND_PX = 7;
 const TERRAIN_INK = "#6f685c";
 
 interface ElevationProfileProps {
   corridor: CorridorData | null;
+  rainBands: RainSegment[];
   placed: CorridorAlert[];
   hiddenIds: ReadonlySet<string>;
   activeKm: number | null; // tour position or external hover
@@ -28,6 +31,7 @@ interface ElevationProfileProps {
 
 export function ElevationProfile({
   corridor,
+  rainBands,
   placed,
   hiddenIds,
   activeKm,
@@ -63,6 +67,17 @@ export function ElevationProfile({
             <td>{formatElevation(p.elevationM)}</td>
           </tr>
         ))}
+        {rainBands.map((band) => (
+          <tr key={`rain-${band.kmStart}`}>
+            <td>
+              Lluvia: {band.level.label.toLowerCase()} ({band.mm.toLocaleString("es-PE")} mm)
+            </td>
+            <td>
+              {Math.round(band.kmStart)}–{Math.round(band.kmEnd)}
+            </td>
+            <td>—</td>
+          </tr>
+        ))}
         {visiblePlaced.map((p) => (
           <tr key={p.alert.id}>
             <td>
@@ -94,11 +109,16 @@ export function ElevationProfile({
     if (!last || x(place.km) - x(last.km) >= MIN_PLACE_LABEL_GAP_PX) placeLabels.push(place);
   }
   const shownKm = hoverKm ?? activeKm;
+  const rainSample = shownKm !== null && rainBands.length ? rainBandAtKm(rainBands, shownKm) : null;
   const near = shownKm !== null ? nearestPlace(corridor.places, shownKm) : null;
   const kmAt = (clientX: number, rect: DOMRect) => Math.max(0, Math.min(kmTotal, ((clientX - rect.left - PAD.left) / plotW) * kmTotal));
 
   return (
-    <ChartCard title="Perfil de elevación · Carretera Central" subtitle="Lima → La Oroya · alertas en su km" table={table}>
+    <ChartCard
+      title="Perfil de elevación · Carretera Central"
+      subtitle={rainBands.length ? "Lima → La Oroya · alertas y lluvia 24 h" : "Lima → La Oroya · alertas en su km"}
+      table={table}
+    >
       <div ref={ref} className="pr-chart__plot">
         {width > 0 && (
           <svg
@@ -127,6 +147,18 @@ export function ElevationProfile({
             ))}
             <path d={areaPath} fill={TERRAIN_INK} opacity={0.12} />
             <path d={linePath} fill="none" stroke={TERRAIN_INK} strokeWidth={1.6} strokeLinejoin="round" />
+            {rainBands.map((band) => (
+              <rect
+                key={band.kmStart}
+                x={x(band.kmStart)}
+                y={y(0) - RAIN_BAND_PX}
+                width={Math.max(0, x(band.kmEnd) - x(band.kmStart))}
+                height={RAIN_BAND_PX}
+                fill={band.level.color}
+              >
+                <title>{`${band.level.label} · ${band.mm.toLocaleString("es-PE")} mm (km ${Math.round(band.kmStart)}–${Math.round(band.kmEnd)})`}</title>
+              </rect>
+            ))}
             {placeLabels.map((place) => (
               <g key={place.name}>
                 <line x1={x(place.km)} x2={x(place.km)} y1={y(place.elevationM)} y2={y(0)} className="pr-place-tick" />
@@ -174,6 +206,11 @@ export function ElevationProfile({
             <span className="pr-tooltip__main">
               <strong>{formatElevation(elevationAtKm(corridor.profile, shownKm))}</strong> · km {shownKm.toFixed(0)}
             </span>
+            {rainSample && (
+              <span>
+                {rainSample.level.label} · {rainSample.mm.toLocaleString("es-PE")} mm (24 h)
+              </span>
+            )}
             {near && (
               <span>
                 {Math.abs(near.deltaKm) < 1.5 ? near.place.name : `${Math.abs(near.deltaKm).toFixed(0)} km de ${near.place.name}`}

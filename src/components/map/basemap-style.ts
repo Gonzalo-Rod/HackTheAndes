@@ -9,6 +9,7 @@ export const TERRAIN_SOURCE = "terrain-dem";
 export const HILLSHADE_SOURCE = "hillshade-dem";
 export const SATELLITE_LAYER = "satellite";
 export const HILLSHADE_LAYER = "hillshade";
+export const COLOR_RELIEF_LAYER = "color-relief";
 
 const FONT_REGULAR = ["Noto Sans Regular"];
 const FONT_BOLD = ["Noto Sans Bold"];
@@ -18,14 +19,14 @@ const NAME: ["coalesce", ["get", string], ["get", string]] = ["coalesce", ["get"
 export const PALETTE = {
   background: "#ebe6db",
   land: "#efeae0",
-  wood: "#dfe2cc",
-  grass: "#e7e6d1",
-  sand: "#ece2cb",
-  rock: "#e4ddd0",
+  wood: "#b9cc9a",
+  grass: "#d2dba3",
+  sand: "#e8d9ae",
+  rock: "#d8cfbd",
   ice: "#f8f8f5",
   urban: "#e4ddd0",
-  water: "#b7cdd6",
-  waterLine: "#a3bfcb",
+  water: "#9fc5d6",
+  waterLine: "#7fb0c6",
   boundary: "#8f8371",
   road: "#fbf8f1",
   roadCasing: "#d9cfbd",
@@ -77,6 +78,45 @@ export function createBaseStyle(): StyleSpecification {
     layers: [
       { id: "background", type: "background", paint: { "background-color": PALETTE.background } },
       {
+        // Elevation tint: khaki lowlands, green valleys, ochre highlands, grey-white summits.
+        // Transparent below sea level so the water layer keeps the ocean.
+        id: COLOR_RELIEF_LAYER,
+        type: "color-relief",
+        source: HILLSHADE_SOURCE,
+        paint: {
+          "color-relief-opacity": 1,
+          "color-relief-color": [
+            "interpolate",
+            ["linear"],
+            ["elevation"],
+            -20,
+            "rgba(201, 185, 138, 0)",
+            0,
+            "#c9b98a",
+            150,
+            "#b9bd7c",
+            500,
+            "#93b25c",
+            1000,
+            "#7fa655",
+            1800,
+            "#6f9a4c",
+            2600,
+            "#97a052",
+            3500,
+            "#b19a58",
+            4200,
+            "#a07f52",
+            4800,
+            "#93786a",
+            5400,
+            "#cfcac4",
+            6200,
+            "#ffffff",
+          ],
+        },
+      },
+      {
         id: "landcover",
         type: "fill",
         source: "omt",
@@ -101,7 +141,7 @@ export function createBaseStyle(): StyleSpecification {
             PALETTE.ice,
             PALETTE.land,
           ],
-          "fill-opacity": ["interpolate", ["linear"], ["zoom"], 4, 0.55, 10, 0.8],
+          "fill-opacity": ["interpolate", ["linear"], ["zoom"], 4, 0.4, 10, 0.55],
         },
       },
       {
@@ -214,8 +254,8 @@ export function createBaseStyle(): StyleSpecification {
       },
     ],
     sky: {
-      "sky-color": "#c9d6dd",
-      "horizon-color": "#efe7d9",
+      "sky-color": "#aecbe0",
+      "horizon-color": "#f2e6cf",
       "fog-color": "#ece6da",
       "sky-horizon-blend": 0.6,
       "horizon-fog-blend": 0.5,

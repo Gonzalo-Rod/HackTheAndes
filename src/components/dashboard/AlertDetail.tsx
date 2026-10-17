@@ -3,6 +3,9 @@
 import { CAUSE_META, historyTypeLabel, STATUS_META, sutranAlertUrl } from "@/components/alert-meta";
 import { Icon } from "@/components/icons";
 import type { AlertDetailResponse, RoadAlert } from "@/contracts/road-alerts";
+import type { RainSample } from "@/contracts/weather";
+import { classifyRain, rainPeakMm } from "@/domain/weather/rain";
+import { hoursSinceAction, isStaleAlert, STALE_ALERT_AFTER_HOURS } from "@/domain/road-alerts/staleness";
 import { formatCalendarDate, formatDateTime, formatElevation, formatKm, formatRelative } from "@/lib/format";
 
 import type { useAlertDetail } from "@/hooks/use-alert-detail";
@@ -12,12 +15,16 @@ export interface CorridorContext {
   elevationM: number;
   nearestPlace: string;
   deltaKm: number;
+  /** Nearest rain sample on the corridor, when the forecast is loaded. */
+  rain: RainSample | null;
 }
 
 interface AlertDetailProps {
   alert: RoadAlert;
   detail: ReturnType<typeof useAlertDetail>;
   corridorContext: CorridorContext | null;
+  /** Alerts currently vigente on the same road code. */
+  roadAlertCount: number;
   now: number | null;
   onRetryDetail: () => void;
   onCenter: () => void;
@@ -82,7 +89,7 @@ function Evidence({ data }: { data: AlertDetailResponse }) {
   );
 }
 
-export function AlertDetail({ alert, detail, corridorContext, now, onRetryDetail, onCenter, onClose }: AlertDetailProps) {
+export function AlertDetail({ alert, detail, corridorContext, roadAlertCount, now, onRetryDetail, onCenter, onClose }: AlertDetailProps) {
   const status = STATUS_META[alert.roadStatus];
   return (
     <article className="pr-detail" aria-labelledby="detail-title">
@@ -136,6 +143,16 @@ export function AlertDetail({ alert, detail, corridorContext, now, onRetryDetail
         </div>
       </dl>
 
+      {now && isStaleAlert(alert, now) && (
+        <div className="pr-stale-note" role="note">
+          <Icon name="restringido" size={14} />
+          <span>
+            Sin novedades de SUTRAN hace {Math.round(hoursSinceAction(alert, now) ?? 0)} h (umbral: {STALE_ALERT_AFTER_HOURS} h). La alerta
+            sigue vigente, pero el estado podría haber cambiado; confirma antes de viajar.
+          </span>
+        </div>
+      )}
+
       {alert.currentSituation && <blockquote className="pr-situation">{alert.currentSituation}</blockquote>}
       {alert.description && alert.description !== alert.title && <p className="pr-detail__desc">{alert.description}</p>}
 
@@ -149,6 +166,20 @@ export function AlertDetail({ alert, detail, corridorContext, now, onRetryDetail
               : `a ${Math.abs(corridorContext.deltaKm).toFixed(1)} km de ${corridorContext.nearestPlace}`}
           </span>
         </div>
+      )}
+
+      {roadAlertCount > 1 && alert.roadCode && (
+        <p className="pr-note">
+          {roadAlertCount} alertas vigentes en {alert.roadCode} en este momento.
+        </p>
+      )}
+
+      {corridorContext?.rain && (
+        <p className="pr-note">
+          Lluvia cerca de este km: {classifyRain(rainPeakMm(corridorContext.rain)).label.toLowerCase()} (últimas 24 h{" "}
+          {corridorContext.rain.pastMm.toLocaleString("es-PE")} mm · próximas 24 h {corridorContext.rain.nextMm.toLocaleString("es-PE")}{" "}
+          mm). Pronóstico de Open-Meteo, no es un aviso oficial.
+        </p>
       )}
 
       <dl className="pr-kv">
@@ -191,6 +222,13 @@ export function AlertDetail({ alert, detail, corridorContext, now, onRetryDetail
           </>
         )}
       </section>
+
+      <div className="pr-help">
+        <span>Emergencias en carretera (MTC)</span>
+        <span>
+          <a href="tel:981232298">981 232 298</a> · <a href="tel:981232505">981 232 505</a>
+        </span>
+      </div>
 
       <footer className="pr-detail__actions">
         <button type="button" className="pr-btn" onClick={onCenter}>

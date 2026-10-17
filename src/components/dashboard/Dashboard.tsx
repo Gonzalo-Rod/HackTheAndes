@@ -31,7 +31,10 @@ import {
   timelineWindow,
   type TimelineRange,
 } from "@/domain/road-alerts/timeline";
+import { rainAtKm, rainSegments } from "@/domain/weather/rain";
+import { countByRoad } from "@/domain/road-alerts/staleness";
 import { useAlertDetail } from "@/hooks/use-alert-detail";
+import { useCorridorRain } from "@/hooks/use-corridor-rain";
 import { useCorridor } from "@/hooks/use-corridor";
 import { useNow } from "@/hooks/use-now";
 import { useRoadAlerts } from "@/hooks/use-road-alerts";
@@ -59,6 +62,7 @@ const readDeepLink = () => (typeof window === "undefined" ? null : new URLSearch
 export function Dashboard() {
   const alertsState = useRoadAlerts();
   const corridorState = useCorridor();
+  const rainState = useCorridorRain();
   const now = useNow();
   const mapRef = useRef<MapViewHandle>(null);
 
@@ -84,6 +88,8 @@ export function Dashboard() {
   const summary = useMemo(() => summarizeAlerts(filtered), [filtered]);
   const matrix = useMemo(() => causeStatusMatrix(filtered, CAUSE_ORDER), [filtered]);
   const corridorAlerts = useMemo(() => (corridor ? placeAlertsOnCorridor(filtered, corridor) : []), [filtered, corridor]);
+  const rain = rainState.data;
+  const rainBands = useMemo(() => (rain && corridor ? rainSegments(rain.samples, corridor.kmTotal) : []), [rain, corridor]);
   const timeWindow = useMemo(() => timelineWindow(filtered, range, now ?? 0), [filtered, range, now]);
   const cumulative = useMemo(() => (now ? cumulativeByDay(filtered, timeWindow) : []), [filtered, timeWindow, now]);
   const hiddenIds = useMemo(() => (cursorMs === null ? EMPTY_SET : hiddenAtCursor(filtered, cursorMs)), [filtered, cursorMs]);
@@ -93,6 +99,7 @@ export function Dashboard() {
   const detail = useAlertDetail(selected?.id ?? null, detailReload);
   const tab: SidebarTab = tabChoice ?? (selected ? "detalle" : "capas");
   const filtersActive = hasActiveFilters(filters);
+  const roadCounts = useMemo(() => countByRoad(allAlerts), [allAlerts]);
   const pe22Count = allAlerts.filter((a) => a.roadCode === PE22).length;
   const placedSelected = selected ? corridorAlerts.find((c) => c.alert.id === selected.id) : undefined;
   const near = placedSelected && corridor ? nearestPlace(corridor.places, placedSelected.km) : null;
@@ -103,6 +110,7 @@ export function Dashboard() {
           elevationM: elevationAtKm(corridor.profile, placedSelected.km),
           nearestPlace: near.place.name,
           deltaKm: near.deltaKm,
+          rain: rain ? rainAtKm(rain.samples, placedSelected.km) : null,
         }
       : null;
 
@@ -201,6 +209,7 @@ export function Dashboard() {
           mode={mode}
           corridor={corridor}
           corridorAlerts={corridorAlerts}
+          rainSegments={rainBands}
           highlightRegionKey={filters.regionKey}
           profileKm={tourKm ?? profileKm}
           now={now}
@@ -236,7 +245,16 @@ export function Dashboard() {
                 <header className="pr-panel__head">
                   <h2 id="layers-title">Capas</h2>
                 </header>
-                <LayersPanel layers={layers} is3d={mode === "3d"} onChange={setLayers} />
+                <LayersPanel
+                  layers={layers}
+                  is3d={mode === "3d"}
+                  meta={alertsState.data?.meta ?? null}
+                  corridor={corridor}
+                  rain={rain}
+                  rainError={rainState.error}
+                  now={now}
+                  onChange={setLayers}
+                />
               </section>
             </>
           }
@@ -246,6 +264,7 @@ export function Dashboard() {
                 alert={selected}
                 detail={detail}
                 corridorContext={corridorContext}
+                roadAlertCount={roadCounts.get(selected.roadCode) ?? 0}
                 now={now}
                 onRetryDetail={() => setDetailReload((n) => n + 1)}
                 onCenter={() => mapRef.current?.flyToAlert(selected)}
@@ -258,7 +277,7 @@ export function Dashboard() {
               </div>
             )
           }
-          sourcesContent={<SourcesPanel meta={alertsState.data?.meta ?? null} corridor={corridor} />}
+          sourcesContent={<SourcesPanel meta={alertsState.data?.meta ?? null} corridor={corridor} rain={rain} />}
         />
 
         <div className="pr-dock">
@@ -290,6 +309,7 @@ export function Dashboard() {
               />
               <ElevationProfile
                 corridor={corridor}
+                rainBands={rainBands}
                 placed={corridorAlerts}
                 hiddenIds={hiddenIds}
                 activeKm={tourKm}

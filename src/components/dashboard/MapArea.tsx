@@ -18,7 +18,10 @@ const BASE_PADDING = { top: 64, right: 48, bottom: 64, left: 48 };
 /** Extra bottom padding so a flown-to alert is not hidden behind the selected-alert card. */
 const CALLOUT_PADDING = { ...BASE_PADDING, bottom: 190 };
 
-type PassThrough = Pick<MapViewProps, "alerts" | "hiddenIds" | "hoveredId" | "corridorAlerts" | "highlightRegionKey" | "onHover">;
+type PassThrough = Pick<
+  MapViewProps,
+  "alerts" | "hiddenIds" | "hoveredId" | "corridorAlerts" | "rainSegments" | "highlightRegionKey" | "onHover"
+>;
 
 interface MapAreaProps extends PassThrough {
   mapRef: Ref<MapViewHandle>;
@@ -49,6 +52,7 @@ export function MapArea({
   hiddenIds,
   hoveredId,
   corridorAlerts,
+  rainSegments,
   highlightRegionKey,
   profileKm,
   status,
@@ -79,6 +83,7 @@ export function MapArea({
         mode={mode}
         corridor={corridor}
         corridorAlerts={corridorAlerts}
+        rainSegments={rainSegments}
         highlightRegionKey={highlightRegionKey}
         profileKm={profileKm}
         padding={BASE_PADDING}

@@ -260,3 +260,26 @@
   color: var(--ink-3);
   font-size: 11px;
 }
+
+.pr-stale-note {
+  display: flex;
+  gap: 7px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  background: rgba(250, 178, 25, 0.16);
+  color: #6e4700;
+  font-size: 12px;
+}
+.pr-help {
+  display: grid;
+  gap: 4px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  background: #f1ece2;
+  color: var(--ink-2);
+  font-size: 12px;
+}
+.pr-help a {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}

@@ -7,6 +7,7 @@ import type { LayerState, MapMode } from "@/components/dashboard/types";
 import type { CorridorData } from "@/contracts/corridor";
 import type { RoadAlert } from "@/contracts/road-alerts";
 import type { LngLat } from "@/domain/geo/measure";
+import type { RainSegment } from "@/domain/weather/rain";
 import type { CorridorAlert } from "@/domain/road-alerts/corridor-placement";
 
 import { createBaseStyle, TERRAIN_SOURCE } from "./basemap-style";
@@ -17,6 +18,7 @@ import {
   applyRegionHighlight,
   setAffectedStretches,
   setCorridorData,
+  setCorridorRain,
   setProfilePoint,
   startFlowAnimation,
 } from "./map-layers";
@@ -34,6 +36,7 @@ export interface MapViewProps {
   mode: MapMode;
   corridor: CorridorData | null;
   corridorAlerts: CorridorAlert[];
+  rainSegments: RainSegment[];
   highlightRegionKey: string | null;
   profileKm: number | null;
   padding: ScreenPadding;
@@ -189,7 +192,8 @@ export function MapView(props: MapViewProps) {
     };
   }, []);
 
-  const { layers, mode, corridor, corridorAlerts, highlightRegionKey, profileKm, alerts, hiddenIds, selectedId, hoveredId } = props;
+  const { layers, mode, corridor, corridorAlerts, rainSegments, highlightRegionKey, profileKm, alerts, hiddenIds, selectedId, hoveredId } =
+    props;
   useEffect(() => {
     if (mapRef.current && readyRef.current) applyLayerState(mapRef.current, layers);
   }, [layers, mapReady]);
@@ -227,6 +231,10 @@ export function MapView(props: MapViewProps) {
   useEffect(() => {
     if (mapRef.current && readyRef.current && corridor) setCorridorData(mapRef.current, corridor);
   }, [corridor, mapReady]);
+
+  useEffect(() => {
+    if (mapRef.current && readyRef.current) setCorridorRain(mapRef.current, corridor, rainSegments);
+  }, [corridor, rainSegments, mapReady]);
 
   useEffect(() => {
     if (mapRef.current && readyRef.current && corridor) setAffectedStretches(mapRef.current, corridor, corridorAlerts, hiddenIds);
