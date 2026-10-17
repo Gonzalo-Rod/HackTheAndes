@@ -30,8 +30,13 @@
   border-radius: 50%;
   background: var(--marker-color);
   color: var(--marker-ink);
-  box-shadow: 0 0 0 2px #fffdf7, 0 3px 8px rgba(31, 28, 23, 0.35);
-  transition: transform 0.3s var(--ease-out), box-shadow 0.3s, opacity 0.3s;
+  box-shadow:
+    0 0 0 2px #fffdf7,
+    0 3px 8px rgba(31, 28, 23, 0.35);
+  transition:
+    transform 0.3s var(--ease-out),
+    box-shadow 0.3s,
+    opacity 0.3s;
   animation: pr-pop 0.55s var(--ease-out) both;
 }
 .pr-marker[data-status="interrumpido"] .pr-marker__dot {
@@ -87,7 +92,9 @@
   opacity: 0;
   transform: translate(-4px, -50%);
   pointer-events: none;
-  transition: opacity 0.2s, transform 0.2s;
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
 }
 .pr-marker.has-chip .pr-marker__chip {
   opacity: 1;
@@ -98,7 +105,10 @@
 }
 .pr-marker.is-selected .pr-marker__dot {
   transform: scale(1.3);
-  box-shadow: 0 0 0 2.5px #fffdf7, 0 0 0 5px var(--marker-color), 0 6px 16px rgba(31, 28, 23, 0.4);
+  box-shadow:
+    0 0 0 2.5px #fffdf7,
+    0 0 0 5px var(--marker-color),
+    0 6px 16px rgba(31, 28, 23, 0.4);
 }
 .pr-marker.is-selected .pr-marker__chip {
   background: var(--ink);
@@ -280,7 +290,9 @@
 .pr-legend__line--corridor {
   height: 4px;
   background: #2b2620;
-  box-shadow: 0 0 0 1.5px #fffdf7, 0 0 0 2.5px var(--line-strong);
+  box-shadow:
+    0 0 0 1.5px #fffdf7,
+    0 0 0 2.5px var(--line-strong);
 }
 
 /* Selected-alert card (reference: dark translucent card with large figures) */

@@ -30,14 +30,26 @@ export function SourcesPanel({ meta, corridor }: SourcesPanelProps) {
           <a href={SUTRAN_MAP_URL} target="_blank" rel="noopener noreferrer">
             mapa de alertas de SUTRAN <Icon name="external" size={11} />
           </a>
-          , leídas desde su API JSON pública (sin autenticación, no documentada). El servidor la consulta como máximo una vez por minuto y el tablero se actualiza
-          cada 2 minutos.
+          , leídas desde su API JSON pública (sin autenticación, no documentada). El servidor la consulta como máximo una vez por minuto y
+          el tablero se actualiza cada 2 minutos.
         </p>
         <dl className="pr-kv pr-kv--compact">
-          <div className="pr-kv__row"><dt>Modo</dt><dd>{meta ? FALLBACK_LABELS[meta.fallback] : "—"}</dd></div>
-          <div className="pr-kv__row"><dt>{meta?.fallback === "snapshot" ? "Instantánea guardada" : "Última consulta"}</dt><dd>{meta ? formatDateTime(meta.fetchedAt) : "—"}</dd></div>
-          <div className="pr-kv__row"><dt>Última acción SUTRAN</dt><dd>{meta ? formatDateTime(meta.latestActionAt) : "—"}</dd></div>
-          <div className="pr-kv__row"><dt>Registros descartados</dt><dd>{meta ? `${meta.skippedCount} (vencidos, no vigentes o inválidos)` : "—"}</dd></div>
+          <div className="pr-kv__row">
+            <dt>Modo</dt>
+            <dd>{meta ? FALLBACK_LABELS[meta.fallback] : "—"}</dd>
+          </div>
+          <div className="pr-kv__row">
+            <dt>{meta?.fallback === "snapshot" ? "Instantánea guardada" : "Última consulta"}</dt>
+            <dd>{meta ? formatDateTime(meta.fetchedAt) : "—"}</dd>
+          </div>
+          <div className="pr-kv__row">
+            <dt>Última acción SUTRAN</dt>
+            <dd>{meta ? formatDateTime(meta.latestActionAt) : "—"}</dd>
+          </div>
+          <div className="pr-kv__row">
+            <dt>Registros descartados</dt>
+            <dd>{meta ? `${meta.skippedCount} (vencidos, no vigentes o inválidos)` : "—"}</dd>
+          </div>
         </dl>
       </section>
 
@@ -46,9 +58,15 @@ export function SourcesPanel({ meta, corridor }: SourcesPanelProps) {
           <span className="pr-source__kind">Capa estática</span>
           Red vial, ríos y regiones
         </h3>
-        <p>Red vial nacional del MTC, ríos y quebradas del ANA y límites regionales, tal como los publica el mapa de SUTRAN. Simplificados para su visualización.</p>
+        <p>
+          Red vial nacional del MTC, ríos y quebradas del ANA y límites regionales, tal como los publica el mapa de SUTRAN. Simplificados
+          para su visualización.
+        </p>
         <dl className="pr-kv pr-kv--compact">
-          <div className="pr-kv__row"><dt>Descargado</dt><dd>{corridor ? formatDateTime(corridor.metadata.retrievedAt) : "—"}</dd></div>
+          <div className="pr-kv__row">
+            <dt>Descargado</dt>
+            <dd>{corridor ? formatDateTime(corridor.metadata.retrievedAt) : "—"}</dd>
+          </div>
         </dl>
       </section>
 
@@ -58,16 +76,22 @@ export function SourcesPanel({ meta, corridor }: SourcesPanelProps) {
           Corredor PE-22 y perfil de elevación
         </h3>
         <p>
-          Eje de la Carretera Central armado con los 32 tramos oficiales del MTC; el km se interpola dentro de cada tramo. Elevación de Mapzen Terrain Tiles (AWS,
-          ~30 m). Lugares de OpenStreetMap ajustados al eje.
+          Eje de la Carretera Central armado con los 32 tramos oficiales del MTC; el km se interpola dentro de cada tramo. Elevación de
+          Mapzen Terrain Tiles (AWS, ~30 m). Lugares de OpenStreetMap ajustados al eje.
         </p>
       </section>
 
       <section className="pr-source pr-source--limits">
         <h3>Limitaciones conocidas</h3>
         <ul>
-          <li>Si SUTRAN no responde y el servidor no tiene datos recientes, se muestra una instantánea real guardada con su fecha (sin las alertas ya vencidas).</li>
-          <li>SUTRAN solo publica alertas vigentes: no hay archivo público de alertas pasadas. La línea de tiempo reproduce las alertas de hoy según su fecha de evento.</li>
+          <li>
+            Si SUTRAN no responde y el servidor no tiene datos recientes, se muestra una instantánea real guardada con su fecha (sin las
+            alertas ya vencidas).
+          </li>
+          <li>
+            SUTRAN solo publica alertas vigentes: no hay archivo público de alertas pasadas. La línea de tiempo reproduce las alertas de hoy
+            según su fecha de evento.
+          </li>
           <li>Las fechas de evento no tienen hora; se ubican a las 12:00 (hora de Lima).</li>
           <li>El km publicado por SUTRAN y el km interpolado sobre la geometría del MTC difieren en ~1,5 km en la PE-22.</li>
           <li>Los tramos afectados (±1,2 km) son una aproximación visual, no una extensión oficial.</li>
@@ -76,8 +100,8 @@ export function SourcesPanel({ meta, corridor }: SourcesPanelProps) {
       </section>
 
       <p className="pr-attrib">
-        Mapa base: OpenFreeMap · © OpenMapTiles · © colaboradores de OpenStreetMap. Relieve: Mapzen Terrain Tiles en AWS Open Data. Satélite: Sentinel-2 cloudless
-        2016 por EOX (CC BY 4.0).
+        Mapa base: OpenFreeMap · © OpenMapTiles · © colaboradores de OpenStreetMap. Relieve: Mapzen Terrain Tiles en AWS Open Data.
+        Satélite: Sentinel-2 cloudless 2016 por EOX (CC BY 4.0).
       </p>
     </div>
   );

@@ -1,10 +1,4 @@
-import type {
-  AlertCause,
-  AlertEvidence,
-  AlertHistoryEntry,
-  RoadAlert,
-  RoadStatus,
-} from "@/contracts/road-alerts";
+import type { AlertCause, AlertEvidence, AlertHistoryEntry, RoadAlert, RoadStatus } from "@/contracts/road-alerts";
 import { ALERT_CAUSES, ROAD_STATUSES } from "@/contracts/road-alerts";
 
 import { parseKm, parseSutranDate, regionKey, regionLabel, safeHttpUrl, titleCase, toSentenceCase } from "./parsing";

@@ -50,11 +50,23 @@ export function CumulativeChart({ points, window, cursorMs, onPickDay }: Cumulat
 
   const table = (
     <table>
-      <thead><tr><th>Día</th><th>Nuevas</th><th>Acumuladas</th></tr></thead>
+      <thead>
+        <tr>
+          <th>Día</th>
+          <th>Nuevas</th>
+          <th>Acumuladas</th>
+        </tr>
+      </thead>
       <tbody>
-        {points.filter((p) => p.added > 0).map((p) => (
-          <tr key={p.dayStartMs}><td>{formatShortDate(p.dayStartMs + DAY_MS / 2)}</td><td>{p.added}</td><td>{p.total}</td></tr>
-        ))}
+        {points
+          .filter((p) => p.added > 0)
+          .map((p) => (
+            <tr key={p.dayStartMs}>
+              <td>{formatShortDate(p.dayStartMs + DAY_MS / 2)}</td>
+              <td>{p.added}</td>
+              <td>{p.total}</td>
+            </tr>
+          ))}
       </tbody>
     </table>
   );
@@ -78,18 +90,37 @@ export function CumulativeChart({ points, window, cursorMs, onPickDay }: Cumulat
             {ticks.map((t) => (
               <g key={t}>
                 <line x1={PAD.left} x2={width - PAD.right} y1={y(t)} y2={y(t)} className="pr-grid" />
-                <text x={PAD.left - 6} y={y(t)} className="pr-axis" textAnchor="end" dominantBaseline="middle">{t}</text>
+                <text x={PAD.left - 6} y={y(t)} className="pr-axis" textAnchor="end" dominantBaseline="middle">
+                  {t}
+                </text>
               </g>
             ))}
             <path d={area} fill={SERIES_COLOR} opacity={0.1} />
             <path d={line} fill="none" stroke={SERIES_COLOR} strokeWidth={2} strokeLinejoin="round" />
-            <text x={PAD.left} y={height - 4} className="pr-axis">{formatShortDate(window.startMs + DAY_MS / 2)}</text>
-            <text x={width - PAD.right} y={height - 4} className="pr-axis" textAnchor="end">Hoy</text>
+            <text x={PAD.left} y={height - 4} className="pr-axis">
+              {formatShortDate(window.startMs + DAY_MS / 2)}
+            </text>
+            <text x={width - PAD.right} y={height - 4} className="pr-axis" textAnchor="end">
+              Hoy
+            </text>
             {cursorX !== null && <line x1={cursorX} x2={cursorX} y1={PAD.top} y2={PAD.top + plotH} className="pr-cursor-line" />}
             {hovered && (
               <g>
-                <line x1={x(hovered.dayStartMs + DAY_MS / 2)} x2={x(hovered.dayStartMs + DAY_MS / 2)} y1={PAD.top} y2={PAD.top + plotH} className="pr-crosshair" />
-                <circle cx={x(hovered.dayStartMs + DAY_MS / 2)} cy={y(hovered.total)} r={4} fill={SERIES_COLOR} stroke="var(--surface)" strokeWidth={2} />
+                <line
+                  x1={x(hovered.dayStartMs + DAY_MS / 2)}
+                  x2={x(hovered.dayStartMs + DAY_MS / 2)}
+                  y1={PAD.top}
+                  y2={PAD.top + plotH}
+                  className="pr-crosshair"
+                />
+                <circle
+                  cx={x(hovered.dayStartMs + DAY_MS / 2)}
+                  cy={y(hovered.total)}
+                  r={4}
+                  fill={SERIES_COLOR}
+                  stroke="var(--surface)"
+                  strokeWidth={2}
+                />
               </g>
             )}
           </svg>
@@ -99,7 +130,10 @@ export function CumulativeChart({ points, window, cursorMs, onPickDay }: Cumulat
             <span className="pr-tooltip__main">
               <strong>{hovered.total}</strong> alertas vigentes
             </span>
-            <span>{formatShortDate(hovered.dayStartMs + DAY_MS / 2)}{hovered.added ? ` · +${hovered.added} ese día` : ""}</span>
+            <span>
+              {formatShortDate(hovered.dayStartMs + DAY_MS / 2)}
+              {hovered.added ? ` · +${hovered.added} ese día` : ""}
+            </span>
           </ChartTooltip>
         )}
       </div>

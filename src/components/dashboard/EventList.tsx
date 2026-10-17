@@ -18,11 +18,24 @@ interface EventListProps {
   onClearFilters: () => void;
 }
 
-export function EventList({ alerts, hiddenIds, selectedId, hoveredId, now, loading, emptyReason, onSelect, onHover, onClearFilters }: EventListProps) {
+export function EventList({
+  alerts,
+  hiddenIds,
+  selectedId,
+  hoveredId,
+  now,
+  loading,
+  emptyReason,
+  onSelect,
+  onHover,
+  onClearFilters,
+}: EventListProps) {
   return (
     <section className="pr-events" aria-labelledby="events-title">
       <header className="pr-events__head">
-        <h2 id="events-title" className="pr-dock-title">Eventos</h2>
+        <h2 id="events-title" className="pr-dock-title">
+          Eventos
+        </h2>
         <span className="pr-count pr-count--strong">{alerts.length}</span>
         <span className="pr-events__hint">Última acción SUTRAN</span>
       </header>
@@ -36,7 +49,9 @@ export function EventList({ alerts, hiddenIds, selectedId, hoveredId, now, loadi
       {!loading && emptyReason && (
         <div className="pr-empty">
           <Icon name={emptyReason === "filters" ? "search" : "check"} size={18} />
-          <p>{emptyReason === "filters" ? "Ninguna alerta coincide con los filtros." : "SUTRAN no reporta alertas vigentes en este ámbito."}</p>
+          <p>
+            {emptyReason === "filters" ? "Ninguna alerta coincide con los filtros." : "SUTRAN no reporta alertas vigentes en este ámbito."}
+          </p>
           {emptyReason === "filters" && (
             <button type="button" className="pr-btn pr-btn--link" onClick={onClearFilters}>
               Limpiar filtros

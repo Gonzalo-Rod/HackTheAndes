@@ -75,19 +75,43 @@ export function Timeline(props: TimelineProps) {
       <div className="pr-timeline__bar">
         <h2 className="pr-dock-title">Línea de tiempo</h2>
         <div className="pr-timeline__controls">
-          <button type="button" className="pr-icon-btn" onClick={() => props.onStep(-1)} aria-label="Evento anterior" title="Evento anterior">
+          <button
+            type="button"
+            className="pr-icon-btn"
+            onClick={() => props.onStep(-1)}
+            aria-label="Evento anterior"
+            title="Evento anterior"
+          >
             <Icon name="prev" size={13} />
           </button>
-          <button type="button" className="pr-icon-btn pr-icon-btn--primary" onClick={props.onTogglePlay} aria-label={playing ? "Pausar" : "Reproducir"} title={playing ? "Pausar" : "Reproducir"}>
+          <button
+            type="button"
+            className="pr-icon-btn pr-icon-btn--primary"
+            onClick={props.onTogglePlay}
+            aria-label={playing ? "Pausar" : "Reproducir"}
+            title={playing ? "Pausar" : "Reproducir"}
+          >
             <Icon name={playing ? "pause" : "play"} size={13} />
           </button>
-          <button type="button" className="pr-icon-btn" onClick={() => props.onStep(1)} aria-label="Evento siguiente" title="Evento siguiente">
+          <button
+            type="button"
+            className="pr-icon-btn"
+            onClick={() => props.onStep(1)}
+            aria-label="Evento siguiente"
+            title="Evento siguiente"
+          >
             <Icon name="next" size={13} />
           </button>
         </div>
         <div className="pr-segmented pr-segmented--sm" role="group" aria-label="Periodo">
           {RANGES.map((r) => (
-            <button key={r.value} type="button" className="pr-segmented__item" aria-pressed={range === r.value} onClick={() => props.onRangeChange(r.value)}>
+            <button
+              key={r.value}
+              type="button"
+              className="pr-segmented__item"
+              aria-pressed={range === r.value}
+              onClick={() => props.onRangeChange(r.value)}
+            >
               {r.label}
             </button>
           ))}
@@ -103,7 +127,11 @@ export function Timeline(props: TimelineProps) {
       </div>
 
       <div className="pr-timeline__trackwrap">
-        {earlierCount > 0 && <span className="pr-timeline__earlier" title="Alertas con fecha de evento anterior al periodo">◂ {earlierCount} antes</span>}
+        {earlierCount > 0 && (
+          <span className="pr-timeline__earlier" title="Alertas con fecha de evento anterior al periodo">
+            ◂ {earlierCount} antes
+          </span>
+        )}
         <div
           ref={trackRef}
           className={`pr-timeline__track${dragging ? " is-dragging" : ""}`}

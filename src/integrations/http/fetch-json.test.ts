@@ -24,7 +24,10 @@ describe("getJson", () => {
   });
 
   it("retries a 500 and succeeds", async () => {
-    const fetchImpl = vi.fn().mockResolvedValueOnce(jsonResponse({}, 500)).mockResolvedValueOnce(jsonResponse({ ok: 2 }));
+    const fetchImpl = vi
+      .fn()
+      .mockResolvedValueOnce(jsonResponse({}, 500))
+      .mockResolvedValueOnce(jsonResponse({ ok: 2 }));
     await expect(getJson("https://x.test/a", { ...base, fetchImpl })).resolves.toEqual({ ok: 2 });
     expect(fetchImpl).toHaveBeenCalledTimes(2);
   });

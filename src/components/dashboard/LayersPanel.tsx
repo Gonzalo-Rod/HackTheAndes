@@ -58,8 +58,20 @@ export function LayersPanel({ layers, is3d, onChange }: LayersPanelProps) {
   const set = (patch: Partial<LayerState>) => onChange({ ...layers, ...patch });
   return (
     <ul className="pr-layers">
-      <LayerRow label="Alertas SUTRAN" hint="Vigentes, oficiales" swatch={<span className="sw sw--alerts" />} checked={layers.alerts} onToggle={(alerts) => set({ alerts })} />
-      <LayerRow label="Carretera Central" hint="Eje PE-22, km y lugares" swatch={<span className="sw sw--corridor" />} checked={layers.corridor} onToggle={(corridor) => set({ corridor })} />
+      <LayerRow
+        label="Alertas SUTRAN"
+        hint="Vigentes, oficiales"
+        swatch={<span className="sw sw--alerts" />}
+        checked={layers.alerts}
+        onToggle={(alerts) => set({ alerts })}
+      />
+      <LayerRow
+        label="Carretera Central"
+        hint="Eje PE-22, km y lugares"
+        swatch={<span className="sw sw--corridor" />}
+        checked={layers.corridor}
+        onToggle={(corridor) => set({ corridor })}
+      />
       <LayerRow
         label="Red vial nacional"
         hint="MTC vía SUTRAN"
@@ -90,7 +102,14 @@ export function LayersPanel({ layers, is3d, onChange }: LayersPanelProps) {
         opacity={layers.riversOpacity}
         onOpacity={(riversOpacity) => set({ riversOpacity })}
       />
-      <LayerRow label="Terreno 3D" hint={is3d ? "Relieve exagerado" : "Activa la vista 3D"} swatch={<span className="sw sw--terrain" />} checked={layers.terrain} disabled={!is3d} onToggle={(terrain) => set({ terrain })} />
+      <LayerRow
+        label="Terreno 3D"
+        hint={is3d ? "Relieve exagerado" : "Activa la vista 3D"}
+        swatch={<span className="sw sw--terrain" />}
+        checked={layers.terrain}
+        disabled={!is3d}
+        onToggle={(terrain) => set({ terrain })}
+      />
       <LayerRow
         label="Sombreado de relieve"
         swatch={<span className="sw sw--hillshade" />}
@@ -108,7 +127,12 @@ export function LayersPanel({ layers, is3d, onChange }: LayersPanelProps) {
         opacity={layers.satelliteOpacity}
         onOpacity={(satelliteOpacity) => set({ satelliteOpacity })}
       />
-      <LayerRow label="Límites regionales" swatch={<span className="sw sw--regions" />} checked={layers.regions} onToggle={(regions) => set({ regions })} />
+      <LayerRow
+        label="Límites regionales"
+        swatch={<span className="sw sw--regions" />}
+        checked={layers.regions}
+        onToggle={(regions) => set({ regions })}
+      />
     </ul>
   );
 }

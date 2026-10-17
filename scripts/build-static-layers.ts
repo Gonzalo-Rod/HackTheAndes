@@ -75,13 +75,25 @@ type Geometry = { type: string; coordinates: unknown };
 type Feature = { type: "Feature"; geometry: Geometry; properties: Record<string, unknown> };
 type FeatureCollection = { type: "FeatureCollection"; features: Feature[] };
 type Envelope<T> = { data: T };
-type SegmentAttrs = { id: string; codVia: string; kmInicio: number; kmFin: number; superficie: string | null; estado: string | null; nombreVia: string };
+type SegmentAttrs = {
+  id: string;
+  codVia: string;
+  kmInicio: number;
+  kmFin: number;
+  superficie: string | null;
+  estado: string | null;
+  nombreVia: string;
+};
 type HydroAttrs = { id: string; nombre: string; tipo: string; cuenca: string };
 type NominatimHit = { lat: string; lon: string; category: string };
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 const round = (value: number, digits: number) => Math.round(value * 10 ** digits) / 10 ** digits;
-const exists = (file: string) => fs.access(file).then(() => true, () => false);
+const exists = (file: string) =>
+  fs.access(file).then(
+    () => true,
+    () => false,
+  );
 
 async function cachedJson<T>(name: string, url: string): Promise<T> {
   const file = path.join(CACHE_DIR, name);
@@ -123,7 +135,9 @@ function simplifiedPolygons(geometry: Geometry): { geometry: Geometry; bbox: num
   const bbox = [Infinity, Infinity, -Infinity, -Infinity];
   const simplified = polygons
     .map((rings) =>
-      rings.map((ring) => dedupeConsecutive(simplifyLine(ring, REGIONS_TOLERANCE_DEG).map((c) => roundCoord(c, 4)))).filter((ring) => ring.length >= 4),
+      rings
+        .map((ring) => dedupeConsecutive(simplifyLine(ring, REGIONS_TOLERANCE_DEG).map((c) => roundCoord(c, 4))))
+        .filter((ring) => ring.length >= 4),
     )
     .filter((rings) => rings.length > 0);
   for (const [lng, lat] of simplified.flat(2)) {
@@ -148,7 +162,10 @@ async function elevationAt([lng, lat]: LngLat): Promise<number> {
   const [x, y] = [Math.floor(xf), Math.floor(yf)];
   const key = `${x}-${y}`;
   if (!terrainTiles.has(key)) {
-    terrainTiles.set(key, cachedBuffer(`terrarium-${TERRAIN_ZOOM}-${key}.png`, SOURCES.terrarium(TERRAIN_ZOOM, x, y)).then((b) => PNG.sync.read(b)));
+    terrainTiles.set(
+      key,
+      cachedBuffer(`terrarium-${TERRAIN_ZOOM}-${key}.png`, SOURCES.terrarium(TERRAIN_ZOOM, x, y)).then((b) => PNG.sync.read(b)),
+    );
   }
   const png = await (terrainTiles.get(key) as Promise<PNG>);
   const px = Math.min(255, Math.floor((xf - x) * 256));
@@ -161,7 +178,10 @@ async function elevationAt([lng, lat]: LngLat): Promise<number> {
 async function geocodePlaces(line: MeasuredVertex[]): Promise<CorridorData["places"]> {
   const places: CorridorData["places"] = [];
   for (const [name, query] of PE22_PLACES) {
-    const slug = name.normalize("NFD").replace(/[^\w]+/g, "-").toLowerCase();
+    const slug = name
+      .normalize("NFD")
+      .replace(/[^\w]+/g, "-")
+      .toLowerCase();
     const cacheName = `nominatim-${slug}-candidates.json`;
     const wasCached = await exists(path.join(CACHE_DIR, cacheName));
     const params = new URLSearchParams({ q: query, format: "jsonv2", limit: "6", countrycodes: "pe" });
@@ -169,10 +189,14 @@ async function geocodePlaces(line: MeasuredVertex[]): Promise<CorridorData["plac
     if (!wasCached || REFRESH) await sleep(NOMINATIM_DELAY_MS);
     // Prefer settlement nodes over administrative centroids; disambiguate homonyms by proximity to the road.
     const settlements = hits.filter((hit) => hit.category === "place");
-    const projections = (settlements.length ? settlements : hits).map((hit) => projectOnMeasuredLine([Number(hit.lon), Number(hit.lat)], line));
+    const projections = (settlements.length ? settlements : hits).map((hit) =>
+      projectOnMeasuredLine([Number(hit.lon), Number(hit.lat)], line),
+    );
     const best = projections.sort((a, b) => a.distanceKm - b.distanceKm)[0];
     const accepted = best !== undefined && best.distanceKm <= MAX_PLACE_OFFSET_KM;
-    console.log(`    ${accepted ? "✓" : "✗"} ${name}: ${best ? `km ${best.km.toFixed(1)}, ${best.distanceKm.toFixed(2)} km from the axis` : "not found"}`);
+    console.log(
+      `    ${accepted ? "✓" : "✗"} ${name}: ${best ? `km ${best.km.toFixed(1)}, ${best.distanceKm.toFixed(2)} km from the axis` : "not found"}`,
+    );
     if (!accepted) continue;
     places.push({
       name,
@@ -217,7 +241,12 @@ async function buildCorridor(network: FeatureCollection, segmentById: Map<string
     kmTotal: round(kmTotal, 3),
     line: thinned,
     segments: pe22
-      .map(({ attrs }) => ({ kmStart: round(attrs.kmInicio, 3), kmEnd: round(attrs.kmFin, 3), surface: attrs.superficie ?? "Sin dato", condition: attrs.estado ?? "Sin dato" }))
+      .map(({ attrs }) => ({
+        kmStart: round(attrs.kmInicio, 3),
+        kmEnd: round(attrs.kmFin, 3),
+        surface: attrs.superficie ?? "Sin dato",
+        condition: attrs.estado ?? "Sin dato",
+      }))
       .sort((a, b) => a.kmStart - b.kmStart),
     kmMarkers: Array.from({ length: Math.floor(kmTotal / KM_MARKER_STEP) + 1 }, (_, i) => {
       const [lng, lat] = pointAtKm(line, i * KM_MARKER_STEP);
@@ -227,7 +256,8 @@ async function buildCorridor(network: FeatureCollection, segmentById: Map<string
     profile,
     metadata: {
       retrievedAt,
-      geometry: "MTC network segments for PE-22 (via SUTRAN), chained and measured by linear interpolation of each segment's official km range",
+      geometry:
+        "MTC network segments for PE-22 (via SUTRAN), chained and measured by linear interpolation of each segment's official km range",
       elevation: "AWS Terrain Tiles (Terrarium, z12, ~30 m at this latitude), sampled every 0.5 km",
       places: "OpenStreetMap Nominatim settlements snapped to the PE-22 axis; positions are approximate",
       attribution: [
@@ -243,12 +273,17 @@ async function buildCorridor(network: FeatureCollection, segmentById: Map<string
 
 async function checkAlertKm(line: MeasuredVertex[]) {
   console.log("Current SUTRAN PE-22 alerts vs. the measured corridor:");
-  const body = (await getJson(SOURCES.alerts, { ...HTTP, timeoutMs: 15_000, provider: "sutran", operation: "data-build.alerts" })) as Envelope<
-    { codigo: string; km: string; lat: number; lng: number; viaCodigo: string }[]
-  >;
+  const body = (await getJson(SOURCES.alerts, {
+    ...HTTP,
+    timeoutMs: 15_000,
+    provider: "sutran",
+    operation: "data-build.alerts",
+  })) as Envelope<{ codigo: string; km: string; lat: number; lng: number; viaCodigo: string }[]>;
   for (const alert of body.data.filter((a) => a.viaCodigo === "PE-22")) {
     const p = projectOnMeasuredLine([alert.lng, alert.lat], line);
-    console.log(`  ${alert.codigo}: stated "${alert.km}" → geometry km ${p.km.toFixed(1)}, ${(p.distanceKm * 1000).toFixed(0)} m from the axis`);
+    console.log(
+      `  ${alert.codigo}: stated "${alert.km}" → geometry km ${p.km.toFixed(1)}, ${(p.distanceKm * 1000).toFixed(0)} m from the axis`,
+    );
   }
 }
 
@@ -271,11 +306,20 @@ async function main() {
     const attrs = segmentById.get(String(feature.properties.id));
     const geometry = attrs ? simplifiedLines(feature.geometry, NETWORK_TOLERANCE_DEG) : null;
     if (!attrs || !geometry) continue;
-    networkFeatures.push({ type: "Feature", geometry, properties: { road: attrs.codVia, condition: attrs.estado ?? "Sin dato", surface: attrs.superficie ?? "Sin dato" } });
+    networkFeatures.push({
+      type: "Feature",
+      geometry,
+      properties: { road: attrs.codVia, condition: attrs.estado ?? "Sin dato", surface: attrs.superficie ?? "Sin dato" },
+    });
   }
   await writeJson("red-vial-nacional.geojson", {
     type: "FeatureCollection",
-    metadata: { source: "MTC national road network as served by SUTRAN", geometryUrl: SOURCES.network, attributesUrl: SOURCES.segments, retrievedAt },
+    metadata: {
+      source: "MTC national road network as served by SUTRAN",
+      geometryUrl: SOURCES.network,
+      attributesUrl: SOURCES.segments,
+      retrievedAt,
+    },
     features: networkFeatures,
   });
 

@@ -36,11 +36,23 @@ export function CauseStatusChart({ rows, activeCauses, onToggleCause }: CauseSta
   const table = (
     <table>
       <thead>
-        <tr><th>Motivo</th>{LEGEND_STATUSES.map((s) => <th key={s}>{STATUS_META[s].label}</th>)}<th>Total</th></tr>
+        <tr>
+          <th>Motivo</th>
+          {LEGEND_STATUSES.map((s) => (
+            <th key={s}>{STATUS_META[s].label}</th>
+          ))}
+          <th>Total</th>
+        </tr>
       </thead>
       <tbody>
         {rows.map((r) => (
-          <tr key={r.cause}><td>{CAUSE_META[r.cause].short}</td>{LEGEND_STATUSES.map((s) => <td key={s}>{r.byStatus[s]}</td>)}<td>{r.total}</td></tr>
+          <tr key={r.cause}>
+            <td>{CAUSE_META[r.cause].short}</td>
+            {LEGEND_STATUSES.map((s) => (
+              <td key={s}>{r.byStatus[s]}</td>
+            ))}
+            <td>{r.total}</td>
+          </tr>
         ))}
       </tbody>
     </table>
@@ -61,7 +73,9 @@ export function CauseStatusChart({ rows, activeCauses, onToggleCause }: CauseSta
                   className={`pr-bars__row${active ? " is-active" : ""}`}
                   onClick={() => onToggleCause(row.cause)}
                   aria-pressed={active}
-                  aria-label={`${CAUSE_META[row.cause].label}: ${row.total} alertas. ${STATUS_ORDER.filter((s) => row.byStatus[s] > 0).map((s) => `${row.byStatus[s]} ${STATUS_META[s].label.toLowerCase()}`).join(", ")}`}
+                  aria-label={`${CAUSE_META[row.cause].label}: ${row.total} alertas. ${STATUS_ORDER.filter((s) => row.byStatus[s] > 0)
+                    .map((s) => `${row.byStatus[s]} ${STATUS_META[s].label.toLowerCase()}`)
+                    .join(", ")}`}
                 >
                   <span className="pr-bars__label">
                     <Icon name={row.cause} size={12} />

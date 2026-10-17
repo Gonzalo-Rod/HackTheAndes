@@ -328,7 +328,9 @@
   background: linear-gradient(160deg, transparent 42%, #fffdf7 42% 47%, #2b2620 47% 55%, #fffdf7 55% 60%, transparent 60%), #e8e1d3;
 }
 .sw--network {
-  background: linear-gradient(120deg, transparent 45%, #6b6255 45% 52%, transparent 52%), linear-gradient(30deg, transparent 60%, #6b6255 60% 65%, transparent 65%), #efeae0;
+  background:
+    linear-gradient(120deg, transparent 45%, #6b6255 45% 52%, transparent 52%),
+    linear-gradient(30deg, transparent 60%, #6b6255 60% 65%, transparent 65%), #efeae0;
 }
 .sw--rivers {
   background: linear-gradient(150deg, transparent 40%, #5f93aa 40% 48%, transparent 48%), #e6ece9;
@@ -343,7 +345,9 @@
   background: linear-gradient(135deg, #7d8467, #a99f86 50%, #5c6650);
 }
 .sw--regions {
-  background: repeating-linear-gradient(90deg, transparent 0 5px, #8f8371 5px 7px) center / 100% 1.5px no-repeat, #f3efe6;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 5px, #8f8371 5px 7px) center / 100% 1.5px no-repeat,
+    #f3efe6;
 }
 .pr-layer__label {
   display: flex;
@@ -502,7 +506,9 @@
   border: 2px solid var(--surface);
   border-radius: 50%;
   cursor: pointer;
-  transition: transform 0.15s, opacity 0.2s;
+  transition:
+    transform 0.15s,
+    opacity 0.2s;
 }
 .pr-timeline__event:hover,
 .pr-timeline__event:focus-visible {
@@ -753,7 +759,9 @@
 .pr-bars__seg {
   height: 100%;
   min-width: 4px;
-  transition: filter 0.15s, width 0.4s var(--ease-out);
+  transition:
+    filter 0.15s,
+    width 0.4s var(--ease-out);
 }
 .pr-bars__seg:first-child {
   border-radius: 0;

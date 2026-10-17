@@ -1,10 +1,5 @@
 import { CorridorDataSchema, type CorridorData } from "@/contracts/corridor";
-import {
-  AlertDetailResponseSchema,
-  AlertsResponseSchema,
-  type AlertDetailResponse,
-  type AlertsResponse,
-} from "@/contracts/road-alerts";
+import { AlertDetailResponseSchema, AlertsResponseSchema, type AlertDetailResponse, type AlertsResponse } from "@/contracts/road-alerts";
 import { getJson, UpstreamError } from "@/integrations/http/fetch-json";
 
 // Browser adapter for this app's own API and static data. Responses are validated
@@ -17,7 +12,11 @@ const PROVIDER = "dashboard-api";
  */
 const API_TIMEOUT_MS = 30_000;
 
-function parseOrThrow<T>(schema: { safeParse: (v: unknown) => { success: true; data: T } | { success: false } }, body: unknown, what: string): T {
+function parseOrThrow<T>(
+  schema: { safeParse: (v: unknown) => { success: true; data: T } | { success: false } },
+  body: unknown,
+  what: string,
+): T {
   const parsed = schema.safeParse(body);
   if (!parsed.success) throw new UpstreamError(`Respuesta inválida (${what})`, "invalid_body", PROVIDER);
   return parsed.data;

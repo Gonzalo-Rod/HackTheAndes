@@ -11,7 +11,15 @@ import type { CorridorAlert } from "@/domain/road-alerts/corridor-placement";
 
 import { createBaseStyle, TERRAIN_SOURCE } from "./basemap-style";
 import { createCameraController, PERU_BOUNDS, type CameraController, type ScreenPadding } from "./map-camera";
-import { addThematicLayers, applyLayerState, applyRegionHighlight, setAffectedStretches, setCorridorData, setProfilePoint, startFlowAnimation } from "./map-layers";
+import {
+  addThematicLayers,
+  applyLayerState,
+  applyRegionHighlight,
+  setAffectedStretches,
+  setCorridorData,
+  setProfilePoint,
+  startFlowAnimation,
+} from "./map-layers";
 import { cullMarkers, syncMarkers, type MarkerEntry } from "./map-markers";
 
 export type MapViewHandle = Omit<CameraController, "stopAll" | "flyToAlert"> & { flyToAlert: (alert: RoadAlert) => void };
@@ -101,7 +109,8 @@ export function MapView(props: MapViewProps) {
       });
 
       map.on("error", (event) => {
-        if (!readyRef.current && FATAL_ERROR_PATTERN.test(event.error?.message ?? "")) latest.current.onError("No se pudo cargar el mapa base.");
+        if (!readyRef.current && FATAL_ERROR_PATTERN.test(event.error?.message ?? ""))
+          latest.current.onError("No se pudo cargar el mapa base.");
       });
       map.on("load", () => {
         if (cancelled) return;
@@ -154,7 +163,14 @@ export function MapView(props: MapViewProps) {
 
     init().catch((error: unknown) => {
       // WebGL unavailable or the map bundle failed to load: show the error state instead of a blank map.
-      console.error(JSON.stringify({ level: "error", operation: "map.init", result: "error", message: error instanceof Error ? error.message : String(error) }));
+      console.error(
+        JSON.stringify({
+          level: "error",
+          operation: "map.init",
+          result: "error",
+          message: error instanceof Error ? error.message : String(error),
+        }),
+      );
       latest.current.onError("Este navegador no puede mostrar el mapa (WebGL no disponible).");
     });
 
@@ -221,25 +237,21 @@ export function MapView(props: MapViewProps) {
     });
   }, [alerts, hiddenIds, selectedId, hoveredId, layers.alerts, mapReady]);
 
-  useImperativeHandle(
-    ref,
-    (): MapViewHandle => {
-      const camera = () => cameraRef.current;
-      return {
-        flyToPeru: () => camera()?.flyToPeru(),
-        flyToCorridor: () => camera()?.flyToCorridor(),
-        flyToAlert: (alert) => camera()?.flyToAlert([alert.lng, alert.lat]),
-        flyToBounds: (bbox) => camera()?.flyToBounds(bbox),
-        flyToKm: (km) => camera()?.flyToKm(km),
-        startTour: () => camera()?.startTour(),
-        stopTour: () => camera()?.stopTour(),
-        setOrbit: (on: boolean, center?: LngLat) => camera()?.setOrbit(on, center),
-        resetNorth: () => camera()?.resetNorth(),
-        zoomBy: (delta) => camera()?.zoomBy(delta),
-      };
-    },
-    [],
-  );
+  useImperativeHandle(ref, (): MapViewHandle => {
+    const camera = () => cameraRef.current;
+    return {
+      flyToPeru: () => camera()?.flyToPeru(),
+      flyToCorridor: () => camera()?.flyToCorridor(),
+      flyToAlert: (alert) => camera()?.flyToAlert([alert.lng, alert.lat]),
+      flyToBounds: (bbox) => camera()?.flyToBounds(bbox),
+      flyToKm: (km) => camera()?.flyToKm(km),
+      startTour: () => camera()?.startTour(),
+      stopTour: () => camera()?.stopTour(),
+      setOrbit: (on: boolean, center?: LngLat) => camera()?.setOrbit(on, center),
+      resetNorth: () => camera()?.resetNorth(),
+      zoomBy: (delta) => camera()?.zoomBy(delta),
+    };
+  }, []);
 
   return <div ref={containerRef} className="pr-map" role="region" aria-label="Mapa de alertas viales del Perú" />;
 }

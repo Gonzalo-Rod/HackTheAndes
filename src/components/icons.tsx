@@ -25,14 +25,18 @@ const ICONS = {
   refresh: '<path d="M20.5 12a8.5 8.5 0 1 1-2.5-6"/><path d="M20.5 3.5v5h-5"/>',
   search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/>',
   close: '<path d="M18 6 6 18M6 6l12 12"/>',
-  external: '<path d="M14 4h6v6"/><path d="M10 14 20 4"/><path d="M19 14v5a1.5 1.5 0 0 1-1.5 1.5h-12A1.5 1.5 0 0 1 4 19V6.5A1.5 1.5 0 0 1 5.5 5H10"/>',
+  external:
+    '<path d="M14 4h6v6"/><path d="M10 14 20 4"/><path d="M19 14v5a1.5 1.5 0 0 1-1.5 1.5h-12A1.5 1.5 0 0 1 4 19V6.5A1.5 1.5 0 0 1 5.5 5H10"/>',
   chevronDown: '<path d="m6 9 6 6 6-6"/>',
   more: '<circle cx="12" cy="5" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/><circle cx="12" cy="19" r="1.3" fill="currentColor"/>',
   north: '<path d="M12 2.5 18.5 20 12 16.2 5.5 20z" fill="currentColor" stroke="none"/>',
-  maximize: '<path d="M8 3.5H5A1.5 1.5 0 0 0 3.5 5v3M20.5 8V5A1.5 1.5 0 0 0 19 3.5h-3M3.5 16v3A1.5 1.5 0 0 0 5 20.5h3M16 20.5h3a1.5 1.5 0 0 0 1.5-1.5v-3"/>',
-  minimize: '<path d="M8 3.5v3A1.5 1.5 0 0 1 6.5 8h-3M20.5 8h-3A1.5 1.5 0 0 1 16 6.5v-3M3.5 16h3A1.5 1.5 0 0 1 8 17.5v3M16 20.5v-3a1.5 1.5 0 0 1 1.5-1.5h3"/>',
+  maximize:
+    '<path d="M8 3.5H5A1.5 1.5 0 0 0 3.5 5v3M20.5 8V5A1.5 1.5 0 0 0 19 3.5h-3M3.5 16v3A1.5 1.5 0 0 0 5 20.5h3M16 20.5h3a1.5 1.5 0 0 0 1.5-1.5v-3"/>',
+  minimize:
+    '<path d="M8 3.5v3A1.5 1.5 0 0 1 6.5 8h-3M20.5 8h-3A1.5 1.5 0 0 1 16 6.5v-3M3.5 16h3A1.5 1.5 0 0 1 8 17.5v3M16 20.5v-3a1.5 1.5 0 0 1 1.5-1.5h3"/>',
   crosshair: '<circle cx="12" cy="12" r="7.5"/><path d="M12 2.5v4M12 17.5v4M2.5 12h4M17.5 12h4"/>',
-  route: '<circle cx="6" cy="18.5" r="2.5"/><path d="M8.5 18.5h8.8a3.5 3.5 0 0 0 0-7H6.7a3.5 3.5 0 0 1 0-7H15.5"/><circle cx="18" cy="4.5" r="2.5"/>',
+  route:
+    '<circle cx="6" cy="18.5" r="2.5"/><path d="M8.5 18.5h8.8a3.5 3.5 0 0 0 0-7H6.7a3.5 3.5 0 0 1 0-7H15.5"/><circle cx="18" cy="4.5" r="2.5"/>',
   link: '<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>',
   orbit: '<path d="M20.5 12a8.5 8.5 0 1 1-8.5-8.5c2.4 0 4.5 1 6 2.5L20.5 8.5"/><path d="M20.5 3.5v5h-5"/>',
   table: '<rect x="3.5" y="4.5" width="17" height="15" rx="1.5"/><path d="M3.5 9.5h17M3.5 14.5h17M9.5 4.5v15"/>',
@@ -40,7 +44,8 @@ const ICONS = {
   check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>',
   layers: '<path d="m12 3.5 8.5 4.7L12 13 3.5 8.2z"/><path d="m3.5 12.6 8.5 4.8 8.5-4.8"/><path d="m3.5 16.6 8.5 4.8 8.5-4.8"/>',
   info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.7v.2"/>',
-  source: '<ellipse cx="12" cy="5.5" rx="7.5" ry="2.8"/><path d="M4.5 5.5v13c0 1.5 3.4 2.8 7.5 2.8s7.5-1.3 7.5-2.8v-13"/><path d="M4.5 12c0 1.5 3.4 2.8 7.5 2.8s7.5-1.3 7.5-2.8"/>',
+  source:
+    '<ellipse cx="12" cy="5.5" rx="7.5" ry="2.8"/><path d="M4.5 5.5v13c0 1.5 3.4 2.8 7.5 2.8s7.5-1.3 7.5-2.8v-13"/><path d="M4.5 12c0 1.5 3.4 2.8 7.5 2.8s7.5-1.3 7.5-2.8"/>',
   mountain: '<path d="m2.5 20 7-12.5 4 7 2.5-4 5.5 9.5z"/>',
   clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 2"/>',
   pin: '<path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
@@ -95,7 +100,14 @@ export function LogoMark({ size = 26 }: { size?: number }) {
       <path d="M1.5 25 11 9l5.5 8.6L20 12l10.5 13z" fill="#c2512c" />
       <path d="M11 9l2.6 4.1-1.6-.9-1.4 1.6-1.2-1.3-1.5.9z" fill="#fbfaf6" opacity="0.9" />
       <path d="M6 30c3-4.5 8.5-3.5 11-6.5s5.5-3 9-2.5" fill="none" stroke="#1f1c17" strokeWidth="2.4" strokeLinecap="round" />
-      <path d="M6 30c3-4.5 8.5-3.5 11-6.5s5.5-3 9-2.5" fill="none" stroke="#fbfaf6" strokeWidth="0.8" strokeDasharray="1.6 1.8" strokeLinecap="round" />
+      <path
+        d="M6 30c3-4.5 8.5-3.5 11-6.5s5.5-3 9-2.5"
+        fill="none"
+        stroke="#fbfaf6"
+        strokeWidth="0.8"
+        strokeDasharray="1.6 1.8"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }

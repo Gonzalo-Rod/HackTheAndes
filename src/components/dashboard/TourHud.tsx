@@ -9,7 +9,11 @@ import { formatElevation } from "@/lib/format";
 export function TourHud({ corridor, km, onStop }: { corridor: CorridorData; km: number; onStop: () => void }) {
   const near = nearestPlace(corridor.places, km);
   const progress = Math.min(100, (km / corridor.kmTotal) * 100);
-  const nearLabel = near ? (Math.abs(near.deltaKm) < 1.5 ? near.place.name : `${Math.abs(near.deltaKm).toFixed(0)} km ${near.deltaKm < 0 ? "antes de" : "después de"} ${near.place.name}`) : "";
+  const nearLabel = near
+    ? Math.abs(near.deltaKm) < 1.5
+      ? near.place.name
+      : `${Math.abs(near.deltaKm).toFixed(0)} km ${near.deltaKm < 0 ? "antes de" : "después de"} ${near.place.name}`
+    : "";
   return (
     <div className="pr-tour" role="status" aria-live="off">
       <div className="pr-tour__row">

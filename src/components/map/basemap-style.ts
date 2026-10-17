@@ -147,7 +147,15 @@ export function createBaseStyle(): StyleSpecification {
         filter: ["in", ["get", "class"], ["literal", ["river", "canal", "stream"]]],
         paint: {
           "line-color": PALETTE.waterLine,
-          "line-width": ["interpolate", ["linear"], ["zoom"], 8, ["match", ["get", "class"], "river", 0.8, 0.3], 14, ["match", ["get", "class"], "river", 2.4, 1]],
+          "line-width": [
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            8,
+            ["match", ["get", "class"], "river", 0.8, 0.3],
+            14,
+            ["match", ["get", "class"], "river", 2.4, 1],
+          ],
         },
       },
       {

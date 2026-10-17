@@ -17,7 +17,16 @@ interface MapControlsProps {
   onZoom: (delta: number) => void;
 }
 
-export function MapControls({ mode, bearing, exaggeration, fullscreenTarget, onModeChange, onExaggerationChange, onResetNorth, onZoom }: MapControlsProps) {
+export function MapControls({
+  mode,
+  bearing,
+  exaggeration,
+  fullscreenTarget,
+  onModeChange,
+  onExaggerationChange,
+  onResetNorth,
+  onZoom,
+}: MapControlsProps) {
   const [fullscreen, setFullscreen] = useState(false);
   useEffect(() => {
     const sync = () => setFullscreen(document.fullscreenElement !== null);

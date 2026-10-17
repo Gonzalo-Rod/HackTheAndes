@@ -43,7 +43,11 @@ export function ChartTooltip({ x, y, width, children }: { x: number; y: number; 
   // Keep the tooltip inside the plot: flip to the left of the pointer near the right edge.
   const flip = x > width - 150;
   return (
-    <div className="pr-tooltip" style={{ left: flip ? undefined : x + 12, right: flip ? width - x + 12 : undefined, top: Math.max(0, y - 8) }} role="status">
+    <div
+      className="pr-tooltip"
+      style={{ left: flip ? undefined : x + 12, right: flip ? width - x + 12 : undefined, top: Math.max(0, y - 8) }}
+      role="status"
+    >
       {children}
     </div>
   );

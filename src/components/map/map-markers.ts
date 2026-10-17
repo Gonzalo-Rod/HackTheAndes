@@ -86,12 +86,7 @@ export function cullMarkers(map: MLMap, entries: Map<string, MarkerEntry>): void
 }
 
 /** Adds, updates and removes markers so they match the given alerts. */
-export function syncMarkers(
-  map: MLMap,
-  MarkerClass: typeof Marker,
-  entries: Map<string, MarkerEntry>,
-  input: MarkerSyncInput,
-): void {
+export function syncMarkers(map: MLMap, MarkerClass: typeof Marker, entries: Map<string, MarkerEntry>, input: MarkerSyncInput): void {
   const keep = new Set(input.alerts.map((a) => a.id));
   for (const [id, entry] of entries) {
     if (keep.has(id)) continue;

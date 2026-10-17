@@ -22,28 +22,44 @@ interface TopBarProps {
   onOpenSources: () => void;
 }
 
-function Freshness({ meta, loading, refreshing, error, now, onRefresh }: Pick<TopBarProps, "meta" | "loading" | "refreshing" | "error" | "now" | "onRefresh">) {
+function Freshness({
+  meta,
+  loading,
+  refreshing,
+  error,
+  now,
+  onRefresh,
+}: Pick<TopBarProps, "meta" | "loading" | "refreshing" | "error" | "now" | "onRefresh">) {
   const ageMs = meta && now ? now - Date.parse(meta.fetchedAt) : 0;
   const tone = error || meta?.stale ? "warn" : meta && ageMs > STALE_AFTER_MS ? "warn" : meta ? "ok" : "idle";
   let label = "Consultando SUTRAN…";
   if (meta && now) {
     const age = formatRelative(meta.fetchedAt, now);
-    label = meta.fallback === "snapshot" ? `Instantánea SUTRAN · ${age}` : meta.stale ? `Datos en caché · ${age}` : `SUTRAN · consultado ${age}`;
+    label =
+      meta.fallback === "snapshot" ? `Instantánea SUTRAN · ${age}` : meta.stale ? `Datos en caché · ${age}` : `SUTRAN · consultado ${age}`;
   } else if (!loading && error) {
     label = "SUTRAN no disponible";
   }
-  const title = meta?.fallback === "snapshot"
-    ? `SUTRAN no responde. Instantánea guardada el ${formatDateTime(meta.fetchedAt)}; se reintenta cada 2 min.`
-    : meta
-    ? `Consulta a SUTRAN: ${formatTime(Date.parse(meta.fetchedAt))}. Última acción publicada por SUTRAN: ${meta.latestActionAt ? formatTime(Date.parse(meta.latestActionAt)) : "—"}. Se actualiza cada 2 min.`
-    : undefined;
+  const title =
+    meta?.fallback === "snapshot"
+      ? `SUTRAN no responde. Instantánea guardada el ${formatDateTime(meta.fetchedAt)}; se reintenta cada 2 min.`
+      : meta
+        ? `Consulta a SUTRAN: ${formatTime(Date.parse(meta.fetchedAt))}. Última acción publicada por SUTRAN: ${meta.latestActionAt ? formatTime(Date.parse(meta.latestActionAt)) : "—"}. Se actualiza cada 2 min.`
+        : undefined;
   return (
     <div className={`pr-fresh pr-fresh--${tone}`} title={title}>
       <span className="pr-fresh__dot" aria-hidden="true" />
       <span className="pr-fresh__label" aria-live="polite">
         {label}
       </span>
-      <button type="button" className="pr-icon-btn pr-icon-btn--sm" onClick={onRefresh} disabled={refreshing} aria-label="Actualizar datos de SUTRAN" title="Actualizar">
+      <button
+        type="button"
+        className="pr-icon-btn pr-icon-btn--sm"
+        onClick={onRefresh}
+        disabled={refreshing}
+        aria-label="Actualizar datos de SUTRAN"
+        title="Actualizar"
+      >
         <span className={refreshing ? "pr-spin" : undefined}>
           <Icon name="refresh" size={14} />
         </span>

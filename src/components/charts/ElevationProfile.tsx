@@ -26,7 +26,16 @@ interface ElevationProfileProps {
   onSelectAlert: (id: string) => void;
 }
 
-export function ElevationProfile({ corridor, placed, hiddenIds, activeKm, selectedId, onHoverKm, onPickKm, onSelectAlert }: ElevationProfileProps) {
+export function ElevationProfile({
+  corridor,
+  placed,
+  hiddenIds,
+  activeKm,
+  selectedId,
+  onHoverKm,
+  onPickKm,
+  onSelectAlert,
+}: ElevationProfileProps) {
   const [ref, size] = useElementSize<HTMLDivElement>();
   const [hoverKm, setHoverKm] = useState<number | null>(null);
   const { width, height } = size;
@@ -39,11 +48,29 @@ export function ElevationProfile({ corridor, placed, hiddenIds, activeKm, select
   const visiblePlaced = placed.filter((p) => !hiddenIds.has(p.alert.id));
   const table = (
     <table>
-      <thead><tr><th>Lugar</th><th>km</th><th>Altitud</th></tr></thead>
+      <thead>
+        <tr>
+          <th>Lugar</th>
+          <th>km</th>
+          <th>Altitud</th>
+        </tr>
+      </thead>
       <tbody>
-        {corridor?.places.map((p) => <tr key={p.name}><td>{p.name}</td><td>{Math.round(p.km)}</td><td>{formatElevation(p.elevationM)}</td></tr>)}
+        {corridor?.places.map((p) => (
+          <tr key={p.name}>
+            <td>{p.name}</td>
+            <td>{Math.round(p.km)}</td>
+            <td>{formatElevation(p.elevationM)}</td>
+          </tr>
+        ))}
         {visiblePlaced.map((p) => (
-          <tr key={p.alert.id}><td>Alerta {p.alert.code} ({STATUS_META[p.alert.roadStatus].label})</td><td>{p.km.toFixed(1)}</td><td>{corridor ? formatElevation(elevationAtKm(corridor.profile, p.km)) : "—"}</td></tr>
+          <tr key={p.alert.id}>
+            <td>
+              Alerta {p.alert.code} ({STATUS_META[p.alert.roadStatus].label})
+            </td>
+            <td>{p.km.toFixed(1)}</td>
+            <td>{corridor ? formatElevation(elevationAtKm(corridor.profile, p.km)) : "—"}</td>
+          </tr>
         ))}
       </tbody>
     </table>
@@ -103,13 +130,22 @@ export function ElevationProfile({ corridor, placed, hiddenIds, activeKm, select
             {placeLabels.map((place) => (
               <g key={place.name}>
                 <line x1={x(place.km)} x2={x(place.km)} y1={y(place.elevationM)} y2={y(0)} className="pr-place-tick" />
-                <text x={x(place.km)} y={height - 4} className="pr-axis" textAnchor="middle">{place.name}</text>
+                <text x={x(place.km)} y={height - 4} className="pr-axis" textAnchor="middle">
+                  {place.name}
+                </text>
               </g>
             ))}
             {shownKm !== null && (
               <g pointerEvents="none">
                 <line x1={x(shownKm)} x2={x(shownKm)} y1={PAD.top - 6} y2={y(0)} className="pr-crosshair" />
-                <circle cx={x(shownKm)} cy={y(elevationAtKm(corridor.profile, shownKm))} r={4} fill="#1f1c17" stroke="var(--surface)" strokeWidth={2} />
+                <circle
+                  cx={x(shownKm)}
+                  cy={y(elevationAtKm(corridor.profile, shownKm))}
+                  r={4}
+                  fill="#1f1c17"
+                  stroke="var(--surface)"
+                  strokeWidth={2}
+                />
               </g>
             )}
             {visiblePlaced.map(({ alert, km }) => {
@@ -138,7 +174,11 @@ export function ElevationProfile({ corridor, placed, hiddenIds, activeKm, select
             <span className="pr-tooltip__main">
               <strong>{formatElevation(elevationAtKm(corridor.profile, shownKm))}</strong> · km {shownKm.toFixed(0)}
             </span>
-            {near && <span>{Math.abs(near.deltaKm) < 1.5 ? near.place.name : `${Math.abs(near.deltaKm).toFixed(0)} km de ${near.place.name}`}</span>}
+            {near && (
+              <span>
+                {Math.abs(near.deltaKm) < 1.5 ? near.place.name : `${Math.abs(near.deltaKm).toFixed(0)} km de ${near.place.name}`}
+              </span>
+            )}
           </ChartTooltip>
         )}
       </div>

@@ -6,7 +6,13 @@ const LOCALE = "es-PE";
 const dateFmt = new Intl.DateTimeFormat(LOCALE, { timeZone: LIMA_TZ, day: "numeric", month: "short", year: "numeric" });
 const shortDateFmt = new Intl.DateTimeFormat(LOCALE, { timeZone: LIMA_TZ, day: "numeric", month: "short" });
 const timeFmt = new Intl.DateTimeFormat(LOCALE, { timeZone: LIMA_TZ, hour: "2-digit", minute: "2-digit", hour12: false });
-const weekdayFmt = new Intl.DateTimeFormat(LOCALE, { timeZone: LIMA_TZ, weekday: "short", day: "numeric", month: "short", year: "numeric" });
+const weekdayFmt = new Intl.DateTimeFormat(LOCALE, {
+  timeZone: LIMA_TZ,
+  weekday: "short",
+  day: "numeric",
+  month: "short",
+  year: "numeric",
+});
 const numberFmt = new Intl.NumberFormat(LOCALE);
 
 const tidy = (s: string) => s.replace(/\./g, "").replace(/\s+de\s+/g, " ");

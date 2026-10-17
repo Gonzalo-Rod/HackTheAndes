@@ -111,7 +111,14 @@ export function createRoadAlertsService({ provider, snapshot = null, now = Date.
     } catch (error) {
       const failure = describe(error);
       if (alertsCache) {
-        logger.warn({ operation: "roadAlerts.current", provider: "sutran", requestId: options.requestId, result: "fallback", fallback: "cache", errorCode: failure.code });
+        logger.warn({
+          operation: "roadAlerts.current",
+          provider: "sutran",
+          requestId: options.requestId,
+          result: "fallback",
+          fallback: "cache",
+          errorCode: failure.code,
+        });
         const { response } = alertsCache;
         return ok({
           ...response,
@@ -125,7 +132,14 @@ export function createRoadAlertsService({ provider, snapshot = null, now = Date.
         });
       }
       if (snapshot) {
-        logger.warn({ operation: "roadAlerts.current", provider: "sutran", requestId: options.requestId, result: "fallback", fallback: "snapshot", errorCode: failure.code });
+        logger.warn({
+          operation: "roadAlerts.current",
+          provider: "sutran",
+          requestId: options.requestId,
+          result: "fallback",
+          fallback: "snapshot",
+          errorCode: failure.code,
+        });
         return ok(fromSnapshot(snapshot, failure));
       }
       return err(failure);

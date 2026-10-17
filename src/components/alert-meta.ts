@@ -6,9 +6,27 @@ import type { AlertCause, RoadStatus } from "@/contracts/road-alerts";
 
 export const STATUS_META: Record<RoadStatus, { label: string; adjective: string; description: string; color: string; ink: string }> = {
   interrumpido: { label: "Interrumpido", adjective: "Vía interrumpida", description: "Tránsito cortado", color: "#d03b3b", ink: "#ffffff" },
-  restringido: { label: "Restringido", adjective: "Vía restringida", description: "Paso limitado o por turnos", color: "#fab219", ink: "#1f1c17" },
-  normal: { label: "Normal", adjective: "Vía libre", description: "Transitable; la alerta sigue vigente", color: "#0ca30c", ink: "#ffffff" },
-  desconocido: { label: "Sin dato", adjective: "Estado sin dato", description: "SUTRAN no indicó el estado", color: "#857d70", ink: "#ffffff" },
+  restringido: {
+    label: "Restringido",
+    adjective: "Vía restringida",
+    description: "Paso limitado o por turnos",
+    color: "#fab219",
+    ink: "#1f1c17",
+  },
+  normal: {
+    label: "Normal",
+    adjective: "Vía libre",
+    description: "Transitable; la alerta sigue vigente",
+    color: "#0ca30c",
+    ink: "#ffffff",
+  },
+  desconocido: {
+    label: "Sin dato",
+    adjective: "Estado sin dato",
+    description: "SUTRAN no indicó el estado",
+    color: "#857d70",
+    ink: "#ffffff",
+  },
 };
 
 /** Display order and stacking priority (most severe first). */

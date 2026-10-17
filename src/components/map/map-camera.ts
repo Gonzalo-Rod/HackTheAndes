@@ -89,7 +89,14 @@ export function createCameraController(map: MLMap, deps: CameraDeps) {
     tour = state;
     deps.onTourChange(true);
     deps.onTourProgress(0);
-    map.flyTo({ center: pointAtKm(line, 0), zoom: TOUR_ZOOM, pitch: TOUR_PITCH, bearing: smoothedBearing, duration: 2400, essential: true });
+    map.flyTo({
+      center: pointAtKm(line, 0),
+      zoom: TOUR_ZOOM,
+      pitch: TOUR_PITCH,
+      bearing: smoothedBearing,
+      duration: 2400,
+      essential: true,
+    });
     map.once("moveend", () => {
       if (tour !== state) return;
       const startMs = performance.now();
@@ -100,7 +107,11 @@ export function createCameraController(map: MLMap, deps: CameraDeps) {
         const km = progress * kmTotal;
         const center = pointAtKm(line, km);
         if (km < kmTotal - 0.5) {
-          smoothedBearing = lerpAngle(smoothedBearing, bearingDeg(center, pointAtKm(line, Math.min(kmTotal, km + TOUR_LOOKAHEAD_KM))), TOUR_BEARING_SMOOTHING);
+          smoothedBearing = lerpAngle(
+            smoothedBearing,
+            bearingDeg(center, pointAtKm(line, Math.min(kmTotal, km + TOUR_LOOKAHEAD_KM))),
+            TOUR_BEARING_SMOOTHING,
+          );
         }
         map.jumpTo({ center, bearing: smoothedBearing, pitch: TOUR_PITCH, zoom: TOUR_ZOOM });
         if (Math.abs(km - lastReportedKm) >= TOUR_PROGRESS_STEP_KM) {

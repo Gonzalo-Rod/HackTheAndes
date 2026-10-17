@@ -5,15 +5,7 @@ import { DAY_MS, limaIsoDate, startOfLimaDayMs } from "@/lib/time";
 import { SUTRAN_ALERT_PE22 } from "@/test/fixtures/sutran";
 
 import { normalizeSutranAlert } from "./normalize";
-import {
-  countBefore,
-  cumulativeByDay,
-  eventTimeMs,
-  hiddenAtCursor,
-  nextEventTime,
-  previousEventTime,
-  timelineWindow,
-} from "./timeline";
+import { countBefore, cumulativeByDay, eventTimeMs, hiddenAtCursor, nextEventTime, previousEventTime, timelineWindow } from "./timeline";
 
 const base = normalizeSutranAlert(SUTRAN_ALERT_PE22);
 if (!base) throw new Error("fixture must normalize");

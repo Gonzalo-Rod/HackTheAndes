@@ -60,7 +60,14 @@ function Evidence({ data }: { data: AlertDetailResponse }) {
         const href = item.url ?? item.posterUrl ?? "#";
         const preview = item.kind === "foto" ? item.url : item.posterUrl;
         return (
-          <a key={`${href}-${index}`} href={href} target="_blank" rel="noopener noreferrer" className="pr-evidence__item" title={item.name ?? undefined}>
+          <a
+            key={`${href}-${index}`}
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="pr-evidence__item"
+            title={item.name ?? undefined}
+          >
             {preview ? (
               // eslint-disable-next-line @next/next/no-img-element -- external SUTRAN media, not optimizable by next/image without a domain allowlist
               <img src={preview} alt={item.name ?? (item.kind === "foto" ? "Foto de la alerta" : "Video de la alerta")} loading="lazy" />
@@ -103,12 +110,30 @@ export function AlertDetail({ alert, detail, corridorContext, now, onRetryDetail
       </header>
 
       <dl className="pr-figures">
-        <div><dt>Vía</dt><dd>{alert.roadCode || "—"}</dd></div>
-        <div><dt>Kilómetro</dt><dd>{alert.kmText || "—"}</dd></div>
-        <div><dt>Sentido</dt><dd>{alert.direction || "—"}</dd></div>
-        <div><dt>Fecha del evento</dt><dd>{formatCalendarDate(alert.eventDate)}</dd></div>
-        <div><dt>Vigente hasta</dt><dd>{formatCalendarDate(alert.validUntil)}</dd></div>
-        <div><dt>Última acción</dt><dd>{now ? formatRelative(alert.lastActionAt, now) : "—"}</dd></div>
+        <div>
+          <dt>Vía</dt>
+          <dd>{alert.roadCode || "—"}</dd>
+        </div>
+        <div>
+          <dt>Kilómetro</dt>
+          <dd>{alert.kmText || "—"}</dd>
+        </div>
+        <div>
+          <dt>Sentido</dt>
+          <dd>{alert.direction || "—"}</dd>
+        </div>
+        <div>
+          <dt>Fecha del evento</dt>
+          <dd>{formatCalendarDate(alert.eventDate)}</dd>
+        </div>
+        <div>
+          <dt>Vigente hasta</dt>
+          <dd>{formatCalendarDate(alert.validUntil)}</dd>
+        </div>
+        <div>
+          <dt>Última acción</dt>
+          <dd>{now ? formatRelative(alert.lastActionAt, now) : "—"}</dd>
+        </div>
       </dl>
 
       {alert.currentSituation && <blockquote className="pr-situation">{alert.currentSituation}</blockquote>}
@@ -119,7 +144,9 @@ export function AlertDetail({ alert, detail, corridorContext, now, onRetryDetail
           <Icon name="mountain" size={14} />
           <span>
             En el eje PE-22: {formatKm(corridorContext.km)} (geometría MTC) · {formatElevation(corridorContext.elevationM)} ·{" "}
-            {Math.abs(corridorContext.deltaKm) < 1 ? `en ${corridorContext.nearestPlace}` : `a ${Math.abs(corridorContext.deltaKm).toFixed(1)} km de ${corridorContext.nearestPlace}`}
+            {Math.abs(corridorContext.deltaKm) < 1
+              ? `en ${corridorContext.nearestPlace}`
+              : `a ${Math.abs(corridorContext.deltaKm).toFixed(1)} km de ${corridorContext.nearestPlace}`}
           </span>
         </div>
       )}
@@ -133,7 +160,9 @@ export function AlertDetail({ alert, detail, corridorContext, now, onRetryDetail
           {alert.sourceUrl && (
             <>
               {" · "}
-              <a href={alert.sourceUrl} target="_blank" rel="noopener noreferrer">ver fuente</a>
+              <a href={alert.sourceUrl} target="_blank" rel="noopener noreferrer">
+                ver fuente
+              </a>
             </>
           )}
         </Row>
@@ -150,7 +179,9 @@ export function AlertDetail({ alert, detail, corridorContext, now, onRetryDetail
         {detail.status === "error" && (
           <p className="pr-note pr-note--warn">
             No se pudo cargar el historial: {detail.message}{" "}
-            <button type="button" className="pr-btn pr-btn--link" onClick={onRetryDetail}>Reintentar</button>
+            <button type="button" className="pr-btn pr-btn--link" onClick={onRetryDetail}>
+              Reintentar
+            </button>
           </p>
         )}
         {detail.status === "ready" && (

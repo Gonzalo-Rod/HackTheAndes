@@ -87,7 +87,9 @@ export function FilterBar({ filters, facets, regions, resultCount, totalCount, a
 
       <div className="pr-filterbar__end">
         <span className="pr-filterbar__count" aria-live="polite">
-          {active ? `${resultCount} de ${plural(totalCount, "alerta", "alertas")}` : plural(totalCount, "alerta vigente", "alertas vigentes")}
+          {active
+            ? `${resultCount} de ${plural(totalCount, "alerta", "alertas")}`
+            : plural(totalCount, "alerta vigente", "alertas vigentes")}
         </span>
         {active && (
           <button type="button" className="pr-btn pr-btn--link" onClick={onClear}>

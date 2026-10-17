@@ -22,7 +22,15 @@ import {
   toggleValue,
   type AlertFilters,
 } from "@/domain/road-alerts/filters";
-import { countBefore, cumulativeByDay, hiddenAtCursor, nextEventTime, previousEventTime, timelineWindow, type TimelineRange } from "@/domain/road-alerts/timeline";
+import {
+  countBefore,
+  cumulativeByDay,
+  hiddenAtCursor,
+  nextEventTime,
+  previousEventTime,
+  timelineWindow,
+  type TimelineRange,
+} from "@/domain/road-alerts/timeline";
 import { useAlertDetail } from "@/hooks/use-alert-detail";
 import { useCorridor } from "@/hooks/use-corridor";
 import { useNow } from "@/hooks/use-now";
@@ -90,7 +98,12 @@ export function Dashboard() {
   const near = placedSelected && corridor ? nearestPlace(corridor.places, placedSelected.km) : null;
   const corridorContext =
     placedSelected && corridor && near
-      ? { km: placedSelected.km, elevationM: elevationAtKm(corridor.profile, placedSelected.km), nearestPlace: near.place.name, deltaKm: near.deltaKm }
+      ? {
+          km: placedSelected.km,
+          elevationM: elevationAtKm(corridor.profile, placedSelected.km),
+          nearestPlace: near.place.name,
+          deltaKm: near.deltaKm,
+        }
       : null;
 
   const select = useCallback(
@@ -212,7 +225,13 @@ export function Dashboard() {
           onTabChange={setTabChoice}
           layersContent={
             <>
-              <SummaryPanel summary={summary} scope={scope} latestActionAt={alertsState.data?.meta.latestActionAt ?? null} now={now} filtered={filtersActive} />
+              <SummaryPanel
+                summary={summary}
+                scope={scope}
+                latestActionAt={alertsState.data?.meta.latestActionAt ?? null}
+                now={now}
+                filtered={filtersActive}
+              />
               <section className="pr-panel" aria-labelledby="layers-title">
                 <header className="pr-panel__head">
                   <h2 id="layers-title">Capas</h2>
@@ -264,7 +283,11 @@ export function Dashboard() {
             />
             <div className="pr-charts">
               <CumulativeChart points={cumulative} window={timeWindow} cursorMs={cursorMs} onPickDay={setCursorMs} />
-              <CauseStatusChart rows={matrix} activeCauses={filters.causes} onToggleCause={(cause) => setFilters({ ...filters, causes: toggleValue(filters.causes, cause) })} />
+              <CauseStatusChart
+                rows={matrix}
+                activeCauses={filters.causes}
+                onToggleCause={(cause) => setFilters({ ...filters, causes: toggleValue(filters.causes, cause) })}
+              />
               <ElevationProfile
                 corridor={corridor}
                 placed={corridorAlerts}

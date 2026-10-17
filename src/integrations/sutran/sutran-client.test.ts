@@ -64,7 +64,14 @@ describe("SUTRAN client", () => {
 
   it("parses detail extras and history", async () => {
     const { client } = clientWith(
-      json(sutranEnvelope({ id: "a", submotivoLabel: "Otros", etiquetasLabels: ["", "Huaico"], evidencia: [{ tipo: "foto", url: "https://c.test/1.jpg" }, 5] })),
+      json(
+        sutranEnvelope({
+          id: "a",
+          submotivoLabel: "Otros",
+          etiquetasLabels: ["", "Huaico"],
+          evidencia: [{ tipo: "foto", url: "https://c.test/1.jpg" }, 5],
+        }),
+      ),
       json(sutranEnvelope([{ fecha: "2026-10-17T15:21:32.269Z", tipo: "publicacion", estadoNuevo: null }])),
     );
     await expect(client.getAlertDetail("a", {})).resolves.toEqual({

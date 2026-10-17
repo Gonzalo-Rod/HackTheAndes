@@ -61,8 +61,26 @@ describe("corridor builder", () => {
 
   it("orients reversed segments and measures them by their km range", () => {
     const { line: measured, maxGapKm } = buildMeasuredCorridor([
-      { kmStart: 10, kmEnd: 20, parts: [[[0.02, 0], [0.01, 0]]] },
-      { kmStart: 0, kmEnd: 10, parts: [[[0, 0], [0.01, 0]]] },
+      {
+        kmStart: 10,
+        kmEnd: 20,
+        parts: [
+          [
+            [0.02, 0],
+            [0.01, 0],
+          ],
+        ],
+      },
+      {
+        kmStart: 0,
+        kmEnd: 10,
+        parts: [
+          [
+            [0, 0],
+            [0.01, 0],
+          ],
+        ],
+      },
     ]);
     expect(measured.map((v) => v[2])).toEqual([0, 10, 10, 20]);
     expect(measured.at(-1)?.[0]).toBe(0.02);
@@ -95,6 +113,15 @@ describe("simplify", () => {
 
   it("rounds and dedupes coordinates", () => {
     expect(roundCoord([-76.123456, -11.987654], 4)).toEqual([-76.1235, -11.9877]);
-    expect(dedupeConsecutive([[1, 1], [1, 1], [2, 2]])).toEqual([[1, 1], [2, 2]]);
+    expect(
+      dedupeConsecutive([
+        [1, 1],
+        [1, 1],
+        [2, 2],
+      ]),
+    ).toEqual([
+      [1, 1],
+      [2, 2],
+    ]);
   });
 });

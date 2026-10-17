@@ -98,7 +98,10 @@ select {
   text-decoration: none;
   cursor: pointer;
   white-space: nowrap;
-  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    box-shadow 0.15s;
 }
 .pr-btn:hover:not(:disabled) {
   background: var(--surface-2);
@@ -167,7 +170,9 @@ select {
   cursor: pointer;
   font-size: 16px;
   line-height: 1;
-  transition: background 0.15s, color 0.15s;
+  transition:
+    background 0.15s,
+    color 0.15s;
 }
 .pr-icon-btn:hover:not(:disabled) {
   background: var(--surface-2);
@@ -224,7 +229,9 @@ select {
 .pr-segmented__item[aria-pressed="true"] {
   background: var(--surface);
   color: var(--ink);
-  box-shadow: var(--shadow-1), 0 0 0 1px var(--line);
+  box-shadow:
+    var(--shadow-1),
+    0 0 0 1px var(--line);
 }
 .pr-segmented--sm .pr-segmented__item {
   height: 22px;
@@ -274,7 +281,9 @@ select {
   font-weight: 500;
   cursor: pointer;
   white-space: nowrap;
-  transition: background 0.15s, border-color 0.15s;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
 }
 .pr-chip:hover {
   border-color: var(--ink-4);

@@ -62,11 +62,7 @@ function describeTarget(url: string): string {
   }
 }
 
-async function attemptOnce<T>(
-  url: string,
-  options: RequestOptions,
-  parse: (response: Response) => Promise<T>,
-): Promise<Attempt<T>> {
+async function attemptOnce<T>(url: string, options: RequestOptions, parse: (response: Response) => Promise<T>): Promise<Attempt<T>> {
   const fetchImpl = options.fetchImpl ?? fetch;
   const timeoutMs = options.timeoutMs ?? DEFAULT_TIMEOUT_MS;
   const controller = new AbortController();
@@ -85,7 +81,10 @@ async function attemptOnce<T>(
     const timedOut = controller.signal.aborted;
     // Messages reach users; runtime error text (e.g. Node's "fetch failed") is English and opaque.
     const message = timedOut ? `Sin respuesta en ${Math.round(timeoutMs / 1000)} s` : "no se pudo conectar";
-    return { ok: false, error: new UpstreamError(message, timedOut ? "timeout" : "network", options.provider, undefined, { cause: error }) };
+    return {
+      ok: false,
+      error: new UpstreamError(message, timedOut ? "timeout" : "network", options.provider, undefined, { cause: error }),
+    };
   } finally {
     clearTimeout(timer);
   }

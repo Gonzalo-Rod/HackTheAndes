@@ -21,7 +21,17 @@ export function matchesQuery(alert: RoadAlert, query: string): boolean {
   const terms = fold(query).split(/\s+/).filter(Boolean);
   if (!terms.length) return true;
   const haystack = fold(
-    [alert.title, alert.code, alert.roadCode, alert.roadName, alert.district, alert.province, alert.region, alert.kmText, alert.source].join(" "),
+    [
+      alert.title,
+      alert.code,
+      alert.roadCode,
+      alert.roadName,
+      alert.district,
+      alert.province,
+      alert.region,
+      alert.kmText,
+      alert.source,
+    ].join(" "),
   );
   return terms.every((term) => haystack.includes(term));
 }
