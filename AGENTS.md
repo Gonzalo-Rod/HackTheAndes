@@ -12,13 +12,145 @@ Before working, read `getting-started/README.md`, `docs/team-plan.md`,
 and the recent entries in `getting-started/PROGRESS.md`. The Team Plan is the
 team's chosen product direction: follow its original approach and full MVP scope,
 with the updated five-criterion rubric and 30-hour schedule. Do not treat proposed
-integrations, metrics, or predictions as verified results.
+integrations, metrics, or predictions as verified results. Before writing code,
+read the engineering principles and quality rules below.
 
 The chosen track is **Climate and Territory**
 (`environmental`). The current rubric was provided by the participant: 30%
 technical complexity, 25% functionality, 20% technical quality, 15% problem and
 impact, and 10% clarity. Do not replace it with the older rubric still shown in
 the online guide at the time of our initial review.
+
+## Engineering principles
+
+All code in this repository must be production-ready: code a teammate can run,
+review, test and deploy without asking the author. Technical quality is 20% of
+the grade (1: fragile, or secrets in the repo; 3: organized, with shortcuts;
+5: handles errors, edge cases and credentials). Follow these principles in every
+change, including code written by agents.
+
+### Structure and design
+
+- **Separation of concerns.** Keep four layers and import only downward:
+  - `src/app/` (routes, pages, route handlers): parse input, call a service,
+    shape the response. No business rules here.
+  - `src/services/`: use cases that coordinate the domain, the database and the
+    integrations (for example, "process an incoming report").
+  - `src/domain/`: pure business logic with no I/O, network, database or clock
+    access. This covers extraction normalization, dedupe, confidence, risk,
+    dispatch decision, entitlements and alert rules.
+  - `src/integrations/<provider>/` and `src/db/`: adapters for external services
+    and data access.
+- **Single responsibility.** One module, one reason to change. Split files that
+  mix concerns or grow past about 300 lines.
+- **Depend on interfaces, not providers.** Each external service is wrapped in
+  an adapter behind a typed interface (for example, `MessagingProvider`, or
+  `Transcriber` for speech-to-text). The interface allows fakes in tests, a
+  fallback provider, and a provider change without touching the domain.
+- **Pure core.** Pass time, configuration and randomness into domain functions
+  as arguments (`now`, `config`), so the logic is deterministic and testable.
+- **DRY for knowledge, not for shape.** Share helpers for security, HTTP,
+  validation and time. Do not create abstractions for code that appears only
+  once (KISS, YAGNI).
+- **Explicit contracts.** The API JSON shapes from phase 0 live as shared
+  TypeScript types and zod schemas in `src/contracts/`. Change a contract only in
+  a pull request that updates every consumer.
+
+### Code conventions
+
+- **TypeScript strict mode.** No `any`, no `@ts-ignore` and no non-null `!`
+  without a comment explaining why it is safe. Use `unknown` and narrow it.
+- **Validate at every boundary with zod:** request bodies, query parameters,
+  webhooks, provider responses, LLM output, SUTRAN and weather payloads,
+  database JSON columns, and environment variables. Data that fails validation
+  is rejected or logged and skipped, never used as-is.
+- **Configuration.** Read environment variables in one module only
+  (`src/config/env.ts`), which validates them at startup and fails fast with a
+  clear message naming the missing variable (never its value).
+- **Naming.** Use descriptive English names: `camelCase` for variables and
+  functions, `PascalCase` for types and components, and `SCREAMING_SNAKE_CASE`
+  for constants. Name units in identifiers (`timeoutMs`, `distanceKm`,
+  `rainMm24h`). Spanish appears only in user-facing text and provider values.
+- **Small functions** with one level of abstraction. Prefer early returns to
+  nested conditionals.
+- **Comments explain why** (a decision, a provider quirk, a threshold's source).
+  Do not narrate what the code does.
+- **Time.** Store and compare timestamps in UTC. Convert to `America/Lima` only
+  for display and quiet hours. Parse provider formats explicitly (SUTRAN
+  `fechaEvento` is `DD/MM/YYYY`; `lastActionAt` is ISO 8601 in UTC).
+- **Magic numbers** (thresholds, radii, windows, weights) go in named constants
+  with units and a one-line note on their source.
+- **Formatting and linting** are automatic (Prettier and ESLint). Do not merge
+  code with lint errors or disabled rules that lack a reason.
+
+### Error handling and resilience
+
+- **Never swallow errors.** Every `catch` either recovers with an explicit
+  fallback or rethrows with context. Empty `catch` blocks are not allowed.
+- **Expected failures are values.** Domain and service functions return typed
+  results (`{ ok: true, value } | { ok: false, error }`) for failures the caller
+  must handle (invalid report, unknown place, expired pass). Exceptions are for
+  bugs and unavailable infrastructure.
+- **Safe responses.** API errors return a consistent JSON shape
+  (`{ error: { code, message } }`) with the right HTTP status. Never return
+  stack traces, SQL or provider error bodies to clients.
+- **Users always get an answer.** When a step fails, the WhatsApp user receives
+  a short message in Spanish, and the dashboard shows a visible state (for
+  example, "Datos en caché de hace 12 min" or "Fuente no disponible"). Do not
+  fail silently or show a blank screen.
+- **Idempotency.** Webhooks and scheduled jobs can run more than once. Dedupe
+  webhooks by the provider's event or message ID, and make jobs upsert by
+  natural keys (for example, SUTRAN `id` + `lastActionAt`).
+
+### Observability
+
+- Use structured logs (JSON) with a request ID, the operation, the provider,
+  the duration and the result.
+- Never log phone numbers, message contents linked to a sender, tokens, keys,
+  signatures or full provider payloads. Log the `phone_key` instead.
+- Record each external-call failure with its provider and error type, so a
+  provider outage can be seen in the logs.
+
+### Git workflow
+
+- `main` always deploys and stays green. Code reaches `main` only through a pull
+  request from a feature branch (`feat/<area>`, `fix/<area>`), reviewed by one
+  other member, with CI passing.
+- Keep pull requests small and focused. Commit messages are imperative English
+  ("Add Zavu webhook signature check").
+
+## Technical quality rules and verifications
+
+Each rule has a verification. A pull request that breaks a rule is not merged.
+Run the full list again at the 05:30 feature freeze and the 07:00 code freeze.
+
+| Area | Rule | Verification |
+|---|---|---|
+| Secrets | No secret, key, token, password, pepper or real phone number is ever committed. Each variable is listed in `.env.example` with an empty value and a comment. `.env*` is in `.gitignore`, except `.env.example`. Secrets live in the hosting platform and in `.env.local` | CI runs a secrets scanner (gitleaks) on every pull request. Before the deadline, run `gitleaks detect --log-opts="--all"` over the full history. Every variable read in `src/config/env.ts` appears in `.env.example` |
+| Leaked secret | A secret that reaches any commit is treated as compromised | Rotate it with the provider immediately, then remove it. Deleting the file is not enough |
+| External calls | Every call to Zavu, ElevenLabs, the LLM, SUTRAN, Open-Meteo, Qatom and n8n goes through the shared wrapper in `src/integrations/http/`, which has an explicit timeout (default 8 s), at most 2 retries with exponential backoff and jitter (only for network errors, 429 and 5xx, and only for idempotent requests or requests with an idempotency key), and structured logging | No direct `fetch(` or SDK call outside `src/integrations/` (checked by an ESLint rule or `git grep`). Tests simulate a timeout, a 500 and a 429 for each adapter |
+| Visible fallback | Every external call has a defined fallback that users can see: cached data with its age, a reduced answer, or a clear "unavailable" state. The fallback for each provider is listed in a table in `docs/` | A test or manual check per provider with the provider disabled shows the fallback, not a crash or a blank screen |
+| Signed webhooks | Every incoming webhook (Zavu, Qatom, n8n callbacks) verifies its signature over the raw body with a constant-time comparison (`crypto.timingSafeEqual`), checks a timestamp window against replays when the provider sends one, and dedupes by event ID. Invalid or missing signatures return 401 and are logged without the payload | Tests for a valid signature, a wrong signature, a missing header, a modified body and a replayed event |
+| Internal endpoints | n8n job endpoints, the admin page and cron routes require a secret or an authenticated session and reject everything else | A test confirms that a request without credentials is rejected |
+| Personal data | Phone numbers are stored only encrypted (`contact_ref`, AES-256-GCM with a random 12-byte IV and the auth tag stored), or as the HMAC-SHA256 `phone_key` with a secret pepper. Never in plain text in the database, logs, URLs, analytics or error messages | Tests for an encryption round trip, a modified ciphertext failing, and a stable `phone_key` for different formats of the same number (`+51 999…`, `999…`). Before code freeze, search the logs for 9-digit Peruvian mobile numbers |
+| Input validation | All external input is parsed with zod before use. Unknown WhatsApp message types, empty messages, oversized media and malformed payloads are handled explicitly | Tests with invalid and unexpected payloads for each webhook and public API route |
+| Paid access | Every paid route and paid WhatsApp feature checks an active pass on the server. Client-side checks are only cosmetic | Tests for no pass, an expired pass, an active pass and the wrong organization |
+| Public endpoints | Public write endpoints (waitlist, report intake) are rate-limited and validate input size | A manual check with repeated requests returns 429 |
+| Required tests | Unit tests (Vitest) cover: **extraction** (normalizing LLM output on 10–20 real anonymized road messages, including bad LLM output), **dedupe**, **confidence**, **risk** and **dispatch decision** (one test per rule and the boundary values), plus webhook signatures, encryption and entitlements | `npm test` passes locally and in CI. Tests run without network access or real credentials, using the fakes behind the interfaces |
+| Edge cases | Each domain module tests its edge cases: a place outside PE-22, a pin more than 500 m from the road, a voice note that fails to transcribe, a duplicate webhook, a SUTRAN response that is empty or changed, a departure outside the 72 h forecast range, a pass that expires during a trip, and Lima time zone boundaries | Named test cases exist for each item that applies to the module |
+| CI | Every pull request runs lint, type check (`tsc --noEmit`), tests and the secrets scan | A pull request cannot merge with a red check |
+| Reproducible setup | A fresh clone runs with the README steps, `.env.example` and the database migrations. The demo uses seeded data, not manual database edits | A member who did not write the feature follows the README on a clean checkout before the code freeze |
+
+### Pull request checklist
+
+Copy this list into every pull request description and check each item:
+
+- [ ] No secrets or real phone numbers in the diff; new variables added to `.env.example`
+- [ ] External calls use the shared wrapper and have a visible fallback
+- [ ] Input validated with zod; errors handled with a user-facing message
+- [ ] Tests added or updated for the logic changed, including edge cases
+- [ ] Lint, type check and tests pass locally
+- [ ] No business logic in route handlers or React components
 
 ## Automatic progress logging during sessions
 

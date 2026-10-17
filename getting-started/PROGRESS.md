@@ -75,3 +75,7 @@ We applied the organizers' evaluation sheet: 1–5 scoring per judge, a traction
 ## 2026-10-17T13:14:01-05:00 — Technical task split for the four members
 
 Section 8c now divides the technical work among four roles: platform, payments and API (A), messaging and voice agent (B), data and model (C), and frontend and visualization (D). It has a feature ownership table and per-phase tasks ending at the Sunday 09:00 deadline, with the weekly report (F6) as the last feature. Pitch, outreach and traction tasks were removed from the split and will be assigned separately; section 7 and the integration-check owners were updated to match.
+
+## 2026-10-17T13:41:23-05:00 — Engineering principles and technical quality rules
+
+`AGENTS.md` now defines the engineering principles every code change must follow: a layered structure with a pure domain core, provider adapters behind interfaces, strict TypeScript with zod validation at every boundary, explicit error handling with user-facing fallbacks, idempotent webhooks and jobs, and logs without personal data. It also lists the technical quality rules with a verification for each (secrets scanning, the shared external-call wrapper with timeout, retry and visible fallback, signed webhooks, encrypted contacts, required tests for extraction, dedupe, confidence, risk and dispatch decision) and a pull request checklist. Next, member A adds the CI checks and shared helpers these rules depend on.
