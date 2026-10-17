@@ -11,8 +11,8 @@ Project: [HackTheAndes](https://supabase.com/dashboard/project/cdqnintcqryfbfjjl
 region `us-west-2`. Existing project API keys were retrieved; no additional
 project, subscription, API key, or administrator-password reset was created.
 
-Five migrations have been applied after rollback-only dry runs. They
-create PostGIS and 30 application tables, all with RLS and no anonymous or
+Six migrations have been applied after rollback-only dry runs. They
+create PostGIS and 31 application tables, all with RLS and no anonymous or
 authenticated browser grants. A scoped `peruroad_backend` login has application
 table permissions and its own RLS policies, without superuser, database/role
 creation, or RLS-bypass privileges. This login is trusted server infrastructure;
@@ -25,8 +25,10 @@ poll added no duplicates. Seven real-Postgres tests verified concurrency,
 rollback, null revision uniqueness, constraints, and access controls; synthetic
 test IDs were removed afterward. Subsequent work activated ten-minute SUTRAN
 polling and populated 174 terrain elevations with provenance; repeat elevation
-import changed zero segment values. The current database suite has 13 tests,
-including isolated elevation fixtures. Dashboard integration, merged application
+import changed zero segment values. The sourced gazetteer now stores 67
+candidates with complete snapshot provenance; repeat import skips identical data.
+The current database suite has 17 tests, including isolated elevation and
+gazetteer fixtures. Dashboard integration, merged application
 incidents, and the risk model remain pending.
 
 ## Tables and boundaries
@@ -38,6 +40,10 @@ incidents, and the risk model remain pending.
 | `product_workflows`           | `passes`, `private.payment_events`, `trips`, `calls`, `dispatch_decisions`, `waitlist`, `weekly_reports`, `private.api_calls`                                           |
 | `official_archive_and_access` | `private.official_alerts`, `private.official_alert_versions`, `private.official_alert_history`, `incident_official_alerts`, `private.ingestion_runs`; shared RLS/grants |
 | `segment_elevations`          | `segment_elevations`; terrain sample location, dataset attribution, source URLs, and retrieval time                                                                     |
+
+Migration `gazetteer_provenance` extends `gazetteer` with source identities,
+reported kilometers, geometry revision and projection metadata, and adds
+`gazetteer_snapshots` for complete validated captures.
 
 Names in the Team Plan are logical singular entities; SQL names above are the
 physical shared contract. Parent/child arrays are represented by join tables
@@ -82,6 +88,7 @@ npm --prefix packages/road-data run supabase:configure
 
 npm --prefix packages/road-data run db:import-pe22
 npm --prefix packages/road-data run db:import-elevation
+npm --prefix packages/road-data run db:import-gazetteer
 npm --prefix packages/road-data run sutran:ingest
 npm --prefix packages/road-data run db:check
 ```
@@ -150,3 +157,5 @@ APIs and remaining spatial/weather inputs. Realtime/browser access policies,
 organization authorization, and paid-feature access need explicit application
 work; operational tables retain denied browser access. See
 [the elevation handoff](../docs/data/pe22-elevation.md) for the new importer.
+The [gazetteer handoff](../docs/data/pe22-gazetteer.md) describes landmark imports
+and the distinction between source-reported kilometers and calibrated markers.

@@ -5,8 +5,9 @@ reproducible public-source snapshot, a continuous corridor, and 1-km display
 segments inside `packages/road-data/`. The 174 display segments are now loaded
 in Supabase/PostGIS through the [database importer](../../supabase/README.md).
 An independent [terrain elevation overlay](pe22-elevation.md) now enriches all
-174 stored segments. Calibrated kilometer markers and the place-name gazetteer
-are still pending.
+174 stored segments. A [sourced landmark gazetteer](pe22-gazetteer.md) now links
+67 candidates to segments and provides kilometer evidence; calibrated kilometer
+markers remain pending.
 
 ## Source and verified coverage
 
@@ -115,8 +116,9 @@ dataset and show its timestamp or an unavailable state.
 
 1. Cross-check source kilometer references against trustworthy markers and
    incident locations, recording the calibration method and uncertainty.
-2. Create a sourced gazetteer for B rather than guessed place/km pairs; use the
-   separate elevation contract for terrain estimates and preserve missing states.
+2. Integrate the sourced gazetteer with B's report flow, retaining confirmation,
+   ambiguous-name, and missing-place states; validate additional local aliases
+   with users. Use the separate elevation contract for terrain estimates.
 3. Integrate the implemented PostGIS tables/importer with A's read APIs, filtering
    the intended geometry revision and respecting the shared access rules.
 4. Give D the GeoJSON and contracts now, with measured-distance and pending-data

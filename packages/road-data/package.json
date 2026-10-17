@@ -15,7 +15,7 @@
     "format:check": "prettier --check src tests scripts package.json package-lock.json tsconfig.json tsconfig.build.json vitest*.config.ts eslint.config.mjs .prettierrc.json README.md ../../workflows/n8n",
     "build": "tsc --project tsconfig.build.json",
     "prepack": "npm run build",
-    "test:exports": "node --input-type=module -e \"await import('@peruroad/road-data'); await import('@peruroad/road-data/contracts'); await import('@peruroad/road-data/ingestion'); await import('@peruroad/road-data/geometry'); await import('@peruroad/road-data/geometry/contracts'); await import('@peruroad/road-data/database'); await import('@peruroad/road-data/jobs'); await import('@peruroad/road-data/elevation'); await import('@peruroad/road-data/elevation/contracts');\"",
+    "test:exports": "node --input-type=module -e \"await import('@peruroad/road-data'); await import('@peruroad/road-data/contracts'); await import('@peruroad/road-data/ingestion'); await import('@peruroad/road-data/geometry'); await import('@peruroad/road-data/geometry/contracts'); await import('@peruroad/road-data/database'); await import('@peruroad/road-data/jobs'); await import('@peruroad/road-data/elevation'); await import('@peruroad/road-data/elevation/contracts'); await import('@peruroad/road-data/locations'); await import('@peruroad/road-data/locations/contracts');\"",
     "pe22:prepare": "node scripts/prepare-pe22.ts",
     "senamhi:check": "node scripts/check-senamhi.ts",
     "db:migrate": "node --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/migrate-database.ts",
@@ -26,11 +26,14 @@
     "test:db": "node --env-file-if-exists=.env --env-file-if-exists=.env.local node_modules/vitest/vitest.mjs run --config vitest.database.config.ts",
     "sutran:job:check": "node --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/check-sutran-job.ts",
     "pe22:elevation": "node scripts/prepare-pe22-elevation.ts",
-    "db:import-elevation": "node --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/import-pe22-elevation.ts"
+    "db:import-elevation": "node --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/import-pe22-elevation.ts",
+    "pe22:gazetteer": "node scripts/prepare-pe22-gazetteer.ts",
+    "db:import-gazetteer": "node --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/import-pe22-gazetteer.ts"
   },
   "dependencies": {
     "@turf/length": "^7.4.0",
     "@turf/line-slice-along": "^7.4.0",
+    "@turf/nearest-point-on-line": "^7.4.0",
     "pg": "^8.23.1",
     "zod": "^4.0.0"
   },
@@ -82,6 +85,14 @@
     "./elevation/contracts": {
       "types": "./dist/contracts/road-elevation.d.ts",
       "default": "./dist/contracts/road-elevation.js"
+    },
+    "./locations": {
+      "types": "./dist/locations.d.ts",
+      "default": "./dist/locations.js"
+    },
+    "./locations/contracts": {
+      "types": "./dist/contracts/road-locations.d.ts",
+      "default": "./dist/contracts/road-locations.js"
     }
   },
   "files": [
