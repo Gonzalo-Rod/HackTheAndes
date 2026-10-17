@@ -47,6 +47,12 @@ change, including code written by agents.
   application separate from teammates' root frontend setup until integration is
   coordinated. Run Next.js type generation and builds sequentially because both
   manage `.next/`. Do not include local environment files in deployable artifacts.
+- **Coordinated frontend integration.** The participant approved integrating Role
+  D's `400bb8d` snapshot into `feat/data-model`. Root `src/` now owns the integrated
+  dashboard and A's application APIs, security helpers, access and waitlist. Root
+  tooling excludes the independent projects; build `packages/road-data` before
+  installing the root application. The existing `apps/api` deployment and n8n
+  URL remain independent. See `docs/platform-api.md` and the root `README.md`.
 - **Shared database.** Team-wide SQL migrations live in `supabase/migrations/`.
   Database operator commands and the initial Postgres adapter live in
   `packages/road-data/`; see `supabase/README.md`. Never edit an applied migration:
@@ -142,8 +148,7 @@ change, including code written by agents.
   ("Add Zavu webhook signature check").
 - **Participant update:** continue all Role C work and its API/database integration
   on `feat/data-model`, with one consolidated PR to `main`. Do not create a new
-  branch for each implementation step. Keep Role D's visualization branch separate
-  until team integration is coordinated; `main` still requires review and passing CI.
+  branch for each implementation step. Role D's visualization branch remains untouched after the authorized snapshot integration; `main` still requires review and passing CI.
 
 ## Technical quality rules and verifications
 

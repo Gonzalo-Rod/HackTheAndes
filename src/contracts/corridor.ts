@@ -25,6 +25,12 @@ export const CorridorDataSchema = z.object({
   profile: z.array(z.object({ km: z.number(), elevationM: z.number() })).min(2),
   metadata: z.object({
     retrievedAt: z.string(),
+    state: z.enum(["database", "snapshot"]).optional(),
+    geometryRevision: z
+      .string()
+      .regex(/^[a-f0-9]{64}$/)
+      .optional(),
+    message: z.string().optional(),
     geometry: z.string(),
     elevation: z.string(),
     places: z.string(),

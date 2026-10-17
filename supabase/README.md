@@ -119,11 +119,7 @@ It is a public trust certificate, not a private key. See the official
 The shared pooler hostname was read from Management API configuration.
 
 ```ts
-import {
-  createDatabasePool,
-  createPostgresOfficialAlertRepository,
-  loadDatabaseConfiguration,
-} from "@peruroad/road-data/database";
+import { createDatabasePool, createPostgresOfficialAlertRepository, loadDatabaseConfiguration } from "@peruroad/road-data/database";
 
 const pool = createDatabasePool(loadDatabaseConfiguration());
 const repository = createPostgresOfficialAlertRepository(pool);
@@ -159,3 +155,12 @@ work; operational tables retain denied browser access. See
 [the elevation handoff](../docs/data/pe22-elevation.md) for the new importer.
 The [gazetteer handoff](../docs/data/pe22-gazetteer.md) describes landmark imports
 and the distinction between source-reported kilometers and calibrated markers.
+
+## Integrated application access
+
+Migrations `20261017230000` and `20261017230100` add persistent request quotas,
+webhook claims, explicit demo/test incident and trip flags, waitlist request-ID
+idempotency and answered-query usage events. `public.incident_updates` is the only
+browser-readable change signal; operational incident/report/contact tables remain
+private. Its statement trigger invalidates the integrated map through Supabase
+Realtime without publishing identities or content. See [the platform handoff](../docs/platform-api.md).

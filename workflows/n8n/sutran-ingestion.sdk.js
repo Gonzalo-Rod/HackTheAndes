@@ -1,12 +1,4 @@
-import {
-  workflow,
-  node,
-  trigger,
-  sticky,
-  newCredential,
-  ifElse,
-  expr,
-} from "@n8n/workflow-sdk";
+import { workflow, node, trigger, sticky, newCredential, ifElse, expr } from "@n8n/workflow-sdk";
 
 const schedule = trigger({
   type: "n8n-nodes-base.scheduleTrigger",
@@ -47,9 +39,7 @@ const ingest = node({
       sendBody: true,
       contentType: "json",
       specifyBody: "json",
-      jsonBody: expr(
-        '{{ JSON.stringify({ requestId: "n8n-sutran-" + $execution.id }) }}',
-      ),
+      jsonBody: expr('{{ JSON.stringify({ requestId: "n8n-sutran-" + $execution.id }) }}'),
       options: {
         timeout: 130000,
         allowUnauthorizedCerts: false,
@@ -138,10 +128,7 @@ const setup = sticky(
   { position: [0, -320], width: 1200, height: 300, color: 5 },
 );
 
-export default workflow(
-  "peruroad-sutran-ingestion",
-  "PeruRoad — SUTRAN ingestion (10 minutes)",
-)
+export default workflow("peruroad-sutran-ingestion", "PeruRoad — SUTRAN ingestion (10 minutes)")
   .add(schedule)
   .to(ingest)
   .to(completed.onFalse(failed))
@@ -149,6 +136,5 @@ export default workflow(
   .to(ingest)
   .add(setup)
   .group("SUTRAN archive", [ingest, completed, failed], {
-    description:
-      "Calls the authenticated backend and marks any unconfirmed ingestion as failed.",
+    description: "Calls the authenticated backend and marks any unconfirmed ingestion as failed.",
   });

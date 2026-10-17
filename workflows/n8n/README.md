@@ -54,14 +54,8 @@ handler at `POST /api/jobs/sutran` in the deployed Node.js application. A Next.j
 route can stay this small:
 
 ```ts
-import {
-  createDatabasePool,
-  loadDatabaseConfiguration,
-} from "@peruroad/road-data/database";
-import {
-  createPostgresSutranJobHandler,
-  loadJobConfiguration,
-} from "@peruroad/road-data/jobs";
+import { createDatabasePool, loadDatabaseConfiguration } from "@peruroad/road-data/database";
+import { createPostgresSutranJobHandler, loadJobConfiguration } from "@peruroad/road-data/jobs";
 
 export const runtime = "nodejs";
 export const maxDuration = 150;

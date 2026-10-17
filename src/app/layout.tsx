@@ -7,6 +7,7 @@ import "@/styles/dashboard.css";
 import "@/styles/panels.css";
 import "@/styles/map.css";
 import "@/styles/responsive.css";
+import "@/styles/platform.css";
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"], display: "swap" });
 const jetbrains = JetBrains_Mono({ variable: "--font-jetbrains", subsets: ["latin"], display: "swap", weight: ["400", "500"] });

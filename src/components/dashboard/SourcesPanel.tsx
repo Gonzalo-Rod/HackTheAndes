@@ -100,8 +100,8 @@ export function SourcesPanel({ meta, corridor, rain }: SourcesPanelProps) {
           Corredor PE-22 y perfil de elevación
         </h3>
         <p>
-          Eje de la Carretera Central armado con los 32 tramos oficiales del MTC; el km se interpola dentro de cada tramo. Elevación de
-          Mapzen Terrain Tiles (AWS, ~30 m). Lugares de OpenStreetMap ajustados al eje.
+          {corridor?.metadata.geometry} {corridor?.metadata.elevation} {corridor?.metadata.places}
+          {corridor?.metadata.message}
         </p>
       </section>
 
@@ -117,9 +117,11 @@ export function SourcesPanel({ meta, corridor, rain }: SourcesPanelProps) {
             según su fecha de evento.
           </li>
           <li>Las fechas de evento no tienen hora; se ubican a las 12:00 (hora de Lima).</li>
-          <li>El km publicado por SUTRAN y el km interpolado sobre la geometría del MTC difieren en ~1,5 km en la PE-22.</li>
+          <li>La distancia medida desde el origen geométrico no equivale al km oficial; la calibración sigue sin verificar.</li>
           <li>Los tramos afectados (±1,2 km) son una aproximación visual, no una extensión oficial.</li>
-          <li>Estas alertas son observaciones oficiales confirmadas, no pronósticos de riesgo.</li>
+          <li>
+            Las alertas SUTRAN son oficiales. Los reportes comunitarios se etiquetan como no confirmados. No son pronósticos de riesgo.
+          </li>
           <li>
             La lluvia es un pronóstico de modelo, no una medición de estaciones ni un aviso de SENAMHI. Muestra intensidad de lluvia, no el
             riesgo de huaicos o derrumbes, y en la sierra puede diferir bastante entre quebradas cercanas.

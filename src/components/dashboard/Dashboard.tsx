@@ -35,6 +35,7 @@ import { rainAtKm, rainSegments } from "@/domain/weather/rain";
 import { countByRoad } from "@/domain/road-alerts/staleness";
 import { useAlertDetail } from "@/hooks/use-alert-detail";
 import { useCorridorRain } from "@/hooks/use-corridor-rain";
+import { useCommunityIncidents } from "@/hooks/use-community-incidents";
 import { useCorridor } from "@/hooks/use-corridor";
 import { useNow } from "@/hooks/use-now";
 import { useRoadAlerts } from "@/hooks/use-road-alerts";
@@ -61,6 +62,7 @@ const readDeepLink = () => (typeof window === "undefined" ? null : new URLSearch
 
 export function Dashboard() {
   const alertsState = useRoadAlerts();
+  const community = useCommunityIncidents();
   const corridorState = useCorridor();
   const rainState = useCorridorRain();
   const now = useNow();
@@ -80,7 +82,7 @@ export function Dashboard() {
   const [detailReload, setDetailReload] = useState(0);
 
   const corridor = corridorState.status === "ready" ? corridorState.data : null;
-  const allAlerts = useMemo(() => alertsState.data?.alerts ?? [], [alertsState.data]);
+  const allAlerts = useMemo(() => [...(alertsState.data?.alerts ?? []), ...community.alerts], [alertsState.data, community.alerts]);
   const scopedFilters = useMemo(() => ({ ...filters, roadCode: scope === "pe22" ? PE22 : null }), [filters, scope]);
   const filtered = useMemo(() => sortByRecentAction(filterAlerts(allAlerts, scopedFilters)), [allAlerts, scopedFilters]);
   const facets = useMemo(() => facetCounts(allAlerts, scopedFilters), [allAlerts, scopedFilters]);
@@ -175,6 +177,7 @@ export function Dashboard() {
   return (
     <div className="pr-app">
       <TopBar
+        communityStatus={community.error ?? (community.connection === "live" ? "Comunidad · en vivo" : "Comunidad · consulta cada minuto")}
         scope={scope}
         counts={{ pais: allAlerts.length, pe22: pe22Count }}
         meta={alertsState.data?.meta ?? null}
@@ -216,7 +219,14 @@ export function Dashboard() {
           status={{
             loading,
             dataError: alertsState.status === "error" ? alertsState.error : null,
-            staleMessage: alertsState.data && alertsState.error ? alertsState.error : null,
+            staleMessage:
+              [
+                alertsState.data && alertsState.error ? alertsState.error : null,
+                corridor?.metadata.state === "snapshot" ? corridor.metadata.message : null,
+                community.error,
+              ]
+                .filter(Boolean)
+                .join(" ") || null,
             refreshing: alertsState.refreshing,
             onRetry: alertsState.refresh,
           }}

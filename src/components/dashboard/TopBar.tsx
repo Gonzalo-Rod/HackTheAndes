@@ -10,6 +10,7 @@ import type { Scope } from "./types";
 const STALE_AFTER_MS = 5 * 60_000;
 
 interface TopBarProps {
+  communityStatus: string;
   scope: Scope;
   counts: { pais: number; pe22: number };
   meta: AlertsMeta | null;
@@ -96,6 +97,15 @@ export function TopBar(props: TopBarProps) {
       </nav>
       <div className="pr-topbar__spacer" />
       <span className="pr-topbar__date pr-hide-md">{now ? formatToday(now) : " "}</span>
+      <a className="pr-btn pr-btn--ghost" href="/impacto">
+        Impacto
+      </a>
+      <a className="pr-btn pr-btn--ghost" href="/empresa">
+        Empresas
+      </a>
+      <span className="pr-hide-md" role="status">
+        {props.communityStatus}
+      </span>
       <Freshness {...props} />
       <button type="button" className="pr-btn pr-btn--ghost pr-hide-sm" onClick={onOpenSources}>
         <Icon name="source" size={14} />

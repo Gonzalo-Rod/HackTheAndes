@@ -1,3 +1,11 @@
+import {
+  IncidentFeedSchema,
+  SegmentsSchema,
+  StatsSchema,
+  type IncidentFeed,
+  type PublicStats,
+  type SegmentCollection,
+} from "@/contracts/platform";
 import { CorridorDataSchema, type CorridorData } from "@/contracts/corridor";
 import { AlertDetailResponseSchema, AlertsResponseSchema, type AlertDetailResponse, type AlertsResponse } from "@/contracts/road-alerts";
 import { CorridorRainResponseSchema, type CorridorRainResponse } from "@/contracts/weather";
@@ -34,17 +42,20 @@ export async function fetchRoadAlerts({ fresh = false }: { fresh?: boolean } = {
 }
 
 export async function fetchAlertDetail(id: string): Promise<AlertDetailResponse> {
-  const body = await getJson(`/api/sutran/alerts/${encodeURIComponent(id)}`, {
-    provider: PROVIDER,
-    operation: "dashboard.alertDetail",
-    timeoutMs: API_TIMEOUT_MS,
-    retries: 0,
-  });
+  const body = await getJson(
+    id.startsWith("community:") ? `/api/incidents/${encodeURIComponent(id.slice(10))}` : `/api/sutran/alerts/${encodeURIComponent(id)}`,
+    {
+      provider: PROVIDER,
+      operation: "dashboard.alertDetail",
+      timeoutMs: API_TIMEOUT_MS,
+      retries: 0,
+    },
+  );
   return parseOrThrow(AlertDetailResponseSchema, body, "detalle");
 }
 
 export async function fetchCorridor(): Promise<CorridorData> {
-  const body = await getJson("/data/pe22.json", { provider: PROVIDER, operation: "dashboard.corridor", retries: 1 });
+  const body = await getJson("/api/corridor", { provider: PROVIDER, operation: "dashboard.corridor", retries: 1 });
   return parseOrThrow(CorridorDataSchema, body, "corredor");
 }
 
@@ -69,4 +80,26 @@ export function describeFetchError(error: unknown): string {
     return `Error del servidor (${error.status ?? "?"}).`;
   }
   return "Error inesperado.";
+}
+
+export async function fetchCommunityIncidents(): Promise<IncidentFeed> {
+  return parseOrThrow(
+    IncidentFeedSchema,
+    await getJson("/api/incidents", { provider: PROVIDER, operation: "dashboard.community", retries: 0 }),
+    "reportes comunitarios",
+  );
+}
+export async function fetchSegments(): Promise<SegmentCollection> {
+  return parseOrThrow(
+    SegmentsSchema,
+    await getJson("/api/segments", { provider: PROVIDER, operation: "dashboard.segments", retries: 0 }),
+    "segmentos",
+  );
+}
+export async function fetchStats(): Promise<PublicStats> {
+  return parseOrThrow(
+    StatsSchema,
+    await getJson("/api/stats", { provider: PROVIDER, operation: "dashboard.stats", retries: 0 }),
+    "impacto",
+  );
 }

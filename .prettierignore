@@ -7,3 +7,6 @@ package-lock.json
 docs/
 getting-started/
 AGENTS.md
+apps/
+packages/
+workflows/

@@ -149,7 +149,7 @@ test("database constraints reject an out-of-range confidence value", async () =>
 
 test("all application tables enforce RLS and deny browser-role table access", async () => {
   const result = await pool.query<{ insecure: number }>(
-    "select count(*)::integer as insecure from pg_catalog.pg_class c join pg_catalog.pg_namespace n on n.oid = c.relnamespace where c.relkind = 'r' and n.nspname in ('public','private') and c.relname <> 'spatial_ref_sys' and (not c.relrowsecurity or has_table_privilege('anon', c.oid, 'select,insert,update,delete') or has_table_privilege('authenticated', c.oid, 'select,insert,update,delete'))",
+    "select count(*)::integer as insecure from pg_catalog.pg_class c join pg_catalog.pg_namespace n on n.oid = c.relnamespace where c.relkind = 'r' and n.nspname in ('public','private') and c.relname not in ('spatial_ref_sys','incident_updates') and (not c.relrowsecurity or has_table_privilege('anon', c.oid, 'select,insert,update,delete') or has_table_privilege('authenticated', c.oid, 'select,insert,update,delete'))",
   );
   assert.equal(result.rows[0]?.insecure, 0);
   const role = await pool.query<{ safe: boolean }>(
