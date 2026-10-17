@@ -159,6 +159,13 @@ export function LayersPanel({ layers, is3d, meta, corridor, rain, rainError, now
         </span>
       </LayerRow>
       <LayerRow
+        label="Cuencas aproximadas"
+        hint="HydroBASINS · confianza baja; no riesgo calculado"
+        swatch={<span style={{ display: "inline-block", width: 14, height: 10, border: "1px dashed #77618e", background: "#77618e22" }} />}
+        checked={layers.catchments}
+        onToggle={(catchments) => set({ catchments })}
+      />
+      <LayerRow
         label="Ríos y quebradas"
         hint="ANA vía SUTRAN"
         freshness={staticFreshness(corridor, now, "Capa estática")}

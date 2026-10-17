@@ -37,6 +37,10 @@ change, including code written by agents.
   `npm --prefix packages/road-data ...`. Keep this tooling inside the package
   while teammates develop the application locally. Coordinate root application
   dependencies and workspace setup with member A during integration.
+- **Offline spatial tooling.** Python preparation lives in `packages/road-data/python/`
+  with pinned `requirements-data.lock.txt`; `.venv/` and bulk source caches are ignored.
+  Server applications consume validated JSON through the compiled TypeScript package.
+  See `docs/data/pe22-catchments.md`; Python is not a deployment dependency.
 - **Path scope.** The `src/` paths below are relative to the application root
   for application code and to `packages/road-data/` for the Data & Model package.
   The package mirrors the same layers and exposes compiled entry points for

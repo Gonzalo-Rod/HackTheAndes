@@ -1,12 +1,13 @@
 import { randomUUID } from "node:crypto";
 import { setTimeout as delay } from "node:timers/promises";
 
-// Limits come from AGENTS.md; bound Retry-After so a scheduled job cannot hang.
-const DEFAULT_TIMEOUT_MS = 8_000;
-const MAX_TIMEOUT_MS = 120_000;
-const MAX_RETRIES = 2;
-const INITIAL_RETRY_DELAY_MS = 250;
-const MAX_RETRY_DELAY_MS = 30_000;
+import {
+  DEFAULT_TIMEOUT_MS,
+  MAX_TIMEOUT_MS,
+  MAX_RETRIES,
+  INITIAL_RETRY_DELAY_MS,
+  MAX_RETRY_DELAY_MS,
+} from "./policy.ts";
 
 export interface JsonRequestOptions {
   signal?: AbortSignal;

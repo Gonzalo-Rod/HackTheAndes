@@ -8,9 +8,9 @@ export const RainSampleSchema = z.object({
   lng: z.number(),
   lat: z.number(),
   elevationM: z.number(),
-  /** Observed/analysed rain over the 24 h before the request. */
+  /** Model-estimated rain for 24 complete hours ending at the capture hour (UTC). */
   pastMm: z.number().nonnegative(),
-  /** Forecast rain over the next 24 h. */
+  /** Forecast rain for 24 complete hours after the capture hour (UTC). */
   nextMm: z.number().nonnegative(),
 });
 

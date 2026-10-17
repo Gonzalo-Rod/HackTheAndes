@@ -20,7 +20,7 @@ const CALLOUT_PADDING = { ...BASE_PADDING, bottom: 190 };
 
 type PassThrough = Pick<
   MapViewProps,
-  "alerts" | "hiddenIds" | "hoveredId" | "corridorAlerts" | "rainSegments" | "highlightRegionKey" | "onHover"
+  "catchments" | "alerts" | "hiddenIds" | "hoveredId" | "corridorAlerts" | "rainSegments" | "highlightRegionKey" | "onHover"
 >;
 
 interface MapAreaProps extends PassThrough {
@@ -53,6 +53,7 @@ export function MapArea({
   hoveredId,
   corridorAlerts,
   rainSegments,
+  catchments,
   highlightRegionKey,
   profileKm,
   status,
@@ -84,6 +85,7 @@ export function MapArea({
         corridor={corridor}
         corridorAlerts={corridorAlerts}
         rainSegments={rainSegments}
+        catchments={catchments}
         highlightRegionKey={highlightRegionKey}
         profileKm={profileKm}
         padding={BASE_PADDING}

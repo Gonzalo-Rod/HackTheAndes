@@ -15,7 +15,7 @@
     "format:check": "prettier --check src tests scripts package.json package-lock.json tsconfig.json tsconfig.build.json vitest*.config.ts eslint.config.mjs .prettierrc.json README.md ../../workflows/n8n",
     "build": "tsc --project tsconfig.build.json",
     "prepack": "npm run build",
-    "test:exports": "node --input-type=module -e \"await import('@peruroad/road-data'); await import('@peruroad/road-data/contracts'); await import('@peruroad/road-data/ingestion'); await import('@peruroad/road-data/geometry'); await import('@peruroad/road-data/geometry/contracts'); await import('@peruroad/road-data/database'); await import('@peruroad/road-data/jobs'); await import('@peruroad/road-data/elevation'); await import('@peruroad/road-data/elevation/contracts'); await import('@peruroad/road-data/locations'); await import('@peruroad/road-data/locations/contracts'); await import('@peruroad/road-data/context'); await import('@peruroad/road-data/context/contracts');\"",
+    "test:exports": "node --input-type=module -e \"await import('@peruroad/road-data'); await import('@peruroad/road-data/contracts'); await import('@peruroad/road-data/ingestion'); await import('@peruroad/road-data/geometry'); await import('@peruroad/road-data/geometry/contracts'); await import('@peruroad/road-data/database'); await import('@peruroad/road-data/jobs'); await import('@peruroad/road-data/elevation'); await import('@peruroad/road-data/elevation/contracts'); await import('@peruroad/road-data/locations'); await import('@peruroad/road-data/locations/contracts'); await import('@peruroad/road-data/context'); await import('@peruroad/road-data/context/contracts'); await import('@peruroad/road-data/catchments'); await import('@peruroad/road-data/catchments/contracts');\"",
     "pe22:prepare": "node scripts/prepare-pe22.ts",
     "senamhi:check": "node scripts/check-senamhi.ts",
     "db:migrate": "node --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/migrate-database.ts",
@@ -29,7 +29,10 @@
     "db:import-elevation": "node --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/import-pe22-elevation.ts",
     "pe22:gazetteer": "node scripts/prepare-pe22-gazetteer.ts",
     "db:import-gazetteer": "node --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/import-pe22-gazetteer.ts",
-    "road-context:check": "node --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/check-road-context.ts"
+    "road-context:check": "node --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/check-road-context.ts",
+    "catchments:download": "node scripts/download-hydrobasins.ts && node scripts/capture-hydrography.ts",
+    "catchments:prepare": ".venv/bin/python python/prepare_catchments.py --output data/.cache/catchments-candidate.json && node scripts/validate-catchments.ts",
+    "db:import-catchments": "node --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/import-catchments.ts"
   },
   "dependencies": {
     "@turf/length": "^7.4.0",
@@ -102,11 +105,20 @@
     "./context/contracts": {
       "types": "./dist/contracts/road-context.d.ts",
       "default": "./dist/contracts/road-context.js"
+    },
+    "./catchments": {
+      "types": "./dist/catchments.d.ts",
+      "default": "./dist/catchments.js"
+    },
+    "./catchments/contracts": {
+      "types": "./dist/contracts/road-catchments.d.ts",
+      "default": "./dist/contracts/road-catchments.js"
     }
   },
   "files": [
     "dist",
     "README.md",
-    "certs"
+    "certs",
+    "data/pe22/catchments.json"
   ]
 }

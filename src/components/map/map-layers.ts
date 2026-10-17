@@ -1,3 +1,4 @@
+import { addCatchmentLayers, setCatchmentVisibility } from "./catchment-layers";
 import type { ExpressionSpecification, GeoJSONSource, Map as MLMap } from "maplibre-gl";
 
 import { STATUS_META } from "@/components/alert-meta";
@@ -51,6 +52,8 @@ export function addThematicLayers(map: MLMap, origin: string): void {
   for (const id of ["corridor", "corridor-rain", "corridor-stretches", "corridor-km", "corridor-places", "profile-point"]) {
     map.addSource(id, { type: "geojson", data: EMPTY });
   }
+
+  addCatchmentLayers(map);
 
   // A light wash over Peru's regions, under the hillshade, so the country reads first.
   map.addLayer(
@@ -249,6 +252,7 @@ export function applyLayerState(map: MLMap, layers: LayerState): void {
     "line-color",
     layers.networkColorBy === "condition" ? conditionColor : layers.satellite ? "#fffdf7" : "#6b6255",
   );
+  setCatchmentVisibility(map, layers.catchments);
   map.setLayoutProperty("rivers-line", "visibility", visibility(layers.rivers));
   map.setPaintProperty("rivers-line", "line-opacity", layers.riversOpacity);
   map.setLayoutProperty("regions-line", "visibility", visibility(layers.regions));

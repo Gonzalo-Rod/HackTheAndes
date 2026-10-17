@@ -38,12 +38,26 @@ export function createCorridorRainService({ provider, loadCorridor, now = Date.n
         });
         const hourly = await provider.fetchHourlyRain(points, requestId);
         const nowSec = Math.floor(current / 1000);
+        if (hourly.length !== points.length) throw new Error("Invalid rain point count");
+        const samples: CorridorRainResponse["samples"] = [];
+        for (const [index, point] of points.entries()) {
+          const series = hourly[index];
+          const window = splitRainWindow(series.timesSec, series.precipitation, nowSec);
+          if (!window.ok) {
+            logger.warn({
+              operation: "weather.corridorRain",
+              provider: "open-meteo",
+              requestId,
+              result: "error",
+              errorType: window.error.code,
+            });
+            if (cached) return ok({ ...cached.value, stale: true });
+            return err({ code: "upstream_unavailable", message: "Faltan datos horarios de lluvia; no se puede calcular el acumulado." });
+          }
+          samples.push({ ...point, elevationM: elevationAtKm(corridor.profile, point.km), ...window.value });
+        }
         const value: CorridorRainResponse = {
-          samples: points.map((point, i) => ({
-            ...point,
-            elevationM: elevationAtKm(corridor.profile, point.km),
-            ...splitRainWindow(hourly[i].timesSec, hourly[i].precipitation, nowSec),
-          })),
+          samples,
           fetchedAt: new Date(current).toISOString(),
           source: "open-meteo",
           stale: false,
@@ -55,7 +69,8 @@ export function createCorridorRainService({ provider, loadCorridor, now = Date.n
           operation: "weather.corridorRain",
           requestId,
           result: "error",
-          error: error instanceof Error ? error.message : "unknown",
+          provider: "open-meteo",
+          errorType: error instanceof Error ? error.name : "UnknownError",
         });
         // Serve the last good data, flagged, rather than hiding the layer on a provider blip.
         if (cached) return ok({ ...cached.value, stale: true });

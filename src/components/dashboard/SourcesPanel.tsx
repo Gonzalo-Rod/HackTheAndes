@@ -63,7 +63,8 @@ export function SourcesPanel({ meta, corridor, rain }: SourcesPanelProps) {
         <p>
           Precipitación por hora en {rain ? rain.samples.length : 9} puntos equidistantes del eje, del pronóstico de Open-Meteo (modelos
           globales, malla de varios km). Cada tramo toma el valor del punto más cercano y se colorea con el mayor valor entre las últimas y
-          las próximas 24 h. El servidor la consulta como máximo cada 30 minutos.
+          las próximas 24 h completas, ancladas a la hora UTC de la consulta. El pasado también es una estimación de modelo, no una
+          observación. El servidor consulta como máximo cada 30 minutos; datos horarios incompletos activan caché o un estado no disponible.
         </p>
         <dl className="pr-kv pr-kv--compact">
           <div className="pr-kv__row">
@@ -105,6 +106,25 @@ export function SourcesPanel({ meta, corridor, rain }: SourcesPanelProps) {
         </p>
       </section>
 
+      <section className="pr-source">
+        <h3>Cuencas aproximadas</h3>
+        <p>
+          HydroBASINS nivel 12 y topología aguas arriba, asociados a intersecciones cartográficas de ríos y carretera. Incluyen la parte de
+          la subcuenca situada aguas abajo del cruce: no son delimitaciones precisas al punto vial. Confianza baja; no representan un nivel
+          de riesgo.
+        </p>
+        <p>
+          <a
+            href="https://data.hydrosheds.org/file/technical-documentation/HydroSHEDS_TechDoc_v1_4.pdf#page=29"
+            target="_blank"
+            rel="noreferrer"
+          >
+            HydroBASINS / HydroSHEDS © WWF · fuente y licencia
+          </a>
+          . Lehner y Grill (2013), doi:10.1002/hyp.9740. WWF no ha evaluado esta derivación y no ofrece garantía de precisión, integridad o
+          adecuación.
+        </p>
+      </section>
       <section className="pr-source pr-source--limits">
         <h3>Limitaciones conocidas</h3>
         <ul>

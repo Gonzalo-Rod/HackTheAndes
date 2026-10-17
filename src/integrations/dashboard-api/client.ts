@@ -1,3 +1,4 @@
+import { CatchmentLayerSchema } from "@/contracts/catchments";
 import {
   IncidentFeedSchema,
   SegmentsSchema,
@@ -101,5 +102,13 @@ export async function fetchStats(): Promise<PublicStats> {
     StatsSchema,
     await getJson("/api/stats", { provider: PROVIDER, operation: "dashboard.stats", retries: 0 }),
     "impacto",
+  );
+}
+
+export async function fetchCatchments() {
+  return parseOrThrow(
+    CatchmentLayerSchema,
+    await getJson("/api/catchments", { provider: PROVIDER, operation: "dashboard.catchments", retries: 0 }),
+    "cuencas",
   );
 }

@@ -25,7 +25,7 @@ export interface RainProvider {
 }
 
 const LocationSchema = z.object({
-  hourly: z.object({ time: z.array(z.number()), precipitation: z.array(z.number().nullable()) }),
+  hourly: z.object({ time: z.array(z.number().int()), precipitation: z.array(z.number().nonnegative().nullable()) }),
 });
 const ResponseSchema = z.union([z.array(LocationSchema), LocationSchema.transform((one) => [one])]);
 
@@ -37,7 +37,8 @@ export function createOpenMeteoClient(config: { baseUrl: string; fetchImpl?: Req
         longitude: points.map((p) => p.lng.toFixed(4)).join(","),
         hourly: "precipitation",
         past_hours: "24",
-        forecast_hours: "24",
+        // Include the current hour and all 24 future hour-end precipitation values.
+        forecast_hours: "25",
         timeformat: "unixtime",
         timezone: "GMT",
       });

@@ -1,4 +1,5 @@
 import type { RainSample } from "@/contracts/weather";
+import { err, ok, type Result } from "@/lib/result";
 
 // Pure rain helpers: classification, windowing of hourly data, and mapping point samples
 // onto stretches of the corridor. This is rain intensity, not a landslide (huaico) forecast.
@@ -38,23 +39,39 @@ export function sampleKms(kmTotal: number, count: number): number[] {
   return Array.from({ length: count }, (_, i) => (kmTotal * i) / (count - 1));
 }
 
-/**
- * Splits hourly precipitation into the 24 h before `nowSec` and the 24 h after it.
- * Null readings (missing data) count as zero; all inputs are Unix seconds / millimetres.
- */
+// Open-Meteo precipitation is the sum for the preceding hour, ending at its timestamp.
+const HOUR_SECONDS = 3600;
+const WINDOW_HOURS = 24;
+
+export interface RainWindowError {
+  code: "invalid_hourly_rain";
+}
+
+/** Require complete UTC hour windows; missing rain must never appear as dry weather. */
 export function splitRainWindow(
   timesSec: readonly number[],
   precipitation: readonly (number | null)[],
   nowSec: number,
-): { pastMm: number; nextMm: number } {
+): Result<{ pastMm: number; nextMm: number }, RainWindowError> {
+  const invalid = () => err<RainWindowError>({ code: "invalid_hourly_rain" });
+  if (!Number.isFinite(nowSec) || timesSec.length !== precipitation.length) return invalid();
+  const anchor = Math.floor(nowSec / HOUR_SECONDS) * HOUR_SECONDS;
+  const values = new Map<number, number | null>();
+  for (const [index, time] of timesSec.entries()) {
+    const mm = precipitation[index];
+    if (!Number.isInteger(time) || time % HOUR_SECONDS !== 0 || values.has(time)) return invalid();
+    if (mm !== null && (!Number.isFinite(mm) || mm < 0)) return invalid();
+    values.set(time, mm);
+  }
   let pastMm = 0;
   let nextMm = 0;
-  timesSec.forEach((time, i) => {
-    const mm = Math.max(0, precipitation[i] ?? 0);
-    if (time <= nowSec) pastMm += mm;
+  for (let hour = -WINDOW_HOURS + 1; hour <= WINDOW_HOURS; hour++) {
+    const mm = values.get(anchor + hour * HOUR_SECONDS);
+    if (mm === null || mm === undefined) return invalid();
+    if (hour <= 0) pastMm += mm;
     else nextMm += mm;
-  });
-  return { pastMm: Math.round(pastMm * 10) / 10, nextMm: Math.round(nextMm * 10) / 10 };
+  }
+  return ok({ pastMm: Math.round(pastMm * 10) / 10, nextMm: Math.round(nextMm * 10) / 10 });
 }
 
 export interface RainSegment {

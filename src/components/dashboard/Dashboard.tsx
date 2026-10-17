@@ -1,4 +1,5 @@
 "use client";
+import { useCatchments } from "@/hooks/use-catchments";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
@@ -65,6 +66,7 @@ export function Dashboard() {
   const community = useCommunityIncidents();
   const corridorState = useCorridor();
   const rainState = useCorridorRain();
+  const catchments = useCatchments();
   const now = useNow();
   const mapRef = useRef<MapViewHandle>(null);
 
@@ -213,6 +215,7 @@ export function Dashboard() {
           corridor={corridor}
           corridorAlerts={corridorAlerts}
           rainSegments={rainBands}
+          catchments={catchments.data}
           highlightRegionKey={filters.regionKey}
           profileKm={tourKm ?? profileKm}
           now={now}
@@ -224,6 +227,8 @@ export function Dashboard() {
                 alertsState.data && alertsState.error ? alertsState.error : null,
                 corridor?.metadata.state === "snapshot" ? corridor.metadata.message : null,
                 community.error,
+                catchments.error,
+                catchments.data?.meta.state === "snapshot" ? catchments.data.meta.message : null,
               ]
                 .filter(Boolean)
                 .join(" ") || null,

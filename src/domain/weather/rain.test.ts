@@ -19,9 +19,58 @@ describe("rain", () => {
     expect(sampleKms(100, 5)).toEqual([0, 25, 50, 75, 100]);
   });
 
-  it("splits hourly data around now and treats nulls as zero", () => {
-    const result = splitRainWindow([100, 200, 300, 400], [1, null, 2, 3.04], 250);
-    expect(result).toEqual({ pastMm: 1, nextMm: 5 });
+  const anchorSec = Date.parse("2026-10-18T05:00:00Z") / 1000; // Midnight in Lima.
+  const times = Array.from({ length: 50 }, (_, index) => anchorSec + (index - 24) * 3600);
+  const values = times.map((time) => (time <= anchorSec ? 1 : 2));
+
+  it("includes exactly 24 complete past and future hours, ignoring values outside them", () => {
+    expect(splitRainWindow(times, values, anchorSec + 1800)).toEqual({ ok: true, value: { pastMm: 24, nextMm: 48 } });
+  });
+
+  it("accepts an explicitly measured model zero", () => {
+    expect(
+      splitRainWindow(
+        times,
+        values.map(() => 0),
+        anchorSec,
+      ),
+    ).toEqual({ ok: true, value: { pastMm: 0, nextMm: 0 } });
+  });
+
+  it("rejects missing, null, duplicate and malformed hours rather than inventing dry weather", () => {
+    const missingValue = [...values] as (number | null)[];
+    missingValue[12] = null;
+    expect(splitRainWindow(times, missingValue, anchorSec).ok).toBe(false);
+    expect(
+      splitRainWindow(
+        times.filter((_, i) => i !== 12),
+        values.filter((_, i) => i !== 12),
+        anchorSec,
+      ).ok,
+    ).toBe(false);
+    expect(splitRainWindow(times, values.slice(1), anchorSec).ok).toBe(false);
+    expect(splitRainWindow([...times, times[1]], [...values, 1], anchorSec).ok).toBe(false);
+    expect(
+      splitRainWindow(
+        times.map((time) => time + 1),
+        values,
+        anchorSec,
+      ).ok,
+    ).toBe(false);
+    expect(
+      splitRainWindow(
+        times,
+        values.map(() => -1),
+        anchorSec,
+      ).ok,
+    ).toBe(false);
+    expect(
+      splitRainWindow(
+        times,
+        values.map(() => Number.NaN),
+        anchorSec,
+      ).ok,
+    ).toBe(false);
   });
 
   it("builds contiguous segments that cover the whole corridor", () => {

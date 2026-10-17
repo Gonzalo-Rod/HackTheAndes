@@ -30,4 +30,24 @@ describe("open-meteo client", () => {
       ]),
     ).rejects.toMatchObject({ kind: "invalid_body" });
   });
+  it("requests the next full 24 hours including the final hour-end timestamp", async () => {
+    let requestedUrl = "";
+    const client = createOpenMeteoClient({
+      baseUrl: "https://example.test/v1",
+      fetchImpl: (async (url) => {
+        requestedUrl = String(url);
+        return new Response(JSON.stringify(location));
+      }) as typeof fetch,
+    });
+    await client.fetchHourlyRain([{ lat: -11.9, lng: -76.7 }]);
+    expect(new URL(requestedUrl).searchParams.get("forecast_hours")).toBe("25");
+  });
+
+  it("rejects negative precipitation from the provider", async () => {
+    const client = createOpenMeteoClient({
+      baseUrl: "https://example.test/v1",
+      fetchImpl: json({ hourly: { time: [1], precipitation: [-1] } }) as typeof fetch,
+    });
+    await expect(client.fetchHourlyRain([{ lat: -11.9, lng: -76.7 }])).rejects.toMatchObject({ kind: "invalid_body" });
+  });
 });

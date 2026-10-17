@@ -18,6 +18,7 @@ export interface LayerState {
   networkColorBy: NetworkColorBy;
   corridor: boolean;
   rain: boolean;
+  catchments: boolean;
   rivers: boolean;
   riversOpacity: number;
   regions: boolean;
@@ -36,6 +37,7 @@ export const DEFAULT_LAYERS: LayerState = {
   networkColorBy: "neutral",
   corridor: true,
   rain: true,
+  catchments: true,
   rivers: true,
   riversOpacity: 0.8,
   regions: true,

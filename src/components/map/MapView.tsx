@@ -3,6 +3,8 @@
 import type { Map as MLMap, MapLayerMouseEvent, Popup } from "maplibre-gl";
 import { useEffect, useImperativeHandle, useRef, useState, type Ref } from "react";
 
+import type { CatchmentLayer } from "@/contracts/catchments";
+import { setCatchmentData } from "./catchment-layers";
 import type { LayerState, MapMode } from "@/components/dashboard/types";
 import type { CorridorData } from "@/contracts/corridor";
 import type { RoadAlert } from "@/contracts/road-alerts";
@@ -37,6 +39,7 @@ export interface MapViewProps {
   corridor: CorridorData | null;
   corridorAlerts: CorridorAlert[];
   rainSegments: RainSegment[];
+  catchments: CatchmentLayer | null;
   highlightRegionKey: string | null;
   profileKm: number | null;
   padding: ScreenPadding;
@@ -192,8 +195,20 @@ export function MapView(props: MapViewProps) {
     };
   }, []);
 
-  const { layers, mode, corridor, corridorAlerts, rainSegments, highlightRegionKey, profileKm, alerts, hiddenIds, selectedId, hoveredId } =
-    props;
+  const {
+    catchments,
+    layers,
+    mode,
+    corridor,
+    corridorAlerts,
+    rainSegments,
+    highlightRegionKey,
+    profileKm,
+    alerts,
+    hiddenIds,
+    selectedId,
+    hoveredId,
+  } = props;
   useEffect(() => {
     if (mapRef.current && readyRef.current) applyLayerState(mapRef.current, layers);
   }, [layers, mapReady]);
@@ -227,6 +242,10 @@ export function MapView(props: MapViewProps) {
     if (mode === "2d") map.easeTo({ pitch: 0, duration: 900 });
     else if (map.getPitch() < 20) map.easeTo({ pitch: map.getZoom() > 7 ? 58 : 35, duration: 900 });
   }, [mode]);
+
+  useEffect(() => {
+    if (mapRef.current && readyRef.current) setCatchmentData(mapRef.current, catchments);
+  }, [catchments, mapReady]);
 
   useEffect(() => {
     if (mapRef.current && readyRef.current && corridor) setCorridorData(mapRef.current, corridor);

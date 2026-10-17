@@ -20,3 +20,9 @@ next-env.d.ts
 
 # Copied from node_modules by scripts/copy-maplibre-worker.mjs
 /public/maplibre/
+
+# Offline geospatial tooling and raw continental source archives
+.venv/
+__pycache__/
+*.pyc
+/packages/road-data/data/.cache/

@@ -5,7 +5,8 @@ implementation reads and validates SUTRAN alerts and per-alert history, and
 provides an idempotent ingestion service behind a transactional repository
 interface, backed by a verified Postgres repository. It also prepares and imports
 PE-22 geometry, 1-km display segments, terrain elevation, and a sourced landmark
-gazetteer with nearest-road lookup, and probes public
+gazetteer with nearest-road lookup, prepares a coarse HydroBASINS catchment
+fallback with area-weighted weather query points, and probes public
 SENAMHI warning-layer access. The deployed authenticated job and active n8n
 schedule archive SUTRAN alerts every ten minutes; weather ingestion and risk
 models remain future work under the [Team Plan](../../docs/team-plan.md).
@@ -52,7 +53,7 @@ explicit unavailable state when the source fails. It does not persist data or
 start scheduled polling. Tests run offline against captured public responses
 and controlled failures.
 
-## Application integration later
+## Application integration
 
 `npm run build` emits JavaScript and declarations into `dist/`. The package
 exports the following entry points:
@@ -81,6 +82,10 @@ import { elevationSnapshotSchema } from "@peruroad/road-data/elevation/contracts
 import { createRoadLocator, resolvePlaceName } from "@peruroad/road-data/locations";
 import { gazetteerSchema } from "@peruroad/road-data/locations/contracts";
 
+// Coarse catchment fallback and browser-safe contract.
+import { loadBundledCatchments } from "@peruroad/road-data/catchments";
+import { catchmentSnapshotSchema } from "@peruroad/road-data/catchments/contracts";
+
 // Server-only database pool and durable official-source repository.
 import {
   createDatabasePool,
@@ -106,11 +111,12 @@ Install and build this package before the application build. Coordinate the
 application's dependency installation and lockfile update with A; a workspace
 can replace the file dependency later if the team adopts one. The backend entry
 point uses Node.js APIs and belongs in server code; client components use the
-`/contracts`, `/geometry/contracts`, `/elevation/contracts`, or `/locations/contracts`
+`/contracts`, `/geometry/contracts`, `/elevation/contracts`, `/locations/contracts`,
+or `/catchments/contracts`
 entry point.
 This package is private and is not published to npm.
 
-## PE-22 geometry and SENAMHI access
+## PE-22 geometry, catchments and SENAMHI access
 
 ```sh
 # Refresh public source data and generate the corridor, segments, diagnostics, and hashes.
@@ -151,7 +157,8 @@ risk use. The currently returned properties require product/validity review.
 
 See [geometry handoff](../../docs/data/pe22-geometry.md),
 [elevation handoff](../../docs/data/pe22-elevation.md),
-[gazetteer handoff](../../docs/data/pe22-gazetteer.md), and
+[gazetteer handoff](../../docs/data/pe22-gazetteer.md),
+[catchment preparation](../../docs/data/pe22-catchments.md), and
 [SENAMHI discovery](../../docs/data/senamhi-access.md) for verified behavior,
 source links, limitations, and integration steps. These public-source commands need no
 Supabase or n8n credentials.
@@ -173,6 +180,7 @@ npm --prefix packages/road-data run db:check
 npm --prefix packages/road-data run db:import-pe22
 npm --prefix packages/road-data run db:import-elevation
 npm --prefix packages/road-data run db:import-gazetteer
+npm --prefix packages/road-data run db:import-catchments
 npm --prefix packages/road-data run sutran:ingest
 npm --prefix packages/road-data run test:db
 ```
