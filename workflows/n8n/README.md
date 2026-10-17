@@ -6,21 +6,23 @@ remain in `@peruroad/road-data`; n8n holds no database credentials.
 
 ## Current state
 
-An unpublished workflow is saved in the account's personal project:
+A published workflow is saved in the account's personal project:
 [PeruRoad — SUTRAN ingestion (10 minutes)](https://gozlie.app.n8n.cloud/workflow/67O2kAY8fPtWjD9K).
 The API is deployed at
 `https://peruroad-api-git-feat-api-foundation-gozlie.vercel.app/api/jobs/sutran`
-and has passed direct authenticated HTTP ingestion checks. The cloud draft's
-HTTPS URL is configured and its graph validates; the HTTP credential still needs
-to be saved before real n8n execution and publication. The MCP connection can
-list and attach credentials but provides no credential-creation tool, so this
-one credential must be saved through n8n's UI. Weather ingestion, risk
-recalculation, incident promotion, alert
+and has passed direct authenticated HTTP ingestion checks. The workflow uses the
+saved **PeruRoad ingestion job** Header Auth credential and was published on
+October 17, 2026 at 16:04 Lima time, with its ten-minute trigger registered.
+Live manual executions `4` and `5` returned complete outcomes and their finished
+Supabase audit rows were verified; automatic scheduled-run verification is
+pending. The MCP connection can attach existing credentials but provides no
+credential-creation tool, so credential entry is performed through n8n's UI.
+Weather ingestion, risk recalculation, incident promotion, alert
 evaluation, and the weekly report are separate pending integrations.
 
 - `sutran-ingestion.sdk.js`: source for n8n's Workflow SDK/MCP builder. It is
   interpreted by n8n, not executed by the road-data package.
-- `sutran-ingestion.json`: portable export of the saved draft, with `active: false`
+- `sutran-ingestion.json`: portable export of the published graph, with `active: false`
   and no account-specific credential IDs, pin data, or personal information.
 - `sutran-ingestion.settings.json`: workflow settings applied through MCP after
   creation; these are also included in the JSON export.
@@ -31,6 +33,13 @@ apply targeted updates to the existing workflow. Do not create duplicates or
 publish while URL/credential setup is pending. After saving, retrieve and compare
 the graph and settings, and refresh the portable export without credentials or
 test pin data. Import the JSON file through n8n's editor to restore it elsewhere.
+
+The portable export deliberately stays inactive on import. Select an existing
+Header Auth credential before running or publishing it. The SDK's credential
+factory is a setup marker: bind it to the existing credential returned by
+`list_credentials` when rebuilding through MCP. Validation without that binding
+warns against creating a new plain generic credential; the deployed workflow
+reuses the participant's saved credential and its bound SDK validation passes.
 
 ## Backend handoff for member A
 
@@ -117,15 +126,13 @@ retry pending enrichment during a later execution.
 2. Replace the URL placeholder in **Archive SUTRAN through backend** with the
    deployed HTTPS endpoint. Redirects remain disabled to avoid forwarding job
    credentials to another destination.
-3. Configure the **PeruRoad ingestion job** custom-auth credential to send the
-   `Authorization` header. For the templated custom-auth type, use the template
-   `{"headers":{"Authorization":"Bearer {{api_key}}"}}` and store the job secret
-   as `api_key`. Select that credential on the HTTP node; no credential value
-   belongs in the graph export.
-   An existing **Header Auth** credential can also be reused: its header Name is
+3. Reuse the saved **PeruRoad ingestion job** Header Auth credential. Its Name is
    `Authorization` and its Value is `Bearer ` followed by the same job secret.
-   Match the HTTP node's generic authentication type to the saved credential
-   before testing; keep secret values exclusively in the credential store.
+   Keep `genericAuthType: httpHeaderAuth` on the current HTTP node. For a new
+   SDK-created credential instead, n8n recommends templated custom auth with
+   `{"headers":{"Authorization":"Bearer {{api_key}}"}}`; match the node's
+   credential type to that choice and store the job secret as `api_key`.
+   Keep secret values exclusively in the credential store.
 4. Run **Manual verification** twice with different n8n execution IDs. Confirm
    HTTP 200, `status: complete`, two finished Supabase audit rows, and no duplicated
    revisions/history for unchanged source data. An empty valid source batch is a
@@ -162,6 +169,15 @@ event, and returned identical cached outcomes for duplicate execution IDs.
 n8n's pinned-response test execution `1` succeeded; execution `2` intentionally
 failed at **Fail unconfirmed ingestion** for a simulated partial outcome. These
 were simulated n8n tests, not scheduled calls to a deployed backend.
+
+Live n8n verification on October 17, 2026: execution `3` was rejected with 401
+before ingestion because the initial credential did not match the backend.
+After the participant corrected it, manual executions `4` and `5` each returned
+HTTP 200 with `status: complete`, selected four unchanged alerts, and added no
+duplicate revisions/history. Both finished database audit rows were verified
+independently with verified TLS. Published version
+`3e88c79e-aba9-4c94-8a29-b7e0b8266dcc` has one registered schedule trigger;
+automatic runs still need observation.
 
 MCP validation and pinned-response workflow tests verify the graph and failure
 branch without calling the backend. They do not establish live deployed behavior.

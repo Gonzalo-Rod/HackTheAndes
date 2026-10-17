@@ -37,13 +37,13 @@ const ingest = node({
     retryOnFail: false,
     onError: "stopWorkflow",
     credentials: {
-      httpTemplatedCustomAuth: newCredential("PeruRoad ingestion job"),
+      httpHeaderAuth: newCredential("PeruRoad ingestion job"),
     },
     parameters: {
       method: "POST",
       url: "https://peruroad-api-git-feat-api-foundation-gozlie.vercel.app/api/jobs/sutran",
       authentication: "genericCredentialType",
-      genericAuthType: "httpTemplatedCustomAuth",
+      genericAuthType: "httpHeaderAuth",
       sendBody: true,
       contentType: "json",
       specifyBody: "json",
@@ -133,7 +133,7 @@ const failed = node({
 });
 
 const setup = sticky(
-  "## Deployed API — credential setup pending\nThe HTTPS /api/jobs/sutran URL is configured. Select the PeruRoad ingestion job credential, sending Authorization: Bearer <ROAD_DATA_JOB_SECRET>. Keep database credentials in the backend and job secrets only in the credential store.\n\nThe backend validates and archives PE-22 alerts and history. Only HTTP 200 with status complete succeeds; partial ingestion fails visibly. No automatic POST retries.\n\nRun Manual verification twice with fresh execution IDs, confirm Supabase audit rows, then publish. Workflow timezone: America/Lima; execution timeout: 150 seconds. Weather/risk and alert evaluation are separate pending work.",
+  "## SUTRAN archive — every 10 minutes\nCalls the deployed HTTPS /api/jobs/sutran endpoint using the saved PeruRoad ingestion job Header Auth credential. Keep job secrets only in the credential store and database credentials only in the backend.\n\nOnly HTTP 200 with status complete succeeds. Partial results and HTTP failures stop the workflow visibly; there are no automatic POST retries. Each execution has its own backend audit ID.\n\nLive manual executions 4 and 5 were verified against Supabase on October 17, 2026. Timezone: America/Lima; HTTP timeout: 130 seconds; workflow timeout: 150 seconds. Verify automatic executions after publishing. Weather/risk and alert evaluation remain separate pending work.",
   undefined,
   { position: [0, -320], width: 1200, height: 300, color: 5 },
 );
