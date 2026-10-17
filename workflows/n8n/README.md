@@ -13,9 +13,9 @@ The API is deployed at
 and has passed direct authenticated HTTP ingestion checks. The workflow uses the
 saved **PeruRoad ingestion job** Header Auth credential and was published on
 October 17, 2026 at 16:04 Lima time, with its ten-minute trigger registered.
-Live manual executions `4` and `5` returned complete outcomes and their finished
-Supabase audit rows were verified; automatic scheduled-run verification is
-pending. The MCP connection can attach existing credentials but provides no
+Live manual executions `4` and `5`, plus automatic execution `6`, returned
+complete outcomes and their finished Supabase audit rows were verified.
+The MCP connection can attach existing credentials but provides no
 credential-creation tool, so credential entry is performed through n8n's UI.
 Weather ingestion, risk recalculation, incident promotion, alert
 evaluation, and the weekly report are separate pending integrations.
@@ -144,6 +144,11 @@ retry pending enrichment during a later execution.
    two actual scheduled executions and the matching audit rows. Save an export
    before the trial ends.
 
+Trigger alignment depends on n8n's version and scheduler configuration. Current
+documentation describes publication-based Minutes intervals; use this instance's
+recorded execution timestamps to verify its actual cadence instead of assuming
+clock-boundary or publication-time alignment. See the [Schedule Trigger timing documentation](https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.scheduletrigger/).
+
 HTTP failures stop the workflow. Even an HTTP 200 response must contain
 `status: complete`; otherwise the explicit failure branch stops execution.
 Failures remain visible in n8n's execution list and the backend audit. Messaging
@@ -177,7 +182,10 @@ HTTP 200 with `status: complete`, selected four unchanged alerts, and added no
 duplicate revisions/history. Both finished database audit rows were verified
 independently with verified TLS. Published version
 `3e88c79e-aba9-4c94-8a29-b7e0b8266dcc` has one registered schedule trigger;
-automatic runs still need observation.
+automatic execution `6` started at 16:10:43 Lima time and completed successfully
+at 16:10:46. Its HTTP 200 outcome and finished database audit also showed four
+unchanged alerts with no duplicate history. Further runs can be checked in the
+workflow's execution history and `private.ingestion_runs`.
 
 MCP validation and pinned-response workflow tests verify the graph and failure
 branch without calling the backend. They do not establish live deployed behavior.
