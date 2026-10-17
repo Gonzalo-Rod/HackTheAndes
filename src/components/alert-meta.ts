@@ -47,6 +47,7 @@ const HISTORY_TYPE_LABELS: Record<string, string> = {
   publicacion: "Publicación de la alerta",
   actualizacion: "Actualización",
   cambio_estado: "Cambio de estado",
+  cambio_estado_via: "Cambio de estado de la vía",
 };
 
 export function historyTypeLabel(type: string): string {

@@ -30,7 +30,10 @@ export interface ScreenPadding {
 }
 
 interface CameraDeps {
+  /** Padding for general moves (floating controls). */
   getPadding: () => ScreenPadding;
+  /** Padding while an alert is selected (also clears the selected-alert card). */
+  getFocusPadding: () => ScreenPadding;
   getMode: () => MapMode;
   getCorridor: () => CorridorData | null;
   onTourProgress: (km: number | null) => void;
@@ -40,11 +43,10 @@ interface CameraDeps {
 
 const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-// Padding is never passed to flyTo/easeTo: MapLibre would keep it as persistent map padding and
-// cameraForBounds would subtract it a second time. Point targets use a center offset instead.
-function offsetFor(padding: ScreenPadding): [number, number] {
-  return [(padding.left - padding.right) / 2, (padding.top - padding.bottom) / 2];
-}
+// Overlays are handled with MapLibre's map padding, which persists after a move: point targets
+// set it explicitly, and bounds fits rely on the current value (cameraForBounds already includes
+// it, so passing it again would count it twice). `offset` is not used because MapLibre resolves
+// it against the camera at the start of a flight, which misplaces targets in pitched 3D views.
 const duration = (ms: number) => (reducedMotion() ? 0 : ms);
 
 function lerpAngle(from: number, to: number, t: number): number {
@@ -78,7 +80,7 @@ export function createCameraController(map: MLMap, deps: CameraDeps) {
   }
 
   function flyToBoundsLike(bounds: LngLatBoundsLike, pitch: number, bearing = 0) {
-    const camera = map.cameraForBounds(bounds, { padding: deps.getPadding(), bearing });
+    const camera = map.cameraForBounds(bounds, { bearing });
     if (camera) map.flyTo({ ...camera, pitch, bearing, duration: duration(2200), essential: true });
   }
 
@@ -158,7 +160,7 @@ export function createCameraController(map: MLMap, deps: CameraDeps) {
         zoom: Math.max(map.getZoom(), ALERT_ZOOM),
         pitch: pitchFor(62),
         bearing: deps.getMode() === "3d" ? map.getBearing() : 0,
-        offset: offsetFor(deps.getPadding()),
+        padding: deps.getFocusPadding(),
         duration: duration(2200),
         essential: true,
       });
@@ -184,7 +186,7 @@ export function createCameraController(map: MLMap, deps: CameraDeps) {
         zoom: 12.2,
         pitch: pitchFor(62),
         bearing: deps.getMode() === "3d" ? bearingDeg(center, ahead) : 0,
-        offset: offsetFor(deps.getPadding()),
+        padding: deps.getPadding(),
         duration: duration(2000),
         essential: true,
       });

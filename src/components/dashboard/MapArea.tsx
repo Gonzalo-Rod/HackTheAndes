@@ -81,7 +81,8 @@ export function MapArea({
         corridorAlerts={corridorAlerts}
         highlightRegionKey={highlightRegionKey}
         profileKm={profileKm}
-        padding={selected ? CALLOUT_PADDING : BASE_PADDING}
+        padding={BASE_PADDING}
+        focusPadding={CALLOUT_PADDING}
         onSelect={onSelect}
         onHover={onHover}
         onReady={() => setMapReady(true)}

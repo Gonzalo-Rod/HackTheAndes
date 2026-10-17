@@ -37,6 +37,8 @@ export interface MapViewProps {
   highlightRegionKey: string | null;
   profileKm: number | null;
   padding: ScreenPadding;
+  /** Padding while an alert is selected, so the target stays clear of the selected-alert card. */
+  focusPadding: ScreenPadding;
   onSelect: (id: string | null) => void;
   onHover: (id: string | null) => void;
   onReady: () => void;
@@ -101,6 +103,7 @@ export function MapView(props: MapViewProps) {
       map.addControl(new ml.ScaleControl({ maxWidth: 110, unit: "metric" }), "bottom-right");
       cameraRef.current = createCameraController(map, {
         getPadding: () => latest.current.padding,
+        getFocusPadding: () => latest.current.focusPadding,
         getMode: () => latest.current.mode,
         getCorridor: () => latest.current.corridor,
         onTourProgress: (km) => latest.current.onTourProgress(km),
@@ -200,6 +203,16 @@ export function MapView(props: MapViewProps) {
     if (!map || !readyRef.current) return;
     map.setTerrain(mode === "3d" && layers.terrain ? { source: TERRAIN_SOURCE, exaggeration: layers.exaggeration } : null);
   }, [mode, layers.terrain, layers.exaggeration, mapReady]);
+
+  // Keep the map padding in sync with the selected-alert card. Selecting an alert starts a flight that
+  // already ends with the focus padding, so moving maps are left alone.
+  const hasSelection = selectedId !== null;
+  const { padding, focusPadding } = props;
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !readyRef.current || map.isMoving()) return;
+    map.easeTo({ padding: hasSelection ? focusPadding : padding, duration: 400 });
+  }, [hasSelection, padding, focusPadding, mapReady]);
 
   // The national overview starts flat; the camera tilts only when the user changes the mode (or on fly-tos).
   const appliedMode = useRef(mode);
