@@ -59,3 +59,7 @@ the earlier recommendation to reduce it. We updated the Team Plan to the
 30/25/20/15/10 rubric and a 30-hour schedule, deleted the implementation review,
 and updated agent instructions and onboarding references. Scope, architecture,
 definition of done, rubric totals, and internal links were verified.
+
+## 2026-10-17T12:04:55-05:00 — Team Plan: Next.js stack and model review fixes
+
+We updated the Team Plan to a Next.js (TypeScript) stack with MapLibre and PostGIS, named the project PeruRoad Climate, and added spec items such as the rainfall heat map, catchment layer and indicator panel. Following the review, advance-warning claims now rely only on archived Open-Meteo Previous Runs forecasts evaluated on a season held out from calibration, with the Yaku 2023 replay labeled as a reconstruction. The plan now uses delineated upstream catchments, states that 1-km segments are display units rather than weather precision, and stores subscriptions with a provider contact ID or encrypted destination plus an HMAC matching key. All integrations remain unverified; next, run the section 6 checks and submit the WhatsApp alert template at H0.
