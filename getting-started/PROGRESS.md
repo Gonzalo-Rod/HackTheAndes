@@ -42,3 +42,20 @@ We translated all four documents and renamed the documentation folder and
 progress files to English, updating every internal reference. Repository
 instructions now require English for all future work, while progress entries
 remain short paragraphs; local links and rubric weights were verified.
+
+## 2026-10-17T11:48:00-05:00 — Team Plan feasibility review
+
+We reviewed the Team Plan and recommended a smaller WhatsApp reporting, map,
+and status-query MVP, identifying the outdated rubric, 36-hour schedule, and
+unverified prediction claims. We moved the proposal to `docs/`, preserved its
+content with a review note, and required agents to read the plan and review;
+internal links and formatting were verified. Next, validate messaging access,
+one target user, and the minimum data needed for the core workflow.
+
+## 2026-10-17T11:54:33-05:00 — Original scope retained; rubric and schedule updated
+
+The participant chose the original approach and full MVP scope, superseding
+the earlier recommendation to reduce it. We updated the Team Plan to the
+30/25/20/15/10 rubric and a 30-hour schedule, deleted the implementation review,
+and updated agent instructions and onboarding references. Scope, architecture,
+definition of done, rubric totals, and internal links were verified.

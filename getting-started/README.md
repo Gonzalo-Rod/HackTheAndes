@@ -108,6 +108,8 @@ publish the entire log. The history may become public.
 
 ## Working documents
 
+- [Team Plan](../docs/team-plan.md): the chosen product direction and full MVP
+  scope, with the current rubric and a 30-hour implementation schedule.
 - [PROGRESS.md](PROGRESS.md): local history of decisions, implementation, checks,
   blockers, and next steps, with one short paragraph per update.
 - [PROGRESS_TEMPLATE.md](PROGRESS_TEMPLATE.md): a template for a 2-to-4-sentence
@@ -117,9 +119,12 @@ publish the entire log. The history may become public.
 
 ## Initial state
 
-The repository was empty when preparation began. The team chose `environmental`.
-Pending: user, specific problem, team name, MVP scope, technology stack, data
-sources, demo, and presentation.
+The repository was empty when preparation began. The team chose `environmental`
+and has since added a Team Plan for WhatsApp hazard reporting on the Carretera
+Central. The participant chose to retain its original approach and full MVP
+scope, with the rubric and schedule updated. User validation, team name,
+integrations, data access, demo, and presentation remain pending; the plan does
+not establish that these have been completed.
 
 All future work and documentation will be in English. Public sources may change;
 keep the review date and record any new guidance from the organizers or the

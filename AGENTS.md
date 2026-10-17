@@ -8,8 +8,13 @@ required external identifiers unchanged.
 
 ## Context
 
-Before working, read `getting-started/README.md` and the recent entries in
-`getting-started/PROGRESS.md`. The chosen track is **Climate and Territory**
+Before working, read `getting-started/README.md`, `docs/team-plan.md`,
+and the recent entries in `getting-started/PROGRESS.md`. The Team Plan is the
+team's chosen product direction: follow its original approach and full MVP scope,
+with the updated five-criterion rubric and 30-hour schedule. Do not treat proposed
+integrations, metrics, or predictions as verified results.
+
+The chosen track is **Climate and Territory**
 (`environmental`). The current rubric was provided by the participant: 30%
 technical complexity, 25% functionality, 20% technical quality, 15% problem and
 impact, and 10% clarity. Do not replace it with the older rubric still shown in

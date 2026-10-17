@@ -8,15 +8,20 @@
 
 ## 1. Why we win (read this first)
 
-The judges score three things (1–5 each):
+The current rubric has five criteria, as communicated by the participant:
 
-| Criterion | Weight | What a 5 looks like | Our plan to get it |
+| Criterion | Weight | What is assessed | Our plan to demonstrate it |
 |---|---|---|---|
-| **Technical effort** | 40% | Solid engineering, justified decisions, hard problems solved | Report verification pipeline + per-road-segment risk model + backtest on a real past disaster |
-| **Traction** | 30% | Real usage, retention, evidence | Live WhatsApp line used by real drivers this weekend + in-person interviews at the bus terminal |
-| **Pitch** | 30% | Convincing proposal, clear demo, precise answers | 3D replay of Cyclone Yaku 2023 + a judge sends a live report from their own phone |
+| **Technical complexity** | 30% | Integrations, data, models, and architecture | Report verification pipeline + per-road-segment risk model + backtest on a real past disaster |
+| **Functionality** | 25% | A complete live workflow from the public URL | Public 3D map + a judge sends a WhatsApp report + the incident appears + a subscriber receives the alert |
+| **Technical quality** | 20% | The judges review our GitHub repository | Clear architecture and setup instructions, documented data sources and configuration, reproducible risk logic, and focused checks for the critical flows |
+| **Problem and impact** | 15% | A real user within our track | Live WhatsApp line used by real drivers + in-person interviews at the bus terminal + evidence of what helped and what we changed |
+| **Clarity** | 10% | Explanation of decisions and tradeoffs | Rehearsed 3-minute demo with the Yaku replay, justified technical choices, honest limitations, and precise answers |
 
-Score = traction × 6 + technical × 8 + pitch × 6. **Technical effort is the biggest weight.** "We used AI" scores nothing by itself. We have to *explain our decisions*.
+**Technical criteria total 75%; product criteria total 25%.** Technical complexity
+has the largest individual weight. The updated scoring scale and calculation
+have not been confirmed, so we do not reuse the previous 1–5 scale or formula.
+"We used AI" is not evidence by itself. We have to *explain our decisions*.
 
 What we learned from ~150 past hackathon winners:
 - Winners use **a channel people already have** (WhatsApp), not a new app.
@@ -185,18 +190,28 @@ Everyone uses AI coding tools for boilerplate. **The risk logic, confidence logi
 
 ## 8. Timeline (H0 = hacking starts)
 
+All implementation, validation, submission, and pitch preparation fit within
+**30 hours**. The backend, data/model, and frontend roles work in parallel;
+the pitch lead owns user outreach and presentation preparation. Confirm the
+organizers' actual submission cutoff at H0; if it is earlier than H30, move the
+submission and final checks forward to finish at least 30 minutes before it.
+
 | Hours | Goal | Done when |
 |---|---|---|
 | **H0–2** | Align and set up | Read this doc; data sources checked; Zavu number live; repo, database and deploy working; demo script written |
 | **H2–8** | Thin skeleton, end to end | A WhatsApp message creates a pin on the map (even if extraction is crude); segments for PE-22 loaded; first Open-Meteo pull |
-| **H8–10** | **Launch to real users** | Number shared in WhatsApp groups (drivers, family, friends who travel the Central). Traction starts counting here |
+| **H8–10** | **Launch to real users** | Number shared in WhatsApp groups (drivers, family, friends who travel the Central); start collecting usage and problem/impact evidence |
 | **H10–18 (night)** | Core | Extraction + dedupe + confidence; risk model v1 per segment; subscriptions + alerts; Yaku 2023 data loaded |
-| **H18** | **Feature freeze** | The full demo flow works once from start to finish |
-| **H18–26** | Backtest + polish | Backtest number; timeline replay; voice replies; second-priority features *only if* everything above works |
-| **H18–26 (in parallel)** | **Terminal visit** | Pitch lead (+1) goes to the Central bus/colectivo terminals (e.g. Yerbateros): ~10 interviews, sign-ups, photos/video |
-| **H26–30** | Harden | Pre-loaded demo data; cached LLM answers for the demo; fallback if Wi-Fi fails; 60-second backup video recorded |
-| **H30** | **Code freeze** | No new code. Only bug fixes for the demo flow |
-| **H30–36** | Pitch | Slides + 5 or more timed rehearsals; Q&A prep; submit 30+ minutes early |
+| **H18** | **Core integration checkpoint** | The live reporting → map → subscriber alert flow works from start to finish |
+| **H18–24** | Backtest + full demo | Backtest result; 3D timeline replay; voice replies; all section 3 MVP features integrated; second-priority features only if the full MVP already works |
+| **H18–22 (in parallel)** | **Terminal visit** | Pitch lead (+1 if available) goes to the Central bus/colectivo terminals (e.g. Yerbateros): ~10 interviews, sign-ups, photos/video |
+| **H22–29 (in parallel)** | Pitch preparation | Slides, real usage evidence, 5 or more timed rehearsals, and Q&A preparation completed |
+| **H24** | **Feature freeze** | Full MVP works end to end; no new features after this point |
+| **H24–27** | Harden | Critical flows checked; pre-loaded demo data and cached responses ready; Wi-Fi fallback and 60-second backup video recorded; GitHub setup instructions verified |
+| **H27** | **Code freeze** | Only fixes for demo blockers and submission issues from this point |
+| **H27–29** | Final validation | Public app and presentation checked from a fresh session; complete demo rehearsed; deliverables ready |
+| **By H29:30** | **Submit** | All four deliverables saved at least 30 minutes before H30, or earlier if the official cutoff requires it |
+| **H29:30–30** | Verify and prepare to present | Saved submission and links verified; presentation and backup ready |
 
 ---
 
@@ -211,7 +226,11 @@ Everyone uses AI coding tools for boilerplate. **The risk logic, confidence logi
 
 ---
 
-## 9. Traction plan (30% of the score)
+## 9. User evidence and traction plan (supports problem and impact: 15%)
+
+The current rubric evaluates a real user within our track under **problem and
+impact (15%)**. The metrics below support that evidence; traction is not a
+separate 30% criterion in the updated rubric.
 
 **Metrics we track live, shown on a slide at the end:**
 - Reports received / unique reporters
@@ -260,7 +279,7 @@ Everyone uses AI coding tools for boilerplate. **The risk logic, confidence logi
 | Government data has no usable feed | Static snapshot, disclosed openly |
 | Locating "pasando el puente" fails | Ask the reporter to share their WhatsApp location as fallback |
 | Live demo breaks (Wi-Fi, API slowness) | Pre-loaded data, cached responses, phone hotspot, backup video |
-| Scope creep | Section 3 is the contract. Nothing from "second priority" until the MVP works end to end at H18 |
+| Scope creep | Section 3 is the contract. Nothing from "second priority" until the full MVP works end to end; no new features after the H24 freeze |
 | Panic from wrong alerts | Labels, confidence levels, and wording that gives risk, not certainty |
 
 ---
