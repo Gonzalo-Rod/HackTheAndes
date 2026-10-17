@@ -53,7 +53,7 @@ const adapter = createSutranAdapter({
 ```
 
 The injected clock makes retrieval timestamps deterministic in tests. Both
-methods accept an optional `AbortSignal`. `fetchCurrentAlerts` also accepts an
+methods accept an optional `AbortSignal` and `requestId` for correlated logs. `fetchCurrentAlerts` also accepts an
 explicit `roadCode`; it always selects records whose source flags say they are
 in force.
 
@@ -133,13 +133,12 @@ reuse and availability guarantees remain unverified.
 
 ## Next integration step
 
-Agree this boundary with A, then implement the repository and ingestion service:
-unique source/external-ID matching, atomic current-state/history writes,
-idempotent versions, out-of-order protection, run accounting and partial-failure
-handling. Start with nullable segment references until road geometry is loaded.
-Fetch source history on first observation or a source update, with bounded
-requests; do not fetch every history on every poll.
+The [ingestion service](sutran-ingestion.md) now implements source/external-ID
+matching, version decisions, out-of-order protection, run accounting, and
+partial-failure handling behind a transactional repository interface. It fetches
+history on first observation, a source revision change, or an incomplete-history
+retry, with a bounded request budget.
 
-Only after that service exists should the authenticated job endpoint and
-ten-minute n8n workflow be connected. **No database connection or scheduled
-polling has been configured by this adapter task.**
+Next, implement and verify durable persistence with A, then connect the
+authenticated job endpoint and ten-minute n8n workflow. **No database connection
+or scheduled polling has been configured.**

@@ -15,7 +15,7 @@
     "format:check": "prettier --check src tests scripts package.json package-lock.json tsconfig.json tsconfig.build.json vitest.config.ts eslint.config.mjs .prettierrc.json README.md",
     "build": "tsc --project tsconfig.build.json",
     "prepack": "npm run build",
-    "test:exports": "node --input-type=module -e \"await import('@peruroad/road-data'); await import('@peruroad/road-data/contracts');\""
+    "test:exports": "node --input-type=module -e \"await import('@peruroad/road-data'); await import('@peruroad/road-data/contracts'); await import('@peruroad/road-data/ingestion');\""
   },
   "dependencies": {
     "zod": "^4.0.0"
@@ -39,6 +39,10 @@
     "./contracts": {
       "types": "./dist/contracts/road-alerts.d.ts",
       "default": "./dist/contracts/road-alerts.js"
+    },
+    "./ingestion": {
+      "types": "./dist/services/index.d.ts",
+      "default": "./dist/services/index.js"
     }
   },
   "files": [

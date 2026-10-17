@@ -30,10 +30,12 @@ export function createSutranAdapter({ transport, clock = () => new Date() }: Sut
     normalize: (record: S, retrievedAt: string) => T,
     include: (record: S) => boolean,
     signal?: AbortSignal,
+    requestId?: string,
   ): Promise<SourceBatch<T>> {
     const payload = await transport.getJson(url, {
       provider: "sutran",
       ...(signal ? { signal } : {}),
+      ...(requestId ? { requestId } : {}),
     });
     const retrievedAt = clock().toISOString();
     const envelope = sutranEnvelopeSchema.safeParse(payload);
@@ -71,7 +73,7 @@ export function createSutranAdapter({ transport, clock = () => new Date() }: Sut
   return {
     /** Keep normal-status records: an incident can be reopened while still in force. */
     fetchCurrentAlerts(
-      options: { roadCode?: string; signal?: AbortSignal } = {},
+      options: { roadCode?: string; signal?: AbortSignal; requestId?: string } = {},
     ): Promise<SourceBatch<OfficialRoadAlert>> {
       const roadCode = (options.roadCode ?? "PE-22").trim().toUpperCase();
       if (!roadCode) throw new TypeError("roadCode must not be empty");
@@ -82,13 +84,14 @@ export function createSutranAdapter({ transport, clock = () => new Date() }: Sut
         (record) =>
           record.viaCodigo.toUpperCase() === roadCode && !record.vencida && !record.aunNoVigente,
         options.signal,
+        options.requestId,
       );
     },
 
     /** Does not invent an initial status when SUTRAN publication entries have null. */
     async fetchAlertHistory(
       externalId: string,
-      options: { signal?: AbortSignal } = {},
+      options: { signal?: AbortSignal; requestId?: string } = {},
     ): Promise<SourceBatch<OfficialAlertHistoryEntry>> {
       const id = z.uuid().parse(externalId);
       const batch = await readBatch(
@@ -97,6 +100,7 @@ export function createSutranAdapter({ transport, clock = () => new Date() }: Sut
         (record) => normalizeHistoryEntry(record, id),
         () => true,
         options.signal,
+        options.requestId,
       );
       return {
         ...batch,

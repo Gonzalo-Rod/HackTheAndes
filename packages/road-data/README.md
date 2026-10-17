@@ -1,8 +1,9 @@
 # @peruroad/road-data
 
 Member C's independent Data & Model package for PeruRoad Climate. The current
-implementation reads and validates SUTRAN alerts and per-alert history. Database
-persistence, scheduled polling, weather adapters, and risk models remain future
+implementation reads and validates SUTRAN alerts and per-alert history, and
+provides an idempotent ingestion service behind a transactional repository
+interface. A durable database adapter, scheduled polling, weather adapters, and risk models remain future
 work under the [Team Plan](../../docs/team-plan.md).
 
 ## Development
@@ -24,7 +25,8 @@ at the repository root. The package does not require a root workspace or root
 package manifest to run its checks.
 
 The layers inside `src/` follow [AGENTS.md](../../AGENTS.md): shared contracts,
-pure domain logic, provider integrations, and later services/database adapters.
+pure domain logic, provider integrations, and ingestion services. A database
+adapter will implement the persistence contract during integration with A.
 
 ## Live check
 
@@ -43,7 +45,7 @@ and controlled failures.
 ## Application integration later
 
 `npm run build` emits JavaScript and declarations into `dist/`. The package
-exports two entry points:
+exports three entry points:
 
 ```ts
 // Server-side adapters; import from route handlers or services.
@@ -52,6 +54,10 @@ import { createSutranAdapter, createFetchJsonTransport } from "@peruroad/road-da
 // Shared schemas and types; suitable for dashboard consumers too.
 import { officialRoadAlertSchema } from "@peruroad/road-data/contracts";
 import type { OfficialRoadAlert } from "@peruroad/road-data/contracts";
+
+// Server-side ingestion with injectable persistence.
+import { createSutranIngestionService } from "@peruroad/road-data/ingestion";
+import type { OfficialAlertRepository } from "@peruroad/road-data/ingestion";
 ```
 
 When integrating, member A adds the local dependency to the application's
@@ -72,5 +78,6 @@ point uses Node.js APIs and belongs in server code; client components use the
 `/contracts` entry point. This package is private and is not published to npm.
 
 [Adapter documentation](../../docs/data/sutran-adapter.md) describes contracts,
-source semantics, HTTP behavior, and the remaining ingestion work. Changes go
+source semantics and HTTP behavior. [Ingestion documentation](../../docs/data/sutran-ingestion.md)
+covers the storage contract, failure results, and Supabase handoff. Changes go
 through a feature branch, CI, and teammate review before merging into main.
