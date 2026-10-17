@@ -71,3 +71,7 @@ Following the team's decisions, the Team Plan now details features F1–F8 in pr
 ## 2026-10-17T13:04:43-05:00 — Official rubric, time-based plans, dispatch decision and task split
 
 We applied the organizers' evaluation sheet: 1–5 scoring per judge, a traction bonus of up to 0.5 that counts outside users, a waitlist or a payment shown from the product, and a hard deadline of Sunday 09:00 with a public URL, live demo and GitHub repo. Access is now sold by time (Route Pass for 1, 4 or 7 days; company dashboard or prediction plans) through Qatom with a Yape fallback, and we added the dispatch decision (go / wait / do not go, F9) and the `/impacto` traction page with a company waitlist (F10). Section 8c splits the work among the 4 members on a clock schedule ending at the deadline, with the weekly report (F6) as the last feature. Qatom time-based sales and every integration other than the SUTRAN API remain unverified.
+
+## 2026-10-17T13:14:01-05:00 — Technical task split for the four members
+
+Section 8c now divides the technical work among four roles: platform, payments and API (A), messaging and voice agent (B), data and model (C), and frontend and visualization (D). It has a feature ownership table and per-phase tasks ending at the Sunday 09:00 deadline, with the weekly report (F6) as the last feature. Pitch, outreach and traction tasks were removed from the split and will be assigned separately; section 7 and the integration-check owners were updated to match.

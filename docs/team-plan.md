@@ -111,7 +111,7 @@ Access is sold **by time, not by message**: a driver pays for the days they will
 | **Company Dashboard** | Transport and logistics companies, insurers, municipalities / COER | Full dashboard (F5b): timeline, 72 h forecast, indicators, stretch analysis, export; weekly report (F6) | Access for a period (e.g. 7 or 30 days) |
 | **Company Predictions** | Dispatch teams at bus, cargo and car-fleet companies | Everything in Company Dashboard + **dispatch decisions** (F9) for every planned departure, in the dashboard and on WhatsApp; fleet trip watch with call alerts (F4) | Subscription for a period (e.g. 30 days or the rainy season) |
 
-- **Prices are hypotheses.** The pitch lead sets a low **test price** for the Route Pass at H0 so a real driver can buy one during the event. Interviews ask companies what a stranded vehicle costs them and what they would pay for a dispatch decision.
+- **Prices are hypotheses.** The team sets a low **test price** for the Route Pass at H0 so a real driver can buy one during the event. Interviews ask companies what a stranded vehicle costs them and what they would pay for a dispatch decision.
 - **Payment rail:** passes and subscriptions are sold through Qatom if the section 6 check confirms it can sell time-based access; Qatom also lists the data API for AI agents, paid per call (second priority). Fallback: Yape with manual activation by the team, recorded in the product with its payment reference.
 - **Entitlements:** a `pass` record (phone key or organization, plan, start, expiry, route, payment reference). WhatsApp features check the sender's active pass; dashboard features check the organization's active pass through an access code and a signed cookie. A seeded demo organization lets judges see the paid views from the public URL.
 - **No card handling in our code.** We never collect card or bank details; the payment provider does.
@@ -477,18 +477,18 @@ Low confidence is shown clearly as **"no confirmado"**.
 
 | Integration | Practical check | Pass criterion | Fallback |
 |---|---|---|---|
-| Zavu inbound WhatsApp (Backend) | Send text, voice note, photo and location to the number | Webhook receives all four with media URLs downloadable | SMS / Telegram via Zavu for the demo |
-| Zavu outbound alerts (Backend) | Send a message to a user **outside** the 24-hour conversation window | Message delivered. WhatsApp requires an approved template for business-initiated messages; submit alert and weekly-report templates at H0 and record approval time | Alerts by SMS; WhatsApp only inside the 24 h window |
-| Zavu contact reference (Backend) | Check whether the API exposes a stable contact / recipient ID usable as a send target | ID can be stored and used to send | Encrypted destination number |
-| Zavu Voice Agents (Backend) | Place an outbound call (`POST /v1/calls`, live key) to a Peruvian mobile (+51) with a Spanish (`es`) voice and a per-call greeting; call a tool on our API during the call | Call connects, Spanish is understandable, tool result is spoken, transcript retrieved; cost per minute and caller ID recorded | ElevenLabs Agents outbound via Twilio; otherwise WhatsApp-only alerts |
-| Zavu agent scope (Backend) | Enable the voice agent and send a WhatsApp message to the same sender | WhatsApp messages still reach our webhook pipeline and are not auto-answered by the agent | Use a separate sender for voice |
-| Zavu inbound audio transcription (Backend) | Check whether inbound voice notes arrive with a transcript | Transcript present and usable | ElevenLabs Scribe (planned) |
-| ElevenLabs speech-to-text (Backend) | Transcribe a real WhatsApp voice note (OGG/Opus, Peruvian Spanish, road noise) | Usable transcript of location and incident type | Ask the user to type, or use another STT |
-| LLM structured extraction (Backend) | Run on 10–20 real road messages | Correct type and location on most; failures logged | Ask the reporter a follow-up question |
+| Zavu inbound WhatsApp (Messaging) | Send text, voice note, photo and location to the number | Webhook receives all four with media URLs downloadable | SMS / Telegram via Zavu for the demo |
+| Zavu outbound alerts (Messaging) | Send a message to a user **outside** the 24-hour conversation window | Message delivered. WhatsApp requires an approved template for business-initiated messages; submit alert and weekly-report templates at H0 and record approval time | Alerts by SMS; WhatsApp only inside the 24 h window |
+| Zavu contact reference (Messaging) | Check whether the API exposes a stable contact / recipient ID usable as a send target | ID can be stored and used to send | Encrypted destination number |
+| Zavu Voice Agents (Messaging) | Place an outbound call (`POST /v1/calls`, live key) to a Peruvian mobile (+51) with a Spanish (`es`) voice and a per-call greeting; call a tool on our API during the call | Call connects, Spanish is understandable, tool result is spoken, transcript retrieved; cost per minute and caller ID recorded | ElevenLabs Agents outbound via Twilio; otherwise WhatsApp-only alerts |
+| Zavu agent scope (Messaging) | Enable the voice agent and send a WhatsApp message to the same sender | WhatsApp messages still reach our webhook pipeline and are not auto-answered by the agent | Use a separate sender for voice |
+| Zavu inbound audio transcription (Messaging) | Check whether inbound voice notes arrive with a transcript | Transcript present and usable | ElevenLabs Scribe (planned) |
+| ElevenLabs speech-to-text (Messaging) | Transcribe a real WhatsApp voice note (OGG/Opus, Peruvian Spanish, road noise) | Usable transcript of location and incident type | Ask the user to type, or use another STT |
+| LLM structured extraction (Messaging) | Run on 10–20 real road messages | Correct type and location on most; failures logged | Ask the reporter a follow-up question |
 | n8n (Data) | Ingestion job calls SUTRAN and the authenticated recalculation endpoint; weekly job generates and delivers one report | Each runs twice successfully | Cron in the hosting platform |
-| Qatom time-based access (Pitch lead + Backend) | Create a provider account; check whether Qatom can sell a 1-, 4- and 7-day pass and a 30-day company plan to a person paying in soles or by card, and notify our app (webhook or verifiable receipt) | A test purchase activates a pass in our database | Yape payment with manual activation in the admin page |
-| Yape fallback (Pitch lead) | Set up a team Yape number for test-price passes and record each payment reference | A payment can be matched to a pass | Plin or bank transfer, same manual flow |
-| Qatom agent API listing (Backend, second priority) | List `/api/v1/route-risk` as a paid tool and call it from an MCP client with a funded agent wallet | Paid call returns our data and the transaction is recorded | API works with an API key; listing documented as pending |
+| Qatom time-based access (Platform) | Create a provider account; check whether Qatom can sell a 1-, 4- and 7-day pass and a 30-day company plan to a person paying in soles or by card, and notify our app (webhook or verifiable receipt) | A test purchase activates a pass in our database | Yape payment with manual activation in the admin page |
+| Yape fallback (Platform) | Set up a team Yape number for test-price passes and record each payment reference | A payment can be matched to a pass | Plin or bank transfer, same manual flow |
+| Qatom agent API listing (Platform, second priority) | List `/api/v1/route-risk` as a paid tool and call it from an MCP client with a funded agent wallet | Paid call returns our data and the transaction is recorded | API works with an API key; listing documented as pending |
 
 ### Weather and evaluation data
 
@@ -517,14 +517,14 @@ Low confidence is shown clearly as **"no confirmado"**.
 
 ## 7. Roles
 
-Adjust to team size. With 3 people, merge Data and Backend.
+Four technical roles; section 8c lists each member's tasks. Pitch, user outreach and traction tasks (sections 9 and 10) will be assigned separately.
 
 | Role | Owns |
 |---|---|
-| **Pitch & traction lead** | Demo script, interviews (drivers and dispatchers, including willingness to pay), getting the number into WhatsApp groups, terminal visit, waitlist sign-ups, Route Pass test price, Qatom and Yape checks, payment confirmations, bot wording, slides, rehearsals, README |
-| **Backend / agent** | Next.js route handlers, Zavu webhook, templates and voice agent, extraction, geocoding, dedupe, confidence, contact encryption, ElevenLabs, alert engine, passes and payment flow (F7), dispatch decision by WhatsApp (F9), paid-access gate and admin page, weekly report delivery (F6), trips and calls (F4), `/api/v1` |
-| **Data & model** | Integration checks for data, SUTRAN ingestion and archive, catchment delineation, segments, risk model, dispatch decision engine (F9), reconstruction and forecast evaluation, n8n jobs (ingestion and weekly report) |
-| **Frontend / map** | Next.js UI, MapLibre 3D map, layers, heat map, timeline, indicator panel and charts, route profile, stretch selector, departure planner and departure chart (F9), `/impacto` page and waitlist form (F10), report page (F6), export, live incident updates |
+| **A. Platform, payments and API** | Repo, deploy, schema, CI, security helpers, read APIs and Realtime, passes and payment (F7), paid-access gate, admin page, traction and waitlist backend (F10), dispatch-decision API, agent API on Qatom |
+| **B. Messaging and voice agent** | Zavu webhook, templates and voice agent, ElevenLabs, extraction, geocoding, dedupe, confidence, alert engine (F1–F3), WhatsApp flows for passes and dispatch decisions, weekly report delivery (F6), trips and calls (F4) |
+| **C. Data and model** | Data integration checks, SUTRAN ingestion and archive, segments, catchments, risk model, dispatch decision engine (F9), reconstruction and forecast evaluation, n8n jobs (ingestion and weekly report) |
+| **D. Frontend and visualization** | Next.js UI, MapLibre 3D map, layers, heat map, timeline, indicators and charts, route profile, stretch selector, departure planner and chart (F9), `/impacto` and waitlist form (F10), purchase screens, report page (F6), export, live updates |
 
 AI coding tools are used for boilerplate. The risk, confidence and evaluation logic is written and understood by the team.
 
@@ -534,7 +534,7 @@ AI coding tools are used for boilerplate. The risk, confidence and evaluation lo
 
 All implementation, validation, submission, and pitch preparation fit within
 **30 hours**. The backend, data/model, and frontend roles work in parallel;
-the pitch lead owns user outreach and presentation preparation. Confirm the
+pitch and user-outreach tasks will be assigned separately. Confirm the
 organizers' actual submission cutoff at H0; if it is earlier than H30, move the
 submission and final checks forward to finish at least 30 minutes before it.
 
@@ -548,7 +548,7 @@ submission and final checks forward to finish at least 30 minutes before it.
 | **H10–18 (night)** | Core (P0) | Extraction + dedupe + confidence; catchments delineated; risk model v1; subscriptions + alerts; SENAMHI ingestion; Yaku 2023 reconstruction data, 2024–2025 archived forecasts and event records loaded |
 | **H18** | **Core integration checkpoint** | The live reporting → dashboard → subscriber alert flow works from start to finish; go / no-go decision on F4 call alerts based on the Zavu voice check |
 | **H18–24** | Complete MVP (P1) + evaluation, then F6 | Dispatch decision (F9); passes and payment (F7); `/impacto` page (F10); ask by WhatsApp; paid dashboard view (timeline, 72 h forecast, indicators, route profile, stretch selector, export); calibration and held-out forecast evaluation done; **then, as the last task, the weekly report (F6)**; F4 only if all of this already works |
-| **H18–22 (in parallel)** | **Terminal visit** | Pitch lead (+1 if available) goes to the Central bus/colectivo terminals (e.g. Yerbateros): ~10 interviews, sign-ups, willingness-to-pay answers, photos/video |
+| **H18–22 (in parallel)** | **Terminal visit** | One or two members go to the Central bus/colectivo terminals (e.g. Yerbateros): ~10 interviews, sign-ups, willingness-to-pay answers, photos/video |
 | **H22–29 (in parallel)** | Pitch preparation | Slides, real usage evidence, 5 or more timed rehearsals, and Q&A preparation completed |
 | **H24** | **Feature freeze** | Full MVP works end to end; no new features after this point |
 | **H24–27** | Harden | Critical flows checked; pre-loaded demo data, demo paid organization and cached responses ready; Wi-Fi fallback and 60-second backup video recorded; GitHub setup instructions verified |
@@ -575,98 +575,116 @@ submission and final checks forward to finish at least 30 minutes before it.
 
 ---
 
-## 8c. Team organization and task split (4 members)
+## 8c. Team organization: technical task split (4 members)
 
-### Members
+This section covers technical work only. Pitch, user outreach and traction tasks (sections 9 and 10) will be assigned separately.
 
-| Member | Role (section 7) | Main deliverables |
+### Members and ownership
+
+| Member | Technical area | Owns |
 |---|---|---|
-| **A** | Pitch & traction lead | Real users, interviews, waitlist, pass sales and payment confirmations, bot wording, README, slides, demo |
-| **B** | Backend / agent | WhatsApp pipeline (F1–F3), passes and payment (F7), dispatch decision by WhatsApp (F9), paid-access gate, report delivery (F6), calls (F4) |
-| **C** | Data & model | SUTRAN and weather ingestion (F8), segments and catchments, risk model, dispatch decision engine (F9), evaluation, weekly report data (F6) |
-| **D** | Frontend / map | 3D dashboard (F5a, F5b), departure planner (F9), `/impacto` and waitlist (F10), report page (F6) |
+| **A** | Platform, payments and API | Repo, deploy, database schema, CI, security helpers, read APIs and Realtime, passes and payment (F7), paid-access gate, admin page, traction and waitlist backend (F10), dispatch-decision API, agent API on Qatom |
+| **B** | Messaging and voice agent | Zavu (WhatsApp, SMS, email, calls), ElevenLabs, report pipeline (F1), ask (F2), subscriptions and alert engine (F3), WhatsApp conversations for passes and dispatch decisions, report delivery (F6), call alerts (F4) |
+| **C** | Data and model | SUTRAN and weather ingestion (F8), segments, gazetteer, catchments, hazard layers, risk model, dispatch decision engine (F9), Yaku reconstruction, forecast evaluation, weekly report data (F6), n8n workflows |
+| **D** | Frontend and visualization | Public and paid dashboard (F5a, F5b), departure planner and chart (F9), `/impacto` page and waitlist form (F10), purchase and access-code screens, report page (F6) |
 
 Write each member's name next to their letter at the start of phase 0.
+
+| Feature | Owner | Support |
+|---|---|---|
+| F1 Report by WhatsApp | B | C (gazetteer, segments) |
+| F2 Ask by WhatsApp | B | C (risk), A (read API) |
+| F3 Alerts | B | C (alert evaluation trigger), A (pass checks) |
+| F4 Call alerts (P2) | B | C (risk at arrival time) |
+| F5a / F5b Dashboard | D | A (read APIs, Realtime), C (layers, indicators) |
+| F6 Weekly report (last) | C | B (delivery), D (page), A (job auth) |
+| F7 Passes and payment | A | B (WhatsApp flow), D (purchase screens) |
+| F8 Official data ingestion | C | A (schema) |
+| F9 Dispatch decision | C (engine) | A (API and entitlement), B (WhatsApp), D (planner and chart) |
+| F10 Traction page and waitlist | A (backend) | D (page and form) |
 
 ### Phases (clock times, America/Lima)
 
 The times assume work starts on Saturday at 13:30 and end at the Sunday 09:00 deadline. If work starts later, keep the order and shorten phase 3 first.
 
-| Phase | Time | Goal | Checkpoint at the end |
+| Phase | Time | Technical goal | Checkpoint at the end |
 |---|---|---|---|
-| **0. Setup and contracts** | Sat 13:30–15:00 | Repo, deploy, database, Zavu number, templates submitted, API contracts agreed, SUTRAN polling started | 15:00: everyone can deploy; contracts written in the repo |
-| **1. Thin skeleton** | 15:00–19:00 | A WhatsApp message becomes a pin on the public map; SUTRAN incidents visible | 19:00: **launch to real users** (number shared, waitlist form live) |
+| **0. Setup and contracts** | Sat 13:30–15:00 | Repo, deploy, database, Zavu number, templates submitted, API contracts agreed, SUTRAN polling started | 15:00: everyone can deploy; contracts in the repo |
+| **1. Thin skeleton** | 15:00–19:00 | A WhatsApp message becomes a pin on the public map; SUTRAN incidents visible; waitlist form stores sign-ups | 19:00: the public URL is usable by real people |
 | **2. Core (P0)** | 19:00–01:00 | F1, F3, F5a, F8 and the risk model working on real data | Sun 01:00: **core checkpoint**; go / no-go on F4 |
 | **3. Complete MVP (P1)** | 01:00–04:30 | F9, F7, F10, F5b, F2 and the forecast evaluation | 04:30: P1 works end to end |
-| **4. Weekly report (F6), the last feature** | 04:30–05:30 | One weekly report generated by n8n and delivered | 05:30: **feature freeze** |
-| **5. Harden** | 05:30–07:00 | Error handling, edge cases, demo data, backup video | 07:00: **code freeze** |
-| **6. Final validation and submission** | 07:00–08:30 | Fresh-session check, full rehearsal, submission | **08:30: submitted** (deadline 09:00) |
+| **4. Weekly report (F6), the last feature** | 04:30–05:30 | One weekly report generated by n8n and delivered; F4 only if it was a *go* | 05:30: **feature freeze** |
+| **5. Harden** | 05:30–07:00 | Error handling, edge cases, tests, demo data, setup instructions | 07:00: **code freeze** |
+| **6. Final validation** | 07:00–08:30 | Fresh-session check of every flow on the public URL; only fixes for blockers | 08:30: ready to submit (deadline 09:00) |
 
-**Stand-ups (5 minutes):** at 15:00, 19:00, 22:00, 01:00, 04:30, 05:30 and 07:00. Each member says: what is done, what is blocked, and what is next. During the night (01:00–05:00), each member takes one 90-minute rest, staggered so that two members are always working, and never during a checkpoint.
+**Stand-ups (5 minutes):** at 15:00, 19:00, 22:00, 01:00, 04:30, 05:30 and 07:00. Each member says what is done, what is blocked, and what is next. During the night (01:00–05:00), each member takes one 90-minute rest, staggered so that at least two members are always working, and never during a checkpoint.
 
 **Working rules:**
-- One feature branch per task, small pull requests, and deploy on merge to `main`.
-- The API contracts (JSON shapes for incidents, segments, risk, dispatch decision, passes) are written in phase 0. D builds against mocks until B and C deliver.
-- Secrets stay in the hosting platform and `.env.local`; the repo has only `.env.example`.
-- Every external call (Zavu, ElevenLabs, LLM, SUTRAN, Open-Meteo, Qatom) has a timeout, a retry and a visible fallback.
+- One feature branch per task, small pull requests reviewed by one other member, and deploy on merge to `main`.
+- The API contracts (JSON shapes for incidents, segments, risk, dispatch decision, passes, stats) are written in phase 0. Each member builds against mocks until the owner delivers.
+- Secrets live in the hosting platform and `.env.local`; the repo has only `.env.example`.
+- Every external call (Zavu, ElevenLabs, LLM, SUTRAN, Open-Meteo, Qatom) goes through A's shared wrapper with a timeout, a retry and a visible fallback.
 
-### Member A: pitch & traction lead
-
-| Phase | Task | Done when |
-|---|---|---|
-| 0 | Confirm the deadline and the rules on pre-existing code with the organizers; redeem sponsor credits | Recorded in `PROGRESS.md` |
-| 0 | Run the Qatom time-based access check with B; set up Yape; set the Route Pass test price | A test purchase path exists (Qatom or Yape) |
-| 0 | Collect 10–20 real road messages from WhatsApp groups for B's extraction tests; list the groups to share the number in | Messages saved (no personal data) |
-| 0–1 | Write the bot's Spanish wording with B: replies, alerts, templates, pass messages, consent texts | Wording merged in the repo |
-| 1 | Launch at 19:00: share the number and the waitlist form in driver and traveler groups | First real users recorded in the database |
-| 2 | **Terminal visit** (e.g. Yerbateros), around 19:30–22:30: ~10 interviews with drivers and dispatchers, sign-ups, waitlist entries, first Route Pass sales | Notes, quotes, waitlist entries, payments recorded |
-| 2–3 | Answer real users, confirm Yape payments in the admin page, watch `/impacto` | Every real payment is matched to a pass |
-| 3 | Draft the README problem, user, decisions and limitations sections; synthesize interviews into the top 3 lessons and what we changed | README draft merged |
-| 3–4 | Build the slides with real numbers from `/impacto` | Slides ready |
-| 5 | Record the 60-second backup video; run rehearsals 1–3 | Video saved; rehearsals timed |
-| 6 | Check the public URL, paid access code and slides from a fresh session; rehearsals 4–5; **submit by 08:30** and verify what the server saved | Submission verified |
-
-### Member B: backend / agent
+### Member A: platform, payments and API
 
 | Phase | Task | Done when |
 |---|---|---|
-| 0 | Next.js repo, Vercel deploy, Supabase schema (with C), `.env.example`, contact encryption and HMAC helpers | `main` deploys to the public URL |
-| 0 | Zavu: number live, signed webhook, alert, pass-expiry and weekly-report templates submitted; one test call to a +51 number; agent-scope check | Results recorded in `PROGRESS.md` |
-| 0 | Write the API contracts with C and D | Contracts merged |
-| 1 | Webhook → store report → crude extraction → incident → API → pin on D's map; acknowledgment reply | A real WhatsApp message shows on the public map |
-| 2 | ElevenLabs transcription; LLM structured extraction; gazetteer location and follow-up question; dedupe with SUTRAN and community incidents; confidence | Tests pass on the 10–20 real messages |
-| 2 | Subscriptions and alert engine (F3): free closure alerts vs pass alerts, bundling, quiet hours, template / SMS fallback | A subscriber receives an alert for a new incident |
-| 3 | Passes and payment (F7): *"PASE 4"* flow, Qatom confirmation or manual Yape confirmation in the admin page, entitlement checks, expiry reminder | A real or test payment activates a pass |
-| 3 | Dispatch decision by WhatsApp (F9) using C's engine; ask by WhatsApp (F2); organization access code and signed cookie | *"¿Sale el bus de las 22:00 a Huancayo?"* gets a decision |
-| 4 | F6 delivery endpoint used by n8n (Zavu email or WhatsApp template) | One report delivered |
-| 4 | F4 call alerts only if the 01:00 decision was *go* | One consenting phone received a call |
-| 5 | Error-handling pass, secrets check, seeded demo organization, cached demo responses | Critical flows survive an external API failure |
+| 0 | Next.js repo (TypeScript, App Router), Vercel deploy, Supabase with PostGIS, schema migrations for every table in section 5 (with C), `.env.example`, CI with lint, type check and tests on each pull request | `main` deploys to the public URL; migrations run from scratch |
+| 0 | Security helpers: AES-256-GCM contact encryption, HMAC phone key, webhook-signature helper, external-call wrapper (timeout, retry, logging without phone numbers) | Helpers merged with tests |
+| 0 | Write the API contracts with B, C and D; create the Qatom provider account and run the time-based access check (section 6) | Contracts merged; check recorded in `PROGRESS.md` |
+| 1 | Read APIs for the dashboard (`/api/incidents`, `/api/segments`, `/api/risk`) over C's tables; Supabase Realtime channel for incidents; seed script with demo data | D's map reads real endpoints |
+| 1 | Waitlist API and storage (F10); `is_team` flag and the team's phone keys | A sign-up from D's form is stored |
+| 2 | Entitlements: `pass` table, `hasActivePass(phone key or organization)`, organization access code with signed cookie, middleware protecting paid routes | Paid routes reject requests without an active pass |
+| 2 | `/api/stats` for `/impacto` (F10) with the exclusion rules (team, test numbers, automated traffic) | Counts match a manual SQL check |
+| 3 | Passes and payment (F7): Qatom checkout and confirmation, or Yape pending → manual confirmation; pass activation, expiry job, 12 h reminder (sent through B's send helper); company plan purchase backend | A test payment activates a pass that expires on time |
+| 3 | Protected admin page: pending Yape confirmations, active passes and subscriptions | The team can confirm a payment from the page |
+| 3 | `/api/dispatch-decision` endpoint wrapping C's engine, with entitlement check, input validation and rate limiting | D and B get decisions from the same endpoint |
+| 4 | Authentication for n8n job endpoints; storage and access control for weekly reports (F6) | n8n calls succeed only with the job secret |
+| 4 | Qatom agent API listing (second priority, only if P1 is done) | One paid call recorded |
+| 5 | Quality pass: secrets scan, error responses, edge cases (expired pass, duplicate payment, bad input), tests for payments and entitlements green; seeded demo organization and access code; README setup instructions | A fresh clone runs with the README steps |
 
-### Member C: data & model
+### Member B: messaging and voice agent
 
 | Phase | Task | Done when |
 |---|---|---|
-| 0 | **Start the SUTRAN poller** (every 10 min) and the status archive | PE-22 alerts stored with history |
+| 0 | Zavu: number live, signed webhook endpoint, WhatsApp templates submitted (alert, pass expiry, weekly report); test call to a +51 number; agent-scope check; ElevenLabs transcription test on a real voice note; LLM provider configured | Results recorded in `PROGRESS.md` |
+| 1 | Message router: report, ask, *AVÍSAME*, *BAJA*, *PASE*, departure questions, fallback help message | Each command reaches its handler |
+| 1 | Webhook → store report (download media) → crude extraction → incident → acknowledgment reply | A real WhatsApp message shows on the public map |
+| 2 | ElevenLabs transcription; LLM structured extraction with a fixed schema; 2-minute message grouping; location (pin snapping and C's gazetteer); follow-up question when type or place is missing | Tests pass on 10–20 real road messages |
+| 2 | Dedupe against community and SUTRAN incidents; confidence v1; clearing logic | Tests for dedupe and confidence pass |
+| 2 | Subscriptions and alert engine (F3): free closure alerts vs pass alerts, bundling, quiet hours, template or SMS fallback outside the 24 h window; send helper with retry | A subscriber receives an alert for a new incident |
+| 3 | Ask by WhatsApp (F2), with a voice-note reply when the question was a voice note | *"¿Cómo está la Central?"* gets a correct summary |
+| 3 | WhatsApp flows for *PASE* (calls A's payment module) and *"¿Sale el bus de las 22:00 a Huancayo?"* (calls `/api/dispatch-decision`) | Both flows work end to end on a phone |
+| 4 | Weekly report delivery endpoint (Zavu email or WhatsApp template) used by n8n (F6) | One report delivered |
+| 4 | Call alerts (F4) only if the 01:00 decision was *go*: trip registration, call consent, trigger evaluation, `POST /v1/calls` with greeting, agent tool endpoints, transcript storage | One consenting phone received a call |
+| 5 | Failure handling for Zavu, ElevenLabs and the LLM (timeouts, fallbacks, user-facing error messages); cached responses for the demo | The pipeline survives an external API failure |
+
+### Member C: data and model
+
+| Phase | Task | Done when |
+|---|---|---|
+| 0 | **SUTRAN poller** in n8n (every 10 min): PE-22 alerts in force, upsert by `id`, changes by `lastActionAt`, status archive | PE-22 alerts stored with history |
 | 0–1 | PE-22 geometry and 1-km segments with km references and elevation; place-to-km gazetteer for B | Segments in PostGIS; gazetteer merged |
-| 1 | Open-Meteo forecast pull for sample points; start downloading Previous Runs (2024, 2025) and Historical Weather (Feb–Mar 2023) | Data stored |
-| 1–2 | Crossing points; catchment delineation (WhiteboxTools) or HydroBASINS fallback; susceptibility and SENAMHI layers | Catchments linked to segments |
-| 2 | Risk model v1: 24 h, 72 h and 6-hour windows, stored inputs and reasons; hourly n8n job → recalculation → alert evaluation | Risk levels on every PE-22 segment, hourly |
-| 2 | Yaku 2023 reconstruction data; list of dated PE-22 events for 2024 and 2025 | Data ready for the timeline and the evaluation |
-| 3 | **Dispatch decision engine (F9):** travel timing per vehicle type, risk at arrival time, decision rules, best departure window, cost at stake; tests | The engine returns a decision for any departure in the next 72 h |
-| 3 | Calibrate on 2024, evaluate on 2025; write the results, including weak ones | Evaluation documented |
-| 3 | Indicator queries for D (km exposed, incidents by type, closure hours) | Endpoints return real numbers |
-| 4 | **F6 weekly report:** n8n weekly workflow, report data endpoint, LLM summary written only from the numbers | One report generated |
-| 5 | README data sources, terms, resolution limits and evaluation; check that the scripts reproduce | README sections merged |
+| 1 | Open-Meteo forecast pull for sample points; downloads of Previous Runs (Jan–Apr 2024 and 2025) and Historical Weather (Feb–Mar 2023) | Data stored |
+| 1–2 | Crossing points; catchment delineation (WhiteboxTools) or HydroBASINS fallback; rivers, susceptibility and SENAMHI layers exported as GeoJSON for D | Catchments linked to segments; layers load on the map |
+| 2 | Risk model v1: 24 h, 72 h and 6-hour windows, stored inputs, model, grid and reasons; hourly n8n job → recalculation → alert evaluation (B's engine) | Risk levels on every PE-22 segment, hourly |
+| 2 | Yaku 2023 reconstruction series; list of dated PE-22 events for 2024 and 2025 | Data ready for the timeline and the evaluation |
+| 3 | **Dispatch decision engine (F9):** travel timing per vehicle type, risk at arrival time, decision rules, best departure window, cost at stake; unit tests for each rule | The engine returns a decision for any departure in the next 72 h |
+| 3 | Calibrate on 2024, evaluate on 2025 per lead time against a baseline; write the results, including weak ones | Evaluation documented in the repo |
+| 3 | Indicator queries for D: km exposed per level, incidents by type and source, closure hours, rainfall per catchment, departure-chart matrix | Endpoints return real numbers |
+| 4 | **F6 weekly report:** n8n weekly workflow, report data endpoint, LLM summary written only from the computed numbers | One report generated |
+| 5 | Data documentation: sources, terms, retrieval method, resolution limits, evaluation; check that the scripts reproduce the outputs | Scripts run from a clean database |
 
-### Member D: frontend / map
+### Member D: frontend and visualization
 
 | Phase | Task | Done when |
 |---|---|---|
-| 0 | UI shell; MapLibre 3D terrain and fly-in from Peru to PE-22; mocks that follow the API contracts | Map renders on the public URL |
-| 1 | Live incidents layer (community and SUTRAN) and incident panel; **waitlist form (F10)** live before 19:00 | A WhatsApp report appears live; the form stores sign-ups |
-| 2 | Segment risk layer and panel; rainfall heat map; catchments and rivers; SENAMHI and susceptibility layers; observed / forecast / estimated labels | F5a complete on real data |
-| 3 | Paid-access gate; **departure planner and departure chart (F9)**; timeline with Yaku reconstruction mode; indicator panel; route profile | F5b and F9 work with the demo access code |
-| 3 | `/impacto` page reading live counts (F10) | Counts match the database and exclude the team |
+| 0 | UI shell and routing; MapLibre 3D terrain and fly-in from Peru to PE-22; mocks that follow the API contracts | Map renders on the public URL |
+| 1 | Live incidents layer (community and SUTRAN) and incident panel; waitlist form (F10) | A WhatsApp report appears live; the form stores sign-ups |
+| 2 | Segment risk layer and panel; rainfall heat map; catchments and rivers; SENAMHI and susceptibility layers; observed / forecast / estimated labels and *"no confirmado"* | F5a complete on real data |
+| 3 | Access-code entry and company plan purchase screens (A's backend); **departure planner and departure chart (F9)** | A dispatcher gets a decision and chart with the demo access code |
+| 3 | Paid view: timeline with Yaku reconstruction mode, 24 h / 72 h toggle, stretch selector, indicator panel, route profile, rainfall-vs-risk chart, export | F5b works with the demo access code |
+| 3 | `/impacto` page reading `/api/stats` (F10) | Counts render and match the API |
 | 4 | **F6 report page** and reports archive, with C | A generated report opens in the dashboard |
 | 5 | Loading, empty and error states; performance on the presentation laptop; phone-width check | Fresh-session walkthrough passes |
 
