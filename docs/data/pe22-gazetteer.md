@@ -75,6 +75,10 @@ parent geometry revision, skips identical or older snapshots, upserts by stable
 provider/revision/source identity, and removes withdrawn candidates only for
 that provider and revision. Legacy entries and historical revisions survive.
 No segment geometry, elevation, or official kilometer value is modified.
+Reproduction permits approximately 1 mm of numerical variation in derived
+projections/distances across CPU and Node builds; source facts and identities
+still match exactly. Accepted artifact values are preserved so repeat imports
+remain idempotent across machines.
 
 ## Integration for B and D
 

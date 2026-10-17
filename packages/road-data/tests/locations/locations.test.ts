@@ -148,3 +148,37 @@ test("committed data reproduces offline; changed identities, locations and revis
   ])
     assert.equal(validateGazetteerSnapshot(built.value.segments, input).ok, false);
 });
+
+test("cache reproduction allows only millimeter numerical noise in derived fields, keeping source facts exact", () => {
+  const segments = geometry().segments;
+  const built = buildGazetteer(segments, source());
+  assert.ok(built.ok);
+  const noisy = structuredClone(built.value);
+  const entry = noisy.entries[0];
+  const anchor = noisy.kilometerEvidence.anchors[0];
+  assert.ok(entry && anchor);
+  entry.location.distanceFromRoadM += 0.0001;
+  entry.location.distanceFromOriginKm += 1e-7;
+  entry.location.snappedPosition[0] += 1e-9;
+  anchor.distanceFromOriginKm += 1e-7;
+  anchor.offsetKm -= 1e-7;
+  const accepted = validateGazetteerSnapshot(segments, noisy);
+  assert.ok(accepted.ok);
+  assert.deepEqual(accepted.value, noisy);
+  for (const field of ["distance", "coordinate", "source", "name", "segment", "anchor"]) {
+    const changed = structuredClone(noisy);
+    const first = changed.entries[0];
+    assert.ok(first);
+    if (field === "distance") first.location.distanceFromRoadM += 0.01;
+    if (field === "coordinate") first.location.snappedPosition[0] += 1e-6;
+    if (field === "source") first.reportedKm = 999;
+    if (field === "name") first.name += " changed";
+    if (field === "segment") first.location.segmentId = "other";
+    if (field === "anchor") {
+      const item = changed.kilometerEvidence.anchors[0];
+      assert.ok(item);
+      item.offsetKm += 0.01;
+    }
+    assert.equal(validateGazetteerSnapshot(segments, changed).ok, false, field);
+  }
+});
