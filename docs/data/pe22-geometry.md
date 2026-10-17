@@ -4,8 +4,9 @@ This implements the first geometry slice of [Role C](../team-plan.md): a
 reproducible public-source snapshot, a continuous corridor, and 1-km display
 segments inside `packages/road-data/`. The 174 display segments are now loaded
 in Supabase/PostGIS through the [database importer](../../supabase/README.md).
-Calibrated kilometer markers, elevation enrichment, and the place-name
-gazetteer are still pending.
+An independent [terrain elevation overlay](pe22-elevation.md) now enriches all
+174 stored segments. Calibrated kilometer markers and the place-name gazetteer
+are still pending.
 
 ## Source and verified coverage
 
@@ -44,7 +45,8 @@ of approximately 0.8727 km. Each carries:
 - `sourceReferences`: IDs and full original kilometer ranges of overlapping
   source sections. These ranges are evidence for later calibration, not exact
   kilometer values for the generated segment endpoints.
-- `officialKmStart`, `officialKmEnd`, and `elevationM`: null.
+- `officialKmStart`, `officialKmEnd`, and `elevationM`: null in the base GeoJSON;
+  the independent elevation overlay and database provide terrain estimates.
 - `kilometerCalibration: "unverified"`.
 - `geometryRevision`: SHA-256 of canonical assembled coordinates, plus a stable
   segment ID containing that revision and the zero-based segment index.
@@ -74,6 +76,10 @@ Artifacts are versioned in `packages/road-data/data/pe22/`:
 | `segments-1km.geojson` | Display-segment `FeatureCollection` for D and later database loading.              |
 | `diagnostics.json`     | Measured and published lengths and their differences per source section.           |
 | `manifest.json`        | Dataset revision, pending fields, segment count, file SHA-256 hashes.              |
+
+`elevation.json` is a separate, source-attributed overlay described in the
+[elevation handoff](pe22-elevation.md); base geometry preparation and manifest
+hashes do not include it.
 
 The offline command deterministically rebuilds from `source.json`; it does not
 refresh that snapshot's retrieval time. Files are individually replaced through
@@ -109,13 +115,13 @@ dataset and show its timestamp or an unavailable state.
 
 1. Cross-check source kilometer references against trustworthy markers and
    incident locations, recording the calibration method and uncertainty.
-2. Obtain elevation through a documented terrain source, preserving null when
-   unavailable; create a sourced gazetteer for B rather than guessed place/km pairs.
+2. Create a sourced gazetteer for B rather than guessed place/km pairs; use the
+   separate elevation contract for terrain estimates and preserve missing states.
 3. Integrate the implemented PostGIS tables/importer with A's read APIs, filtering
    the intended geometry revision and respecting the shared access rules.
 4. Give D the GeoJSON and contracts now, with measured-distance and pending-data
    labels. Link segments to catchments before weather sampling and risk modeling.
 
 Geometry preparation still needs no credentials. Database import now uses the
-configured scoped connection; authenticated scheduled jobs remain a separate
-integration step with A.
+configured scoped connection. Authenticated SUTRAN scheduling is active through
+the separate [n8n integration](../../workflows/n8n/README.md).

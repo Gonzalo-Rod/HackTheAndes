@@ -4,10 +4,10 @@ Member C's independent Data & Model package for PeruRoad Climate. The current
 implementation reads and validates SUTRAN alerts and per-alert history, and
 provides an idempotent ingestion service behind a transactional repository
 interface, backed by a verified Postgres repository. It also prepares and imports
-PE-22 geometry and 1-km display segments and probes public SENAMHI warning-layer
-access. An authenticated job handler and inactive n8n workflow are prepared;
-deployed scheduled polling, weather ingestion, and risk models remain future work
-under the [Team Plan](../../docs/team-plan.md).
+PE-22 geometry, 1-km display segments, and terrain elevation, and probes public
+SENAMHI warning-layer access. The deployed authenticated job and active n8n
+schedule archive SUTRAN alerts every ten minutes; weather ingestion and risk
+models remain future work under the [Team Plan](../../docs/team-plan.md).
 
 ## Development
 
@@ -67,6 +67,10 @@ import type { OfficialAlertRepository } from "@peruroad/road-data/ingestion";
 import { preparePe22Geometry } from "@peruroad/road-data/geometry";
 import { displaySegmentsSchema } from "@peruroad/road-data/geometry/contracts";
 
+// Server-side elevation preparation and a browser-safe overlay contract.
+import { preparePe22Elevation } from "@peruroad/road-data/elevation";
+import { elevationSnapshotSchema } from "@peruroad/road-data/elevation/contracts";
+
 // Server-only database pool and durable official-source repository.
 import {
   createDatabasePool,
@@ -92,7 +96,8 @@ Install and build this package before the application build. Coordinate the
 application's dependency installation and lockfile update with A; a workspace
 can replace the file dependency later if the team adopts one. The backend entry
 point uses Node.js APIs and belongs in server code; client components use the
-`/contracts` or `/geometry/contracts` entry point. This package is private and is not published to npm.
+`/contracts`, `/geometry/contracts`, or `/elevation/contracts` entry point.
+This package is private and is not published to npm.
 
 ## PE-22 geometry and SENAMHI access
 
@@ -103,13 +108,20 @@ npm --prefix packages/road-data run pe22:prepare
 # Reproduce the committed artifacts without network access.
 npm --prefix packages/road-data run pe22:prepare -- --offline
 
+# Refresh midpoint terrain elevations, or validate the committed cache offline.
+npm --prefix packages/road-data run pe22:elevation
+npm --prefix packages/road-data run pe22:elevation -- --offline
+
 # Read-only access check; does not feed the risk model or require credentials.
 npm --prefix packages/road-data run senamhi:check
 ```
 
 The versioned `data/pe22/` snapshot currently yields 174 segments from about
 173.87 measured kilometers. These are distances along the source geometry;
-official kilometer calibration, elevation, and the gazetteer remain pending.
+official kilometer calibration and the gazetteer remain pending. A separate
+elevation overlay provides 174 terrain samples with source metadata, while the
+base GeoJSON remains unchanged. An elevation refresh failure shows a compatible
+cache with its age, or an unavailable state, and exits nonzero.
 The preparation command exits nonzero on invalid/disconnected input or an
 unavailable source. It validates and builds before replacing artifacts; verify
 manifest hashes when consuming files after an interrupted write.
@@ -119,9 +131,10 @@ access metadata only. `reachable` means the layer was fetched and validated,
 not that warnings are absent, current, relevant to PE-22, or ready for automated
 risk use. The currently returned properties require product/validity review.
 
-See [geometry handoff](../../docs/data/pe22-geometry.md) and
+See [geometry handoff](../../docs/data/pe22-geometry.md),
+[elevation handoff](../../docs/data/pe22-elevation.md), and
 [SENAMHI discovery](../../docs/data/senamhi-access.md) for verified behavior,
-source links, limitations, and integration steps. Neither command needs
+source links, limitations, and integration steps. These public-source commands need no
 Supabase or n8n credentials.
 
 [Adapter documentation](../../docs/data/sutran-adapter.md) describes contracts,
@@ -139,12 +152,14 @@ connection validates Supabase's public CA and hostname.
 ```sh
 npm --prefix packages/road-data run db:check
 npm --prefix packages/road-data run db:import-pe22
+npm --prefix packages/road-data run db:import-elevation
 npm --prefix packages/road-data run sutran:ingest
 npm --prefix packages/road-data run test:db
 ```
 
 These are explicit database/network commands; the default test suite remains
-offline. `test:db` uses random temporary alert IDs and removes only those IDs.
+offline. `test:db` uses random temporary alert IDs and geometry revisions and
+removes only its fixtures.
 The ingestion command runs once, records a safe run summary, and exits nonzero
 on partial/unavailable results. It does not enable continuous polling. Remote
 migrations and initial credential provisioning require the management token;
@@ -153,10 +168,11 @@ runtime ingestion uses the scoped `peruroad_backend` login.
 ## Scheduled ingestion handoff
 
 The [API application](../../apps/api/README.md) now consumes this package and
-mounts the protected job at `POST /api/jobs/sutran`; public deployment is pending.
+mounts the protected job at `POST /api/jobs/sutran` on a verified public Preview.
 
-See [the n8n workflow guide](../../workflows/n8n/README.md) for the inactive workflow,
-`POST /api/jobs/sutran` integration, credential setup, and activation checks.
+See [the n8n workflow guide](../../workflows/n8n/README.md) for the active schedule,
+portable inactive export, `POST /api/jobs/sutran` integration, credential setup,
+and activation checks.
 `npm --prefix packages/road-data run sutran:job:check` explicitly checks real
 SUTRAN/Supabase persistence through the local handler, including denied missing
 credentials and repeated execution IDs. It requires `ROAD_DATA_JOB_SECRET` in

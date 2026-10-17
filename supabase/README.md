@@ -11,20 +11,23 @@ Project: [HackTheAndes](https://supabase.com/dashboard/project/cdqnintcqryfbfjjl
 region `us-west-2`. Existing project API keys were retrieved; no additional
 project, subscription, API key, or administrator-password reset was created.
 
-Four migrations were applied atomically after a rollback-only dry run. They
-create PostGIS and 29 application tables, all with RLS and no anonymous or
+Five migrations have been applied after rollback-only dry runs. They
+create PostGIS and 30 application tables, all with RLS and no anonymous or
 authenticated browser grants. A scoped `peruroad_backend` login has application
 table permissions and its own RLS policies, without superuser, database/role
 creation, or RLS-bypass privileges. This login is trusted server infrastructure;
 application handlers must still enforce organization permissions, entitlements,
 rate limits, and webhook authentication.
 
-The live check stored 174 PE-22 segments, three official SUTRAN alerts, three
+The initial live check stored 174 PE-22 segments, three official SUTRAN alerts, three
 source revisions, and six history facts. A second geometry import and SUTRAN
 poll added no duplicates. Seven real-Postgres tests verified concurrency,
 rollback, null revision uniqueness, constraints, and access controls; synthetic
-test IDs were removed afterward. These observations do not establish a deployed
-dashboard, merged application incidents, a risk model, or continuous polling.
+test IDs were removed afterward. Subsequent work activated ten-minute SUTRAN
+polling and populated 174 terrain elevations with provenance; repeat elevation
+import changed zero segment values. The current database suite has 13 tests,
+including isolated elevation fixtures. Dashboard integration, merged application
+incidents, and the risk model remain pending.
 
 ## Tables and boundaries
 
@@ -34,6 +37,7 @@ dashboard, merged application incidents, a risk model, or continuous polling.
 | `reports_and_incidents`       | `private.delivery_contacts`, `reports`, `incidents`, `incident_reports`, `incident_status_log`, `organizations`, `subscriptions`                                        |
 | `product_workflows`           | `passes`, `private.payment_events`, `trips`, `calls`, `dispatch_decisions`, `waitlist`, `weekly_reports`, `private.api_calls`                                           |
 | `official_archive_and_access` | `private.official_alerts`, `private.official_alert_versions`, `private.official_alert_history`, `incident_official_alerts`, `private.ingestion_runs`; shared RLS/grants |
+| `segment_elevations`          | `segment_elevations`; terrain sample location, dataset attribution, source URLs, and retrieval time                                                                     |
 
 Names in the Team Plan are logical singular entities; SQL names above are the
 physical shared contract. Parent/child arrays are represented by join tables
@@ -50,7 +54,8 @@ invented during official ingestion. Weather, warnings, catchments, risk, payment
 and messaging tables are foundations and currently have no implemented pipeline.
 
 Segments retain geometry revision IDs, measured-distance fields, source section
-references, and null official kilometers/elevation until calibrated/enriched.
+references, and null official kilometers until calibrated. Terrain elevation is
+now enriched through the separate provenance table and transactional importer.
 Consumers must select the intended `geometry_revision`; importing a new geometry
 does not delete historical revisions. Re-importing existing IDs preserves later
 calibration and elevation. See [geometry notes](../docs/data/pe22-geometry.md).
@@ -76,6 +81,7 @@ npm --prefix packages/road-data run db:migrate
 npm --prefix packages/road-data run supabase:configure
 
 npm --prefix packages/road-data run db:import-pe22
+npm --prefix packages/road-data run db:import-elevation
 npm --prefix packages/road-data run sutran:ingest
 npm --prefix packages/road-data run db:check
 ```
@@ -126,7 +132,8 @@ null source revisions dedupe through `UNIQUE NULLS NOT DISTINCT`.
 
 `npm --prefix packages/road-data test` runs offline checks without credentials.
 `npm --prefix packages/road-data run test:db` is opt-in and runs against the
-configured database: it uses random test alert IDs and removes only those IDs.
+configured database: it uses random test alert IDs and geometry revisions and
+removes only its fixtures.
 CI creates a disposable local PostGIS database and applies migrations from
 scratch. Its bootstrap script refuses non-loopback hosts and database names
 other than `peruroad_test`; it is never used on the shared project.
@@ -136,8 +143,10 @@ publishable-key Auth access, and denied browser access to operational tables.
 Supabase may return HTTP 401 (SQL permission error) or 403 for the latter. Cached
 data/unavailable UI handling still belongs to application read APIs.
 
-The protected ingestion handler and inactive ten-minute n8n workflow are prepared;
-see [the scheduler handoff](../workflows/n8n/README.md). Next, A deploys that
-handler and validated read APIs, then C connects and verifies the schedule. Realtime/browser access
-policies and organization authorization need explicit application work; no
-anonymous table grants, paid-feature access, or schedule was enabled here.
+The protected ingestion handler is deployed and the ten-minute n8n schedule is
+active, with natural executions and database audits verified; see
+[the scheduler handoff](../workflows/n8n/README.md). Next, integrate validated read
+APIs and remaining spatial/weather inputs. Realtime/browser access policies,
+organization authorization, and paid-feature access need explicit application
+work; operational tables retain denied browser access. See
+[the elevation handoff](../docs/data/pe22-elevation.md) for the new importer.
