@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+  "measuredLengthKm": 173.87272270170928,
+  "segmentCount": 174,
+  "kilometerCalibration": "unverified",
+  "elevation": "pending",
+  "gazetteer": "pending",
+  "files": {
+    "source.json": "e724318454ff1369c2cc8617cf52b651a6dfdd28cd3bab63c1a52f666d115e9c",
+    "corridor.geojson": "83fc60a89162343a0b3356e46b994c01fd5d825629263438ad0cff362a9a939c",
+    "segments-1km.geojson": "4a44675bbbda6d72bb2c75e9f34ec2f3da83a9169e3d11cefee5e98e5c717095",
+    "diagnostics.json": "d6c959cda9f4f062eea211df89cdc824d32da356869c9686b1ef730cea66558c"
+  }
+}

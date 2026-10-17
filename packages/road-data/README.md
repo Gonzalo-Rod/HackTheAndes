@@ -3,7 +3,9 @@
 Member C's independent Data & Model package for PeruRoad Climate. The current
 implementation reads and validates SUTRAN alerts and per-alert history, and
 provides an idempotent ingestion service behind a transactional repository
-interface. A durable database adapter, scheduled polling, weather adapters, and risk models remain future
+interface. It also prepares PE-22 geometry and 1-km display segments and probes
+public SENAMHI warning-layer access. A durable database adapter, scheduled polling,
+weather ingestion, and risk models remain future
 work under the [Team Plan](../../docs/team-plan.md).
 
 ## Development
@@ -45,7 +47,7 @@ and controlled failures.
 ## Application integration later
 
 `npm run build` emits JavaScript and declarations into `dist/`. The package
-exports three entry points:
+exports the following entry points:
 
 ```ts
 // Server-side adapters; import from route handlers or services.
@@ -58,6 +60,10 @@ import type { OfficialRoadAlert } from "@peruroad/road-data/contracts";
 // Server-side ingestion with injectable persistence.
 import { createSutranIngestionService } from "@peruroad/road-data/ingestion";
 import type { OfficialAlertRepository } from "@peruroad/road-data/ingestion";
+
+// Server-side geometry preparation; client-safe geometry schemas live separately.
+import { preparePe22Geometry } from "@peruroad/road-data/geometry";
+import { displaySegmentsSchema } from "@peruroad/road-data/geometry/contracts";
 ```
 
 When integrating, member A adds the local dependency to the application's
@@ -75,7 +81,37 @@ Install and build this package before the application build. Coordinate the
 application's dependency installation and lockfile update with A; a workspace
 can replace the file dependency later if the team adopts one. The backend entry
 point uses Node.js APIs and belongs in server code; client components use the
-`/contracts` entry point. This package is private and is not published to npm.
+`/contracts` or `/geometry/contracts` entry point. This package is private and is not published to npm.
+
+## PE-22 geometry and SENAMHI access
+
+```sh
+# Refresh public source data and generate the corridor, segments, diagnostics, and hashes.
+npm --prefix packages/road-data run pe22:prepare
+
+# Reproduce the committed artifacts without network access.
+npm --prefix packages/road-data run pe22:prepare -- --offline
+
+# Read-only access check; does not feed the risk model or require credentials.
+npm --prefix packages/road-data run senamhi:check
+```
+
+The versioned `data/pe22/` snapshot currently yields 174 segments from about
+173.87 measured kilometers. These are distances along the source geometry;
+official kilometer calibration, elevation, and the gazetteer remain pending.
+The preparation command exits nonzero on invalid/disconnected input or an
+unavailable source. It validates and builds before replacing artifacts; verify
+manifest hashes when consuming files after an interrupted write.
+
+The SENAMHI command validates the complete configured WFS layer and reports
+access metadata only. `reachable` means the layer was fetched and validated,
+not that warnings are absent, current, relevant to PE-22, or ready for automated
+risk use. The currently returned properties require product/validity review.
+
+See [geometry handoff](../../docs/data/pe22-geometry.md) and
+[SENAMHI discovery](../../docs/data/senamhi-access.md) for verified behavior,
+source links, limitations, and integration steps. Neither command needs
+Supabase or n8n credentials.
 
 [Adapter documentation](../../docs/data/sutran-adapter.md) describes contracts,
 source semantics and HTTP behavior. [Ingestion documentation](../../docs/data/sutran-ingestion.md)
