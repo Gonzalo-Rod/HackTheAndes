@@ -41,6 +41,12 @@ change, including code written by agents.
   for application code and to `packages/road-data/` for the Data & Model package.
   The package mirrors the same layers and exposes compiled entry points for
   server adapters and shared contracts; consumers use those entry points.
+- **Shared database.** Team-wide SQL migrations live in `supabase/migrations/`.
+  Database operator commands and the initial Postgres adapter live in
+  `packages/road-data/`; see `supabase/README.md`. Never edit an applied migration:
+  add a new migration and run the database integration checks. The
+  `peruroad_backend` login and secret API key are server-only; browser roles have
+  no operational-table access until explicit application access rules are added.
 - **Separation of concerns.** Keep four layers and import only downward:
   - `src/app/` (routes, pages, route handlers): parse input, call a service,
     shape the response. No business rules here.

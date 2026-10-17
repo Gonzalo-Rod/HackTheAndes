@@ -8,8 +8,8 @@ It has no dependency on Next.js, n8n, Postgres, or Supabase. It does not write t
 the database, calculate risk, classify incident causes, send alerts, or infer
 that a missing incident has cleared.
 
-| File                                      | Responsibility                                                                          |
-| ----------------------------------------- | --------------------------------------------------------------------------------------- |
+| File                                                         | Responsibility                                                                          |
+| ------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
 | `packages/road-data/src/contracts/road-alerts.ts`            | Provider-independent alert and history types with shared Zod schemas, plus batch types. |
 | `packages/road-data/src/integrations/sutran/schema.ts`       | Runtime validation of consumed SUTRAN fields using Zod.                                 |
 | `packages/road-data/src/domain/road-data/parsing.ts`         | Pure calendar-date and kilometer parsing.                                               |
@@ -26,14 +26,19 @@ package does not introduce a root application manifest or workspace.
 ## Usage
 
 ```ts
-import { createFetchJsonTransport, createSutranAdapter } from "@peruroad/road-data";
+import {
+  createFetchJsonTransport,
+  createSutranAdapter,
+} from "@peruroad/road-data";
 
 const adapter = createSutranAdapter({
   transport: createFetchJsonTransport(),
 });
 
 const alerts = await adapter.fetchCurrentAlerts(); // PE-22 by default
-const history = await adapter.fetchAlertHistory("98a4c1d9-b1ad-4069-aa26-33941df1f38b");
+const history = await adapter.fetchAlertHistory(
+  "98a4c1d9-b1ad-4069-aa26-33941df1f38b",
+);
 
 if (!alerts.complete) {
   // Retain the valid records, surface rejected indices, and mark this poll partial.
@@ -139,6 +144,6 @@ partial-failure handling behind a transactional repository interface. It fetches
 history on first observation, a source revision change, or an incomplete-history
 retry, with a bounded request budget.
 
-Next, implement and verify durable persistence with A, then connect the
-authenticated job endpoint and ten-minute n8n workflow. **No database connection
-or scheduled polling has been configured.**
+Durable Supabase persistence is now configured and verified; see the
+[database handoff](../../supabase/README.md). Next, connect the authenticated
+job endpoint and ten-minute n8n workflow. **No scheduled polling is configured.**

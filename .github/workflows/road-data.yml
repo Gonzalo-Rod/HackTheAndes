@@ -41,3 +41,40 @@ jobs:
           -v "$GITHUB_WORKSPACE:/repo"
           zricethezav/gitleaks:v8.30.1
           git /repo --redact --log-opts="--all"
+
+  database:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgis/postgis:17-3.5
+        env:
+          POSTGRES_DB: peruroad_test
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d peruroad_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    defaults:
+      run:
+        working-directory: packages/road-data
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: packages/road-data/package-lock.json
+      - run: npm ci
+      - name: Apply migrations to a disposable local database
+        run: node scripts/prepare-test-database.ts
+        env:
+          DATABASE_URL: postgresql://postgres@localhost:5432/peruroad_test
+          DATABASE_SSL_MODE: disable
+      - name: Verify real transactions, dedupe, rollback, constraints, and RLS
+        run: npm run test:db
+        env:
+          DATABASE_URL: postgresql://peruroad_backend@localhost:5432/peruroad_test
+          DATABASE_SSL_MODE: disable

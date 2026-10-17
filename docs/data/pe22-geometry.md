@@ -2,8 +2,10 @@
 
 This implements the first geometry slice of [Role C](../team-plan.md): a
 reproducible public-source snapshot, a continuous corridor, and 1-km display
-segments inside `packages/road-data/`. Database loading, calibrated kilometer
-markers, elevation enrichment, and the place-name gazetteer are still pending.
+segments inside `packages/road-data/`. The 174 display segments are now loaded
+in Supabase/PostGIS through the [database importer](../../supabase/README.md).
+Calibrated kilometer markers, elevation enrichment, and the place-name
+gazetteer are still pending.
 
 ## Source and verified coverage
 
@@ -82,7 +84,8 @@ Offline tests verify these hashes and reproduce the committed derived files.
 Application code can validate segments through the browser-safe
 `@peruroad/road-data/geometry/contracts` entry point. Geometry preparation and
 source adapters are server-only exports from `@peruroad/road-data/geometry`.
-Nothing in this slice changes root application dependencies or database schema.
+Shared spatial tables now live in `supabase/migrations/`; root application
+dependencies remain separate.
 
 ## Validation and failure behavior
 
@@ -108,10 +111,11 @@ dataset and show its timestamp or an unavailable state.
    incident locations, recording the calibration method and uncertainty.
 2. Obtain elevation through a documented terrain source, preserving null when
    unavailable; create a sourced gazetteer for B rather than guessed place/km pairs.
-3. Agree PostGIS columns, geometry revision handling, and spatial indexes with A,
-   then implement a loader/migration in the shared database workflow.
+3. Integrate the implemented PostGIS tables/importer with A's read APIs, filtering
+   the intended geometry revision and respecting the shared access rules.
 4. Give D the GeoJSON and contracts now, with measured-distance and pending-data
    labels. Link segments to catchments before weather sampling and risk modeling.
 
-No Supabase or n8n credentials are required for this slice. Durable storage and
-the authenticated scheduled jobs remain a separate integration step with A.
+Geometry preparation still needs no credentials. Database import now uses the
+configured scoped connection; authenticated scheduled jobs remain a separate
+integration step with A.

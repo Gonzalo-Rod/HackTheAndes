@@ -2,8 +2,10 @@
 
 The ingestion service is member C's second F8 implementation slice. It coordinates
 the existing source adapter, pure revision rules, and an injectable repository.
-Offline tests use a transactional in-memory fake; **there is no connected database,
-Supabase repository implementation, deployed job endpoint, or n8n schedule yet**.
+Offline tests use a transactional in-memory fake, and the Postgres implementation
+has also passed real-database integration checks. Supabase persistence is now
+connected; the [shared database handoff](../../supabase/README.md) documents its
+migrations and credentials. A deployed job endpoint and n8n schedule remain pending.
 
 ## Ownership and location
 
@@ -21,15 +23,15 @@ names and incident integration together before adding migrations.
 | `src/services/sutran-history.ts`                | History validation and explicit degraded results.                                    |
 | `tests/ingestion/`                              | Offline checks and a test-only transactional repository.                             |
 
-Production persistence should implement `OfficialAlertRepository` in a database
-adapter, following the existing package layers. App routes call the service;
+Production persistence implements `OfficialAlertRepository` in
+`src/db/official-alert-repository.ts`, following the existing package layers. App routes call the service;
 n8n only schedules an authenticated job. Keep application scaffolding and
 credentials out of this package until integration is coordinated with A.
 
 ## Service usage
 
 After building and installing the local package, a server service can accept
-the future database adapter explicitly:
+the database adapter explicitly:
 
 ```ts
 import {
@@ -69,7 +71,9 @@ remain and a retry must be safe.
 
 ## Required persistence semantics
 
-These are logical storage requirements, not finalized table names or SQL:
+These logical requirements are implemented by the shared migrations: current
+records in `private.official_alerts`, revisions in `private.official_alert_versions`,
+and facts in `private.official_alert_history`.
 
 | Logical record           | Identity and contents                                                                                                                                                                                  |
 | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -104,8 +108,8 @@ against the real database before considering durable ingestion complete.
 The normalized source record deliberately has no application incident ID,
 segment assignment, lifecycle state, or confidence score. A and C should agree
 how these official records map to `incidents` and `incident_status_log`; this
-service does not invent that mapping. Spatial joins can remain pending until
-the PE-22 geometry exists.
+service does not invent that mapping. PE-22 geometry is now stored, but matching
+incidents to segments and calibrated kilometers still requires explicit rules.
 
 ## Revision, history, and fallback rules
 
@@ -140,10 +144,11 @@ Run the package's lint, formatting, type check, offline tests, build, and export
 checks from its README. Tests cover duplicate polls, source revision changes,
 stale/out-of-order requests, conflicts, unknown timestamps, bounded enrichment,
 partial history, source outages, cancellation, and transaction rollback using
-the fake repository. These results establish the service behavior, not a
-verified Supabase deployment.
+the fake repository. The additional database suite verifies those persistence guarantees against
+Postgres; see the shared database handoff for recorded live results.
 
-Next: agree the physical schema with A, implement and verify durable
-persistence, wire an authenticated server job, and enable the ten-minute n8n
-schedule. No manual database connection is needed to run the current offline
-tests; configuring Supabase will be required for the persistence adapter.
+Supabase persistence and the initial schema are now configured and verified;
+`npm --prefix packages/road-data run sutran:ingest` performs a real one-off poll.
+Next, wire an authenticated server job and enable the ten-minute n8n schedule.
+The default tests remain offline; `test:db` explicitly exercises the configured
+Postgres repository, including concurrency and rollback.

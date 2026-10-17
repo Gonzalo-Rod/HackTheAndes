@@ -3,10 +3,10 @@
 Member C's independent Data & Model package for PeruRoad Climate. The current
 implementation reads and validates SUTRAN alerts and per-alert history, and
 provides an idempotent ingestion service behind a transactional repository
-interface. It also prepares PE-22 geometry and 1-km display segments and probes
-public SENAMHI warning-layer access. A durable database adapter, scheduled polling,
-weather ingestion, and risk models remain future
-work under the [Team Plan](../../docs/team-plan.md).
+interface, backed by a verified Postgres repository. It also prepares and imports
+PE-22 geometry and 1-km display segments and probes public SENAMHI warning-layer
+access. Scheduled polling, weather ingestion, and risk models remain future work
+under the [Team Plan](../../docs/team-plan.md).
 
 ## Development
 
@@ -28,7 +28,8 @@ package manifest to run its checks.
 
 The layers inside `src/` follow [AGENTS.md](../../AGENTS.md): shared contracts,
 pure domain logic, provider integrations, and ingestion services. A database
-adapter will implement the persistence contract during integration with A.
+adapter implements the persistence contract; shared migrations are in
+`supabase/migrations/`. See the [database handoff](../../supabase/README.md).
 
 ## Live check
 
@@ -64,6 +65,12 @@ import type { OfficialAlertRepository } from "@peruroad/road-data/ingestion";
 // Server-side geometry preparation; client-safe geometry schemas live separately.
 import { preparePe22Geometry } from "@peruroad/road-data/geometry";
 import { displaySegmentsSchema } from "@peruroad/road-data/geometry/contracts";
+
+// Server-only database pool and durable official-source repository.
+import {
+  createDatabasePool,
+  createPostgresOfficialAlertRepository,
+} from "@peruroad/road-data/database";
 ```
 
 When integrating, member A adds the local dependency to the application's
@@ -117,3 +124,24 @@ Supabase or n8n credentials.
 source semantics and HTTP behavior. [Ingestion documentation](../../docs/data/sutran-ingestion.md)
 covers the storage contract, failure results, and Supabase handoff. Changes go
 through a feature branch, CI, and teammate review before merging into main.
+
+## Supabase persistence
+
+The shared schema and operator instructions are in [supabase/README.md](../../supabase/README.md).
+Credentials are loaded only through `src/config/env.ts`, with names documented in
+`.env.example`; values stay in ignored local environment files. The database
+connection validates Supabase's public CA and hostname.
+
+```sh
+npm --prefix packages/road-data run db:check
+npm --prefix packages/road-data run db:import-pe22
+npm --prefix packages/road-data run sutran:ingest
+npm --prefix packages/road-data run test:db
+```
+
+These are explicit database/network commands; the default test suite remains
+offline. `test:db` uses random temporary alert IDs and removes only those IDs.
+The ingestion command runs once, records a safe run summary, and exits nonzero
+on partial/unavailable results. It does not enable continuous polling. Remote
+migrations and initial credential provisioning require the management token;
+runtime ingestion uses the scoped `peruroad_backend` login.

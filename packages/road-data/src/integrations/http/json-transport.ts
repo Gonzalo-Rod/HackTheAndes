@@ -12,6 +12,7 @@ export interface JsonRequestOptions {
   signal?: AbortSignal;
   provider?: string;
   requestId?: string;
+  headers?: Readonly<Record<string, string>>;
 }
 
 export interface JsonTransport {
@@ -41,7 +42,7 @@ export class HttpTransportError extends Error {
 
 export interface HttpLogEntry {
   requestId: string;
-  operation: "http.get_json";
+  operation: "http.get_json" | "http.post_json";
   provider: string;
   durationMs: number;
   attempt: number;
@@ -78,7 +79,7 @@ async function fetchJson(
   try {
     const response = await fetchImpl(url, {
       method: "GET",
-      headers: { Accept: "application/json" },
+      headers: { ...request.headers, Accept: "application/json" },
       cache: "no-store",
       signal,
     });
