@@ -152,8 +152,8 @@ data/unavailable UI handling still belongs to application read APIs.
 
 The protected ingestion handler is deployed and the ten-minute n8n schedule is
 active, with natural executions and database audits verified; see
-[the scheduler handoff](../workflows/n8n/README.md). Next, integrate validated read
-APIs and spatial/weather inputs are now integrated; see the sections below.
+[the scheduler handoff](../workflows/n8n/README.md). Validated read APIs and
+spatial/weather inputs are now integrated; see the sections below.
 Organization authorization and paid-feature access are enforced server-side;
 operational tables retain denied browser access. See
 [the elevation handoff](../docs/data/pe22-elevation.md) for the new importer.

@@ -78,6 +78,12 @@ Supabase geometry and community incidents, alongside D's official SUTRAN feed an
 rainfall visualization. Measured geometric distance is **not calibrated official
 kilometer chainage**; elevation is a terrain estimate.
 
+Catchment rainfall windows, official susceptibility/warnings and historical
+candidate data now have validated capture/import scripts, public read APIs and
+dated snapshot fallbacks. See the [model-input handoff](docs/data/model-inputs.md)
+and [ML checkpoint](docs/data/ml-readiness.md) for coverage, reproduction and the
+unresolved labels/forecast-availability decisions before training.
+
 Risk prediction, dispatch decisions and weekly generation still require C's
 model/data implementation. Their unavailable states do not mean low risk. No ML
 model has been selected, trained or evaluated in this integration, and no real
