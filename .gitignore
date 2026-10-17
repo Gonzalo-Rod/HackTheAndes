@@ -1,0 +1,9 @@
+node_modules/
+coverage/
+dist/
+.next/
+.DS_Store
+.env
+.env.*
+!.env.example
+/getting-started/PROGRESS.md
