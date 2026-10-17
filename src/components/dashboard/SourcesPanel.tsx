@@ -2,6 +2,7 @@
 
 import { SUTRAN_MAP_URL } from "@/components/alert-meta";
 import { Icon } from "@/components/icons";
+import type { HazardLayer, CatchmentWeatherLayer } from "@/contracts/model-inputs";
 import type { CorridorData } from "@/contracts/corridor";
 import type { AlertsMeta } from "@/contracts/road-alerts";
 import type { CorridorRainResponse } from "@/contracts/weather";
@@ -17,9 +18,11 @@ interface SourcesPanelProps {
   meta: AlertsMeta | null;
   corridor: CorridorData | null;
   rain: CorridorRainResponse | null;
+  hazards: HazardLayer | null;
+  catchmentWeather: CatchmentWeatherLayer | null;
 }
 
-export function SourcesPanel({ meta, corridor, rain }: SourcesPanelProps) {
+export function SourcesPanel({ meta, corridor, rain, hazards, catchmentWeather }: SourcesPanelProps) {
   return (
     <div className="pr-sources">
       <section className="pr-source">
@@ -123,6 +126,37 @@ export function SourcesPanel({ meta, corridor, rain }: SourcesPanelProps) {
           </a>
           . Lehner y Grill (2013), doi:10.1002/hyp.9740. WWF no ha evaluado esta derivación y no ofrece garantía de precisión, integridad o
           adecuación.
+        </p>
+      </section>
+      <section className="pr-source">
+        <h3>Lluvia por cuenca · datos para el modelo</h3>
+        <p>
+          {catchmentWeather
+            ? `${catchmentWeather.data.catchments.length} cuencas y ${catchmentWeather.data.grids.length} celdas de aproximadamente 25 km. Ventanas de 24/72 h y seis horas desde ${formatDateTime(catchmentWeather.data.anchorAt)}.`
+            : "Datos por cuenca pendientes o no disponibles; no se interpretan como lluvia cero."}
+        </p>
+        <p>
+          Las últimas 72/168 h son estimaciones de modelo, no estaciones. La hora de captura no es la hora de emisión del pronóstico; aún no
+          hay riesgo calculado.
+        </p>
+        {catchmentWeather && (
+          <p>
+            Captura: {formatDateTime(catchmentWeather.meta.capturedAt)} ·{" "}
+            {catchmentWeather.meta.stale ? "Caché antigua" : "Ventana de captura"}.
+          </p>
+        )}
+      </section>
+      <section className="pr-source">
+        <h3>Susceptibilidad y avisos oficiales</h3>
+        <p>
+          INGEMMET: clases estáticas de movimientos en masa, sin fecha de publicación verificada. SENAMHI: producto de activación de
+          quebradas, con vigencia del boletín interpretada en hora de Lima. No equivalen a un pronóstico nuestro.
+        </p>
+        <p>
+          {hazards
+            ? `${hazards.data.susceptibility.features.length} polígonos de susceptibilidad; ${hazards.data.warnings.features.length} avisos intersectan la región de análisis, de ${hazards.data.warnings.nationalFeatureCount} consultados. Captura: ${formatDateTime(hazards.meta.capturedAt)}.`
+            : "Capas oficiales pendientes o no disponibles."}{" "}
+          La ausencia de avisos no indica ausencia de peligro.
         </p>
       </section>
       <section className="pr-source pr-source--limits">

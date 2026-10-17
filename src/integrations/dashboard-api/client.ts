@@ -112,3 +112,20 @@ export async function fetchCatchments() {
     "cuencas",
   );
 }
+
+export async function fetchHazardLayer() {
+  const { HazardLayerSchema } = await import("@/contracts/model-inputs");
+  return parseOrThrow(
+    HazardLayerSchema,
+    await getJson("/api/hazards", { provider: PROVIDER, operation: "dashboard.hazards", retries: 0 }),
+    "capas oficiales",
+  );
+}
+export async function fetchCatchmentWeather() {
+  const { CatchmentWeatherLayerSchema } = await import("@/contracts/model-inputs");
+  return parseOrThrow(
+    CatchmentWeatherLayerSchema,
+    await getJson("/api/weather/catchments", { provider: PROVIDER, operation: "dashboard.catchmentWeather", retries: 0 }),
+    "lluvia por cuenca",
+  );
+}

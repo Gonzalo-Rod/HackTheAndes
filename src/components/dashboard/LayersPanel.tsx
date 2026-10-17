@@ -166,6 +166,20 @@ export function LayersPanel({ layers, is3d, meta, corridor, rain, rainError, now
         onToggle={(catchments) => set({ catchments })}
       />
       <LayerRow
+        label="Susceptibilidad · INGEMMET"
+        hint="Estática · marrón claro a oscuro: muy baja a muy alta; gris: sin clasificar. No es pronóstico."
+        swatch={<span style={{ display: "inline-block", width: 14, height: 10, background: "#ae8966" }} />}
+        checked={layers.susceptibility}
+        onToggle={(susceptibility) => set({ susceptibility })}
+      />
+      <LayerRow
+        label="Avisos · SENAMHI"
+        hint="Quebradas · vigencia según boletín; no son niveles de nuestro modelo."
+        swatch={<span style={{ display: "inline-block", width: 14, height: 10, border: "1px dashed #72558a" }} />}
+        checked={layers.officialWarnings}
+        onToggle={(officialWarnings) => set({ officialWarnings })}
+      />
+      <LayerRow
         label="Ríos y quebradas"
         hint="ANA vía SUTRAN"
         freshness={staticFreshness(corridor, now, "Capa estática")}

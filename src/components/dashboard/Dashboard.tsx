@@ -1,4 +1,5 @@
 "use client";
+import { useModelInputs } from "@/hooks/use-model-inputs";
 import { useCatchments } from "@/hooks/use-catchments";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -67,6 +68,7 @@ export function Dashboard() {
   const corridorState = useCorridor();
   const rainState = useCorridorRain();
   const catchments = useCatchments();
+  const modelInputs = useModelInputs();
   const now = useNow();
   const mapRef = useRef<MapViewHandle>(null);
 
@@ -216,6 +218,7 @@ export function Dashboard() {
           corridorAlerts={corridorAlerts}
           rainSegments={rainBands}
           catchments={catchments.data}
+          hazards={modelInputs.hazards.data}
           highlightRegionKey={filters.regionKey}
           profileKm={tourKm ?? profileKm}
           now={now}
@@ -228,6 +231,10 @@ export function Dashboard() {
                 corridor?.metadata.state === "snapshot" ? corridor.metadata.message : null,
                 community.error,
                 catchments.error,
+                modelInputs.hazards.error,
+                modelInputs.weather.error,
+                modelInputs.weather.data?.meta.stale ? "Lluvia por cuenca en caché; revisar la fecha del pronóstico." : null,
+                modelInputs.hazards.data?.meta.stale ? "Avisos oficiales en caché; revisar su vigencia." : null,
                 catchments.data?.meta.state === "snapshot" ? catchments.data.meta.message : null,
               ]
                 .filter(Boolean)
@@ -292,7 +299,15 @@ export function Dashboard() {
               </div>
             )
           }
-          sourcesContent={<SourcesPanel meta={alertsState.data?.meta ?? null} corridor={corridor} rain={rain} />}
+          sourcesContent={
+            <SourcesPanel
+              meta={alertsState.data?.meta ?? null}
+              corridor={corridor}
+              rain={rain}
+              hazards={modelInputs.hazards.data}
+              catchmentWeather={modelInputs.weather.data}
+            />
+          }
         />
 
         <div className="pr-dock">

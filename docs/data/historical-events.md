@@ -4,6 +4,18 @@ Checked October 17, 2026. These are **candidate labels for review**, not a compl
 training set or a verified assessment of forecast performance. No ML model has
 been chosen or trained.
 
+## Implemented capture and preparation
+
+The [input pipeline](model-inputs.md) now downloads bounded public workbooks,
+checks hashes, parses the Excel epoch, filters exact PE-22 natural-hazard rows,
+projects locations and validates sanitized candidates with Zod. The committed
+registry includes the seven Provías candidates below plus the single deduplicated
+COEN event, retaining conflicting times and unverified chainage. Its source hashes
+identify newer captures than the original exploratory downloads recorded below;
+current hashes and coverage are in the [manifest](../../packages/road-data/data/model-inputs-manifest.json).
+This implements data preparation without resolving missing labels or establishing
+forecast skill; see the [ML checkpoint](ml-readiness.md).
+
 ## Official public source found
 
 The [Provías Nacional emergency viewer](https://wsgcv.proviasnac.gob.pe/emergenciavial)

@@ -1,4 +1,6 @@
 "use client";
+import type { HazardLayer } from "@/contracts/model-inputs";
+import { setHazardData } from "./hazard-layers";
 
 import type { Map as MLMap, MapLayerMouseEvent, Popup } from "maplibre-gl";
 import { useEffect, useImperativeHandle, useRef, useState, type Ref } from "react";
@@ -40,6 +42,7 @@ export interface MapViewProps {
   corridorAlerts: CorridorAlert[];
   rainSegments: RainSegment[];
   catchments: CatchmentLayer | null;
+  hazards: HazardLayer | null;
   highlightRegionKey: string | null;
   profileKm: number | null;
   padding: ScreenPadding;
@@ -244,8 +247,11 @@ export function MapView(props: MapViewProps) {
   }, [mode]);
 
   useEffect(() => {
-    if (mapRef.current && readyRef.current) setCatchmentData(mapRef.current, catchments);
-  }, [catchments, mapReady]);
+    if (mapRef.current && readyRef.current) {
+      setCatchmentData(mapRef.current, catchments);
+      setHazardData(mapRef.current, props.hazards);
+    }
+  }, [catchments, props.hazards, mapReady]);
 
   useEffect(() => {
     if (mapRef.current && readyRef.current && corridor) setCorridorData(mapRef.current, corridor);

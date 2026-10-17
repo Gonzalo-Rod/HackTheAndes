@@ -1,8 +1,11 @@
 # SENAMHI warning access discovery
 
-SENAMHI remains part of the Team Plan's hourly official-warning ingestion and
-risk inputs. This work verifies a public spatial data path; it does not yet
-implement warning persistence, PE-22 intersections, or automated risk scoring.
+This document preserves the initial access probe. The subsequent
+[input pipeline](model-inputs.md) identifies the correct activation product
+`g_acti_quebrada:view_av_activ_qdra`, validates bulletin-based validity, stores
+national warnings and prepares regional intersections for the map. The older
+`senamhi:check` command below remains a discovery probe, not that production
+adapter. Hourly refresh and automated risk use are still pending.
 
 ## Verified public source
 

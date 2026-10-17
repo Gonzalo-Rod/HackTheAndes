@@ -16,6 +16,10 @@ in `src/contracts/platform.ts` and `src/contracts/road-alerts.ts`.
 | `GET /api/incidents/:uuid` | Public | Structured status history only; no report text, sender identity, or encrypted content. |
 | `GET /api/segments` | Public | C's pinned geometry revision, terrain elevations, and explicit geometric-distance reference. |
 | `GET /api/catchments` | Public | Coarse upstream HydroBASINS polygons with weights, dates and low-confidence notice; dated bundled fallback on DB failure. See [catchment handoff](data/pe22-catchments.md). |
+| `GET /api/weather/catchments` | Public | Capture-anchored catchment rainfall history and forecast windows, with dated fallback. |
+| `GET /api/hazards` | Public | Static susceptibility and official warnings; separate from model risk. |
+| `GET /api/history/events` | Public | Sanitized candidate events with incomplete-coverage/training flags. |
+| `GET /api/history/weather?dataset=...` | Public | Allowlisted archived forecasts, retrospective references and Yaku reconstruction. See [model inputs](data/model-inputs.md). |
 | `GET /api/corridor` | Public | D's corridor contract adapted to C's segments. Town positions remain approximate OSM references; an explicitly dated bundled fallback survives DB outages. |
 | `GET /api/realtime` | Public | Supabase URL and **publishable** key only. The subscription reads `incident_updates`, a singleton change signal. |
 | `GET /api/stats` | Public | Product counts, exclusions and observation time. `/impacto` renders these and the waitlist. |
@@ -90,7 +94,9 @@ and metric exclusions. CI applies all migrations to a fresh PostGIS database and
 imports the committed PE-22 geometry before those checks.
 
 A's risk/dispatch boundaries and report access control are ready for C's outputs;
-catchment fallback preparation is implemented; catchment weather, model, dispatch and report generation remain pending.
+catchment weather, spatial overlays and historical candidates now have validated
+read APIs and dated outage fallbacks. Hourly weather/model automation, ML training,
+dispatch and report generation remain pending; see the [ML checkpoint](data/ml-readiness.md).
 The participant requested a checkpoint before ML selection/training. Main remains
 unmerged until teammate review and passing CI. Payments, Qatom and payment
 administration are explicitly excluded.

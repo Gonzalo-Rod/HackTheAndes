@@ -11,9 +11,9 @@ Project: [HackTheAndes](https://supabase.com/dashboard/project/cdqnintcqryfbfjjl
 region `us-west-2`. Existing project API keys were retrieved; no additional
 project, subscription, API key, or administrator-password reset was created.
 
-Six migrations have been applied after rollback-only dry runs. They
-create PostGIS and 31 application tables, all with RLS and no anonymous or
-authenticated browser grants. A scoped `peruroad_backend` login has application
+Ten migrations have been applied after rollback-only dry runs. They create
+PostGIS and the application tables. Operational tables have RLS and no browser
+grants; `incident_updates` is the explicitly browser-readable revision signal. A scoped `peruroad_backend` login has application
 table permissions and its own RLS policies, without superuser, database/role
 creation, or RLS-bypass privileges. This login is trusted server infrastructure;
 application handlers must still enforce organization permissions, entitlements,
@@ -27,9 +27,9 @@ test IDs were removed afterward. Subsequent work activated ten-minute SUTRAN
 polling and populated 174 terrain elevations with provenance; repeat elevation
 import changed zero segment values. The sourced gazetteer now stores 67
 candidates with complete snapshot provenance; repeat import skips identical data.
-The current database suite has 17 tests, including isolated elevation and
-gazetteer fixtures. Dashboard integration, merged application
-incidents, and the risk model remain pending.
+The database suites include isolated geometry, elevation, gazetteer, catchment,
+source-snapshot and application security fixtures. The root dashboard now reads
+sanitized APIs and receives Realtime invalidation. The risk model remains pending.
 
 ## Tables and boundaries
 
@@ -56,8 +56,9 @@ No real contact data or demo customers were inserted during setup.
 Official source facts remain separate from application `incidents`; matching,
 cause classification, confidence, clearing, and segment assignment require
 explicit domain rules with B. No lifecycle status or closure duration was
-invented during official ingestion. Weather, warnings, catchments, risk, payments,
-and messaging tables are foundations and currently have no implemented pipeline.
+invented during official ingestion. Catchments, sampled slopes, weather captures and official susceptibility/warnings
+now have validated import pipelines. Risk, payments and messaging processing
+remain separate pending implementations.
 
 Segments retain geometry revision IDs, measured-distance fields, source section
 references, and null official kilometers until calibrated. Terrain elevation is
@@ -89,6 +90,9 @@ npm --prefix packages/road-data run supabase:configure
 npm --prefix packages/road-data run db:import-pe22
 npm --prefix packages/road-data run db:import-elevation
 npm --prefix packages/road-data run db:import-gazetteer
+npm --prefix packages/road-data run db:import-catchments
+npm --prefix packages/road-data run db:import-weather
+npm --prefix packages/road-data run db:import-model-inputs
 npm --prefix packages/road-data run sutran:ingest
 npm --prefix packages/road-data run db:check
 ```
@@ -149,9 +153,9 @@ data/unavailable UI handling still belongs to application read APIs.
 The protected ingestion handler is deployed and the ten-minute n8n schedule is
 active, with natural executions and database audits verified; see
 [the scheduler handoff](../workflows/n8n/README.md). Next, integrate validated read
-APIs and remaining spatial/weather inputs. Realtime/browser access policies,
-organization authorization, and paid-feature access need explicit application
-work; operational tables retain denied browser access. See
+APIs and spatial/weather inputs are now integrated; see the sections below.
+Organization authorization and paid-feature access are enforced server-side;
+operational tables retain denied browser access. See
 [the elevation handoff](../docs/data/pe22-elevation.md) for the new importer.
 The [gazetteer handoff](../docs/data/pe22-gazetteer.md) describes landmark imports
 and the distinction between source-reported kilometers and calibrated markers.
@@ -164,3 +168,20 @@ idempotency and answered-query usage events. `public.incident_updates` is the on
 browser-readable change signal; operational incident/report/contact tables remain
 private. Its statement trigger invalidates the integrated map through Supabase
 Realtime without publishing identities or content. See [the platform handoff](../docs/platform-api.md).
+
+## Validated model-input snapshots
+
+Migration `20261017230200` adds catchment snapshot provenance, and
+`20261018000000_data_snapshots.sql` adds complete validated weather, hazard, terrain
+and historical candidate captures keyed by dataset/key/geometry revision. Source
+hashes and capture dates are retained; older/equal imports preserve the newer
+committed data. The table has backend-only RLS and no browser grants.
+
+`db:import-model-inputs` atomically saves original susceptibility geometry and
+national warnings separately from the smaller display layer, and enriches
+catchment slope with its sampled-DEM provenance. Warning issue time remains null;
+validity assumptions stay in the validated payload. `weather_inputs` remains the
+earlier relational foundation; these captures use `data_snapshots` to preserve
+complete null-bearing hourly matrices without inventing issue times or rainfall.
+See the [input handoff](../docs/data/model-inputs.md) and
+[ML checkpoint](../docs/data/ml-readiness.md).

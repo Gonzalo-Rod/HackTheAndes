@@ -6,10 +6,13 @@ provides an idempotent ingestion service behind a transactional repository
 interface, backed by a verified Postgres repository. It also prepares and imports
 PE-22 geometry, 1-km display segments, terrain elevation, and a sourced landmark
 gazetteer with nearest-road lookup, prepares a coarse HydroBASINS catchment
-fallback with area-weighted weather query points, and probes public
-SENAMHI warning-layer access. The deployed authenticated job and active n8n
-schedule archive SUTRAN alerts every ten minutes; weather ingestion and risk
-models remain future work under the [Team Plan](../../docs/team-plan.md).
+fallback with area-weighted weather query points. Catchment weather captures,
+sampled slopes, official INGEMMET/SENAMHI overlays and historical event candidates
+now have validated contracts, persistence and application read APIs; see the
+[input handoff](../../docs/data/model-inputs.md). The deployed authenticated job
+and active n8n schedule archive SUTRAN alerts every ten minutes. Hourly weather/
+model automation and risk training remain pending the
+[ML checkpoint](../../docs/data/ml-readiness.md).
 
 Continue Role C work on `feat/data-model` and consolidated
 [PR #10](https://github.com/Gonzalo-Rod/HackTheAndes/pull/10). B's protected HTTP
@@ -86,6 +89,19 @@ import { gazetteerSchema } from "@peruroad/road-data/locations/contracts";
 import { loadBundledCatchments } from "@peruroad/road-data/catchments";
 import { catchmentSnapshotSchema } from "@peruroad/road-data/catchments/contracts";
 
+// Weather preparation, pure aggregation and browser-safe schemas.
+import { prepareCatchmentWeather, summarizeOperationalWeather } from "@peruroad/road-data/weather";
+import { weatherCaptureSchema } from "@peruroad/road-data/weather/contracts";
+
+// Validated source snapshots and transactional spatial enrichment.
+import {
+  createDataSnapshotRepository,
+  persistHazards,
+  persistTerrain,
+} from "@peruroad/road-data/model-inputs";
+import { preparedHazardsSchema } from "@peruroad/road-data/model-inputs/spatial-contracts";
+import { historicalEventsSchema } from "@peruroad/road-data/model-inputs/event-contracts";
+
 // Server-only database pool and durable official-source repository.
 import {
   createDatabasePool,
@@ -112,8 +128,8 @@ application's dependency installation and lockfile update with A; a workspace
 can replace the file dependency later if the team adopts one. The backend entry
 point uses Node.js APIs and belongs in server code; client components use the
 `/contracts`, `/geometry/contracts`, `/elevation/contracts`, `/locations/contracts`,
-or `/catchments/contracts`
-entry point.
+`/catchments/contracts`, `/weather/contracts`, `/model-inputs/spatial-contracts`,
+or `/model-inputs/event-contracts` entry point.
 This package is private and is not published to npm.
 
 ## PE-22 geometry, catchments and SENAMHI access
@@ -205,3 +221,15 @@ and activation checks.
 SUTRAN/Supabase persistence through the local handler, including denied missing
 credentials and repeated execution IDs. It requires `ROAD_DATA_JOB_SECRET` in
 the ignored environment file and does not deploy or start scheduled polling.
+
+## Model input capture and training checkpoint
+
+See the [reproduction commands, API contracts, source terms and fallback table](../../docs/data/model-inputs.md).
+`weather:capture`, `hazards:capture`, `hydrography:capture`, `terrain:capture` and
+`events:capture` are operator commands; they do not start a schedule.
+`hazards:prepare` works offline from committed source archives; `events:prepare`
+uses the ignored public XLSX captures downloaded by `events:capture`.
+`db:import-weather` and `db:import-model-inputs` import validated committed inputs.
+`model-inputs:check` audits coverage and regenerates the hash manifest.
+No model is trained by these commands. The registry retains incomplete event
+coverage, unknown negatives and missing forecast hours explicitly.

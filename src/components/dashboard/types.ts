@@ -19,6 +19,8 @@ export interface LayerState {
   corridor: boolean;
   rain: boolean;
   catchments: boolean;
+  susceptibility: boolean;
+  officialWarnings: boolean;
   rivers: boolean;
   riversOpacity: number;
   regions: boolean;
@@ -38,6 +40,8 @@ export const DEFAULT_LAYERS: LayerState = {
   corridor: true,
   rain: true,
   catchments: true,
+  susceptibility: false,
+  officialWarnings: true,
   rivers: true,
   riversOpacity: 0.8,
   regions: true,
