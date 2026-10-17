@@ -29,6 +29,11 @@ test pin data. Import the JSON file through n8n's editor to restore it elsewhere
 
 ## Backend handoff for member A
 
+The handler is now mounted in the [API application](../../apps/api/README.md)
+at `apps/api/src/app/api/jobs/sutran/route.ts`; its public deployment remains
+pending. The example below also applies when integrating with another Node.js
+application.
+
 Add the local package dependency and build it as described in
 [the package README](../../packages/road-data/README.md). Mount its Web Request
 handler at `POST /api/jobs/sutran` in the deployed Node.js application. A Next.js

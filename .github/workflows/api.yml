@@ -1,0 +1,33 @@
+name: API quality
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  api:
+    runs-on: ubuntu-latest
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: |
+            packages/road-data/package-lock.json
+            apps/api/package-lock.json
+      - run: npm --prefix packages/road-data ci
+      - run: npm --prefix packages/road-data run build
+      - run: npm --prefix apps/api ci
+      - run: npm --prefix apps/api run lint
+      - run: npm --prefix apps/api run format:check
+      - run: npm --prefix apps/api run typecheck
+      - run: npm --prefix apps/api test
+      - run: npm --prefix apps/api run build
+      - run: npm --prefix apps/api run test:http

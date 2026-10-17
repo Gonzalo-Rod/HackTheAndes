@@ -41,6 +41,12 @@ change, including code written by agents.
   for application code and to `packages/road-data/` for the Data & Model package.
   The package mirrors the same layers and exposes compiled entry points for
   server adapters and shared contracts; consumers use those entry points.
+- **API application.** The initial Next.js server integration lives in `apps/api/`
+  with independent tooling and a local dependency on `packages/road-data/`.
+  See `apps/api/README.md`; build the data package before the API. Keep this
+  application separate from teammates' root frontend setup until integration is
+  coordinated. Run Next.js type generation and builds sequentially because both
+  manage `.next/`. Do not include local environment files in deployable artifacts.
 - **Shared database.** Team-wide SQL migrations live in `supabase/migrations/`.
   Database operator commands and the initial Postgres adapter live in
   `packages/road-data/`; see `supabase/README.md`. Never edit an applied migration:

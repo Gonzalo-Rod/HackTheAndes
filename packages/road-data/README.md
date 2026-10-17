@@ -152,6 +152,9 @@ runtime ingestion uses the scoped `peruroad_backend` login.
 
 ## Scheduled ingestion handoff
 
+The [API application](../../apps/api/README.md) now consumes this package and
+mounts the protected job at `POST /api/jobs/sutran`; public deployment is pending.
+
 See [the n8n workflow guide](../../workflows/n8n/README.md) for the inactive workflow,
 `POST /api/jobs/sutran` integration, credential setup, and activation checks.
 `npm --prefix packages/road-data run sutran:job:check` explicitly checks real
