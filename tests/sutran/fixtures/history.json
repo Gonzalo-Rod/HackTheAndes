@@ -1,0 +1,15 @@
+{
+  "success": true,
+  "data": [
+    {
+      "fecha": "2026-10-11T19:56:17.762Z",
+      "tipo": "cambio_estado_via",
+      "estadoNuevo": "normal"
+    },
+    {
+      "fecha": "2026-10-11T12:59:33.268Z",
+      "tipo": "publicacion",
+      "estadoNuevo": null
+    }
+  ]
+}

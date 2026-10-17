@@ -1,0 +1,29 @@
+{
+  "name": "peruroad-climate",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24.3.0"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "sutran:check": "node scripts/check-sutran.ts",
+    "lint": "eslint src tests scripts vitest.config.ts --max-warnings=0",
+    "format": "prettier --write src tests scripts package.json package-lock.json tsconfig.json vitest.config.ts eslint.config.mjs .prettierrc.json .github/workflows/ci.yml README.md docs/data",
+    "format:check": "prettier --check src tests scripts package.json package-lock.json tsconfig.json vitest.config.ts eslint.config.mjs .prettierrc.json .github/workflows/ci.yml README.md docs/data"
+  },
+  "dependencies": {
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^24.0.0",
+    "eslint": "^10.13.0",
+    "prettier": "^3.9.10",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.71.2",
+    "vitest": "^5.0.5"
+  }
+}

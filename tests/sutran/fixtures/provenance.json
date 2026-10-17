@@ -1,0 +1,7 @@
+{
+  "capturedAt": "2026-10-17T18:33:22.143315+00:00",
+  "alertsUrl": "https://api.sigea.sutran.gob.pe/public/alerts",
+  "historyUrl": "https://api.sigea.sutran.gob.pe/public/alerts/98a4c1d9-b1ad-4069-aa26-33941df1f38b/historial",
+  "notes": "Real public API responses. No credentials or contact details included. Static test fixtures, not current road advice.",
+  "historyCapturedAt": "2026-10-17T18:34:39.498106+00:00"
+}
