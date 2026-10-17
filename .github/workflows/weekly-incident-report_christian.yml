@@ -1,0 +1,102 @@
+# Daily collection for the weekly Carretera Central incident report.
+#
+# Runs scripts/weekly-incident-report_christian.ts, commits the week's state file and report
+# (docs/research/weekly/) to a bot branch, and keeps one pull request open for review.
+# Collection is daily because SUTRAN lists only current alerts: an alert that expires
+# mid-week would otherwise be missing from the weekly report. No secrets are needed; every
+# source is public.
+#
+# Scheduled runs start once this file is on the default branch. Repository settings needed:
+# Settings → Actions → General → Workflow permissions → "Read and write permissions" and
+# "Allow GitHub Actions to create and approve pull requests".
+name: Weekly PE-22 incident report
+
+on:
+  schedule:
+    # 12:00 UTC is 07:00 in Lima (UTC−05:00, no daylight saving time).
+    - cron: "0 12 * * *"
+  workflow_dispatch:
+    inputs:
+      week_of:
+        description: "Update only the week containing this date (YYYY-MM-DD). Leave empty for the current week."
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: weekly-incident-report-christian
+  cancel-in-progress: false
+
+env:
+  REPORT_BRANCH: bot/weekly-incident-report-christian
+  BASE_BRANCH: ${{ github.ref_name }}
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Switch to the report branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git ls-remote --exit-code --heads origin "$REPORT_BRANCH" > /dev/null; then
+            git checkout -B "$REPORT_BRANCH" "origin/$REPORT_BRANCH"
+            # Take code changes from the base branch; on report files the bot's newer data wins.
+            git merge --no-edit -X ours "origin/$BASE_BRANCH"
+          else
+            git checkout -B "$REPORT_BRANCH"
+          fi
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Collect incidents and render the report
+        env:
+          WEEK_OF: ${{ inputs.week_of }}
+        run: |
+          if [ -n "$WEEK_OF" ]; then
+            npx tsx scripts/weekly-incident-report_christian.ts --week-of "$WEEK_OF"
+          else
+            npx tsx scripts/weekly-incident-report_christian.ts
+          fi
+
+      - name: Commit and push the report
+        run: |
+          git add docs/research/weekly
+          if git diff --cached --quiet; then
+            echo "No report changes in this run."
+          else
+            git commit -m "Update weekly PE-22 incident report"
+          fi
+          if [ "$(git rev-list --count "origin/$BASE_BRANCH..HEAD")" -gt 0 ]; then
+            git push origin "$REPORT_BRANCH"
+          fi
+
+      - name: Open a pull request if none is open
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "$(git rev-list --count "origin/$BASE_BRANCH..HEAD")" -eq 0 ]; then
+            echo "Nothing to review."
+            exit 0
+          fi
+          open_pr=$(gh pr list --head "$REPORT_BRANCH" --state open --json number --jq '.[0].number')
+          if [ -n "$open_pr" ]; then
+            echo "Pull request #$open_pr is already open."
+            exit 0
+          fi
+          gh pr create --head "$REPORT_BRANCH" --base "$BASE_BRANCH" \
+            --title "Weekly PE-22 incident report" \
+            --body "Automated by .github/workflows/weekly-incident-report_christian.yml. SUTRAN and INDECI entries are listed as reported; check the 'News to review' section of each weekly report before merging."
