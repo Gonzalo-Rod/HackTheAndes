@@ -1,46 +1,52 @@
-# Instrucciones del repositorio
+# Repository instructions
 
-## Contexto
+## Language
 
-Antes de trabajar, lee `inicio/README.md` y las entradas recientes de
-`inicio/AVANCES.md`. El track elegido es **Clima y Territorio** (`environmental`).
-La rúbrica vigente es la comunicada por el participante: 30% complejidad técnica,
-25% funcionamiento, 20% calidad técnica, 15% problema e impacto y 10% claridad.
-No la sustituyas por la rúbrica anterior que todavía aparece en la guía web.
+Use English for all future work: conversations, documentation, progress entries,
+code comments, commit messages, and project content. Keep proper names and
+required external identifiers unchanged.
 
-## Registro automático durante las sesiones
+## Context
 
-Actualiza `inicio/AVANCES.md` sin que el usuario tenga que pedirlo, al terminar
-una tarea con cambios relevantes, tomar una decisión de alcance o arquitectura,
-verificar una demo, recoger evidencia de usuarios o encontrar un bloqueo.
-Registra también el resultado antes de cerrar la sesión. Agrupa cambios menores
-en una entrada útil y evita duplicados. No es necesario registrar consultas sin
-hallazgos ni cada edición de un archivo.
+Before working, read `getting-started/README.md` and the recent entries in
+`getting-started/PROGRESS.md`. The chosen track is **Climate and Territory**
+(`environmental`). The current rubric was provided by the participant: 30%
+technical complexity, 25% functionality, 20% technical quality, 15% problem and
+impact, and 10% clarity. Do not replace it with the older rubric still shown in
+the online guide at the time of our initial review.
 
-- Añade entradas al final; conserva el historial. Si corriges un dato, deja
-  constancia de la corrección.
-- Usa fecha y hora reales de `America/Lima` con zona `-05:00`.
-- Cada avance debe ser un único párrafo breve y puntual, de 2 a 4 frases,
-  precedido por fecha y un título corto. Cuenta qué cambió y el siguiente paso;
-  añade una decisión, evidencia o bloqueo solo cuando sea relevante. Evita
-  listas de campos, secciones y explicaciones extensas.
-- Distingue resultados comprobados, hipótesis y pendientes. No inventes pruebas
-  con usuarios, métricas, despliegues ni funcionalidades completadas.
-- Enlaza archivos, commits o demos cuando existan. No crees commits solamente
-  para llenar la bitácora.
-- No guardes secretos, códigos de beneficios, credenciales ni datos personales.
+## Automatic progress logging during sessions
 
-Este mecanismo funciona cuando un agente que respeta este archivo trabaja en el
-repositorio. No existe un proceso en segundo plano: los cambios hechos fuera de
-esas sesiones requieren su propia entrada.
+Update `getting-started/PROGRESS.md` without waiting for the user to ask after
+completing a task with meaningful changes, making a scope or architecture
+decision, verifying a demo, gathering user evidence, or identifying a blocker.
+Record the outcome before ending the session. Group minor changes into a useful
+entry and avoid duplicates. Queries without findings and individual file edits
+do not each need an entry.
 
-## Avances para la organización
+- Append entries and preserve the history. Record corrections explicitly.
+- Use the actual date and time in `America/Lima`, with the `-05:00` offset.
+- Each update must be one short, focused paragraph of 2 to 4 sentences, preceded
+  by a timestamp and a short title. State what changed and the next step; include
+  a decision, evidence, or blocker only when relevant. Avoid field lists,
+  subsections, and lengthy explanations.
+- Distinguish verified results, hypotheses, and pending work. Never invent user
+  tests, metrics, deployments, or completed features.
+- Link files, commits, or demos when available. Do not create commits just to
+  populate the log.
+- Never store secrets, benefit codes, credentials, or personal data.
 
-El registro local es automático; publicar mediante `andes` requiere una
-instrucción del usuario que autorice esa publicación, incluso una autorización
-permanente para la sesión. No publiques solamente por haber actualizado el MD.
+This mechanism works when an agent following this file works in the repository.
+There is no background process: changes made outside those sessions need their
+own entry.
 
-Cuando se autorice, revisa el historial remoto, prepara un resumen factual con
-`inicio/PLANTILLA_AVANCE.md` y publica únicamente el avance nuevo. Verifica el
-contenido devuelto por el CLI antes de registrar que se publicó. Si una escritura
-queda en estado incierto, consulta el historial antes de reintentar.
+## Updates for the organizers
+
+Local logging is automatic; publishing through `andes` requires a user
+instruction authorizing publication, including standing authorization for the
+session. Updating the Markdown file alone does not authorize publication.
+
+When authorized, review the remote history, prepare a factual summary using
+`getting-started/PROGRESS_TEMPLATE.md`, and publish only the new update. Verify
+the content returned by the CLI before recording it as published. If a write has
+an uncertain outcome, check the history before retrying.
