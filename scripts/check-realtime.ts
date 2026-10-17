@@ -52,7 +52,7 @@ async function main() {
     process.exitCode = 1;
   } finally {
     if (timer) clearTimeout(timer);
-    unsubscribe();
+    await unsubscribe();
     await pool.end();
   }
 }

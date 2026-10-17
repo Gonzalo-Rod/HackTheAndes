@@ -12,7 +12,7 @@ export function useCommunityIncidents() {
   const [connection, setConnection] = useState<RealtimeState>("connecting");
   useEffect(() => {
     let cancelled = false;
-    let unsubscribe: (() => void) | undefined;
+    let unsubscribe: (() => Promise<void>) | undefined;
     let running = false;
     async function load() {
       if (running || cancelled) return;
@@ -40,7 +40,7 @@ export function useCommunityIncidents() {
       },
     ).then(
       (stop) => {
-        if (cancelled) stop();
+        if (cancelled) void stop();
         else unsubscribe = stop;
       },
       () => {
@@ -49,7 +49,7 @@ export function useCommunityIncidents() {
     );
     return () => {
       cancelled = true;
-      unsubscribe?.();
+      void unsubscribe?.();
       window.clearInterval(timer);
       window.clearTimeout(initial);
     };
