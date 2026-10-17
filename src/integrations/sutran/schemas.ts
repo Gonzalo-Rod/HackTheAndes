@@ -63,3 +63,15 @@ export const SutranAlertDetailSchema = z.looseObject({
 
 /** Every SUTRAN response is wrapped as { success, data }. */
 export const envelope = <T extends z.ZodType>(data: T) => z.looseObject({ success: z.boolean().optional(), data });
+
+/** Validates each element independently: invalid elements are counted and skipped, never used. */
+export function parseEach<T>(items: unknown[], schema: z.ZodType<T>): { valid: T[]; invalidCount: number } {
+  const valid: T[] = [];
+  let invalidCount = 0;
+  for (const item of items) {
+    const parsed = schema.safeParse(item);
+    if (parsed.success) valid.push(parsed.data);
+    else invalidCount++;
+  }
+  return { valid, invalidCount };
+}

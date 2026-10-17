@@ -158,6 +158,15 @@ export function normalizeSutranEvidence(records: SutranEvidenceRecord[]): AlertE
     .filter((evidence) => evidence.url !== null || evidence.posterUrl !== null);
 }
 
+/**
+ * Whether an alert is in force on a Lima calendar day (YYYY-MM-DD). SUTRAN validity dates are
+ * whole days, so an alert stays in force through its `validUntil` day. Used for snapshots,
+ * whose `vencida` flags were computed when they were captured.
+ */
+export function isInForceOn(alert: Pick<RoadAlert, "validFrom" | "validUntil">, limaDate: string): boolean {
+  return (alert.validFrom === null || alert.validFrom <= limaDate) && (alert.validUntil === null || alert.validUntil >= limaDate);
+}
+
 export function latestActionAt(alerts: RoadAlert[]): string | null {
   return alerts.reduce<string | null>(
     (latest, alert) => (alert.lastActionAt && (!latest || alert.lastActionAt > latest) ? alert.lastActionAt : latest),

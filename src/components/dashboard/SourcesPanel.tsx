@@ -6,6 +6,12 @@ import type { CorridorData } from "@/contracts/corridor";
 import type { AlertsMeta } from "@/contracts/road-alerts";
 import { formatDateTime } from "@/lib/format";
 
+const FALLBACK_LABELS: Record<AlertsMeta["fallback"], string> = {
+  none: "Datos al momento de la consulta",
+  cache: "Caché del servidor (SUTRAN no respondió)",
+  snapshot: "Instantánea guardada (SUTRAN no respondió)",
+};
+
 interface SourcesPanelProps {
   meta: AlertsMeta | null;
   corridor: CorridorData | null;
@@ -28,7 +34,8 @@ export function SourcesPanel({ meta, corridor }: SourcesPanelProps) {
           cada 2 minutos.
         </p>
         <dl className="pr-kv pr-kv--compact">
-          <div className="pr-kv__row"><dt>Última consulta</dt><dd>{meta ? formatDateTime(meta.fetchedAt) : "—"}</dd></div>
+          <div className="pr-kv__row"><dt>Modo</dt><dd>{meta ? FALLBACK_LABELS[meta.fallback] : "—"}</dd></div>
+          <div className="pr-kv__row"><dt>{meta?.fallback === "snapshot" ? "Instantánea guardada" : "Última consulta"}</dt><dd>{meta ? formatDateTime(meta.fetchedAt) : "—"}</dd></div>
           <div className="pr-kv__row"><dt>Última acción SUTRAN</dt><dd>{meta ? formatDateTime(meta.latestActionAt) : "—"}</dd></div>
           <div className="pr-kv__row"><dt>Registros descartados</dt><dd>{meta ? `${meta.skippedCount} (vencidos, no vigentes o inválidos)` : "—"}</dd></div>
         </dl>
@@ -59,6 +66,7 @@ export function SourcesPanel({ meta, corridor }: SourcesPanelProps) {
       <section className="pr-source pr-source--limits">
         <h3>Limitaciones conocidas</h3>
         <ul>
+          <li>Si SUTRAN no responde y el servidor no tiene datos recientes, se muestra una instantánea real guardada con su fecha (sin las alertas ya vencidas).</li>
           <li>SUTRAN solo publica alertas vigentes: no hay archivo público de alertas pasadas. La línea de tiempo reproduce las alertas de hoy según su fecha de evento.</li>
           <li>Las fechas de evento no tienen hora; se ubican a las 12:00 (hora de Lima).</li>
           <li>El km publicado por SUTRAN y el km interpolado sobre la geometría del MTC difieren en ~1,5 km en la PE-22.</li>

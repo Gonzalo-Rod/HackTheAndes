@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { SUTRAN_ALERT_PE22, SUTRAN_ALERT_TUMBES } from "@/test/fixtures/sutran";
 
 import {
+  isInForceOn,
   latestActionAt,
   normalizeSutranAlert,
   normalizeSutranAlerts,
@@ -117,5 +118,23 @@ describe("history and evidence", () => {
         { tipo: "video", url: "ftp://x", posterUrl: null },
       ]),
     ).toEqual([{ kind: "foto", url: "https://cdn.test/a.jpg", posterUrl: null, name: "a.jpg" }]);
+  });
+});
+
+describe("isInForceOn (Lima calendar days)", () => {
+  const window = { validFrom: "2026-10-10", validUntil: "2026-10-31" };
+
+  it("includes both boundary days", () => {
+    expect(isInForceOn(window, "2026-10-10")).toBe(true);
+    expect(isInForceOn(window, "2026-10-31")).toBe(true);
+  });
+
+  it("excludes the day before and the day after", () => {
+    expect(isInForceOn(window, "2026-10-09")).toBe(false);
+    expect(isInForceOn(window, "2026-11-01")).toBe(false);
+  });
+
+  it("treats missing dates as open-ended", () => {
+    expect(isInForceOn({ validFrom: null, validUntil: null }, "2030-01-01")).toBe(true);
   });
 });

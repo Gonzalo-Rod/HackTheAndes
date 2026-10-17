@@ -6,6 +6,7 @@ import { logger } from "@/lib/logger";
 
 import {
   envelope,
+  parseEach,
   SutranAlertDetailSchema,
   SutranAlertRecordSchema,
   SutranEvidenceRecordSchema,
@@ -42,18 +43,6 @@ interface SutranClientOptions {
 
 function formatError(operation: string): UpstreamError {
   return new UpstreamError(`Formato inesperado en ${operation}`, "invalid_body", PROVIDER);
-}
-
-/** Validates each element independently: invalid elements are counted and skipped, never used. */
-function parseEach<T>(items: unknown[], schema: z.ZodType<T>): { valid: T[]; invalidCount: number } {
-  const valid: T[] = [];
-  let invalidCount = 0;
-  for (const item of items) {
-    const parsed = schema.safeParse(item);
-    if (parsed.success) valid.push(parsed.data);
-    else invalidCount++;
-  }
-  return { valid, invalidCount };
 }
 
 export function createSutranClient({ baseUrl, fetchImpl, sleep }: SutranClientOptions): RoadAlertsProvider {

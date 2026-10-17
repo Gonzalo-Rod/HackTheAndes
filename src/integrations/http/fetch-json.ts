@@ -19,8 +19,9 @@ export class UpstreamError extends Error {
     readonly kind: UpstreamErrorKind,
     readonly provider: string,
     readonly status?: number,
+    options?: { cause?: unknown },
   ) {
-    super(message);
+    super(message, options);
     this.name = "UpstreamError";
   }
 }
@@ -82,8 +83,9 @@ async function attemptOnce<T>(
     }
   } catch (error) {
     const timedOut = controller.signal.aborted;
-    const message = timedOut ? `Sin respuesta en ${Math.round(timeoutMs / 1000)} s` : error instanceof Error ? error.message : "Error de red";
-    return { ok: false, error: new UpstreamError(message, timedOut ? "timeout" : "network", options.provider) };
+    // Messages reach users; runtime error text (e.g. Node's "fetch failed") is English and opaque.
+    const message = timedOut ? `Sin respuesta en ${Math.round(timeoutMs / 1000)} s` : "no se pudo conectar";
+    return { ok: false, error: new UpstreamError(message, timedOut ? "timeout" : "network", options.provider, undefined, { cause: error }) };
   } finally {
     clearTimeout(timer);
   }

@@ -2,7 +2,7 @@
 
 import { Icon, LogoMark } from "@/components/icons";
 import type { AlertsMeta } from "@/contracts/road-alerts";
-import { formatRelative, formatTime, formatToday } from "@/lib/format";
+import { formatDateTime, formatRelative, formatTime, formatToday } from "@/lib/format";
 
 import type { Scope } from "./types";
 
@@ -27,11 +27,14 @@ function Freshness({ meta, loading, refreshing, error, now, onRefresh }: Pick<To
   const tone = error || meta?.stale ? "warn" : meta && ageMs > STALE_AFTER_MS ? "warn" : meta ? "ok" : "idle";
   let label = "Consultando SUTRAN…";
   if (meta && now) {
-    label = meta.stale ? `Datos en caché · ${formatRelative(meta.fetchedAt, now)}` : `SUTRAN · consultado ${formatRelative(meta.fetchedAt, now)}`;
+    const age = formatRelative(meta.fetchedAt, now);
+    label = meta.fallback === "snapshot" ? `Instantánea SUTRAN · ${age}` : meta.stale ? `Datos en caché · ${age}` : `SUTRAN · consultado ${age}`;
   } else if (!loading && error) {
     label = "SUTRAN no disponible";
   }
-  const title = meta
+  const title = meta?.fallback === "snapshot"
+    ? `SUTRAN no responde. Instantánea guardada el ${formatDateTime(meta.fetchedAt)}; se reintenta cada 2 min.`
+    : meta
     ? `Consulta a SUTRAN: ${formatTime(Date.parse(meta.fetchedAt))}. Última acción publicada por SUTRAN: ${meta.latestActionAt ? formatTime(Date.parse(meta.latestActionAt)) : "—"}. Se actualiza cada 2 min.`
     : undefined;
   return (

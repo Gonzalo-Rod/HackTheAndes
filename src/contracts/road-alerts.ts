@@ -53,6 +53,8 @@ export const AlertsMetaSchema = z.object({
   latestActionAt: IsoDateTimeSchema.nullable(),
   /** True when serving the last valid response after an upstream failure. */
   stale: z.boolean(),
+  /** Where stale data came from: this server's cache, or the bundled SUTRAN snapshot. */
+  fallback: z.enum(["none", "cache", "snapshot"]),
   staleReason: z.string().nullable(),
   /** Records dropped because they were expired, not yet valid or failed validation. */
   skippedCount: z.number().int().nonnegative(),

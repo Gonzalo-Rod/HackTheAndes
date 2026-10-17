@@ -146,3 +146,57 @@ describe("concurrency", () => {
     expect(provider.listAlerts).toHaveBeenCalledTimes(1);
   });
 });
+
+describe("snapshot fallback", () => {
+  const SNAPSHOT = { capturedAt: "2026-10-17T19:53:45.465Z", records: [SUTRAN_ALERT_PE22, SUTRAN_ALERT_TUMBES] };
+  const failingList = () =>
+    vi.fn(async () => {
+      throw new UpstreamError("Sin respuesta en 8 s", "timeout", "sutran");
+    });
+
+  it("serves the snapshot, labeled with its capture time, when SUTRAN fails on a cold start", async () => {
+    const service = createRoadAlertsService({ provider: fakeProvider({ listAlerts: failingList() }), snapshot: SNAPSHOT, now: () => T0 });
+    const result = await service.getCurrentAlerts();
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.value.alerts).toHaveLength(2);
+    expect(result.value.meta).toMatchObject({ stale: true, fallback: "snapshot", fetchedAt: SNAPSHOT.capturedAt });
+    expect(result.value.meta.staleReason).toContain("instantánea");
+  });
+
+  it("drops snapshot alerts whose validity ended before today in Lima", async () => {
+    // 2026-11-01 00:30 in Lima: both fixtures were valid only until 2026-10-31.
+    const afterValidity = Date.parse("2026-11-01T05:30:00Z");
+    const service = createRoadAlertsService({ provider: fakeProvider({ listAlerts: failingList() }), snapshot: SNAPSHOT, now: () => afterValidity });
+    const result = await service.getCurrentAlerts();
+    expect(result.ok && result.value.alerts).toEqual([]);
+    expect(result.ok && result.value.meta.skippedCount).toBe(2);
+  });
+
+  it("keeps alerts on their last valid day at 23:30 Lima time", async () => {
+    const lastDayLate = Date.parse("2026-11-01T04:30:00Z"); // 2026-10-31 23:30 in Lima
+    const service = createRoadAlertsService({ provider: fakeProvider({ listAlerts: failingList() }), snapshot: SNAPSHOT, now: () => lastDayLate });
+    const result = await service.getCurrentAlerts();
+    expect(result.ok && result.value.alerts).toHaveLength(2);
+  });
+
+  it("prefers the server cache over the snapshot", async () => {
+    let now = T0;
+    const listAlerts = vi
+      .fn<RoadAlertsProvider["listAlerts"]>()
+      .mockResolvedValueOnce({ records: [SUTRAN_ALERT_PE22], invalidCount: 0 })
+      .mockRejectedValueOnce(new UpstreamError("HTTP 503", "http", "sutran", 503));
+    const service = createRoadAlertsService({ provider: fakeProvider({ listAlerts }), snapshot: SNAPSHOT, now: () => now });
+    await service.getCurrentAlerts();
+    now += ALERTS_CACHE_TTL_MS + 1;
+    const result = await service.getCurrentAlerts();
+    expect(result.ok && result.value.meta.fallback).toBe("cache");
+    expect(result.ok && result.value.alerts).toHaveLength(1);
+  });
+
+  it("marks fresh responses as not using a fallback", async () => {
+    const service = createRoadAlertsService({ provider: fakeProvider(), snapshot: SNAPSHOT, now: () => T0 });
+    const result = await service.getCurrentAlerts();
+    expect(result.ok && result.value.meta.fallback).toBe("none");
+  });
+});
