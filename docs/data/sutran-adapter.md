@@ -10,21 +10,23 @@ that a missing incident has cleared.
 
 | File                                      | Responsibility                                                                          |
 | ----------------------------------------- | --------------------------------------------------------------------------------------- |
-| `src/contracts/road-alerts.ts`            | Provider-independent alert and history types with shared Zod schemas, plus batch types. |
-| `src/integrations/sutran/schema.ts`       | Runtime validation of consumed SUTRAN fields using Zod.                                 |
-| `src/domain/road-data/parsing.ts`         | Pure calendar-date and kilometer parsing.                                               |
-| `src/integrations/sutran/normalize.ts`    | Pure conversion from validated source data to internal records.                         |
-| `src/integrations/sutran/adapter.ts`      | Fetch, validate, select records, and report data-quality issues.                        |
-| `src/integrations/http/json-transport.ts` | Shared JSON HTTP wrapper with bounded retries, timeouts, and structured logs.           |
+| `packages/road-data/src/contracts/road-alerts.ts`            | Provider-independent alert and history types with shared Zod schemas, plus batch types. |
+| `packages/road-data/src/integrations/sutran/schema.ts`       | Runtime validation of consumed SUTRAN fields using Zod.                                 |
+| `packages/road-data/src/domain/road-data/parsing.ts`         | Pure calendar-date and kilometer parsing.                                               |
+| `packages/road-data/src/integrations/sutran/normalize.ts`    | Pure conversion from validated source data to internal records.                         |
+| `packages/road-data/src/integrations/sutran/adapter.ts`      | Fetch, validate, select records, and report data-quality issues.                        |
+| `packages/road-data/src/integrations/http/json-transport.ts` | Shared JSON HTTP wrapper with bounded retries, timeouts, and structured logs.           |
 
-The small root package supplies TypeScript tooling while member A's app scaffold
-is pending. Its scripts and dependency entries can be merged into the Next.js
-package without moving or rewriting the adapter.
+The adapter is part of the independent `packages/road-data/` package, with its
+own dependencies, lockfile, TypeScript, ESLint, and Vitest configuration. Its
+[README](../../packages/road-data/README.md) contains commands and local-package
+integration instructions. Member A owns the application's root setup; this
+package does not introduce a root application manifest or workspace.
 
 ## Usage
 
 ```ts
-import { createFetchJsonTransport, createSutranAdapter } from "./src/integrations/sutran/index.ts";
+import { createFetchJsonTransport, createSutranAdapter } from "@peruroad/road-data";
 
 const adapter = createSutranAdapter({
   transport: createFetchJsonTransport(),
@@ -39,7 +41,7 @@ if (!alerts.complete) {
 }
 ```
 
-The adapter uses the shared wrapper in `src/integrations/http/`. Member A can
+The adapter uses the shared wrapper in `packages/road-data/src/integrations/http/`. Member A can
 reuse or replace that implementation through the `JsonTransport` interface:
 
 ```ts
@@ -124,7 +126,7 @@ Checked on **October 17, 2026** using these official service endpoints:
   event fields `fecha`, `tipo`, and `estadoNuevo`; the captured response includes
   a publication and a change to `normal`, newest first upstream.
 
-Exact captures and provenance are in `tests/sutran/fixtures/`. They are static
+Exact captures and provenance are in `packages/road-data/tests/sutran/fixtures/`. They are static
 test data and do not indicate current travel conditions. Access succeeded without
 a login, API key, or browser. These undocumented endpoints can change; terms of
 reuse and availability guarantees remain unverified.

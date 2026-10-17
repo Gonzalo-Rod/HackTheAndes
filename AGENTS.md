@@ -31,6 +31,16 @@ change, including code written by agents.
 
 ### Structure and design
 
+- **Independent Data & Model package.** Member C's implementation lives in
+  `packages/road-data/`, with its own package manifest, lockfile, TypeScript,
+  ESLint, Vitest, and build configuration. Run its commands with
+  `npm --prefix packages/road-data ...`. Keep this tooling inside the package
+  while teammates develop the application locally. Coordinate root application
+  dependencies and workspace setup with member A during integration.
+- **Path scope.** The `src/` paths below are relative to the application root
+  for application code and to `packages/road-data/` for the Data & Model package.
+  The package mirrors the same layers and exposes compiled entry points for
+  server adapters and shared contracts; consumers use those entry points.
 - **Separation of concerns.** Keep four layers and import only downward:
   - `src/app/` (routes, pages, route handlers): parse input, call a service,
     shape the response. No business rules here.
