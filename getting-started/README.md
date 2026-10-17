@@ -24,11 +24,16 @@ translations; CLI identifiers remain unchanged.
 
 ## Current rubric for this team
 
-**Source: update provided by the participant on October 17, 2026.** The guide
+**Source: update provided by the participant on October 17, 2026, confirmed by
+the organizers' evaluation sheet ("Cómo se evalúa a los equipos").** The guide
 reviewed that day still showed the previous three criteria: 30% traction, 40%
-technical effort, and 30% pitch. We use the following five-criterion update to
-prepare the project. We do not carry over the previous scoring scale or formula;
-the current scale still needs confirmation from the organizers.
+technical effort, and 30% pitch. Each of the 5 judges scores each criterion from
+1 to 5; scores are weighted and summed, and the final score is the average across
+judges (maximum 3.75 technical + 1.25 product). An optional traction bonus of up
+to 0.5 is added on top, for a maximum of 5.5. Ties are broken by technical
+complexity, then functionality. To be scored, a team needs a deployed public URL,
+a live demo, and the GitHub repository, submitted by **Sunday, October 18, 09:00**.
+The [Team Plan](../docs/team-plan.md) details each criterion and the bonus.
 
 | Weight | Area | Criterion | What is assessed |
 | --- | --- | --- | --- |

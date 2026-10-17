@@ -2,7 +2,7 @@
 
 **Track:** Clima y Territorio
 **Project name:** *PeruRoad Climate*
-**One line:** A 3D road-risk dashboard for the Carretera Central that combines official climate, hazard and road data with incident reports sent by people on the road over WhatsApp, and warns subscribers and drivers by WhatsApp message or phone call.
+**One line:** A 3D road-risk dashboard for the Carretera Central that combines official climate, hazard and road data with incident reports sent by people on the road over WhatsApp, warns drivers by WhatsApp message or phone call, and tells transport companies whether to dispatch a vehicle now, later, or not at all.
 
 ---
 
@@ -14,27 +14,51 @@
 2. **Estimate** the exposure of each road segment to huaicos, landslides and floods, and show **real-time** status plus a **24–72 h forecast** risk level.
 3. **Collect and verify** reports from people near incidents through WhatsApp (text, voice note, photo, location).
 4. **Warn** people before they reach a hazard: WhatsApp alerts for subscribers and phone calls for drivers on a registered trip.
-5. **Make it sustainable:** a free channel for drivers and residents, paid dashboard access with weekly reports, and a pay-per-call data API on Qatom.
-6. **Evaluate** the early-warning model honestly: archived forecasts issued before each event, on periods separate from calibration (section 4).
-7. **Test with real users** during the event and document what we learned.
+5. **Support dispatch decisions:** for a planned departure of a truck, bus or car, recommend *go / wait / do not go* from the risk the vehicle would meet on each segment at the time it gets there, so companies avoid stranded vehicles, lost hours and cargo delays.
+6. **Make it sustainable:** a free channel for drivers and residents, and time-based paid access: day passes for drivers and dashboard or prediction subscriptions for companies, sold through Qatom.
+7. **Evaluate** the early-warning model honestly: archived forecasts issued before each event, on periods separate from calibration (section 4).
+8. **Test with real users** during the event and document what we learned.
 
 ### Rubric
 
-The current rubric has five criteria, as communicated by the participant:
+Source: the organizers' evaluation sheet ("Cómo se evalúa a los equipos", Hack the Andes 2026).
 
-| Criterion | Weight | What is assessed | How we demonstrate it |
+**Entry requirements (step 0).** Without all four, the team is not scored:
+- a deployed **public URL** (localhost does not count);
+- a **live demo** (slides or a recorded video do not count);
+- the **code on GitHub**, submitted with the URL;
+- submitted before the **deadline: Sunday, October 18, 09:00** (America/Lima).
+
+**Scoring.** Each of the 5 judges scores each criterion from 1 to 5. Scores are multiplied by the weight and summed, and the final score is the average across judges.
+
+| Block | Maximum |
+|---|---|
+| Technical score (75%) | 3.75 |
+| Product score (25%) | 1.25 |
+| Traction bonus (optional) | 0.5 |
+| **Total** | **5.5** |
+
+**Tie-break:** the higher technical complexity score wins; if still tied, the higher functionality score.
+
+| Criterion | Weight | Score 1 → 5 on the sheet | How we aim for a 5 |
 |---|---|---|---|
-| **Technical complexity** | 30% | Integrations, data, models, and architecture | Report verification pipeline + catchment-based risk model + forecast evaluation on held-out periods + trip-aware call alerts + paid data API |
-| **Functionality** | 25% | A complete live workflow from the public URL | Public 3D dashboard + a WhatsApp report + the incident appears + a subscriber receives the alert (and, if delivered, a driver receives a call) + a weekly report generated + a paid API call |
-| **Technical quality** | 20% | The judges review our GitHub repository | Clear architecture and setup instructions, documented data sources and configuration, reproducible risk logic, and focused checks for the critical flows |
-| **Problem and impact** | 15% | A real user within our track | Live WhatsApp line used by real drivers + in-person interviews at the bus terminal (including willingness to pay) + evidence of what helped and what we changed |
-| **Clarity** | 10% | Explanation of decisions and tradeoffs | Rehearsed 3-minute demo, justified technical choices, stated limitations, and precise answers |
+| **Technical complexity** | 30% | 1: an API wrapper or simple CRUD · 3: integrates APIs, data or a model with its own logic · 5: real data, models or orchestrated services, non-trivial architecture | Real official data (SUTRAN, Open-Meteo, SENAMHI) + catchment-based risk model + time-aware dispatch decision + report verification pipeline + orchestrated services (Zavu, n8n, Qatom) + held-out forecast evaluation |
+| **Functionality** | 25% | 1: fails live · 3: runs with toy data · 5: real data, and it holds up to questions outside the script | Live from the public URL with today's SUTRAN incidents and real reports; a judge can send their own WhatsApp message or ask for a dispatch decision for any departure time |
+| **Technical quality** | 20% | 1: fragile, or secrets in the repo · 3: organized, with shortcuts · 5: handles errors, edge cases and credentials | `.env.example` and no secrets in the repo; every external call has a timeout, retry and visible fallback; signed webhooks; encrypted contacts; tests for extraction, dedupe, confidence, risk and dispatch decision |
+| **Problem and impact** | 15% | 1: generic topic · 5: a specific user and evidence of the problem | Drivers and dispatchers on the Carretera Central; interviews at the terminal; real reports, passes and waitlist sign-ups recorded in the product |
+| **Clarity** | 10% | 1: it is unclear what they did · 5: what, why and what was left out | Rehearsed 3-minute demo; decisions, tradeoffs and cut features stated in the README and the pitch |
 
-**Technical criteria total 75%; product criteria total 25%.** Technical complexity
-has the largest individual weight. The updated scoring scale and calculation
-have not been confirmed, so we do not reuse the previous 1–5 scale or formula.
-Using AI is not evidence by itself; every design decision is explained in the
-repository.
+**Traction bonus (added on top, does not replace technical work):**
+
+| Bonus | Condition on the sheet |
+|---|---|
+| 0 | No users outside the team, or no evidence |
+| +0.25 | People outside the team used it, and it shows in records or data |
+| +0.5 | Repeated use, visible volume, a real waitlist, or a payment |
+
+Evidence must be shown **from the product**: screenshots alone, team accounts and automated traffic do not count. This is why the product has a traction page (F10) that reads counts from the database, a company waitlist, and real pass purchases (F7).
+
+Using AI is not evidence by itself; every design decision is explained in the repository.
 
 ### Design principles
 
@@ -78,24 +102,26 @@ The opening view shows Peru in 3D; analysis and live features focus on PE-22.
 
 ### Product surfaces and plans
 
-| Surface | Free | Pro (organizations) | API (agents and developers) |
-|---|---|---|---|
-| WhatsApp line: report, ask, subscribe (F1–F3) | ✔ | ✔ | — |
-| Public dashboard: live incidents, current risk, SENAMHI warnings, last 24 h (F5a) | ✔ | ✔ | — |
-| Full dashboard: 72 h forecast, timeline and history, all layers, indicators, stretch analysis, export (F5b) | — | ✔ | — |
-| Weekly report by email or WhatsApp (F6) | — | ✔ | — |
-| Trip watch with call alerts for the organization's drivers (F4) | — | ✔ | — |
-| Pay-per-call route-risk and incident data on Qatom (F7) | — | — | ✔ |
+Access is sold **by time, not by message**: a driver pays for the days they will be on the road, and a company pays for a period of dashboard access or predictions.
 
-- **Who pays (hypotheses to test in interviews):** logistics and bus companies, insurers, and municipalities / COER for Pro; AI agents and developers for the API. Prices are not set; interviews ask what they pay today for this information and what they would pay.
-- **Access control in the prototype:** an `organization` record with a plan flag (`free` / `pro`) and a hashed access code that unlocks the Pro views through a signed cookie. A seeded demo organization lets anyone with the shared code see the Pro views from the public URL.
-- **No real payment processing in the prototype.** Qatom settles API calls (F7). If the Qatom check in section 6 shows it can also sell a monthly subscription, Pro checkout goes through Qatom; otherwise Pro is activated manually and checkout is future work.
+| Plan | For whom | What it includes | How it is paid |
+|---|---|---|---|
+| **Free** | Drivers, travelers, residents | Report by WhatsApp (F1); ask for the current status (F2); alerts when the corridor is closed (*interrumpido*), because safety warnings are never paywalled (F3); public dashboard with live incidents, 24 h risk and SENAMHI warnings (F5a) | — |
+| **Route Pass** (*Pase de Ruta*) | Independent drivers, truckers, travelers | For **1, 4 or 7 days**: all route alerts on WhatsApp, including rising risk and unconfirmed incidents (F3); 72 h forecast for their route; a *go / wait* answer for their own departure (F9 by WhatsApp); call alerts once F4 is delivered | One payment per pass; it expires automatically and is renewed by WhatsApp |
+| **Company Dashboard** | Transport and logistics companies, insurers, municipalities / COER | Full dashboard (F5b): timeline, 72 h forecast, indicators, stretch analysis, export; weekly report (F6) | Access for a period (e.g. 7 or 30 days) |
+| **Company Predictions** | Dispatch teams at bus, cargo and car-fleet companies | Everything in Company Dashboard + **dispatch decisions** (F9) for every planned departure, in the dashboard and on WhatsApp; fleet trip watch with call alerts (F4) | Subscription for a period (e.g. 30 days or the rainy season) |
+
+- **Prices are hypotheses.** The pitch lead sets a low **test price** for the Route Pass at H0 so a real driver can buy one during the event. Interviews ask companies what a stranded vehicle costs them and what they would pay for a dispatch decision.
+- **Payment rail:** passes and subscriptions are sold through Qatom if the section 6 check confirms it can sell time-based access; Qatom also lists the data API for AI agents, paid per call (second priority). Fallback: Yape with manual activation by the team, recorded in the product with its payment reference.
+- **Entitlements:** a `pass` record (phone key or organization, plan, start, expiry, route, payment reference). WhatsApp features check the sender's active pass; dashboard features check the organization's active pass through an access code and a signed cookie. A seeded demo organization lets judges see the paid views from the public URL.
+- **No card handling in our code.** We never collect card or bank details; the payment provider does.
 
 ### Priority tiers
 
-- **P0, core (must work at the H18 checkpoint):** F1, F3, F5a, F8 and the risk model (section 4).
-- **P1, complete MVP (must work at the H24 feature freeze):** F2, F5b, F6, F7 and Pro access.
-- **P2, only after P1 works end to end:** F4 call alerts, then the items under "Second priority". The Zavu voice check (section 6) still runs at H0 so the decision on F4 can be made at H18.
+- **P0, core (must work at the core checkpoint):** F1, F3, F5a, F8 and the risk model (section 4).
+- **P1, complete MVP (must work at the feature freeze):** F9 dispatch decision, F7 passes and payment, F10 traction page and waitlist, F5b, F2.
+- **Last task before the freeze:** F6 weekly report. It is built only after P1 works, and it is cut if time runs out.
+- **P2, only after all of the above:** F4 call alerts, then the items under "Second priority". The Zavu voice check (section 6) still runs at the start so the decision on F4 can be made at the core checkpoint.
 
 ### F1. Report by WhatsApp (P0)
 
@@ -123,6 +149,7 @@ People near an incident send it to our Zavu WhatsApp number.
 ### F3. Subscribe and WhatsApp alerts (P0)
 
 - *"Avísame de la Central"* or *"Avísame Chosica–La Oroya"* creates a subscription for a km range; the bot confirms the range. Explicit opt-in; *"BAJA"* opts out at any time.
+- **Free subscribers** receive closure alerts (*interrumpido*, official or confirmed). **Route Pass holders and company numbers** receive every trigger below.
 - **Triggers:**
   - a new incident in the range with confidence ≥ the alert threshold (official SUTRAN incidents qualify directly);
   - an incident in the range is cleared;
@@ -131,12 +158,12 @@ People near an incident send it to our Zavu WhatsApp number.
 - **Noise control:** at most one message per subscription every 30 minutes (alerts are bundled); no messages 22:00–05:00 except rojo.
 - **Outside the 24-hour window:** an approved WhatsApp utility template, e.g. *"Alerta PeruRoad: {tipo} en {tramo}, {estado}. Responde ESTADO para más detalles."* SMS fallback until it is approved.
 
-### F4. Trip watch and call alerts (P2, Pro)
+### F4. Trip watch and call alerts (P2; Route Pass and Company Predictions)
 
 A driver on the road cannot read WhatsApp; a short call reaches them. This uses Zavu Voice Agents: the same agent configuration answers calls, and we place a call with one API request (`POST /v1/calls`).
 
 - **Registering a trip:**
-  - a driver writes *"Salgo a Huancayo mañana a las 4"*, or a Pro dispatcher adds it in the dashboard (driver phone, origin, destination, departure time);
+  - a driver writes *"Salgo a Huancayo mañana a las 4"*, or a company dispatcher adds it in the dashboard (driver phone, origin, destination, departure time);
   - the driver gives explicit consent by replying *"SÍ"* on WhatsApp before any call.
 - **Route and timing:** the trip is mapped to the PE-22 segments between origin and destination, with an estimated time window per segment from the departure time and an average speed (default 40 km/h, configurable). The position is an **estimate from the schedule, not GPS**, and is labeled that way.
 - **Trigger:** an incident with confidence ≥ 0.6 (or any SUTRAN "interrumpido" incident), or a rojo risk level, on a segment the driver is expected to reach in the next 3 hours and has not yet passed.
@@ -163,7 +190,7 @@ A driver on the road cannot read WhatsApp; a short call reaches them. This uses 
 - **Segment panel (click):** risk level, top 2–3 reasons, inputs, forecast issue time, weather model and grid resolution.
 - **Live updates:** a new incident appears within seconds of the WhatsApp report (Supabase Realtime or polling).
 
-**F5b. Pro view (P1)**
+**F5b. Paid view (P1; Company Dashboard and Company Predictions)**
 - **Timeline scrubber:**
   - last 7 days observed + next 72 h forecast for the risk, rainfall and incident layers;
   - **Cyclone Yaku (March 2023) reconstruction** mode, clearly labeled as a reconstruction (section 4).
@@ -182,28 +209,30 @@ A driver on the road cannot read WhatsApp; a short call reaches them. This uses 
 - **Export:** incidents and risk as CSV / GeoJSON for the selected stretch and period.
 - **Weekly reports archive** (F6).
 
-### F6. Weekly report (P1, Pro, n8n)
+### F6. Weekly report (last task before the freeze; company plans; n8n)
 
 - **Schedule:** n8n cron every Monday 07:00 (America/Lima), plus a manual trigger for the demo.
-- **Flow:** n8n calls an authenticated endpoint (`/api/reports/weekly?org=…`) → the app computes the numbers → the LLM writes a 5-bullet summary **from those numbers only** → stored as a Pro-only HTML page (`/reports/{id}`) → n8n delivers it by email (Zavu email channel) or by a WhatsApp utility template with the link → n8n logs delivery and retries on failure.
+- **Flow:** n8n calls an authenticated endpoint (`/api/reports/weekly?org=…`) → the app computes the numbers → the LLM writes a 5-bullet summary **from those numbers only** → stored as an HTML page visible only to the paying organization (`/reports/{id}`) → n8n delivers it by email (Zavu email channel) or by a WhatsApp utility template with the link → n8n logs delivery and retries on failure.
 - **Content per subscribed stretch:**
   - incidents of the last 7 days by type, source and km, restriction / closure hours, and comparison with the previous week;
   - SENAMHI warnings issued;
   - the 72 h risk outlook per segment, plus a 7-day rainfall outlook labeled as lower confidence beyond 72 h;
   - top critical points.
 
-### F7. Data API on Qatom (P1)
+### F7. Passes and payment (P1)
 
-- **Endpoints** (Next.js route handlers, versioned):
-  - `GET /api/v1/route-risk?from_km=&to_km=&horizon=24h|72h` → per-segment level, score, reasons, forecast issue time, model, grid resolution;
-  - `GET /api/v1/incidents?from_km=&to_km=&since=` → active incidents with type, km, confidence, status, source type;
-  - `GET /api/v1/stretch-summary?from_km=&to_km=` → a short plain-Spanish summary for agents.
-- **Listing:** each endpoint is listed on Qatom as a paid tool, so MCP-compatible agents can discover it and pay per call. Requests through Qatom are verified before we answer; each call is logged with its transaction reference.
-- **Free tier:** a rate-limited sample (one stretch, 24 h only) for evaluation.
+- **Route Pass by WhatsApp:**
+  - the driver writes *"PASE 4"* (or picks 1, 4 or 7 days from a WhatsApp list) and states the route, e.g. *"Lima–Huancayo"*;
+  - the bot replies with the price and a payment link (Qatom) or Yape instructions (fallback);
+  - once payment is confirmed (provider confirmation, or manual confirmation by the team for Yape), the pass is activated and the bot replies with its expiry, e.g. *"Tu Pase de Ruta está activo hasta el martes 20, 23:59."*;
+  - a reminder is sent 12 h before expiry, with a renewal option;
+  - while active, the pass unlocks route alerts (F3), the 72 h forecast for that route, *go / wait* answers (F9) and, once delivered, call alerts (F4).
+- **Company plans from the dashboard:** the company chooses Company Dashboard or Company Predictions and a period → payment → an access code for its organization is issued and the paid views unlock until the expiry date.
+- **Team admin page** (protected, not public): pending Yape confirmations, active passes and subscriptions, and payment references.
+- **Data API for AI agents (second priority):** the same data exposed as `/api/v1/route-risk`, `/api/v1/incidents`, `/api/v1/stretch-summary` and `/api/v1/dispatch-decision`, listed on Qatom so MCP-compatible agents can discover them and pay per call. Requests through Qatom are verified, and each call is logged with its transaction reference.
 - **Data rules:**
-  - every response labels observed / forecast / estimated;
-  - we sell our **derived** products (merged incidents, risk scores), not raw government datasets; official incidents are linked to their public source; each source's terms are checked and listed in the README.
-- **Demo:** an agent asks *"¿Conviene mandar un camión de Lima a La Oroya esta noche?"*, pays through Qatom, and answers from our data.
+  - every answer labels observed / forecast / estimated;
+  - we sell access to our **derived** products (merged incidents, risk levels, dispatch decisions), not raw government datasets; official incidents link to their public source; each source's terms are checked and listed in the README.
 
 ### F8. Official data ingestion (P0, n8n)
 
@@ -221,6 +250,38 @@ A driver on the road cannot read WhatsApp; a short call reaches them. This uses 
 - **Daily:** El Niño status (SUTRAN's `/public/nino` summary of SENAMHI / ENFEN) for the second-priority El Niño layer.
 - Each layer records its source, retrieval time and whether it is a live feed or a snapshot. Requests to public government services are cached and kept infrequent.
 
+### F9. Dispatch decision: go / wait / do not go (P1; Route Pass and Company Predictions)
+
+The core use case for companies: a dispatcher has a bus, truck or car ready to leave and needs to decide whether to send it now, later, or not at all. A stranded vehicle costs fuel, driver hours, missed deliveries and passenger complaints.
+
+- **Input** (dashboard form *"Planificar salida"*, or WhatsApp *"¿Sale el bus de las 22:00 a Huancayo?"*):
+  - origin and destination on the corridor (preset places: Lima, Chosica, Matucana, San Mateo, La Oroya, Huancayo…);
+  - planned departure date and time, within the next 72 h;
+  - vehicle type: bus, truck or car;
+  - optional: the company's own cost per hour of a stopped vehicle.
+- **Travel timing:** the route is split into PE-22 segments, and the expected arrival time at each segment comes from an average speed per vehicle type. The speeds are configurable defaults, stated as assumptions in the answer.
+- **Risk at arrival time:** for each segment, the risk level of its catchments **for the time window when the vehicle gets there** (the model computes levels for each 6-hour window of the next 72 h, section 4), plus active incidents on that segment (SUTRAN road status and community incidents weighted by confidence).
+- **Decision rules (deterministic, in code):**
+  - **No salir:** a segment is *interrumpido* (official, or community with confidence ≥ 0.8), or its risk level is rojo when the vehicle would arrive;
+  - **Esperar:** a segment is *restringido*, or naranja at arrival time; the answer proposes the best later departure;
+  - **Salir:** otherwise, with any amarillo segments listed as cautions.
+- **Best departure window:** the same check runs for every departure hour in the next 24 h (72 h in the dashboard). The earliest departure with *Salir* and the lowest maximum level is recommended.
+- **Output:**
+  - the recommendation, the 2–3 segments and reasons behind it, and the confidence (forecast lead time and rainfall grid resolution);
+  - the best departure window;
+  - if the company entered its cost per hour, the **cost at stake**: that cost × the expected duration of the closures on the route (from SUTRAN validity dates or our archive), labeled as an estimate.
+- **Departure chart (dashboard):** a heat map with route km on one axis and departure hour on the other, colored by the risk the vehicle would meet. It shows at a glance when the route is safe to start.
+- **Record and feedback:** every decision is stored with its inputs; after the trip, the company can mark the outcome (passed / delayed / stopped), which later feeds evaluation.
+- **Wording:** this is decision support with stated uncertainty, not a guarantee; the company makes the final call.
+
+### F10. Traction page and company waitlist (P1)
+
+- **Public `/impacto` page**, with counts read live from the database since launch:
+  - reports received, unique reporters, queries answered, subscribers, returning users, passes sold and companies on the waitlist;
+  - a chart over time.
+- **What the counts exclude:** team members' phone keys (flagged `is_team`), test numbers and automated traffic. No personal data is shown.
+- **Company waitlist form:** company name, contact person and role, fleet size, routes, contact channel, and consent to be contacted. The terminal visit and interviews point dispatchers to it.
+
 ### Display rule
 
 The dashboard, messages and calls always distinguish **observed** events (official or confirmed reports), **forecasts**, and **estimated exposure**. Unverified reports are labeled **"no confirmado"**.
@@ -228,6 +289,7 @@ The dashboard, messages and calls always distinguish **observed** events (offici
 ### Second priority (only after P1 works end to end)
 
 - F4 trip watch and call alerts, then confirmation calls.
+- Data API for AI agents on Qatom, paid per call (F7).
 - Estimated delay and alternative routes when a closure is confirmed (SUTRAN publishes official alternative routes).
 - **El Niño layer:** ENFEN status, sea-surface temperature anomalies, official outlooks.
 - **Scenario comparison:** exposure under different rainfall scenarios.
@@ -235,7 +297,7 @@ The dashboard, messages and calls always distinguish **observed** events (offici
 
 ### Out of scope
 
-Other corridors (including Lima–Arequipa), frost alerts, native mobile app, full user accounts and roles, real payment processing beyond Qatom, live GPS tracking, national coverage.
+Other corridors (including Lima–Arequipa), frost alerts, native mobile app, full user accounts and roles, card handling in our own code, live GPS tracking, national coverage.
 
 ---
 
@@ -275,7 +337,7 @@ For each catchment, every hour:
 | Active SENAMHI warning for the province | SENAMHI | Official signal |
 | Recent incidents nearby | SUTRAN, MTC, our WhatsApp reports | Ground truth |
 
-**Output:** a level (verde / amarillo / naranja / rojo) plus the top 2–3 reasons, e.g. *"72 mm forecast over the Quebrada X catchment in the next 48 h + soil already wet + high-susceptibility zone"*.
+**Output:** a level (verde / amarillo / naranja / rojo) for the next 24 h and 72 h, and for each 6-hour window of the next 72 h (used by the dispatch decision, F9), plus the top 2–3 reasons, e.g. *"72 mm forecast over the Quebrada X catchment in the next 48 h + soil already wet + high-susceptibility zone"*.
 
 - **Code computes the score; the LLM only writes the explanation** in plain Spanish. The score must be reproducible and auditable: each stored score records its inputs, model, grid and forecast issue time.
 - **Thresholds are calibrated on data, not guessed**, and frozen before evaluation.
@@ -306,25 +368,30 @@ People on the road ──► Zavu (WhatsApp / SMS / email / voice) ──► sig
         │ alerts, calls      │  │ voice agent tools (HTTPS)           ▼
         └────────────────────┘  └──────────── Next.js app (TypeScript, App Router, Vercel)
                                               ├─ Route handlers: Zavu webhook, incidents,
-                                              │  segments, risk, indicators, trips, reports,
-                                              │  /api/v1 data API, n8n job endpoints (authenticated)
+                                              │  segments, risk, indicators, dispatch decisions,
+                                              │  trips, passes, waitlist, reports, /api/v1 data API,
+                                              │  n8n job endpoints (authenticated)
                                               ├─ Report pipeline: ElevenLabs STT → LLM extraction
                                               │  → snap to PE-22 → dedupe → confidence
                                               ├─ Alert engine: subscriptions (F3) + trips (F4)
                                               │  → Zavu message / template / call
+                                              ├─ Dispatch decision engine (F9) + pass checks (F7)
                                               └─ Web UI: MapLibre 3D terrain, layers, heat map,
-                                                 timeline, indicators, Pro gate
+                                                 timeline, indicators, departure planner,
+                                                 /impacto traction page, paid-access gate
                                                           │
                                          Postgres + PostGIS (Supabase, Realtime)
                           segments · catchments · hazard zones · reports · incidents ·
                           incident_status_log · risk_scores · subscriptions · organizations ·
-                          trips · calls · weekly_reports · api_calls
+                          passes · dispatch_decisions · waitlist · trips · calls ·
+                          weekly_reports · api_calls
                                                           ▲
 n8n ── every 10 min: SUTRAN alerts (PE-22) → upsert + status archive → alert evaluation
     ├─ hourly: Open-Meteo, SENAMHI pulls → risk recalculation → alert evaluation
     └─ weekly: report generation → delivery (email / WhatsApp template) → delivery log
 
-Qatom ── lists /api/v1 endpoints as paid tools; agents discover and pay per call
+Qatom ── sells Route Passes and company plans (time-based access); later lists
+          /api/v1 endpoints as paid tools for agents (per call)
 
 Offline (one-time, scripts in the repo): catchment delineation (WhiteboxTools CLI),
 segmentation and overlays (PostGIS SQL + TypeScript / Turf.js), evaluation scripts
@@ -342,7 +409,7 @@ segmentation and overlays (PostGIS SQL + TypeScript / Turf.js), evaluation scrip
 | Messaging and calls | Zavu (WhatsApp, SMS fallback, email, Voice Agents) |
 | Voice-note transcription | ElevenLabs (Scribe speech-to-text; text-to-speech for voice-note replies) |
 | Scheduled jobs, alerts and weekly reports | n8n |
-| Paid data API | Qatom |
+| Payments for passes and subscriptions; agent data API | Qatom (Yape with manual activation as fallback) |
 
 ### Stack decisions
 
@@ -359,7 +426,7 @@ segmentation and overlays (PostGIS SQL + TypeScript / Turf.js), evaluation scrip
 | **Zavu** | The whole messaging channel: inbound reports, queries, WhatsApp alerts and templates, SMS fallback, weekly report email, and outbound call alerts through Voice Agents |
 | **ElevenLabs** | Transcribe WhatsApp voice notes; voice-note replies to drivers |
 | **n8n** | SUTRAN, Open-Meteo and SENAMHI ingestion, risk recalculation and alert evaluation, weekly report generation and delivery |
-| **Qatom** | Paid route-risk and incident API that agents discover and pay per call |
+| **Qatom** | Sells Route Passes and company plans; later, the data API that agents pay per call |
 
 ### Core data model
 
@@ -369,8 +436,11 @@ segmentation and overlays (PostGIS SQL + TypeScript / Turf.js), evaluation scrip
 - **incident**: id, segment_id, type (huaico / derrumbe / inundación / bloqueo / accidente / obra), origin (official / community), external_ref (SUTRAN code), source_entity, road_status (interrumpido / restringido / normal), status (active / clearing / cleared), confidence 0–1, report_ids[], first_seen, last_confirmed
 - **incident_status_log**: incident_id, observed_at, road_status, status, source
 - **risk_score**: catchment_id, computed_at, forecast_issued_at, weather_model, grid_resolution_km, horizon (24h / 72h), level, score, inputs, reasons[]
-- **subscription**: id, contact_ref, phone_key (HMAC), road, km range, channel, consent_at, opted_out_at
-- **organization**: id, name, plan (free / pro), access_code_hash, report_channel, report_stretches
+- **subscription**: id, contact_ref, phone_key (HMAC), road, km range, channel, consent_at, opted_out_at, is_team
+- **organization**: id, name, access_code_hash, report_channel, report_stretches, cost_per_hour (optional, entered by the company)
+- **pass**: id, phone_key or organization_id, plan (route_pass / company_dashboard / company_predictions), days, route (from/to), starts_at, expires_at, payment_method (qatom / yape), payment_ref, amount, status
+- **dispatch_decision**: id, organization_id or phone_key, origin, destination, depart_at, vehicle_type, recommendation (salir / esperar / no_salir), reasons[], segment_levels, best_window, cost_at_stake, model_inputs, created_at, outcome (passed / delayed / stopped)
+- **waitlist**: id, company, contact_name, role, fleet_size, routes, contact_ref, consent_at, created_at
 - **trip**: id, organization_id (optional), contact_ref, phone_key, origin_km, destination_km, depart_at, avg_speed_kmh, status, call_consent_at
 - **call**: id, trip_id, incident_id, provider_call_id, purpose (alert / confirmation), status, duration_s, transcript, outcome
 - **weekly_report**: id, organization_id, period_start, period_end, data (JSON), page_url, sent_at, channel, delivery_status
@@ -416,8 +486,9 @@ Low confidence is shown clearly as **"no confirmado"**.
 | ElevenLabs speech-to-text (Backend) | Transcribe a real WhatsApp voice note (OGG/Opus, Peruvian Spanish, road noise) | Usable transcript of location and incident type | Ask the user to type, or use another STT |
 | LLM structured extraction (Backend) | Run on 10–20 real road messages | Correct type and location on most; failures logged | Ask the reporter a follow-up question |
 | n8n (Data) | Ingestion job calls SUTRAN and the authenticated recalculation endpoint; weekly job generates and delivers one report | Each runs twice successfully | Cron in the hosting platform |
-| Qatom provider listing (Backend) | Register as provider, list `/api/v1/route-risk` as a paid tool, call it from an MCP client with a funded agent wallet | Paid call returns our data and the transaction is recorded | Document the listing; demo the API with an API key |
-| Qatom subscription (Pitch lead) | Check whether Qatom can sell a monthly Pro subscription | Subscription purchasable | Manual Pro activation |
+| Qatom time-based access (Pitch lead + Backend) | Create a provider account; check whether Qatom can sell a 1-, 4- and 7-day pass and a 30-day company plan to a person paying in soles or by card, and notify our app (webhook or verifiable receipt) | A test purchase activates a pass in our database | Yape payment with manual activation in the admin page |
+| Yape fallback (Pitch lead) | Set up a team Yape number for test-price passes and record each payment reference | A payment can be matched to a pass | Plin or bank transfer, same manual flow |
+| Qatom agent API listing (Backend, second priority) | List `/api/v1/route-risk` as a paid tool and call it from an MCP client with a funded agent wallet | Paid call returns our data and the transaction is recorded | API works with an API key; listing documented as pending |
 
 ### Weather and evaluation data
 
@@ -450,10 +521,10 @@ Adjust to team size. With 3 people, merge Data and Backend.
 
 | Role | Owns |
 |---|---|
-| **Pitch & traction lead** | Demo script, interviews (including willingness to pay), getting the number into WhatsApp groups, terminal visit, metrics, Qatom subscription check, slides, rehearsals, README |
-| **Backend / agent** | Next.js route handlers, Zavu webhook, templates and voice agent, extraction, geocoding, dedupe, confidence, contact encryption, ElevenLabs, alert engine, trips and calls, `/api/v1` and Qatom listing, Pro access |
-| **Data & model** | Integration checks for data, SUTRAN ingestion and archive, catchment delineation, segments, risk model, reconstruction and forecast evaluation, n8n jobs (ingestion and weekly report) |
-| **Frontend / map** | Next.js UI, MapLibre 3D map, layers, heat map, timeline, indicator panel and charts, route profile, stretch selector, export, live incident updates |
+| **Pitch & traction lead** | Demo script, interviews (drivers and dispatchers, including willingness to pay), getting the number into WhatsApp groups, terminal visit, waitlist sign-ups, Route Pass test price, Qatom and Yape checks, payment confirmations, bot wording, slides, rehearsals, README |
+| **Backend / agent** | Next.js route handlers, Zavu webhook, templates and voice agent, extraction, geocoding, dedupe, confidence, contact encryption, ElevenLabs, alert engine, passes and payment flow (F7), dispatch decision by WhatsApp (F9), paid-access gate and admin page, weekly report delivery (F6), trips and calls (F4), `/api/v1` |
+| **Data & model** | Integration checks for data, SUTRAN ingestion and archive, catchment delineation, segments, risk model, dispatch decision engine (F9), reconstruction and forecast evaluation, n8n jobs (ingestion and weekly report) |
+| **Frontend / map** | Next.js UI, MapLibre 3D map, layers, heat map, timeline, indicator panel and charts, route profile, stretch selector, departure planner and departure chart (F9), `/impacto` page and waitlist form (F10), report page (F6), export, live incident updates |
 
 AI coding tools are used for boilerplate. The risk, confidence and evaluation logic is written and understood by the team.
 
@@ -467,20 +538,22 @@ the pitch lead owns user outreach and presentation preparation. Confirm the
 organizers' actual submission cutoff at H0; if it is earlier than H30, move the
 submission and final checks forward to finish at least 30 minutes before it.
 
+**The organizers' evaluation sheet sets the deadline at Sunday, October 18, 09:00 (America/Lima).** Section 8c maps this schedule to clock times ending at that deadline; if the two disagree, section 8c governs.
+
 | Hours | Goal | Done when |
 |---|---|---|
-| **H0–2** | Align and set up | Read this doc; section 6 checks started (including one Zavu test call to a +51 number) and the WhatsApp alert and weekly-report templates submitted; Zavu number live; Qatom provider account created; repo, database and deploy working; demo script written |
+| **H0–2** | Align and set up | Read this doc; section 6 checks started (including one Zavu test call to a +51 number) and the WhatsApp alert and weekly-report templates submitted; Zavu number live; Qatom provider account created and time-based sale checked; Route Pass test price set; repo, database and deploy working; demo script written |
 | **H2–8** | Thin skeleton, end to end | A WhatsApp message creates a pin on the map (even if extraction is crude); SUTRAN PE-22 alerts on the map and archived; PE-22 segments and catchment crossing points loaded; first Open-Meteo pull |
-| **H8–10** | **Launch to real users** | Number shared in WhatsApp groups (drivers, family, friends who travel the Central); start collecting usage and problem/impact evidence |
+| **H8–10** | **Launch to real users** | Number shared in WhatsApp groups (drivers, family, friends who travel the Central); waitlist form live; usage recorded in the database from the first real user |
 | **H10–18 (night)** | Core (P0) | Extraction + dedupe + confidence; catchments delineated; risk model v1; subscriptions + alerts; SENAMHI ingestion; Yaku 2023 reconstruction data, 2024–2025 archived forecasts and event records loaded |
 | **H18** | **Core integration checkpoint** | The live reporting → dashboard → subscriber alert flow works from start to finish; go / no-go decision on F4 call alerts based on the Zavu voice check |
-| **H18–24** | Complete MVP (P1) + evaluation | Ask by WhatsApp; Pro view (timeline, 72 h forecast, indicators, route profile, stretch selector, export) and Pro access; weekly report generated and delivered by n8n; `/api/v1` live and listed on Qatom; calibration and held-out forecast evaluation done; F4 only if all of this already works |
+| **H18–24** | Complete MVP (P1) + evaluation, then F6 | Dispatch decision (F9); passes and payment (F7); `/impacto` page (F10); ask by WhatsApp; paid dashboard view (timeline, 72 h forecast, indicators, route profile, stretch selector, export); calibration and held-out forecast evaluation done; **then, as the last task, the weekly report (F6)**; F4 only if all of this already works |
 | **H18–22 (in parallel)** | **Terminal visit** | Pitch lead (+1 if available) goes to the Central bus/colectivo terminals (e.g. Yerbateros): ~10 interviews, sign-ups, willingness-to-pay answers, photos/video |
 | **H22–29 (in parallel)** | Pitch preparation | Slides, real usage evidence, 5 or more timed rehearsals, and Q&A preparation completed |
 | **H24** | **Feature freeze** | Full MVP works end to end; no new features after this point |
-| **H24–27** | Harden | Critical flows checked; pre-loaded demo data, demo Pro organization and cached responses ready; Wi-Fi fallback and 60-second backup video recorded; GitHub setup instructions verified |
+| **H24–27** | Harden | Critical flows checked; pre-loaded demo data, demo paid organization and cached responses ready; Wi-Fi fallback and 60-second backup video recorded; GitHub setup instructions verified |
 | **H27** | **Code freeze** | Only fixes for demo blockers and submission issues from this point |
-| **H27–29** | Final validation | Public app, Pro access code and presentation checked from a fresh session; complete demo rehearsed; deliverables ready |
+| **H27–29** | Final validation | Public app, paid access code and presentation checked from a fresh session; complete demo rehearsed; deliverables ready |
 | **By H29:30** | **Submit** | All four deliverables saved at least 30 minutes before H30, or earlier if the official cutoff requires it |
 | **H29:30–30** | Verify and prepare to present | Saved submission and links verified; presentation and backup ready |
 
@@ -492,7 +565,8 @@ submission and final checks forward to finish at least 30 minutes before it.
 - [ ] Zavu WhatsApp number active and receiving webhooks; live API key available for calls
 - [ ] WhatsApp alert and weekly-report templates submitted for approval
 - [ ] Zavu voice enabled on the agent and one test call placed to a team member's +51 phone
-- [ ] Qatom provider account created
+- [ ] Qatom provider account created; time-based pass sale checked; Yape fallback ready; Route Pass test price set
+- [ ] Member names written next to A–D in section 8c
 - [ ] SUTRAN alerts polling started (so our status archive covers the whole event)
 - [ ] Section 6 checks assigned to owners
 - [ ] Collect 10–20 real messages from WhatsApp groups about road conditions (test set for extraction)
@@ -501,31 +575,141 @@ submission and final checks forward to finish at least 30 minutes before it.
 
 ---
 
-## 9. User evidence and traction plan (supports problem and impact: 15%)
+## 8c. Team organization and task split (4 members)
 
-The current rubric evaluates a real user within our track under **problem and
-impact (15%)**. The metrics below support that evidence; traction is not a
-separate 30% criterion in the updated rubric.
+### Members
 
-**Metrics tracked live, shown on a slide at the end:**
+| Member | Role (section 7) | Main deliverables |
+|---|---|---|
+| **A** | Pitch & traction lead | Real users, interviews, waitlist, pass sales and payment confirmations, bot wording, README, slides, demo |
+| **B** | Backend / agent | WhatsApp pipeline (F1–F3), passes and payment (F7), dispatch decision by WhatsApp (F9), paid-access gate, report delivery (F6), calls (F4) |
+| **C** | Data & model | SUTRAN and weather ingestion (F8), segments and catchments, risk model, dispatch decision engine (F9), evaluation, weekly report data (F6) |
+| **D** | Frontend / map | 3D dashboard (F5a, F5b), departure planner (F9), `/impacto` and waitlist (F10), report page (F6) |
+
+Write each member's name next to their letter at the start of phase 0.
+
+### Phases (clock times, America/Lima)
+
+The times assume work starts on Saturday at 13:30 and end at the Sunday 09:00 deadline. If work starts later, keep the order and shorten phase 3 first.
+
+| Phase | Time | Goal | Checkpoint at the end |
+|---|---|---|---|
+| **0. Setup and contracts** | Sat 13:30–15:00 | Repo, deploy, database, Zavu number, templates submitted, API contracts agreed, SUTRAN polling started | 15:00: everyone can deploy; contracts written in the repo |
+| **1. Thin skeleton** | 15:00–19:00 | A WhatsApp message becomes a pin on the public map; SUTRAN incidents visible | 19:00: **launch to real users** (number shared, waitlist form live) |
+| **2. Core (P0)** | 19:00–01:00 | F1, F3, F5a, F8 and the risk model working on real data | Sun 01:00: **core checkpoint**; go / no-go on F4 |
+| **3. Complete MVP (P1)** | 01:00–04:30 | F9, F7, F10, F5b, F2 and the forecast evaluation | 04:30: P1 works end to end |
+| **4. Weekly report (F6), the last feature** | 04:30–05:30 | One weekly report generated by n8n and delivered | 05:30: **feature freeze** |
+| **5. Harden** | 05:30–07:00 | Error handling, edge cases, demo data, backup video | 07:00: **code freeze** |
+| **6. Final validation and submission** | 07:00–08:30 | Fresh-session check, full rehearsal, submission | **08:30: submitted** (deadline 09:00) |
+
+**Stand-ups (5 minutes):** at 15:00, 19:00, 22:00, 01:00, 04:30, 05:30 and 07:00. Each member says: what is done, what is blocked, and what is next. During the night (01:00–05:00), each member takes one 90-minute rest, staggered so that two members are always working, and never during a checkpoint.
+
+**Working rules:**
+- One feature branch per task, small pull requests, and deploy on merge to `main`.
+- The API contracts (JSON shapes for incidents, segments, risk, dispatch decision, passes) are written in phase 0. D builds against mocks until B and C deliver.
+- Secrets stay in the hosting platform and `.env.local`; the repo has only `.env.example`.
+- Every external call (Zavu, ElevenLabs, LLM, SUTRAN, Open-Meteo, Qatom) has a timeout, a retry and a visible fallback.
+
+### Member A: pitch & traction lead
+
+| Phase | Task | Done when |
+|---|---|---|
+| 0 | Confirm the deadline and the rules on pre-existing code with the organizers; redeem sponsor credits | Recorded in `PROGRESS.md` |
+| 0 | Run the Qatom time-based access check with B; set up Yape; set the Route Pass test price | A test purchase path exists (Qatom or Yape) |
+| 0 | Collect 10–20 real road messages from WhatsApp groups for B's extraction tests; list the groups to share the number in | Messages saved (no personal data) |
+| 0–1 | Write the bot's Spanish wording with B: replies, alerts, templates, pass messages, consent texts | Wording merged in the repo |
+| 1 | Launch at 19:00: share the number and the waitlist form in driver and traveler groups | First real users recorded in the database |
+| 2 | **Terminal visit** (e.g. Yerbateros), around 19:30–22:30: ~10 interviews with drivers and dispatchers, sign-ups, waitlist entries, first Route Pass sales | Notes, quotes, waitlist entries, payments recorded |
+| 2–3 | Answer real users, confirm Yape payments in the admin page, watch `/impacto` | Every real payment is matched to a pass |
+| 3 | Draft the README problem, user, decisions and limitations sections; synthesize interviews into the top 3 lessons and what we changed | README draft merged |
+| 3–4 | Build the slides with real numbers from `/impacto` | Slides ready |
+| 5 | Record the 60-second backup video; run rehearsals 1–3 | Video saved; rehearsals timed |
+| 6 | Check the public URL, paid access code and slides from a fresh session; rehearsals 4–5; **submit by 08:30** and verify what the server saved | Submission verified |
+
+### Member B: backend / agent
+
+| Phase | Task | Done when |
+|---|---|---|
+| 0 | Next.js repo, Vercel deploy, Supabase schema (with C), `.env.example`, contact encryption and HMAC helpers | `main` deploys to the public URL |
+| 0 | Zavu: number live, signed webhook, alert, pass-expiry and weekly-report templates submitted; one test call to a +51 number; agent-scope check | Results recorded in `PROGRESS.md` |
+| 0 | Write the API contracts with C and D | Contracts merged |
+| 1 | Webhook → store report → crude extraction → incident → API → pin on D's map; acknowledgment reply | A real WhatsApp message shows on the public map |
+| 2 | ElevenLabs transcription; LLM structured extraction; gazetteer location and follow-up question; dedupe with SUTRAN and community incidents; confidence | Tests pass on the 10–20 real messages |
+| 2 | Subscriptions and alert engine (F3): free closure alerts vs pass alerts, bundling, quiet hours, template / SMS fallback | A subscriber receives an alert for a new incident |
+| 3 | Passes and payment (F7): *"PASE 4"* flow, Qatom confirmation or manual Yape confirmation in the admin page, entitlement checks, expiry reminder | A real or test payment activates a pass |
+| 3 | Dispatch decision by WhatsApp (F9) using C's engine; ask by WhatsApp (F2); organization access code and signed cookie | *"¿Sale el bus de las 22:00 a Huancayo?"* gets a decision |
+| 4 | F6 delivery endpoint used by n8n (Zavu email or WhatsApp template) | One report delivered |
+| 4 | F4 call alerts only if the 01:00 decision was *go* | One consenting phone received a call |
+| 5 | Error-handling pass, secrets check, seeded demo organization, cached demo responses | Critical flows survive an external API failure |
+
+### Member C: data & model
+
+| Phase | Task | Done when |
+|---|---|---|
+| 0 | **Start the SUTRAN poller** (every 10 min) and the status archive | PE-22 alerts stored with history |
+| 0–1 | PE-22 geometry and 1-km segments with km references and elevation; place-to-km gazetteer for B | Segments in PostGIS; gazetteer merged |
+| 1 | Open-Meteo forecast pull for sample points; start downloading Previous Runs (2024, 2025) and Historical Weather (Feb–Mar 2023) | Data stored |
+| 1–2 | Crossing points; catchment delineation (WhiteboxTools) or HydroBASINS fallback; susceptibility and SENAMHI layers | Catchments linked to segments |
+| 2 | Risk model v1: 24 h, 72 h and 6-hour windows, stored inputs and reasons; hourly n8n job → recalculation → alert evaluation | Risk levels on every PE-22 segment, hourly |
+| 2 | Yaku 2023 reconstruction data; list of dated PE-22 events for 2024 and 2025 | Data ready for the timeline and the evaluation |
+| 3 | **Dispatch decision engine (F9):** travel timing per vehicle type, risk at arrival time, decision rules, best departure window, cost at stake; tests | The engine returns a decision for any departure in the next 72 h |
+| 3 | Calibrate on 2024, evaluate on 2025; write the results, including weak ones | Evaluation documented |
+| 3 | Indicator queries for D (km exposed, incidents by type, closure hours) | Endpoints return real numbers |
+| 4 | **F6 weekly report:** n8n weekly workflow, report data endpoint, LLM summary written only from the numbers | One report generated |
+| 5 | README data sources, terms, resolution limits and evaluation; check that the scripts reproduce | README sections merged |
+
+### Member D: frontend / map
+
+| Phase | Task | Done when |
+|---|---|---|
+| 0 | UI shell; MapLibre 3D terrain and fly-in from Peru to PE-22; mocks that follow the API contracts | Map renders on the public URL |
+| 1 | Live incidents layer (community and SUTRAN) and incident panel; **waitlist form (F10)** live before 19:00 | A WhatsApp report appears live; the form stores sign-ups |
+| 2 | Segment risk layer and panel; rainfall heat map; catchments and rivers; SENAMHI and susceptibility layers; observed / forecast / estimated labels | F5a complete on real data |
+| 3 | Paid-access gate; **departure planner and departure chart (F9)**; timeline with Yaku reconstruction mode; indicator panel; route profile | F5b and F9 work with the demo access code |
+| 3 | `/impacto` page reading live counts (F10) | Counts match the database and exclude the team |
+| 4 | **F6 report page** and reports archive, with C | A generated report opens in the dashboard |
+| 5 | Loading, empty and error states; performance on the presentation laptop; phone-width check | Fresh-session walkthrough passes |
+
+### If we fall behind
+
+At the 01:00 checkpoint, cut in this order until the plan fits: F4 calls → Qatom agent API → voice-note replies → response layer and export → F6 weekly report → rainfall-vs-risk chart. Never cut: F1, F3, F5a, F8, the risk model, F9, the payment flow (with the Yape fallback) and `/impacto`.
+
+---
+
+## 9. User evidence and traction plan (problem and impact 15% + traction bonus up to 0.5)
+
+The evaluation sheet scores a real user within our track under **problem and
+impact (15%)** and adds a **traction bonus**: +0.25 when people outside the team
+used the product and it shows in its records, and +0.5 for repeated use, visible
+volume, a real waitlist, or a payment. The evidence must come from the product,
+so the metrics below are read from the database on the `/impacto` page (F10),
+excluding team members and test numbers.
+
+**Bonus targets:**
+- **+0.25:** real reports, queries and subscribers from people outside the team.
+- **+0.5:** returning users, company waitlist sign-ups, and at least one real Route Pass payment.
+
+**Metrics tracked live on `/impacto`, shown on a slide at the end:**
 - Reports received / unique reporters
 - Queries answered
 - Subscribers to alerts
 - Returning users (used it more than once)
+- Route Passes sold and companies on the waitlist
+- Dispatch decisions requested
 - Calls placed and answered (if F4 is delivered)
 - Interviews done + the top 3 things we learned and changed
 
 **How we get users:**
 1. Share the number in groups of travelers and drivers on the Central, and in our own networks.
 2. Go in person to the terminals. Drivers are there waiting; ask them about the last time a huaico caught them.
-3. Ask every interviewee: *"Would you use this?"* and *"Would your company pay for it?"* Write down quotes.
+3. Ask every interviewee: *"Would you use this?"* and *"Would your company pay for it?"* Write down quotes, and offer the waitlist (companies) or a Route Pass (drivers about to travel).
 
 **Interview questions (5 min max):**
 - How do you find out today whether the Central is open? Do you use the SUTRAN map or *Viaje Seguro*?
 - Last time you got stuck: what happened, how long, what did it cost you?
 - Would you send a voice note to report a blockage? Would you want an alert before leaving?
 - Would you take a short call on the road about a hazard ahead, or prefer a WhatsApp message?
-- (Dispatchers and company staff) How do you warn drivers who are already on the road today? What do you pay for that information now?
+- (Dispatchers and company staff) How do you decide today whether a bus or truck leaves when the Central may be blocked? What did the last stranded vehicle cost you in hours, fuel or penalties? How do you warn drivers already on the road? What do you pay for that information now?
 
 ---
 
@@ -538,7 +722,7 @@ separate 30% criterion in the updated rubric.
 | 0:35–1:10 | **Dashboard.** 3D map flies from Peru into the Central; today's SUTRAN incidents, rainfall heat map, catchments, 72 h risk on the route profile, and the Yaku 2023 reconstruction on the timeline, labeled as such |
 | 1:10–2:00 | **Live.** A WhatsApp voice note "huaico en el km 52" → pin appears live → confidence updates → a subscribed phone receives the alert → (if F4 is delivered) a phone on a registered trip rings and the agent explains the hazard ahead |
 | 2:00–2:25 | **How it works.** Catchment-based design, code scores / LLM explains, confidence model, held-out forecast evaluation result and its limits |
-| 2:25–2:45 | **Who pays.** Pro view and the weekly report; an agent pays per call on Qatom for route risk |
+| 2:25–2:45 | **Who pays.** A dispatcher plans tonight's bus to Huancayo: the dashboard answers *wait until 04:00* with reasons and the departure chart; Route Pass by days for drivers, company plans for dashboard and predictions; real passes and waitlist from `/impacto` |
 | 2:45–3:00 | **Users and next steps.** Real usage numbers, interview quotes, Piura/Tumbes and more corridors |
 
 **Anticipated questions:**
@@ -547,7 +731,8 @@ separate 30% criterion in the updated rubric.
 - Why is the Yaku replay not proof of prediction? (it uses rain that actually fell; advance-warning claims come only from archived forecasts on held-out seasons)
 - Why not just use SENAMHI warnings or the SUTRAN map? (warnings are by province and SUTRAN shows confirmed incidents; we use SUTRAN as an input and add per-catchment forecasts, live reports from the road, and delivery on WhatsApp and by call)
 - Isn't calling a driver who is driving dangerous? (consent first, short hands-free message that needs no answer, WhatsApp follow-up, pre-departure alerts preferred)
-- Who pays, and why would reporters keep reporting for free? (organizations pay for aggregated data; reporters get alerts and status in return)
+- Who pays, and why would reporters keep reporting for free? (drivers pay for a Route Pass only for the days they travel; companies pay for dashboard access or dispatch predictions; reporting and closure alerts stay free)
+- How reliable is a *go / wait* decision? (deterministic rules over risk at arrival time and live incidents; it states the forecast lead time and grid resolution, and the company decides)
 - Can you sell government data? (we sell derived risk scores and merged incidents and link official incidents to their public source; source terms are listed in the README)
 - How do you store phone numbers? (encrypted delivery reference or provider contact ID, HMAC key for matching, opt-out)
 - What does the AI do vs. our code?
@@ -565,8 +750,10 @@ separate 30% criterion in the updated rubric.
 | Zavu Voice Agents (beta) cannot call +51 numbers, sound poor in Spanish, or cost too much | Test at H0; fallback ElevenLabs Agents via Twilio; otherwise F4 stays WhatsApp-only and is presented as future work |
 | Calls distract drivers | Explicit call consent, ≤2 min hands-free message that needs no reply, one call per incident per trip, pre-departure alerts by WhatsApp |
 | Drivers ignore calls from an unknown or foreign number | Save-the-contact message at trip registration; WhatsApp follow-up after each call |
-| Qatom listing or payment fails | API works with an API key; Qatom listing documented as pending |
-| Monetization work takes time from the core | No real payment processing; Pro is a plan flag + access code; P1 starts only after the H18 checkpoint |
+| Qatom cannot sell time-based passes, or payment fails | Yape with manual activation in the admin page; agent API works with an API key and its Qatom listing is documented as pending |
+| No real payment during the event | Waitlist sign-ups and returning users still count toward the bonus; offer the test-price pass at the terminal |
+| The deadline (Sunday 09:00) leaves less time than 30 hours | Clock schedule in section 8c; cut order applied at the 01:00 checkpoint |
+| Monetization work takes time from the core | Payments handled by the provider or Yape; entitlements are a `pass` table and an access code; P1 starts only after the core checkpoint |
 | Data terms do not allow resale | Sell derived products only; list each source's terms; drop a source from the API if its terms forbid it |
 | Too few dated incidents to evaluate forecasts | Report the count and make no advance-warning claim |
 | Rainfall grid too coarse for small quebradas | State the resolution; group small catchments and flag them low-confidence |
@@ -589,11 +776,13 @@ separate 30% criterion in the updated rubric.
 - [ ] Held-out forecast evaluation computed and documented (or documented as not possible, with the reason)
 - [ ] Yaku 2023 reconstruction on the timeline, labeled as a reconstruction
 - [ ] Section 6 checks recorded with results and fallbacks used
-- [ ] Public 3D dashboard with heat map and live incidents works from the public URL; Pro view (timeline, indicators, route profile, export) works with the demo access code
-- [ ] One weekly report generated and delivered by n8n
-- [ ] One paid call to `/api/v1/route-risk` completed through Qatom (or documented as pending, with the reason)
+- [ ] Public 3D dashboard with heat map and live incidents works from the public URL; paid view (timeline, indicators, route profile, export) works with the demo access code
+- [ ] A dispatch decision (go / wait / do not go) with best departure window works in the dashboard and on WhatsApp
+- [ ] A Route Pass can be bought and activated (Qatom or Yape), and expires on time
+- [ ] `/impacto` shows real counts from outside the team; the company waitlist form stores sign-ups
+- [ ] One weekly report generated and delivered by n8n (last task; documented as cut if time ran out)
 - [ ] If F4 is delivered: a consenting phone on a registered trip received a call about a hazard ahead, and the call transcript is linked to the incident
 - [ ] README with architecture, decisions, data sources and their terms, resolution limits, and what AI was used for
 - [ ] Backup video recorded
 - [ ] Pitch rehearsed 5+ times, under 3:00
-- [ ] Submitted 30+ minutes early
+- [ ] Submitted by Sunday 08:30, 30+ minutes before the 09:00 deadline, with public URL, live demo and GitHub repo
