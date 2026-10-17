@@ -22,6 +22,7 @@ export async function postJson(
     request.signal?.throwIfAborted();
     const response = await fetch(url, {
       method: "POST",
+      redirect: "error",
       headers: {
         ...request.headers,
         Accept: "application/json",

@@ -140,6 +140,10 @@ change, including code written by agents.
   other member, with CI passing.
 - Keep pull requests small and focused. Commit messages are imperative English
   ("Add Zavu webhook signature check").
+- **Participant update:** continue all Role C work and its API/database integration
+  on `feat/data-model`, with one consolidated PR to `main`. Do not create a new
+  branch for each implementation step. Keep Role D's visualization branch separate
+  until team integration is coordinated; `main` still requires review and passing CI.
 
 ## Technical quality rules and verifications
 

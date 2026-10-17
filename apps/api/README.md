@@ -3,8 +3,8 @@
 Member A's Node.js/Next.js API application, consuming C's compiled
 `@peruroad/road-data` package. It has its own dependencies, lockfile, and checks
 under `apps/api/` so teammates can integrate their root-level frontend separately.
-The current step mounts and verifies the existing SUTRAN ingestion handler;
-dashboard APIs, paid access, and weather/model endpoints are later
+The application mounts the SUTRAN ingestion handler and B's read-only road-context
+interface; dashboard APIs, paid access, and weather/model endpoints are later
 steps under the full [Team Plan](../../docs/team-plan.md).
 
 ## Install and build
@@ -46,6 +46,9 @@ Provide only these server environment variables, listed in `.env.example`:
 - `DATABASE_URL`: the existing scoped `peruroad_backend` connection.
 - `DATABASE_SSL_MODE=verify-full`: verifies Supabase's public CA and hostname.
 - `ROAD_DATA_JOB_SECRET`: the same base64url secret used by n8n.
+- `ROAD_DATA_API_SECRET`: a separate server-only read credential for B.
+- Optional `ROAD_DATA_GEOMETRY_REVISION`: the reviewed road revision; defaults
+  to the versioned PE-22 geometry in the data package.
 
 Keep values in your shell environment or ignored local files. To reuse the
 existing local settings without copying a secret file into the app or its build
@@ -88,9 +91,10 @@ receive Next.js's 405 response. The job has no CORS allowance for browser access
 See the [n8n handoff](../../workflows/n8n/README.md) for request shape, deduplication,
 source failure handling, and activation checks.
 
-The API app exposes no dashboard data, customer records, or database connection
-details at this stage. There is no root UI; the health route is the public smoke
-check until dashboard integration is implemented.
+See [B's integration handoff](../../docs/integration/member-b.md) for the new
+`POST /api/internal/road-context` route, its separate read credential, schemas,
+freshness and uncertainty rules. The API exposes no customer records or database
+connection details. There is no root UI; health remains the public smoke check.
 
 ## Vercel deployment
 
@@ -102,7 +106,7 @@ using the committed `vercel.json` commands.
 
 - [Public health check](https://peruroad-api-gozlie.vercel.app/api/health).
 - Protected job: `POST https://peruroad-api-gozlie.vercel.app/api/jobs/sutran`.
-- [Feature-branch health check](https://peruroad-api-git-feat-api-foundation-gozlie.vercel.app/api/health).
+- [Feature-branch health check](https://peruroad-api-git-feat-data-model-gozlie.vercel.app/api/health).
   Use this branch alias for n8n during development so successful branch pushes
   update its backend; the short project alias above identifies the initial
   staging deployment.
@@ -119,7 +123,7 @@ and its feature-branch alias passed health/authentication and saved-audit reuse
 checks, and all six PR checks passed. Automatic branch Previews now work; the PR
 stack remains unmerged.
 
-All three server variables are stored as sensitive variables targeting Preview
+The database and job variables are stored as sensitive variables targeting Preview
 only; their names, types, and targets were verified without displaying values.
 For a manual staging deployment, explicitly use Vercel's `target: "staging"`
 value; the first request with an omitted target was classified as Production
@@ -136,9 +140,11 @@ alerts with no duplicate revisions/history; repeat requests reused their stored
 outcomes. Both completed audit rows were verified directly over verified database
 TLS, and the stable alias returned the same saved outcome.
 
-Next, configure the existing n8n draft's HTTPS URL and credential, verify two
-manual n8n executions, then publish and check scheduled runs in a separate step.
-The workflow remains inactive; deploying the API does not enable polling.
+The n8n schedule is active and uses the consolidated `feat/data-model` alias.
+Manual execution `12` completed against it with a verified database audit before
+the old feature branches were removed. B's read credential is a sensitive Preview
+variable scoped to `feat/data-model`; production and teammate integration remain
+separate work.
 
 Framework references: [Next.js Route Handlers](https://nextjs.org/docs/app/getting-started/route-handlers),
 [production file tracing](https://nextjs.org/docs/app/api-reference/config/next-config-js/output),

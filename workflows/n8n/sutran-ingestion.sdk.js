@@ -41,7 +41,7 @@ const ingest = node({
     },
     parameters: {
       method: "POST",
-      url: "https://peruroad-api-git-feat-api-foundation-gozlie.vercel.app/api/jobs/sutran",
+      url: "https://peruroad-api-git-feat-data-model-gozlie.vercel.app/api/jobs/sutran",
       authentication: "genericCredentialType",
       genericAuthType: "httpHeaderAuth",
       sendBody: true,

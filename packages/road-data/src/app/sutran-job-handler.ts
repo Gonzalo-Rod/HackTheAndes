@@ -1,34 +1,11 @@
-import { createHash, randomUUID, timingSafeEqual } from "node:crypto";
+import { randomUUID } from "node:crypto";
+import { createBearerAuthorizer, readBoundedJson } from "./internal-http.ts";
 import { jobRequestSchema, type JobLog, type JobOutcome } from "../contracts/jobs.ts";
 import { parseJobConfiguration } from "../config/env.ts";
 
 // Small JSON envelope only: never accept source data, credentials, or arbitrary provider URLs.
 const MAX_BODY_BYTES = 1_024;
 export const SUTRAN_JOB_TIMEOUT_MS = 120_000;
-const digest = (value: string) => createHash("sha256").update(value).digest();
-
-async function readBody(request: Request): Promise<unknown> {
-  const reader = request.body?.getReader();
-  if (!reader) return null;
-  const chunks: Uint8Array[] = [];
-  let bytes = 0;
-  try {
-    while (true) {
-      const chunk = await reader.read();
-      if (chunk.done) break;
-      bytes += chunk.value.byteLength;
-      if (bytes > MAX_BODY_BYTES) {
-        await reader.cancel();
-        throw new RangeError("Request body is too large");
-      }
-      chunks.push(chunk.value);
-    }
-  } finally {
-    reader.releaseLock();
-  }
-  return JSON.parse(Buffer.concat(chunks).toString("utf8")) as unknown;
-}
-
 export function createSutranJobHandler({
   secret,
   run,
@@ -39,7 +16,7 @@ export function createSutranJobHandler({
   logger?: (entry: JobLog) => void;
 }) {
   parseJobConfiguration({ ROAD_DATA_JOB_SECRET: secret });
-  const expected = digest(`Bearer ${secret}`);
+  const authorized = createBearerAuthorizer(secret);
   return async function handle(request: Request): Promise<Response> {
     const startedAt = performance.now();
     let requestId = randomUUID() as string;
@@ -63,7 +40,7 @@ export function createSutranJobHandler({
     const fail = (status: number, code: string, message: string) =>
       respond({ error: { code, message } }, status, code);
 
-    if (!timingSafeEqual(expected, digest(request.headers.get("authorization") ?? "")))
+    if (!authorized(request))
       return fail(401, "unauthorized", "Valid job credentials are required");
     if (request.method !== "POST") return fail(405, "method_not_allowed", "Use POST");
     if (
@@ -79,7 +56,7 @@ export function createSutranJobHandler({
       return fail(413, "body_too_large", "The job request exceeds its size limit");
     let body: unknown;
     try {
-      body = await readBody(request);
+      body = await readBoundedJson(request, MAX_BODY_BYTES);
     } catch (error) {
       return error instanceof RangeError
         ? fail(413, "body_too_large", "The job request exceeds its size limit")

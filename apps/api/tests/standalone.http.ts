@@ -13,6 +13,7 @@ let directory: string | undefined;
 let baseUrl = "";
 let output = "";
 const secret = randomBytes(32).toString("base64url");
+const contextSecret = randomBytes(32).toString("base64url");
 
 async function unusedPort(): Promise<number> {
   const listener = createServer();
@@ -48,6 +49,7 @@ beforeAll(async () => {
       DATABASE_URL: "postgresql://unused@127.0.0.1:1/peruroad_test",
       DATABASE_SSL_MODE: "verify-full",
       ROAD_DATA_JOB_SECRET: secret,
+      ROAD_DATA_API_SECRET: contextSecret,
     },
     stdio: ["ignore", "pipe", "pipe"],
   });
@@ -162,4 +164,49 @@ test("the mounted endpoint enforces method and body limits", async () => {
 
 test("production logs do not contain the job credential", () => {
   expect(output).not.toContain(secret);
+  expect(output).not.toContain(contextSecret);
+});
+
+test("the context route rejects missing and job credentials, and validates read inputs", async () => {
+  for (const token of [undefined, secret]) {
+    const response = await fetch(`${baseUrl}/api/internal/road-context`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify({ kind: "official_alerts" }),
+    });
+    expect(response.status).toBe(401);
+  }
+  const invalid = await fetch(`${baseUrl}/api/internal/road-context`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${contextSecret}`,
+    },
+    body: JSON.stringify({
+      kind: "place",
+      name: "corcona",
+      sender: "unwanted",
+    }),
+  });
+  expect(invalid.status).toBe(400);
+});
+test("the packaged context route shows unavailable data during a database outage", async () => {
+  const response = await fetch(`${baseUrl}/api/internal/road-context`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${contextSecret}`,
+    },
+    body: JSON.stringify({ kind: "official_alerts" }),
+  });
+  expect(response.status).toBe(503);
+  const body: unknown = await response.json();
+  expect(body).toMatchObject({
+    kind: "official_alerts",
+    state: "unavailable",
+    absenceDoesNotConfirmClearance: true,
+  });
 });

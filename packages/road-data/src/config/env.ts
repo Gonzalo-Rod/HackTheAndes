@@ -86,3 +86,51 @@ export function loadJobConfiguration() {
 }
 export type DatabaseConfiguration = z.infer<typeof databaseSchema>;
 export type ManagementConfiguration = z.infer<typeof managementSchema>;
+
+const roadContextSecretSchema = z.object({
+  ROAD_DATA_API_SECRET: z
+    .string()
+    .min(32)
+    .max(256)
+    .regex(/^[A-Za-z0-9_-]+$/),
+});
+export function parseRoadContextSecret(input: unknown) {
+  return parseConfiguration(roadContextSecretSchema, input);
+}
+export function loadRoadContextServerConfiguration() {
+  return {
+    ...loadDatabaseConfiguration(),
+    ...parseConfiguration(roadContextServerSchema, process.env),
+  };
+}
+// Reviewed versioned PE-22 geometry; test/historical imports must not become the live dataset.
+const CURRENT_PE22_GEOMETRY_REVISION =
+  "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90";
+const roadContextServerSchema = roadContextSecretSchema.extend({
+  ROAD_DATA_GEOMETRY_REVISION: z.preprocess(
+    (value) => (value === "" ? undefined : value),
+    z
+      .string()
+      .regex(/^[a-f0-9]{64}$/)
+      .default(CURRENT_PE22_GEOMETRY_REVISION),
+  ),
+});
+const roadContextClientSchema = roadContextSecretSchema.extend({
+  ROAD_DATA_API_URL: z.url().refine((value) => {
+    const url = new URL(value);
+    return (
+      !url.username &&
+      !url.password &&
+      !url.search &&
+      !url.hash &&
+      (url.protocol === "https:" ||
+        (url.protocol === "http:" && ["127.0.0.1", "localhost", "[::1]"].includes(url.hostname)))
+    );
+  }),
+});
+export function loadRoadContextClientConfiguration() {
+  return parseConfiguration(roadContextClientSchema, process.env);
+}
+export function parseRoadContextClientConfiguration(input: unknown) {
+  return parseConfiguration(roadContextClientSchema, input);
+}

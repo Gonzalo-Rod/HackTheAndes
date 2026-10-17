@@ -10,6 +10,11 @@ SENAMHI warning-layer access. The deployed authenticated job and active n8n
 schedule archive SUTRAN alerts every ten minutes; weather ingestion and risk
 models remain future work under the [Team Plan](../../docs/team-plan.md).
 
+Continue Role C work on `feat/data-model` and consolidated
+[PR #10](https://github.com/Gonzalo-Rod/HackTheAndes/pull/10). B's protected HTTP
+connection and TypeScript client are documented in the
+[messaging handoff](../../docs/integration/member-b.md).
+
 ## Development
 
 Requires Node.js 24.3 or newer and npm. From the repository root:

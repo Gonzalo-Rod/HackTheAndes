@@ -9,7 +9,7 @@ remain in `@peruroad/road-data`; n8n holds no database credentials.
 A published workflow is saved in the account's personal project:
 [PeruRoad — SUTRAN ingestion (10 minutes)](https://gozlie.app.n8n.cloud/workflow/67O2kAY8fPtWjD9K).
 The API is deployed at
-`https://peruroad-api-git-feat-api-foundation-gozlie.vercel.app/api/jobs/sutran`
+`https://peruroad-api-git-feat-data-model-gozlie.vercel.app/api/jobs/sutran`
 and has passed direct authenticated HTTP ingestion checks. The workflow uses the
 saved **PeruRoad ingestion job** Header Auth credential and was published on
 October 17, 2026 at 16:04 Lima time, with its ten-minute trigger registered.
@@ -193,3 +193,11 @@ The standard trial's 1,000-execution allowance covers approximately 210 baseline
 scheduled runs over 30 hours for SUTRAN plus a future combined hourly weather/risk
 workflow, before tests and other workflows; actual remaining account quota should
 be checked in n8n. See [n8n's current trial limits](https://n8n.io/pricing/).
+
+## Consolidated backend branch
+
+The workflow now targets `feat/data-model`; PRs #1–9 and their branch pointers
+were superseded by PR #10, with all commits retained. Manual execution `12`
+returned a complete outcome on the new deployment, with four unchanged alerts
+and a verified Supabase audit, before the URL change was published as version
+`7a3eba98-6a85-4a94-8b2c-e0bcc9777eaf`. The schedule remains active.
