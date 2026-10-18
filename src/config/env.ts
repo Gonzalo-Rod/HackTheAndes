@@ -100,15 +100,6 @@ export function loadZavuConfiguration(): ZavuConfiguration {
   };
 }
 
-/** The bot's public WhatsApp number with country code. Optional: without it the dashboard hides its WhatsApp buttons. */
-export function loadWhatsAppContactConfiguration(): { number: string } | null {
-  const value = process.env.WHATSAPP_BOT_NUMBER;
-  if (!value) return null;
-  const digits = value.replace(/[\s+()-]/g, "");
-  if (!/^\d{8,15}$/.test(digits)) throw new Error("Invalid WhatsApp contact configuration: WHATSAPP_BOT_NUMBER");
-  return { number: digits };
-}
-
 export function loadOpenAiConfiguration(): { apiKey: string; model: string } | null {
   if (!process.env.OPENAI_API_KEY) return null;
   const result = z

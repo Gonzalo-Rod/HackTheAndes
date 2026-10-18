@@ -11,12 +11,10 @@ Project: [HackTheAndes](https://supabase.com/dashboard/project/cdqnintcqryfbfjjl
 region `us-west-2`. Existing project API keys were retrieved; no additional
 project, subscription, API key, or administrator-password reset was created.
 
-Twenty-one migrations have been applied after rollback-only dry runs (through
-`20261018090000_separate_alert_pass_and_route`). `20261018100000_national_route_subscriptions`
-is pending: it lets route subscriptions use any registered road and makes a phone's
-active route unique; apply it **before** deploying the release that uses it, since that
-code upserts on the new index. It keeps the previous index, so the currently deployed
-release keeps working after it is applied. They create
+All 21 migrations have been applied after rollback-only dry runs, the latest being
+`20261018100000_national_route_subscriptions` (October 18): route subscriptions can use any
+registered road and a phone's active route is unique. It keeps the previous
+`(phone_key, road_code)` index so earlier releases still work. The migrations create
 PostGIS and the application tables. Operational tables have RLS and no browser
 grants; `incident_updates` is the explicitly browser-readable revision signal. A scoped `peruroad_backend` login has application
 table permissions and its own RLS policies, without superuser, database/role

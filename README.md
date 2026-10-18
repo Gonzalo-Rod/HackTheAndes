@@ -114,8 +114,8 @@ national road-status and estimated-exposure queries (`ESTADO PE-22`,
 `EXPOSICION PE-32`, pins) using the same live services as the dashboard, with
 replies that link back to it; a narrow OpenAI intent parser supports
 natural-language questions. Route alerts (`RUTA PE-32`) work on every road with a
-climate estimate; reports and weekly PDFs stay on PE-22. Set the optional
-`WHATSAPP_BOT_NUMBER` to show the dashboard's "Consultar por WhatsApp" buttons.
+climate estimate; reports and weekly PDFs stay on PE-22. The dashboard does not
+display the bot's number.
 See [setup, supported behavior and cutover checks](docs/integration/zavu-messaging.md).
 Text reports now follow an [explicit location/confirmation flow](docs/integration/whatsapp-reports.md)
 before appearing as unconfirmed community markers. Voice transcription, explicit origin/destination route subscriptions, source-triggered

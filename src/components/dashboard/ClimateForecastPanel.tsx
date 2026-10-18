@@ -2,7 +2,6 @@
 import { useEffect, useRef } from "react";
 import { formatDateTime } from "@/lib/format";
 import { Icon } from "@/components/icons";
-import { WhatsAppLink } from "@/components/platform/WhatsAppLink";
 import type { ClimateForecastState } from "@/hooks/use-climate-forecast";
 import type { ForecastEvent } from "@/domain/exposure/forecast-events";
 import { formatForecastWindow } from "@/domain/exposure/forecast-events";
@@ -76,11 +75,6 @@ export function ClimateForecastPanel({ forecast, visible, onToggle, onFocus, sup
           <Icon name="refresh" size={14} />
         </button>
       </div>
-      <WhatsAppLink
-        command={forecast.roadFilter ? `EXPOSICION ${forecast.roadFilter}` : "EXPOSICION"}
-        label={forecast.roadFilter ? `Consultar ${forecast.roadFilter} por WhatsApp` : "Consultar por WhatsApp"}
-        className="pr-btn pr-btn--link"
-      />
       <label className="pr-forecast__toggle">
         <input type="checkbox" checked={visible} onChange={onToggle} /> Mostrar estimaciones en el mapa
       </label>

@@ -47,9 +47,9 @@ requests payment after typed consent; `RUTA` requires an existing pass and never
 starts a checkout. `PAGAR` provides the checkout link
 and `PAGO` checks status. No automatic renewal is created. One active
 route per identity is supported, on any registered road; confirming another range
-or road replaces it within the existing pass. This needs migration
-`20261018100000_national_route_subscriptions.sql`; apply it **before** deploying this code,
-because route activation upserts on the new one-route-per-phone index.
+or road replaces it within the existing pass. Migration
+`20261018100000_national_route_subscriptions.sql` (applied October 18) provides the
+one-route-per-phone index that route activation upserts on.
 
 ## Alert eligibility and noise control
 

@@ -226,9 +226,8 @@ specific flow and use its latest reply.
 ## Implementation and verification checkpoint
 
 The separate purchase/route flow uses migration
-`20261018090000_separate_alert_pass_and_route.sql` (applied). National routes need
-`20261018100000_national_route_subscriptions.sql`, not yet applied; it must be applied
-before this release deploys, or route activation fails on every road. National queries, road
+`20261018090000_separate_alert_pass_and_route.sql` (applied). National routes use
+`20261018100000_national_route_subscriptions.sql` (applied). National queries, road
 selection and off-pilot alerts are covered by tests and a local run against live
 data, not yet by a phone check.
 

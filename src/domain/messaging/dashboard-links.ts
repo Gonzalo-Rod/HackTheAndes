@@ -38,8 +38,3 @@ export function readDashboardRoad(search: string): string | null {
   const value = new URLSearchParams(search).get(DASHBOARD_PARAMS.road);
   return value ? parseRoadCode(value) : null;
 }
-
-/** Opens a WhatsApp chat with the bot and a prefilled command the user still has to send. */
-export function whatsAppChatLink(number: string, text: string): string {
-  return `https://wa.me/${number.replace(/\D/g, "")}?text=${encodeURIComponent(text)}`;
-}

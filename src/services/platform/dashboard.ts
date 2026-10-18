@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { loadDashboardCorridor } from "./corridor";
-import { loadPlatformConfiguration, loadRealtimeConfiguration, loadWhatsAppContactConfiguration } from "@/config/env";
-import { IncidentFeedSchema, WhatsAppContactSchema } from "@/contracts/platform";
+import { loadPlatformConfiguration, loadRealtimeConfiguration } from "@/config/env";
+import { IncidentFeedSchema } from "@/contracts/platform";
 import { accessService, dashboardRepository, waitlistService } from "./runtime";
 import { failure, platformRoute } from "./http";
 import { resolveForecastRoad } from "./forecast-roads";
@@ -36,11 +36,6 @@ export const readReports = platformRoute("company.reports", async (request) => a
 export const readCompany = platformRoute("company.session", async (request) => {
   const { organizationId, pass } = await accessService().requireAccess(request);
   return Response.json({ organizationId, plan: pass.plan, expiresAt: pass.expiresAt });
-});
-export const readWhatsAppContact = platformRoute("dashboard.whatsapp", async () => {
-  const contact = loadWhatsAppContactConfiguration();
-  if (!contact) failure(503, "whatsapp_unavailable", "El canal de WhatsApp no está configurado.");
-  return Response.json(WhatsAppContactSchema.parse(contact));
 });
 export const readRealtime = platformRoute("dashboard.realtime", async () => {
   const config = loadRealtimeConfiguration();

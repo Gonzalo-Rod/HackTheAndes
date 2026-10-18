@@ -1,5 +1,5 @@
 import { expect, it } from "vitest";
-import { dashboardLink, parseRoadCode, readDashboardRoad, sameRoadCode, whatsAppChatLink } from "./dashboard-links";
+import { dashboardLink, parseRoadCode, readDashboardRoad, sameRoadCode } from "./dashboard-links";
 
 it.each([
   ["PE-22", "PE-22"],
@@ -25,10 +25,6 @@ it("builds dashboard links with the parameters the dashboard reads", () => {
   );
   expect(dashboardLink("https://example.test", { alert: "123" })).toBe("https://example.test/?alerta=123");
   expect(dashboardLink("https://example.test")).toBe("https://example.test/");
-});
-
-it("prefills a WhatsApp chat with the command, digits only in the number", () => {
-  expect(whatsAppChatLink("+51 900 000 000", "ESTADO PE-22")).toBe("https://wa.me/51900000000?text=ESTADO%20PE-22");
 });
 
 it("reads the road from a dashboard URL and ignores anything else", () => {
