@@ -132,9 +132,7 @@ class SegmentIndex:
 
     def crossing_ids(self, point: Point) -> list[str]:
         projected = transform(TO_METERS, point)
-        nearby = self.tree.query(
-            projected.buffer(MAX_CROSSING_SEGMENT_DISTANCE_M + 1)
-        )
+        nearby = self.tree.query(projected.buffer(MAX_CROSSING_SEGMENT_DISTANCE_M + 1))
         distances = [
             (self.identifiers[index], projected.distance(self.lines[index]))
             for index in nearby

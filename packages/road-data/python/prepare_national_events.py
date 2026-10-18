@@ -46,7 +46,9 @@ def position(longitude: str, latitude: str) -> list[float] | None:
 
 def normalize_rows(rows: list[dict[str, str]], year: int) -> tuple[list[dict], dict]:
     header_index = next(
-        i for i, row in enumerate(rows) if "RUTA" in row.values() and "INICIO" in row.values()
+        i
+        for i, row in enumerate(rows)
+        if "RUTA" in row.values() and "INICIO" in row.values()
     )
     columns = {normalized(value): key for key, value in rows[header_index].items()}
     if any(name not in columns for name in REQUIRED_COLUMNS):
@@ -88,7 +90,9 @@ def normalize_rows(rows: list[dict[str, str]], year: int) -> tuple[list[dict], d
                 "rawType": raw_type,
                 "initialStatus": road_status(get("TRANSITABILIDAD INICIAL")),
                 "rainfallReported": rainfall_reported(
-                    get("ORIGEN EMERGENCIA"), get("PELIGRO EMERGENCIA"), get("DESARROLLO")
+                    get("ORIGEN EMERGENCIA"),
+                    get("PELIGRO EMERGENCIA"),
+                    get("DESARROLLO"),
                 ),
             }
         )
@@ -96,7 +100,9 @@ def normalize_rows(rows: list[dict[str, str]], year: int) -> tuple[list[dict], d
 
 
 def prepare(root: Path) -> dict:
-    sources = json.loads((root / "data/.cache/historical-event-sources.json").read_text())
+    sources = json.loads(
+        (root / "data/.cache/historical-event-sources.json").read_text()
+    )
     events = []
     diagnostics = []
     for source in sources:
@@ -128,4 +134,12 @@ if __name__ == "__main__":
     result = prepare(root)
     target = root / "data/.cache/national-events-candidate.json"
     target.write_text(json.dumps(result, separators=(",", ":"), allow_nan=False))
-    print(json.dumps({"state": "prepared", "events": len(result["events"]), "diagnostics": result["diagnostics"]}))
+    print(
+        json.dumps(
+            {
+                "state": "prepared",
+                "events": len(result["events"]),
+                "diagnostics": result["diagnostics"],
+            }
+        )
+    )

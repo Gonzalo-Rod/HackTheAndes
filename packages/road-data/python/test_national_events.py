@@ -48,10 +48,18 @@ def row(**overrides):
 class NationalEventTests(unittest.TestCase):
     def test_categorizes_reported_damage(self):
         self.assertEqual(road_event_category("OBSTRUCCION POR HUAICO"), "debris_flow")
-        self.assertEqual(road_event_category("OBSTRUCCION/DAÑO POR DERRUMBE"), "rockfall_or_slope_failure")
-        self.assertEqual(road_event_category("EROSION / SOCAVACION DE PUENTE"), "structure_damage")
+        self.assertEqual(
+            road_event_category("OBSTRUCCION/DAÑO POR DERRUMBE"),
+            "rockfall_or_slope_failure",
+        )
+        self.assertEqual(
+            road_event_category("EROSION / SOCAVACION DE PUENTE"), "structure_damage"
+        )
         self.assertEqual(road_event_category("PERDIDA DE PLATAFORMA"), "road_damage")
-        self.assertEqual(road_event_category("OBSTRUCCION POR DISTURBIO SOCIAL/HUELGA/PARO"), "social")
+        self.assertEqual(
+            road_event_category("OBSTRUCCION POR DISTURBIO SOCIAL/HUELGA/PARO"),
+            "social",
+        )
         self.assertEqual(road_event_category("ACCIDENTE DE TRANSITO"), "traffic")
         self.assertEqual(road_event_category("NEVADA"), "other")
 
@@ -70,7 +78,10 @@ class NationalEventTests(unittest.TestCase):
         events, diagnostics = normalize_rows(
             [{}, HEADER, row(), row(A="2", M="45900"), {"A": ""}], 2025
         )
-        self.assertEqual(diagnostics, {"year": 2025, "rows": 2, "outsideWindow": 1, "withoutPosition": 0})
+        self.assertEqual(
+            diagnostics,
+            {"year": 2025, "rows": 2, "outsideWindow": 1, "withoutPosition": 0},
+        )
         self.assertEqual(events[0]["roadCode"], "PE-5N")
         self.assertEqual(events[0]["date"], "2025-03-04")
         self.assertEqual(events[0]["kmStart"], 1288.1)

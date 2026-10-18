@@ -109,9 +109,9 @@ def prepare(root: Path, corridor_path: Path, segments_path: Path) -> dict:
         pour_point = (
             local_crossings[0]["point"]
             if local_crossings
-            else next(line for i, line in segments if i == local_segments[0]).interpolate(
-                0.5, normalized=True
-            )
+            else next(
+                line for i, line in segments if i == local_segments[0]
+            ).interpolate(0.5, normalized=True)
         )
         features.append(
             {

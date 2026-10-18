@@ -65,7 +65,6 @@ class CatchmentDomainTests(unittest.TestCase):
         self.assertEqual(crossing_segment_ids(Point(-76.99, -12), segments), ["a", "b"])
         self.assertEqual(crossing_segment_ids(Point(-76, -12), segments), [])
 
-
     def test_groups_unlinked_segments_by_the_basin_covering_their_midpoint(self):
         basins = {7: box(0, 0, 1, 1), 3: box(1, 0, 2, 1)}
         segments = [

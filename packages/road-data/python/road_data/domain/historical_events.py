@@ -60,15 +60,29 @@ _CATEGORY_RULES = (
     (("DERRUMBE",), "rockfall_or_slope_failure"),
     (("DESLIZAMIENTO",), "landslide"),
     (("INUNDACION",), "flood"),
-    (("PUENTE", "ALCANTARILLA", "OBRA DE ARTE", "MURO", "TUNEL", "ESTRUCTURA"), "structure_damage"),
     (
-        ("EROSION", "SOCAVACION", "PLATAFORMA", "ASENTAMIENTO", "DEFORMACION", "ARENAMIENTO"),
+        ("PUENTE", "ALCANTARILLA", "OBRA DE ARTE", "MURO", "TUNEL", "ESTRUCTURA"),
+        "structure_damage",
+    ),
+    (
+        (
+            "EROSION",
+            "SOCAVACION",
+            "PLATAFORMA",
+            "ASENTAMIENTO",
+            "DEFORMACION",
+            "ARENAMIENTO",
+        ),
         "road_damage",
     ),
     (("DISTURBIO", "HUELGA", "PARO", "VANDALISMO", "NEGLIGENCIA"), "social"),
     (("ACCIDENTE", "SINIESTRO"), "traffic"),
 )
-_ROAD_STATUSES = {"INTERRUMPIDO": "interrumpido", "RESTRINGIDO": "restringido", "NORMAL": "normal"}
+_ROAD_STATUSES = {
+    "INTERRUMPIDO": "interrumpido",
+    "RESTRINGIDO": "restringido",
+    "NORMAL": "normal",
+}
 
 
 def road_event_category(raw_type: str) -> str:
