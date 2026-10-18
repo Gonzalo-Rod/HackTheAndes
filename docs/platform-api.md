@@ -22,12 +22,16 @@ in `src/contracts/platform.ts` and `src/contracts/road-alerts.ts`.
 |---|---|---|
 | `GET /api/incidents` | Public | Sanitized PE-22 operational incidents. D's map combines them with its official SUTRAN feed. Community reports are explicitly unconfirmed. |
 | `GET /api/incidents/:uuid` | Public | Structured status history only; no report text, sender identity, or encrypted content. |
-| `GET /api/segments` | Public | C's pinned geometry revision, terrain elevations, and explicit geometric-distance reference. |
+| `GET /api/segments?road=PE-3N` | Public | Without `road`, C's pinned PE-22 revision; with it, that registered road's segments. C's pinned geometry revision, terrain elevations, and explicit geometric-distance reference. |
 | `GET /api/catchments` | Public | Coarse upstream HydroBASINS polygons with weights, dates and low-confidence notice; dated bundled fallback on DB failure. See [catchment handoff](data/pe22-catchments.md). |
 | `GET /api/weather/catchments` | Public | Capture-anchored catchment rainfall history and forecast windows, with dated fallback. |
 | `GET /api/hazards` | Public | Static susceptibility and official warnings; separate from model risk. |
-| `GET /api/exposure?horizonHours=24\|72` | Public | Estimated climate attention, provenance, 24/72-hour and six-hour windows. Validated DB/bundle reads; stale/future categories masked to unknown. Fresh usable database assessments can trigger conditional alerts; stale/snapshot inputs are ineligible. |
+| `GET /api/exposure/roads` | Public | Roads with reviewed exposure inputs (`data/roads/registry.json`), pilot first; other national roads have no estimate. |
+| `GET /api/exposure?horizonHours=24\|72&road=PE-3N` | Public | `road` defaults to the PE-22 pilot; an unregistered road returns 404 `road_not_covered`. Estimated climate attention, provenance, 24/72-hour and six-hour windows. Validated DB/bundle reads; stale/future categories masked to unknown. Fresh usable database assessments can trigger conditional alerts; stale/snapshot inputs are ineligible. |
 | `GET /api/history/events` | Public | Sanitized candidate events with incomplete-coverage/training flags. |
+| `GET /api/hazards/warnings` | Public | Live SENAMHI quebrada-activation warnings for all of Peru (10-minute cache, then last live result, then the dated capture). Official levels only. See [national layers](data/national-layers.md). |
+| `GET /api/weather/national` | Public | Open-Meteo model rain on a 0.75° grid over Peru (hourly cache; stale flag on provider failure; incomplete cells omitted). |
+| `GET /api/history/road-events` | Public | Nationwide Provías emergencies (Jan–Apr 2024 and 2025), display-only and labeled incomplete; not training labels or current alerts. See [national road events](data/national-road-events.md). |
 | `GET /api/history/weather?dataset=...` | Public | Allowlisted archived forecasts, retrospective references and Yaku reconstruction. See [model inputs](data/model-inputs.md). |
 | `GET /api/corridor` | Public | D's corridor contract adapted to C's segments. Town positions remain approximate OSM references; an explicitly dated bundled fallback survives DB outages. |
 | `GET /api/realtime` | Public | Supabase URL and **publishable** key only. The subscription reads `incident_updates`, a singleton change signal. |
@@ -35,6 +39,7 @@ in `src/contracts/platform.ts` and `src/contracts/road-alerts.ts`.
 | `POST /api/waitlist` | Public, durable quota | Consented company contact; AES-256-GCM phone storage, HMAC matching, transactional request-ID deduplication. |
 | `POST /api/access` | Public, durable quota | High-entropy company code → signed, HttpOnly, SameSite=Strict, Secure-on-HTTPS cookie. No code or token in response JSON. |
 | `GET /api/company` | Signed cookie + active pass | Organization session and current entitlement. |
+| `POST/GET /api/company/trips`, `DELETE /api/company/trips/:id` | Signed cookie + active dashboard pass | Register, list and stop route watches (truck trip or continuous). See [route watch](integration/route-watch.md). |
 | `GET /api/company/reports` | Signed cookie + active dashboard pass | Only that organization's schema-validated reports. Empty until C generates them. |
 | `GET /api/risk?horizonHours=24\|72` | Public | 400 for invalid inputs; currently 503 `model_unavailable`. |
 | `POST /api/dispatch-decision` | Signed cookie + predictions pass | Currently 503 until C's engine is integrated. No fabricated decision is returned. |

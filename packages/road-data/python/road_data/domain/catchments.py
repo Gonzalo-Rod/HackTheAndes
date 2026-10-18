@@ -4,7 +4,7 @@ from collections import defaultdict
 from math import floor, isfinite
 from typing import Iterable
 from pyproj import Geod, Transformer
-from shapely import make_valid
+from shapely import STRtree, make_valid
 from shapely.geometry import (
     GeometryCollection,
     MultiPoint,
@@ -24,6 +24,9 @@ SAMPLE_GRID_DEGREES = 0.1
 # Exact road/river intersections can differ slightly from the separately segmented axis.
 MAX_CROSSING_SEGMENT_DISTANCE_M = 20
 MAX_SAMPLE_POINTS = 10_000
+# Huaicos come from local quebradas. Above this area a crossing's upstream union is a major river
+# (Huallaga, Maranon), whose rain average would dilute the local signal; PE-22's largest is ~7,000 km2.
+MAX_UPSTREAM_AREA_KM2 = 10_000
 
 
 def upstream_ids(outlets: Iterable[int], downstream: dict[int, int]) -> list[int]:
@@ -117,21 +120,57 @@ def sampling_points(geometry: MultiPolygon) -> list[dict[str, float]]:
     return [{**sample, "weight": sample["areaKm2"] / total} for sample in samples]
 
 
+class SegmentIndex:
+    """Projected road segments with a spatial index; long roads have thousands of segments."""
+
+    def __init__(self, segments: list[tuple[str, BaseGeometry]]):
+        if not segments:
+            raise ValueError("No road segments")
+        self.identifiers = [identifier for identifier, _ in segments]
+        self.lines = [transform(TO_METERS, line) for _, line in segments]
+        self.tree = STRtree(self.lines)
+
+    def crossing_ids(self, point: Point) -> list[str]:
+        projected = transform(TO_METERS, point)
+        nearby = self.tree.query(
+            projected.buffer(MAX_CROSSING_SEGMENT_DISTANCE_M + 1)
+        )
+        distances = [
+            (self.identifiers[index], projected.distance(self.lines[index]))
+            for index in nearby
+        ]
+        if not distances:
+            return []
+        minimum = min(distance for _, distance in distances)
+        if minimum > MAX_CROSSING_SEGMENT_DISTANCE_M:
+            return []
+        return sorted(
+            identifier
+            for identifier, distance in distances
+            if abs(distance - minimum) < 0.01
+        )
+
+
 def crossing_segment_ids(
     point: Point, segments: list[tuple[str, BaseGeometry]]
 ) -> list[str]:
-    projected = transform(TO_METERS, point)
-    distances = [
-        (identifier, projected.distance(transform(TO_METERS, line)))
-        for identifier, line in segments
-    ]
-    if not distances:
-        raise ValueError("No road segments")
-    minimum = min(distance for _, distance in distances)
-    if minimum > MAX_CROSSING_SEGMENT_DISTANCE_M:
-        return []
-    return sorted(
-        identifier
-        for identifier, distance in distances
-        if abs(distance - minimum) < 0.01
-    )
+    return SegmentIndex(segments).crossing_ids(point)
+
+
+def containing_basin_segments(
+    segments: list[tuple[str, BaseGeometry]], basins: dict[int, BaseGeometry]
+) -> dict[int, list[str]]:
+    """Group segments by the basin that covers their midpoint; boundary ties pick the lowest id."""
+    grouped: dict[int, list[str]] = defaultdict(list)
+    identifiers = list(basins)
+    tree = STRtree([basins[basin] for basin in identifiers])
+    for identifier, line in segments:
+        midpoint = line.interpolate(0.5, normalized=True)
+        matches = sorted(
+            identifiers[index] for index in tree.query(midpoint, predicate="covered_by")
+        )
+        if not matches:
+            # A midpoint in a basin gap or offshore stays unlinked rather than guessed.
+            continue
+        grouped[matches[0]].append(identifier)
+    return {basin: sorted(ids) for basin, ids in grouped.items()}

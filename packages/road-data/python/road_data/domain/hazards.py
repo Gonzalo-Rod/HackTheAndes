@@ -52,9 +52,10 @@ def weighted_susceptibility(samples, geometries, classes):
             weights[str(max(levels))] += sample["weight"]
         else:
             unknown += sample["weight"]
+    # Weights sum to one only up to floating-point error (PE-12A reached 1.0000000000000002).
     return {
-        "classWeights": weights,
-        "unknownWeight": unknown,
+        "classWeights": {level: min(1.0, weight) for level, weight in weights.items()},
+        "unknownWeight": min(1.0, unknown),
         "method": "area_weighted_sampling",
         "boundaryRule": "highest_class",
     }

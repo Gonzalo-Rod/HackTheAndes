@@ -97,14 +97,12 @@ describe("research evidence presentation", () => {
         mapReady: true,
         mapError: null,
         dataError: "Consulta fallida",
-        staleMessage: null,
         refreshing: false,
         partialData: true,
         onRetry: () => undefined,
       }),
     );
-    expect(html).toContain("pr-banner");
     expect(html).not.toContain('class="pr-overlay"');
-    expect(html).toContain("referencias ambientales mantienen su fecha original");
+    expect(html).not.toContain("pr-banner");
   });
 });

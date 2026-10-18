@@ -4,8 +4,8 @@ import { test } from "vitest";
 import { createDatabasePool } from "../../src/db/pool.ts";
 import { loadDatabaseConfiguration } from "../../src/config/env.ts";
 import { createPostgresRoadContextRepository } from "../../src/db/road-context.ts";
-import { persistPe22Geometry } from "../../src/db/import-geometry.ts";
-import { preparePe22Geometry } from "../../src/services/prepare-pe22.ts";
+import { persistRoadGeometry } from "../../src/db/import-geometry.ts";
+import { prepareRoadGeometry } from "../../src/services/prepare-road-geometry.ts";
 import { importPe22Gazetteer } from "../../src/services/import-pe22-gazetteer.ts";
 import { buildGazetteer } from "../../src/domain/road-data/build-gazetteer.ts";
 import { createRoadContextService } from "../../src/services/road-context.ts";
@@ -24,11 +24,11 @@ test("read context uses its explicit revision and validates real Postgres JSON a
       lat + shift,
     ]);
   }
-  const geometry = preparePe22Geometry(road);
+  const geometry = prepareRoadGeometry(road);
   assert.ok(geometry.ok);
   const revision = geometry.value.corridor.properties.geometryRevision;
   try {
-    await persistPe22Geometry(pool, road, geometry.value);
+    await persistRoadGeometry(pool, road, geometry.value);
     const input = source();
     input.landmarks = input.landmarks.map((row) => ({
       ...row,

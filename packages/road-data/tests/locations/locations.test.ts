@@ -10,7 +10,7 @@ import {
   validateGazetteerSnapshot,
   preparePe22Gazetteer,
 } from "../../src/services/prepare-pe22-gazetteer.ts";
-import { preparePe22Geometry } from "../../src/services/prepare-pe22.ts";
+import { prepareRoadGeometry } from "../../src/services/prepare-road-geometry.ts";
 import { capturedSnapshot } from "../geometry/support.ts";
 import { geometry, source, capturedGazetteer } from "./support.ts";
 
@@ -134,7 +134,7 @@ test("accent/case normalization and aliases resolve exactly; duplicate names rem
   assert.equal(resolvePlaceName(ambiguous.value, "rio blanco").status, "ambiguous");
 });
 test("committed data reproduces offline; changed identities, locations and revisions cannot pass cache verification", () => {
-  const built = preparePe22Geometry(capturedSnapshot());
+  const built = prepareRoadGeometry(capturedSnapshot());
   assert.ok(built.ok);
   const captured = capturedGazetteer();
   assert.ok(validateGazetteerSnapshot(built.value.segments, captured).ok);

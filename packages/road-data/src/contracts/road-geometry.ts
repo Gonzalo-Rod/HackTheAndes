@@ -1,5 +1,11 @@
 import { z } from "zod";
 
+// National network codes from MTC/SUTRAN, for example PE-22, PE-3N, PE-5NB and PE-1NÑ.
+export const roadCodeSchema = z.string().regex(/^PE-\d{1,3}[A-ZÑ]{0,3}$/u);
+export type RoadCode = z.infer<typeof roadCodeSchema>;
+/** The pilot corridor that WhatsApp routes, route watch and the gazetteer still use. */
+export const PILOT_ROAD_CODE = "PE-22";
+
 export const positionSchema = z.tuple([z.number().min(-180).max(180), z.number().min(-90).max(90)]);
 export const lineStringSchema = z.object({
   type: z.literal("LineString"),
@@ -14,7 +20,7 @@ export const roadSectionSchema = z.object({
   properties: z
     .object({
       sourceId: z.string().min(1),
-      roadCode: z.literal("PE-22"),
+      roadCode: roadCodeSchema,
       sourceKmStart: z.number().nonnegative(),
       sourceKmEnd: z.number().positive(),
       sourceLengthKm: z.number().positive(),
@@ -29,7 +35,7 @@ export const roadSectionSchema = z.object({
 export const roadNetworkSnapshotSchema = z.object({
   schemaVersion: z.literal(1),
   source: z.literal("sutran-mtc"),
-  roadCode: z.literal("PE-22"),
+  roadCode: roadCodeSchema,
   retrievedAt: z.iso.datetime({ offset: true }),
   sourceUrls: z.object({ metadata: z.url(), geometry: z.url() }),
   receivedMetadataCount: z.number().int().nonnegative(),
@@ -47,7 +53,7 @@ export const displaySegmentSchema = z.object({
   type: z.literal("Feature"),
   id: z.string(),
   properties: z.object({
-    roadCode: z.literal("PE-22"),
+    roadCode: roadCodeSchema,
     geometryRevision: z.string().regex(/^[a-f0-9]{64}$/),
     distanceFromOriginStartKm: z.number().nonnegative(),
     distanceFromOriginEndKm: z.number().positive(),
@@ -81,7 +87,7 @@ export interface GeometryDiagnostic {
 export interface CorridorBuild {
   corridor: {
     type: "Feature";
-    properties: { roadCode: "PE-22"; geometryRevision: string; measuredLengthKm: number };
+    properties: { roadCode: RoadCode; geometryRevision: string; measuredLengthKm: number };
     geometry: z.infer<typeof lineStringSchema>;
   };
   segments: DisplaySegments;

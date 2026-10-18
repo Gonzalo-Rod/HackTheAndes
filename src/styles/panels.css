@@ -94,7 +94,7 @@
   gap: 7px;
   padding: 8px 10px;
   border-radius: var(--radius-sm);
-  background: #f1ece2;
+  background: var(--muted);
   color: var(--ink-2);
   font-size: 12px;
 }
@@ -232,7 +232,7 @@
   margin-bottom: 8px;
 }
 .pr-source a {
-  color: var(--focus);
+  color: var(--ring);
 }
 .pr-source__kind {
   align-self: flex-start;
@@ -275,7 +275,7 @@
   gap: 4px;
   padding: 8px 10px;
   border-radius: var(--radius-sm);
-  background: #f1ece2;
+  background: var(--muted);
   color: var(--ink-2);
   font-size: 12px;
 }

@@ -100,9 +100,9 @@ export const statusIcon = (status: RoadStatus): IconName => status;
 export function LogoMark({ size = 26 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-      <path d="M1.5 25 11 9l5.5 8.6L20 12l10.5 13z" fill="#c2512c" />
+      <path d="M1.5 25 11 9l5.5 8.6L20 12l10.5 13z" fill="var(--primary)" />
       <path d="M11 9l2.6 4.1-1.6-.9-1.4 1.6-1.2-1.3-1.5.9z" fill="#fbfaf6" opacity="0.9" />
-      <path d="M6 30c3-4.5 8.5-3.5 11-6.5s5.5-3 9-2.5" fill="none" stroke="#1f1c17" strokeWidth="2.4" strokeLinecap="round" />
+      <path d="M6 30c3-4.5 8.5-3.5 11-6.5s5.5-3 9-2.5" fill="none" stroke="var(--foreground)" strokeWidth="2.4" strokeLinecap="round" />
       <path
         d="M6 30c3-4.5 8.5-3.5 11-6.5s5.5-3 9-2.5"
         fill="none"

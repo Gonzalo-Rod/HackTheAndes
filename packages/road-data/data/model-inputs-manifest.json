@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
-  "preparedAt": "2026-10-18T00:59:08.348Z",
+  "preparedAt": "2026-10-18T06:41:29.099Z",
   "artifacts": [
     {
       "file": "weather/live.json.gz",
-      "sha256": "788ea9d5f0ead3d8b0b222e6f55a13ba0ff085d99d975b2d08a544db0f1e3d5f"
+      "sha256": "21bd16f1fa5a0c978a62374ea585f3603edd01e79fe72fb8a88717619aeacf11"
     },
     {
       "file": "weather/previous_runs-2023-12-24-2023-12-31.json.gz",
@@ -37,7 +37,7 @@
     },
     {
       "file": "pe22/catchments.json",
-      "sha256": "497f1ca68986df4b49f3514d9204563f3a14ab61915e364559762696479ee409"
+      "sha256": "d05fce4f2f53100b182becad23ec5bd8c5748e4ae2bffb53379c577273437e80"
     },
     {
       "file": "pe22/catchment-terrain.json",
@@ -45,7 +45,7 @@
     },
     {
       "file": "pe22/hazards.json",
-      "sha256": "d8264a70118508d80fce8e3c4b5ade2ae0c64a17a15372c3ed31924af3066663"
+      "sha256": "5b36d0cba9f1b3fba8d44e735365ccc18cc41d20256a97ff2d71d22e4ca330c1"
     },
     {
       "file": "events/pe22-events.json",
@@ -57,7 +57,7 @@
     },
     {
       "file": "spatial/hazards-source.json.gz",
-      "sha256": "908995bac06db747ec154f55ec9036d17a5d25e0f57464ffbed1673243f7074a"
+      "sha256": "292f8463c5e4628c258262246e96e6a97a737f7b41b948c2dfecf35771acc5da"
     },
     {
       "file": "spatial/hydrographic-units.json.gz",
@@ -69,14 +69,14 @@
       "file": "live.json.gz",
       "kind": "operational",
       "model": "ecmwf_ifs025",
-      "grids": 12,
-      "catchments": 11,
+      "grids": 24,
+      "catchments": 13,
       "coverage": [
         {
           "variable": "precipitation",
-          "totalHours": 2892,
-          "knownHours": 2892,
-          "firstKnown": "2026-10-11T00:00:00.000Z"
+          "totalHours": 5784,
+          "knownHours": 5784,
+          "firstKnown": "2026-10-11T06:00:00.000Z"
         }
       ]
     },
@@ -259,9 +259,9 @@
     }
   ],
   "spatial": {
-    "sourceSusceptibilityPolygons": 270,
-    "displaySusceptibilityPolygons": 235,
-    "invalidSourcePolygons": 95,
+    "sourceSusceptibilityPolygons": 335,
+    "displaySusceptibilityPolygons": 239,
+    "invalidSourcePolygons": 138,
     "nationalWarnings": 10,
     "warningsIntersectingRegion": 0,
     "segments": 174,
@@ -270,7 +270,15 @@
     "hydrographicCoverage": [
       {
         "catchmentId": "hydrobasins-v1c-sa12-6120521890",
-        "coverageFraction": 0.9999998334748662
+        "coverageFraction": 0.9999998334749273
+      },
+      {
+        "catchmentId": "hydrobasins-v1c-sa12-6120524120",
+        "coverageFraction": 0.9999994676287179
+      },
+      {
+        "catchmentId": "hydrobasins-v1c-sa12-6120524610",
+        "coverageFraction": 0.9981305559139105
       },
       {
         "catchmentId": "hydrobasins-v1c-sa12-6120526890",
@@ -278,7 +286,7 @@
       },
       {
         "catchmentId": "hydrobasins-v1c-sa12-6120527040",
-        "coverageFraction": 0.9999999584497303
+        "coverageFraction": 0.9999999584493433
       },
       {
         "catchmentId": "hydrobasins-v1c-sa12-6120528440",
@@ -286,15 +294,15 @@
       },
       {
         "catchmentId": "hydrobasins-v1c-sa12-6120528530",
-        "coverageFraction": 0.9999999682639397
+        "coverageFraction": 0.9999999682634527
       },
       {
         "catchmentId": "hydrobasins-v1c-sa12-6120531630",
-        "coverageFraction": 0.999999968004939
+        "coverageFraction": 0.9999999680050363
       },
       {
         "catchmentId": "hydrobasins-v1c-sa12-6120532050",
-        "coverageFraction": 0.9999999714332107
+        "coverageFraction": 0.9999999714333015
       },
       {
         "catchmentId": "hydrobasins-v1c-sa12-6120534280",

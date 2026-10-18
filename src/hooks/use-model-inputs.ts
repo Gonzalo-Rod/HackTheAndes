@@ -1,15 +1,20 @@
 "use client";
 import { useEffect, useState } from "react";
-import type { HazardLayer, CatchmentWeatherLayer } from "@/contracts/model-inputs";
-import { fetchHazardLayer, fetchCatchmentWeather } from "@/integrations/dashboard-api/client";
+import type { HazardLayer, CatchmentWeatherLayer, NationalWarnings } from "@/contracts/model-inputs";
+import { fetchHazardLayer, fetchCatchmentWeather, fetchNationalWarnings } from "@/integrations/dashboard-api/client";
 type SourceState<T> = { data: T | null; error: string | null };
 export function useModelInputs() {
   const [hazards, setHazards] = useState<SourceState<HazardLayer>>({ data: null, error: null });
   const [weather, setWeather] = useState<SourceState<CatchmentWeatherLayer>>({ data: null, error: null });
+  const [warnings, setWarnings] = useState<SourceState<NationalWarnings>>({ data: null, error: null });
   useEffect(() => {
     let cancelled = false;
     const load = async () => {
-      const [hazardResult, weatherResult] = await Promise.allSettled([fetchHazardLayer(), fetchCatchmentWeather()]);
+      const [hazardResult, weatherResult, warningsResult] = await Promise.allSettled([
+        fetchHazardLayer(),
+        fetchCatchmentWeather(),
+        fetchNationalWarnings(),
+      ]);
       if (cancelled) return;
       setHazards((previous) =>
         hazardResult.status === "fulfilled"
@@ -21,6 +26,11 @@ export function useModelInputs() {
           ? { data: weatherResult.value, error: null }
           : { ...previous, error: "Lluvia por cuenca no disponible; no se interpreta como cero." },
       );
+      setWarnings((previous) =>
+        warningsResult.status === "fulfilled"
+          ? { data: warningsResult.value, error: null }
+          : { ...previous, error: "Avisos nacionales de SENAMHI no disponibles; no implica ausencia de peligro." },
+      );
     };
     void load();
     const timer = window.setInterval(() => void load(), 5 * 60_000);
@@ -29,5 +39,5 @@ export function useModelInputs() {
       window.clearInterval(timer);
     };
   }, []);
-  return { hazards, weather };
+  return { hazards, weather, warnings };
 }

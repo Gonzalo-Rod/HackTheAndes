@@ -40,7 +40,17 @@ a one-time 0.50 USD-TDN Qatom pass for seven elapsed days from the original
 WhatsApp request, using OpenAI
 Responses with Qatom MCP guest checkout, verified fulfilment and server-enforced
 expiry. See `docs/integration/qatom-alert-passes.md`; this supersedes the earlier
-payment exclusion only for weekly WhatsApp alerts. Yape remains excluded. Do not treat proposed
+payment exclusion only for weekly WhatsApp alerts. Yape remains excluded.
+**Latest scope update (2026-10-18):** the incident dashboard covers all of Peru:
+national SUTRAN alerts lead, community reports carry an explicit "No confirmado" source
+filter, and nationwide Provías emergencies give display-only history (see
+`docs/data/national-road-events.md`). Climate exposure covers every road listed in the
+reviewed registry `packages/road-data/data/roads/registry.json` (prepared with `road:prepare`,
+loaded with `road:import`; see `docs/data/multi-road-forecast.md`). WhatsApp routes, route watch,
+the gazetteer and database ingestion remain on the PE-22 pilot corridor. Company monitors can register continuous
+route watches or truck trips that trigger urgent calls; see
+`docs/integration/route-watch.md`.
+Do not treat proposed
 integrations, metrics, or predictions as verified results. Before writing code,
 read the engineering principles and quality rules below.
 

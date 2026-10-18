@@ -1,5 +1,7 @@
 import { addHazardLayers, setHazardVisibility } from "./hazard-layers";
 import { addCatchmentLayers, setCatchmentVisibility } from "./catchment-layers";
+import { addHistoryLayers, setHistoryVisibility } from "./history-layers";
+import { addNationalRainLayers, setNationalRainVisibility } from "./national-rain-layers";
 import type { ExpressionSpecification, GeoJSONSource, Map as MLMap } from "maplibre-gl";
 
 import { STATUS_META } from "@/components/alert-meta";
@@ -57,6 +59,8 @@ export function addThematicLayers(map: MLMap, origin: string): void {
 
   addCatchmentLayers(map);
   addHazardLayers(map);
+  addNationalRainLayers(map);
+  addHistoryLayers(map);
 
   // A light wash over Peru's regions, under the hillshade, so the country reads first.
   map.addLayer(
@@ -312,6 +316,8 @@ export function applyLayerState(map: MLMap, layers: LayerState): void {
   );
   setCatchmentVisibility(map, layers.catchments);
   setHazardVisibility(map, layers.susceptibility, layers.officialWarnings);
+  setHistoryVisibility(map, layers.history);
+  setNationalRainVisibility(map, layers.nationalRain);
   map.setPaintProperty("network-line", "line-opacity", layers.networkOpacity);
   map.setLayoutProperty("rivers-line", "visibility", visibility(layers.rivers));
   map.setPaintProperty("rivers-line", "line-opacity", layers.riversOpacity);

@@ -1,8 +1,10 @@
 """Prepare bounded display layers and explicit sample/road exposure, without a risk score."""
 
+import argparse
 import json
 import gzip
 from pathlib import Path
+from shapely import STRtree
 from shapely.geometry import shape
 from shapely.ops import unary_union, transform
 from pyproj import Transformer
@@ -14,20 +16,24 @@ from road_data.domain.hazards import (
 )
 
 
-def prepare(root: Path) -> dict:
-    source = json.loads(
-        gzip.decompress((root / "data/spatial/hazards-source.json.gz").read_bytes())
-    )
-    catchments = json.loads((root / "data/pe22/catchments.json").read_text())
-    road = shape(
-        json.loads((root / "data/pe22/corridor.geojson").read_text())["geometry"]
-    )
-    segments = json.loads((root / "data/pe22/segments-1km.geojson").read_text())[
-        "features"
-    ]
-    hydrography = json.loads(
-        gzip.decompress((root / "data/spatial/hydrographic-units.json.gz").read_bytes())
-    )
+def utm_epsg(road) -> int:
+    """Southern-hemisphere UTM zone of the road centroid; Peru spans zones 17 to 19."""
+    zone = int((road.centroid.x + 180) // 6) + 1
+    return 32700 + zone
+
+
+def prepare(
+    source_path: Path,
+    catchments_path: Path,
+    corridor_path: Path,
+    segments_path: Path,
+    hydrography_path: Path,
+) -> dict:
+    source = json.loads(gzip.decompress(source_path.read_bytes()))
+    catchments = json.loads(catchments_path.read_text())
+    road = shape(json.loads(corridor_path.read_text())["geometry"])
+    segments = json.loads(segments_path.read_text())["features"]
+    hydrography = json.loads(gzip.decompress(hydrography_path.read_bytes()))
     geometries = [
         shape(feature["geometry"]) for feature in source["susceptibility"]["features"]
     ]
@@ -41,8 +47,9 @@ def prepare(root: Path) -> dict:
         [shape(feature["geometry"]) for feature in catchments["features"]]
         + [road.buffer(0.01)]
     )
-    project_to_meters = Transformer.from_crs(4326, 32718, always_xy=True).transform
-    project_to_wgs84 = Transformer.from_crs(32718, 4326, always_xy=True).transform
+    epsg = utm_epsg(road)
+    project_to_meters = Transformer.from_crs(4326, epsg, always_xy=True).transform
+    project_to_wgs84 = Transformer.from_crs(epsg, 4326, always_xy=True).transform
     display_region = transform(
         project_to_wgs84, transform(project_to_meters, road).buffer(2000)
     )
@@ -52,15 +59,18 @@ def prepare(root: Path) -> dict:
     source["warnings"]["features"] = clipped_features(
         source["warnings"]["features"], region, shape
     )
-    projected = Transformer.from_crs(4326, 32718, always_xy=True).transform
-    projected_geometries = [transform(projected, geometry) for geometry in geometries]
+    projected_geometries = [
+        transform(project_to_meters, geometry) for geometry in geometries
+    ]
+    # Long roads query thousands of polygons per segment without a spatial index.
+    tree = STRtree(projected_geometries)
     segment_exposure = []
     for segment in segments:
-        line = transform(projected, shape(segment["geometry"]))
+        line = transform(project_to_meters, shape(segment["geometry"]))
         affected = [
-            (level, polygon.intersection(line))
-            for level, polygon in zip(classes, projected_geometries)
-            if level > 0 and polygon.intersects(line)
+            (classes[index], projected_geometries[index].intersection(line))
+            for index in sorted(tree.query(line, predicate="intersects"))
+            if classes[index] > 0
         ]
         coverage = (
             unary_union([geometry for _, geometry in affected]).length / line.length
@@ -117,12 +127,31 @@ def prepare(root: Path) -> dict:
     return source
 
 
-if __name__ == "__main__":
+def main() -> None:
     root = Path(__file__).resolve().parents[1]
-    result = prepare(root)
-    target = root / "data/.cache/hazards-candidate.json"
-    target.parent.mkdir(parents=True, exist_ok=True)
-    target.write_text(json.dumps(result, separators=(",", ":"), allow_nan=False))
+    pilot = root / "data/pe22"
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--source", type=Path, default=root / "data/spatial/hazards-source.json.gz"
+    )
+    parser.add_argument("--catchments", type=Path, default=pilot / "catchments.json")
+    parser.add_argument("--corridor", type=Path, default=pilot / "corridor.geojson")
+    parser.add_argument("--segments", type=Path, default=pilot / "segments-1km.geojson")
+    parser.add_argument(
+        "--output", type=Path, default=root / "data/.cache/hazards-candidate.json"
+    )
+    arguments = parser.parse_args()
+    result = prepare(
+        arguments.source,
+        arguments.catchments,
+        arguments.corridor,
+        arguments.segments,
+        root / "data/spatial/hydrographic-units.json.gz",
+    )
+    arguments.output.parent.mkdir(parents=True, exist_ok=True)
+    arguments.output.write_text(
+        json.dumps(result, separators=(",", ":"), allow_nan=False)
+    )
     print(
         json.dumps(
             {
@@ -133,3 +162,7 @@ if __name__ == "__main__":
             }
         )
     )
+
+
+if __name__ == "__main__":
+    main()

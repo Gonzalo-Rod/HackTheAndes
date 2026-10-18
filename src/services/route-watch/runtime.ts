@@ -12,9 +12,10 @@ import { accessService } from "@/services/platform/runtime";
 import { collectRouteIncidents } from "./collect-incidents";
 import { createRouteWatchEvaluator } from "./evaluate";
 import { createTripRegistration } from "./register-trip";
+import { createWatchManagement } from "./manage-watches";
 
-// Production wiring for route watch (F4). Backend only for now: the monitor's route form in the
-// company dashboard is not built yet.
+// Production wiring for route watch (F4): the company dashboard registers, lists and stops watches;
+// scheduled and source-change jobs evaluate them.
 
 function tripRepository() {
   const platform = loadPlatformConfiguration();
@@ -56,3 +57,15 @@ export const registerTrip = platformRoute("route_watch.register", async (request
     now: Date.now,
   })(request);
 });
+
+function watchManagement() {
+  return createWatchManagement({ trips: tripRepository(), requireOrganization: (req) => accessService().requireAccess(req, "dashboard") });
+}
+
+/** GET /api/company/trips: the organization's planned and active watches. */
+export const listWatches = platformRoute("route_watch.list", (request) => watchManagement().list(request));
+
+/** DELETE /api/company/trips/:id: stops one of the organization's watches. */
+export async function cancelWatch(request: Request, id: string) {
+  return platformRoute("route_watch.cancel", (req) => watchManagement().cancel(req, id))(request);
+}

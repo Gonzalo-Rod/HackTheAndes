@@ -1,7 +1,10 @@
 import { exposurePolicySchema } from "../../contracts/exposure.ts";
 // Initial engineering attention bins; these are not SENAMHI or calibrated hazard cutoffs.
+// v2 escalates a segment only where the road crosses INGEMMET class 4 (high) or 5 (very high)
+// terrain: catchment-wide fractions exceeded 0.2 everywhere on PE-22 and never discriminated.
 export const DEFAULT_EXPOSURE_POLICY = exposurePolicySchema.parse({
-  version: "climate-exposure-v1",
+  version: "climate-exposure-v2",
+  minimumLocalSusceptibilityClass: 4,
   interpretation: "experimental_attention_criteria_not_hazard_thresholds",
   weatherMaxAgeMs: 90 * 60 * 1000,
   minimumSusceptibilityCoverage: 0.9,

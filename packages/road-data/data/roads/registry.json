@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "roads": [
+    {
+      "roadCode": "PE-08B",
+      "name": "CARRETERA CAJAMARCA - CHACHAPOYAS - MOYOBAMBA ",
+      "geometryRevision": "aebbcb443fd23af5c70bbdc1a0411c9e3f4d363f2debf7f1d7c038a962c5008c",
+      "measuredLengthKm": 549.1862848606395,
+      "segmentCount": 550,
+      "catchmentCount": 39,
+      "weatherGridCount": 25,
+      "preparedAt": "2026-10-18T09:08:22.548Z"
+    },
+    {
+      "roadCode": "PE-12A",
+      "name": "CARRETERA LA PAMPA - CUSCA - SIHUAS - HUACRACHUCO - UCHIZA",
+      "geometryRevision": "05b3d4b08646a948998dff930011600e3744a06a8a2139ff4327e00de6f23ad3",
+      "measuredLengthKm": 336.96930040203705,
+      "segmentCount": 337,
+      "catchmentCount": 28,
+      "weatherGridCount": 30,
+      "preparedAt": "2026-10-18T09:00:38.885Z"
+    },
+    {
+      "roadCode": "PE-14C",
+      "name": "CARRETERA HUARI - SAN LUIS - POMABAMBA - CASHAPAMPA",
+      "geometryRevision": "dfa34eb49db4872f605ecaf5249636969dc84c3653f3ec0eb12b7f2a08040490",
+      "measuredLengthKm": 223.2854437633833,
+      "segmentCount": 224,
+      "catchmentCount": 13,
+      "weatherGridCount": 9,
+      "preparedAt": "2026-10-18T09:11:07.786Z"
+    },
+    {
+      "roadCode": "PE-18",
+      "name": "CARRETERA CHANCAY - OYON - AMBO",
+      "geometryRevision": "ad47ba270afbce85229d0be0db6ecd9d17b747a92fa4e1dba2f3c8a9cacbc619",
+      "measuredLengthKm": 282.1752269176525,
+      "segmentCount": 283,
+      "catchmentCount": 23,
+      "weatherGridCount": 17,
+      "preparedAt": "2026-10-18T08:58:15.950Z"
+    },
+    {
+      "roadCode": "PE-22",
+      "name": "CARRETERA CENTRAL",
+      "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+      "measuredLengthKm": 173.87272270170928,
+      "segmentCount": 174,
+      "catchmentCount": 13,
+      "weatherGridCount": 24,
+      "preparedAt": "2026-10-18T07:10:44.600Z"
+    },
+    {
+      "roadCode": "PE-30A",
+      "name": "CARRETERA NASCA - PUQUIO - ABANCAY",
+      "geometryRevision": "4f1f9529271caf3af9df1b934a37b633c4cd50a74b4f8c93bc619ad558c2a0d4",
+      "measuredLengthKm": 442.4816592452459,
+      "segmentCount": 443,
+      "catchmentCount": 39,
+      "weatherGridCount": 30,
+      "preparedAt": "2026-10-18T09:35:52.526Z"
+    },
+    {
+      "roadCode": "PE-32",
+      "name": "CARRETERA CHALA - INCUYO - PUQUIO",
+      "geometryRevision": "4aa4e3ae964f56907aef2fd81a8bd9edb178eb8724a576db3cdf1800cc402d99",
+      "measuredLengthKm": 291.7940166702608,
+      "segmentCount": 292,
+      "catchmentCount": 32,
+      "weatherGridCount": 17,
+      "preparedAt": "2026-10-18T08:53:48.141Z"
+    },
+    {
+      "roadCode": "PE-3ND",
+      "name": "CARRETERA CUNYA - CUTERVO",
+      "geometryRevision": "06d5baafb508a455b542e76c42722a2fec975bc080dab686d38e099019cf428d",
+      "measuredLengthKm": 134.56391938989705,
+      "segmentCount": 135,
+      "catchmentCount": 8,
+      "weatherGridCount": 21,
+      "preparedAt": "2026-10-18T09:02:27.979Z"
+    },
+    {
+      "roadCode": "PE-5NA",
+      "name": "CARRETERA PAUCARTAMBO - OXAPAMPA - SAN JUAN DEL CODO",
+      "geometryRevision": "328570a8bf292bd1f59f46c0e0addf780b4ff9e077d16af43cc0264c0bf03faf",
+      "measuredLengthKm": 245.40417312144262,
+      "segmentCount": 246,
+      "catchmentCount": 18,
+      "weatherGridCount": 21,
+      "preparedAt": "2026-10-18T09:00:01.112Z"
+    },
+    {
+      "roadCode": "PE-5NC",
+      "name": "VIA EL REPOSO - BAGUA CHICA - SARAMIRIZA",
+      "geometryRevision": "6c40778fe3e33d0fafc366a38b8dec2113b584acc70e820e353ef576d99506ba",
+      "measuredLengthKm": 283.178699667794,
+      "segmentCount": 284,
+      "catchmentCount": 28,
+      "weatherGridCount": 40,
+      "preparedAt": "2026-10-18T09:35:35.986Z"
+    }
+  ]
+}

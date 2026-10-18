@@ -1,4 +1,5 @@
 import type { AlertCause, RoadStatus } from "@/contracts/road-alerts";
+import type { AlertOrigin } from "@/domain/road-alerts/origin";
 
 // Presentation metadata (Spanish labels and colors). Road status uses the fixed status
 // scale (critical / warning / good) and always ships with an icon and a text label, so
@@ -30,6 +31,12 @@ export const STATUS_META: Record<RoadStatus, { label: string; adjective: string;
 };
 
 /** Display order and stacking priority (most severe first). */
+/** Trust labels for an alert's source; community reports are never presented as verified. */
+export const ORIGIN_META: Record<AlertOrigin, { label: string; badge: string; hint: string }> = {
+  oficial: { label: "Oficial", badge: "Oficial · SUTRAN", hint: "Registrado por SUTRAN (MTC)" },
+  comunidad: { label: "No confirmado", badge: "No confirmado · comunidad", hint: "Reporte comunitario sin verificación oficial" },
+};
+
 export const STATUS_ORDER: RoadStatus[] = ["interrumpido", "restringido", "normal", "desconocido"];
 export const STATUS_PRIORITY: Record<RoadStatus, number> = { interrumpido: 3, restringido: 2, normal: 1, desconocido: 0 };
 

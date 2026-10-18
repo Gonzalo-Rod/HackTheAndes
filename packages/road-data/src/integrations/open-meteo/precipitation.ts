@@ -23,7 +23,14 @@ const responseSchema = z.union([
   z.array(locationSchema),
   locationSchema.transform((value) => [value]),
 ]);
-export function createPrecipitationProvider(transport: JsonTransport): WeatherProvider {
+/**
+ * `batchIntervalMs` spaces batches for large operator captures: the free tier allows about 600
+ * location calls a minute, and a 20-location batch every 2.5 s stays under it.
+ */
+export function createPrecipitationProvider(
+  transport: JsonTransport,
+  { batchIntervalMs = 0 }: { batchIntervalMs?: number } = {},
+): WeatherProvider {
   return {
     async fetchWeather(points, query, requestId) {
       if (!points.length) throw new Error("No weather sample points");
@@ -47,6 +54,8 @@ export function createPrecipitationProvider(transport: JsonTransport): WeatherPr
       const series = [];
       const sourceUrls = [];
       for (let offset = 0; offset < points.length; offset += BATCH_LOCATIONS) {
+        if (offset > 0 && batchIntervalMs > 0)
+          await new Promise((resolve) => setTimeout(resolve, batchIntervalMs));
         const batch = points.slice(offset, offset + BATCH_LOCATIONS);
         const params = new URLSearchParams({
           latitude: batch.map((p) => p[1]).join(","),

@@ -9,3 +9,6 @@ export {
   writeExposureRecord,
 } from "./integrations/exposure/files.ts";
 export { refreshExposureWeather } from "./services/refresh-exposure.ts";
+export { readRoadRegistry, parseRoadRegistry } from "./integrations/road-files.ts";
+export type { RoadRegistry, RoadRegistryEntry } from "./integrations/road-files.ts";
+export { PILOT_ROAD_CODE, roadCodeSchema } from "./contracts/road-geometry.ts";

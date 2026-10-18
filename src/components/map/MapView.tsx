@@ -1,9 +1,15 @@
 "use client";
 import { bindNetworkTooltip } from "./network-tooltip";
-import type { HazardLayer } from "@/contracts/model-inputs";
+import type { HazardLayer, NationalWarnings } from "@/contracts/model-inputs";
 import type { ForecastMapData } from "@/domain/exposure/forecast-map";
 import { addForecastLayers, setForecastData, bindForecastSelection } from "./forecast-layers";
 import { setHazardData } from "./hazard-layers";
+import { bindHistoryTooltip, setHistoryData } from "./history-layers";
+import { bindNationalRainTooltip, setNationalRainData } from "./national-rain-layers";
+import { addMassMovementLayers, setMassMovementData } from "./mass-movement-layers";
+import type { NationalRainResponse } from "@/contracts/weather";
+import type { RoadNetwork } from "@/contracts/road-network";
+import type { NationalRoadEvent } from "@/contracts/road-history";
 
 import type { Map as MLMap, Popup } from "maplibre-gl";
 import { useEffect, useImperativeHandle, useRef, useState, type Ref } from "react";
@@ -57,6 +63,10 @@ export interface MapViewProps {
   rainSegments: RainSegment[];
   catchments: CatchmentLayer | null;
   hazards: HazardLayer | null;
+  nationalWarnings: NationalWarnings | null;
+  historyEvents: NationalRoadEvent[];
+  nationalRain: NationalRainResponse | null;
+  roadNetwork: RoadNetwork | null;
   forecastData: ForecastMapData;
   selectedForecastId: string | null;
   onForecastSelect: (id: string) => void;
@@ -152,6 +162,7 @@ export function MapView(props: MapViewProps) {
         addForecastLayers(map);
         bindForecastSelection(map, (id) => latest.current.onForecastSelect(id));
         addEnvironmentLayers(map);
+        addMassMovementLayers(map);
         if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) stopFlow = startFlowAnimation(map);
         readyRef.current = true;
         setMapReady(true);
@@ -183,6 +194,8 @@ export function MapView(props: MapViewProps) {
 
       tooltip = new ml.Popup({ closeButton: false, closeOnClick: false, className: "pr-map-tip", offset: 10, maxWidth: "260px" });
       bindNetworkTooltip(map, tooltip);
+      bindHistoryTooltip(map, tooltip);
+      bindNationalRainTooltip(map, tooltip);
     }
 
     init().catch((error: unknown) => {
@@ -264,9 +277,17 @@ export function MapView(props: MapViewProps) {
   useEffect(() => {
     if (mapRef.current && readyRef.current) {
       setCatchmentData(mapRef.current, catchments);
-      setHazardData(mapRef.current, props.hazards);
+      setHazardData(mapRef.current, props.hazards, props.nationalWarnings);
     }
-  }, [catchments, props.hazards, mapReady]);
+  }, [catchments, props.hazards, props.nationalWarnings, mapReady]);
+
+  useEffect(() => {
+    if (mapRef.current && readyRef.current) setHistoryData(mapRef.current, props.historyEvents);
+  }, [props.historyEvents, mapReady]);
+
+  useEffect(() => {
+    if (mapRef.current && readyRef.current) setNationalRainData(mapRef.current, props.nationalRain);
+  }, [props.nationalRain, mapReady]);
 
   useEffect(() => {
     if (mapRef.current && readyRef.current && corridor) setCorridorData(mapRef.current, corridor);
@@ -291,6 +312,10 @@ export function MapView(props: MapViewProps) {
   useEffect(() => {
     if (mapRef.current && readyRef.current) setProfilePoint(mapRef.current, corridor, profileKm);
   }, [profileKm, corridor, mapReady]);
+
+  useEffect(() => {
+    if (mapRef.current && readyRef.current) setMassMovementData(mapRef.current, alerts, hiddenIds, layers.alerts, props.roadNetwork);
+  }, [alerts, hiddenIds, layers.alerts, props.roadNetwork, mapReady]);
 
   useEffect(() => {
     const map = mapRef.current;

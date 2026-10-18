@@ -55,3 +55,40 @@ it("rejects conflicting responses for the same provider grid instead of mixing m
     }),
   ).rejects.toThrow("conflicting");
 });
+it("requests each 0.25-degree model cell once when samples are snapped to the grid", async () => {
+  let requested: readonly [number, number][] = [];
+  const value = await prepareCatchmentWeather({
+    catchments,
+    requestId: "test",
+    now,
+    query: { kind: "operational" },
+    snapDegrees: 0.25,
+    provider: {
+      fetchWeather: async (points) => {
+        requested = points;
+        return {
+          sourceUrls: ["https://example.test/weather"],
+          series: points.map((point) => ({
+            id: point.join(","),
+            position: point,
+            elevationM: 100,
+            timesUtc: [now.toISOString()],
+            values: { precipitation: [1] },
+          })),
+        };
+      },
+    },
+  });
+  const keys = requested.map((point) => point.join(","));
+  expect(new Set(keys).size).toBe(keys.length);
+  expect(
+    requested.every(([lon, lat]) => Number.isInteger(lon * 4) && Number.isInteger(lat * 4)),
+  ).toBe(true);
+  // PE-22 has 170 sample points but far fewer model cells.
+  expect(requested.length).toBeLessThan(60);
+  expect(
+    value.catchments.every(
+      (c) => Math.abs(c.gridWeights.reduce((sum, item) => sum + item.weight, 0) - 1) < 1e-8,
+    ),
+  ).toBe(true);
+});

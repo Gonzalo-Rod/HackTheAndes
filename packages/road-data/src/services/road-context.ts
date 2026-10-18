@@ -8,7 +8,7 @@ import {
   type RoadContextLog,
   type RoadContextResponse,
 } from "../contracts/road-context.ts";
-import { preparePe22Geometry } from "./prepare-pe22.ts";
+import { prepareRoadGeometry } from "./prepare-road-geometry.ts";
 import { validateGazetteerSnapshot } from "./prepare-pe22-gazetteer.ts";
 import { createRoadLocator } from "../domain/road-data/locate-road-position.ts";
 import { resolvePlaceName } from "../domain/road-data/build-gazetteer.ts";
@@ -114,7 +114,7 @@ export function createRoadContextService({
       let spatial: Spatial | undefined;
       try {
         const raw = spatialContextSchema.parse(await repository.readSpatial());
-        const geometry = preparePe22Geometry(raw.source);
+        const geometry = prepareRoadGeometry(raw.source);
         if (!geometry.ok) throw new Error("Stored road geometry is invalid");
         const gazetteer = validateGazetteerSnapshot(geometry.value.segments, raw.gazetteer);
         const locator = createRoadLocator(geometry.value.segments);

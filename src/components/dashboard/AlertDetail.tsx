@@ -9,6 +9,10 @@ import { hoursSinceAction, isStaleAlert, STALE_ALERT_AFTER_HOURS } from "@/domai
 import { formatCalendarDate, formatDateTime, formatElevation, formatKm, formatRelative } from "@/lib/format";
 
 import type { useAlertDetail } from "@/hooks/use-alert-detail";
+import { alertOrigin } from "@/domain/road-alerts/origin";
+import type { AlertRoadHistory } from "@/domain/road-history/nearby";
+
+import { RoadHistorySection } from "./RoadHistorySection";
 
 export interface CorridorContext {
   km: number;
@@ -25,6 +29,7 @@ interface AlertDetailProps {
   corridorContext: CorridorContext | null;
   /** Alerts currently vigente on the same road code. */
   roadAlertCount: number;
+  roadHistory: { history: AlertRoadHistory | null; loading: boolean; error: string | null };
   now: number | null;
   onRetryDetail: () => void;
   onCenter: () => void;
@@ -89,9 +94,9 @@ function Evidence({ data }: { data: AlertDetailResponse }) {
   );
 }
 
-export function AlertDetail({ alert, detail, corridorContext, now, onRetryDetail, onCenter, onClose }: AlertDetailProps) {
+export function AlertDetail({ alert, detail, corridorContext, roadHistory, now, onRetryDetail, onCenter, onClose }: AlertDetailProps) {
   const status = STATUS_META[alert.roadStatus];
-  const isCommunity = alert.id.startsWith("community:");
+  const isCommunity = alertOrigin(alert) === "comunidad";
   return (
     <article className="pr-detail" aria-labelledby="detail-title">
       <div className="pr-detail__nav">
@@ -260,6 +265,8 @@ export function AlertDetail({ alert, detail, corridorContext, now, onRetryDetail
           </>
         )}
       </section>
+
+      <RoadHistorySection {...roadHistory} />
 
       <div className="pr-help">
         <span>Emergencias en carretera (MTC)</span>

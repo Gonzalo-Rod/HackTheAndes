@@ -1,8 +1,12 @@
 # Possible-huaico estimates on the dashboard
 
+Since October 18, 2026 an item covers at most 10 km and never spans two different catchment
+links, so each card names a concrete stretch. On the map, each item gets a violet glow band
+on the terrain, the road drawn solid with a white casing, and a "POSIBLE HUAICO" label.
+
 The **Pronóstico** tab displays `possible_huaico` items labeled **Posible huaico ·
 estimación**. These are forecast rainfall conditions overlapping susceptible
-terrain under `climate-exposure-v1`, not observed incidents, event probabilities,
+terrain under `climate-exposure-v2` (v1 records remain readable), not observed incidents, event probabilities,
 confirmed damage or a predicted occurrence time. The underlying rainfall bins
 are experimental engineering criteria, not calibrated huaico thresholds.
 

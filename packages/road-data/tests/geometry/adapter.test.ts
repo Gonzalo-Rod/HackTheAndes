@@ -21,7 +21,7 @@ test("the road adapter joins geometry to metadata by ID and propagates request c
       },
     },
   });
-  const result = await adapter.fetchPe22({ requestId: "geometry-1" });
+  const result = await adapter.fetchRoad("PE-22", { requestId: "geometry-1" });
   assert.equal(result.features.length, 32);
   assert.equal(result.features[0]?.properties.sourceKmStart, 0);
   assert.equal(result.retrievedAt, "2026-10-17T19:30:00.000Z");
@@ -43,7 +43,7 @@ test("a missing geometry join or duplicate ID rejects the whole network", async 
           url === ROAD_NETWORK_URLS.metadata ? payloads.metadata : payloads.geometry,
       },
     });
-    await assert.rejects(adapter.fetchPe22(), RoadNetworkPayloadError);
+    await assert.rejects(adapter.fetchRoad("PE-22"), RoadNetworkPayloadError);
   }
 });
 
@@ -64,11 +64,11 @@ test("a changed envelope or invalid coordinate cannot produce a ready dataset", 
         url === ROAD_NETWORK_URLS.metadata ? payloads.metadata : payloads.geometry,
     },
   });
-  await assert.rejects(adapter.fetchPe22(), RoadNetworkPayloadError);
+  await assert.rejects(adapter.fetchRoad("PE-22"), RoadNetworkPayloadError);
   const changed = createSutranRoadNetworkAdapter({
     transport: { getJson: async () => ({ success: false, data: [] }) },
   });
-  await assert.rejects(changed.fetchPe22(), RoadNetworkPayloadError);
+  await assert.rejects(changed.fetchRoad("PE-22"), RoadNetworkPayloadError);
 });
 
 test.each([
@@ -83,5 +83,5 @@ test.each([
       },
     },
   });
-  await assert.rejects(adapter.fetchPe22(), (error) => error === failure);
+  await assert.rejects(adapter.fetchRoad("PE-22"), (error) => error === failure);
 });

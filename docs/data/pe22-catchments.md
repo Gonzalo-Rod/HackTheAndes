@@ -6,11 +6,20 @@ risk model; no risk score or forecast skill is established here.
 
 ## Verified output
 
-The versioned `packages/road-data/data/pe22/catchments.json` contains 11 coarse
-basin unions, 68 mapped road/river intersections, 38 linked road segments and
-213 area-weighted weather query points. Every polygon is explicitly low confidence.
-The remaining 136 segments have no association from this method; this does **not**
-mean they are safe or have no drainage crossing.
+Updated October 18, 2026. The versioned `packages/road-data/data/pe22/catchments.json`
+contains 13 coarse basin unions linking **all 174** road segments: 11 from the 68
+mapped road/river intersections (`association: "river_crossing"`) and 2 from the
+basin containing a segment's midpoint (`association: "containing_basin"`). There
+are 299 area-weighted weather query points (170 unique). Every polygon is explicitly
+low confidence. The October 17 version linked only 38 segments, because a link
+required a mapped ANA river crossing.
+
+Segments without a mapped crossing are linked to the level-12 basin covering their
+midpoint, plus its upstream basins; most join a basin that already has a crossing.
+This proxies the small quebradas and slopes draining onto the road, which the ANA
+layer does not resolve, so the pour point of a containing-basin link is a road point,
+not an outlet. One containing basin (about 7,000 km²) is the whole Rímac upstream of
+the coastal segment; its rain is dominated by the upper basin.
 
 The inputs are the canonical, measured PE-22 axis and these public datasets:
 
@@ -30,7 +39,7 @@ for every nonempty cell, and weight it by geodesic intersection area. This mesh 
 a query strategy, not the weather model's resolution. Future weather ingestion
 must retain the provider's actual grid and merge repeated returned grid cells.
 
-Associations use nearest canonical segments within 20 m in UTM 18S, preserving
+Crossing associations use nearest canonical segments within 20 m in UTM 18S, preserving
 boundary ties within 1 cm. These tolerances reconcile separately segmented source
 geometry; they do not establish the accuracy of either map. Coordinates and areas
 use WGS84. Mean slope remains `null`: midpoint elevation is not a slope surface.

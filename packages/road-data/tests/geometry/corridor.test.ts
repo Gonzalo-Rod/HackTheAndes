@@ -3,12 +3,12 @@ import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { length } from "@turf/length";
 import { test } from "vitest";
-import { preparePe22Geometry } from "../../src/services/prepare-pe22.ts";
+import { prepareRoadGeometry } from "../../src/services/prepare-road-geometry.ts";
 import { capturedSnapshot, shortSnapshot } from "./support.ts";
 
 test("captured PE-22 sections reproduce the committed corridor and display segments", () => {
   const snapshot = capturedSnapshot();
-  const result = preparePe22Geometry(snapshot);
+  const result = prepareRoadGeometry(snapshot);
   assert.ok(result.ok);
   assert.equal(snapshot.features.length, 32);
   assert.equal(result.value.segments.features.length, 174);
@@ -25,7 +25,7 @@ test("captured PE-22 sections reproduce the committed corridor and display segme
 });
 
 test("segments preserve endpoints, continuous geometry, and measured length with a final remainder", () => {
-  const result = preparePe22Geometry(shortSnapshot());
+  const result = prepareRoadGeometry(shortSnapshot());
   assert.ok(result.ok);
   const { segments, corridor } = result.value;
   assert.equal(segments.features.length, 3);
@@ -50,7 +50,7 @@ test("segments preserve endpoints, continuous geometry, and measured length with
 });
 
 test("measured kilometers never masquerade as calibrated official kilometer markers or elevations", () => {
-  const result = preparePe22Geometry(capturedSnapshot());
+  const result = prepareRoadGeometry(capturedSnapshot());
   assert.ok(result.ok);
   assert.ok(result.value.diagnostics.some((item) => Math.abs(item.lengthDifferenceKm) > 1));
   for (const segment of result.value.segments.features) {
@@ -64,8 +64,8 @@ test("measured kilometers never masquerade as calibrated official kilometer mark
 
 test("source ordering and observation time do not change geometry IDs", () => {
   const original = shortSnapshot();
-  const first = preparePe22Geometry(original);
-  const reordered = preparePe22Geometry({
+  const first = prepareRoadGeometry(original);
+  const reordered = prepareRoadGeometry({
     ...original,
     retrievedAt: "2026-10-18T01:00:00.000Z",
     features: [...original.features].reverse(),
@@ -75,7 +75,7 @@ test("source ordering and observation time do not change geometry IDs", () => {
 
 test("geometry edits produce a new revision and segment identities", () => {
   const source = shortSnapshot();
-  const first = preparePe22Geometry(source);
+  const first = prepareRoadGeometry(source);
   const section = source.features[0];
   assert.ok(section);
   section.geometry = {
@@ -85,7 +85,7 @@ test("geometry edits produce a new revision and segment identities", () => {
       [-76.89, -12],
     ],
   };
-  const updated = preparePe22Geometry(source);
+  const updated = prepareRoadGeometry(source);
   assert.ok(first.ok && updated.ok);
   assert.notEqual(
     first.value.corridor.properties.geometryRevision,
@@ -98,7 +98,7 @@ test("duplicate sections, missing joins, and chainage gaps are rejected", () => 
   const first = source.features[0];
   const second = source.features[1];
   assert.ok(first && second);
-  const duplicate = preparePe22Geometry({ ...source, features: [first, first] });
+  const duplicate = prepareRoadGeometry({ ...source, features: [first, first] });
   assert.ok(!duplicate.ok);
   assert.equal(duplicate.error.code, "duplicate_section");
   const broken = structuredClone(source);
@@ -111,17 +111,17 @@ test("duplicate sections, missing joins, and chainage gaps are rejected", () => 
       [-76.88, -12],
     ],
   };
-  const disconnected = preparePe22Geometry(broken);
+  const disconnected = prepareRoadGeometry(broken);
   assert.ok(!disconnected.ok);
   assert.equal(disconnected.error.code, "disconnected_geometry");
   second.properties.sourceKmStart = 1.1;
-  const gap = preparePe22Geometry(source);
+  const gap = prepareRoadGeometry(source);
   assert.ok(!gap.ok);
   assert.equal(gap.error.code, "invalid_chainage");
 });
 
 test("invalid coordinates, reversed source ranges, and zero-length lines fail explicitly", () => {
-  assert.equal(preparePe22Geometry({ features: [] }).ok, false);
+  assert.equal(prepareRoadGeometry({ features: [] }).ok, false);
   const source = shortSnapshot();
   const first = source.features[0];
   assert.ok(first);
@@ -132,7 +132,7 @@ test("invalid coordinates, reversed source ranges, and zero-length lines fail ex
       [-76.9, -12],
     ],
   };
-  const zero = preparePe22Geometry({ ...source, features: [first] });
+  const zero = prepareRoadGeometry({ ...source, features: [first] });
   assert.ok(!zero.ok);
   assert.equal(zero.error.code, "zero_length_geometry");
   first.geometry = {
@@ -142,9 +142,9 @@ test("invalid coordinates, reversed source ranges, and zero-length lines fail ex
       [-76.89, -12],
     ],
   };
-  assert.equal(preparePe22Geometry(source).ok, false);
+  assert.equal(prepareRoadGeometry(source).ok, false);
   first.properties.sourceKmEnd = -1;
-  assert.equal(preparePe22Geometry(source).ok, false);
+  assert.equal(prepareRoadGeometry(source).ok, false);
 });
 
 test("the committed manifest detects modified or partially generated artifacts", () => {
@@ -176,7 +176,7 @@ test("connected multiline parts join without synthetic edges and disconnected pa
       ],
     ],
   };
-  assert.equal(preparePe22Geometry(snapshot).ok, true);
+  assert.equal(prepareRoadGeometry(snapshot).ok, true);
   first.geometry.coordinates = [
     [
       [-76.9, -12],
@@ -187,7 +187,7 @@ test("connected multiline parts join without synthetic edges and disconnected pa
       [-76.89, -12],
     ],
   ];
-  const disconnected = preparePe22Geometry(snapshot);
+  const disconnected = prepareRoadGeometry(snapshot);
   assert.ok(!disconnected.ok);
   assert.equal(disconnected.error.code, "disconnected_geometry");
 });
@@ -205,7 +205,7 @@ test("an exact one-kilometer route does not emit a floating-point remainder segm
       [oneKmDegrees, 0],
     ],
   };
-  const result = preparePe22Geometry({ ...snapshot, features: [section] });
+  const result = prepareRoadGeometry({ ...snapshot, features: [section] });
   assert.ok(result.ok);
   assert.equal(result.value.segments.features.length, 1);
 });
@@ -221,7 +221,42 @@ test("an unexpectedly huge line is rejected before allocating display segments",
       [0, 0],
     ],
   };
-  const result = preparePe22Geometry({ ...snapshot, features: [section] });
+  const result = prepareRoadGeometry({ ...snapshot, features: [section] });
   assert.ok(!result.ok);
   assert.equal(result.error.code, "too_many_segments");
+});
+
+test("a tiny section collapsed onto the previous end passes through; a longer one still fails", () => {
+  const build = (collapsedKm: number) => {
+    const [first, second] = shortSnapshot().features;
+    assert.ok(first && second);
+    const end = first.geometry.coordinates.at(-1);
+    assert.ok(end && !Array.isArray(end[0]));
+    // MTC publishes such sections on PE-3N (10–30 m whose two points are identical).
+    const collapsed = structuredClone(first);
+    collapsed.properties = {
+      ...first.properties,
+      sourceId: "PE-22#1#collapsed",
+      sourceKmStart: 1,
+      sourceKmEnd: 1 + collapsedKm,
+      sourceLengthKm: collapsedKm,
+    };
+    collapsed.geometry = {
+      type: "LineString",
+      coordinates: [end as [number, number], end as [number, number]],
+    };
+    second.properties = {
+      ...second.properties,
+      sourceKmStart: 1 + collapsedKm,
+      sourceKmEnd: 2 + collapsedKm,
+    };
+    return prepareRoadGeometry({ ...shortSnapshot(), features: [first, collapsed, second] });
+  };
+  const tiny = build(0.03);
+  assert.ok(tiny.ok);
+  assert.equal(tiny.value.diagnostics[1]?.measuredLengthKm, 0);
+  assert.equal(tiny.value.segments.features.length, 3);
+  const long = build(0.2);
+  assert.ok(!long.ok);
+  assert.equal(long.error.code, "zero_length_geometry");
 });

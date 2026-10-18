@@ -15,13 +15,16 @@ const MAX_DISPLAY_SEGMENTS = 10_000;
 const DISTANCE_EPSILON_KM = 1e-9;
 // Allow floating-point comparison noise only; do not bridge a source chainage gap.
 const CHAINAGE_EPSILON_KM = 1e-6;
+// MTC publishes a few 10–30 m PE-3N sections whose geometry collapses to the previous end point;
+// passing through them loses at most this much chainage. Longer collapsed sections still fail.
+const MAX_COLLAPSED_SECTION_KM = 0.05;
 
 function samePosition(a: Position, b: Position): boolean {
   return a[0] === b[0] && a[1] === b[1];
 }
 
 /** Hashing is supplied by the service; this core has no I/O, clock, or random state. */
-export function buildPe22Corridor(
+export function buildRoadCorridor(
   input: unknown,
   geometryRevision: (coordinates: readonly Position[]) => string,
 ): CorridorBuildResult {
@@ -31,6 +34,9 @@ export function buildPe22Corridor(
     message: string,
   ): CorridorBuildResult => ({ ok: false, error: { code, message } });
   if (!parsed.success) return failure("invalid_snapshot", "The road snapshot failed validation");
+  const roadCode = parsed.data.roadCode;
+  if (parsed.data.features.some((section) => section.properties.roadCode !== roadCode))
+    return failure("invalid_snapshot", "Road sections belong to a different road");
   const sections = [...parsed.data.features].sort(
     (a, b) =>
       a.properties.sourceKmStart - b.properties.sourceKmStart ||
@@ -72,6 +78,19 @@ export function buildPe22Corridor(
       }
     }
     const start = coordinates.at(-1);
+    if (
+      start &&
+      sectionCoordinates.length === 0 &&
+      info.sourceLengthKm <= MAX_COLLAPSED_SECTION_KM
+    ) {
+      diagnostics.push({
+        sourceId: info.sourceId,
+        sourceLengthKm: info.sourceLengthKm,
+        measuredLengthKm: 0,
+        lengthDifferenceKm: -info.sourceLengthKm,
+      });
+      continue;
+    }
     const local = start ? [start, ...sectionCoordinates] : sectionCoordinates;
     const geometry = { type: "LineString" as const, coordinates: local };
     const sectionLengthKm = length(
@@ -108,10 +127,10 @@ export function buildPe22Corridor(
       const slice = lineSliceAlong(geometry, startKm, endKm, { units: "kilometers" });
       return {
         type: "Feature",
-        id: `PE-22:${revision}:${index.toString().padStart(5, "0")}`,
+        id: `${roadCode}:${revision}:${index.toString().padStart(5, "0")}`,
         geometry: slice.geometry,
         properties: {
-          roadCode: "PE-22",
+          roadCode,
           geometryRevision: revision,
           distanceFromOriginStartKm: startKm,
           distanceFromOriginEndKm: endKm,
@@ -140,7 +159,7 @@ export function buildPe22Corridor(
     value: {
       corridor: {
         type: "Feature",
-        properties: { roadCode: "PE-22", geometryRevision: revision, measuredLengthKm },
+        properties: { roadCode, geometryRevision: revision, measuredLengthKm },
         geometry,
       },
       segments,

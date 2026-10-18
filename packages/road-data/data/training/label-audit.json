@@ -7,9 +7,9 @@
     "candidates": 8,
     "positiveEvents": 6,
     "unknownEvents": 2,
-    "mappedPositiveEvents": 2,
+    "mappedPositiveEvents": 5,
     "positiveEpisodes": 4,
-    "mappedPositiveEpisodes": 1,
+    "mappedPositiveEpisodes": 3,
     "excludedTrafficCrashes": 2
   },
   "records": [
@@ -18,12 +18,14 @@
       "decision": "unknown",
       "episodeId": "pe22-2024-01-30",
       "date": "2024-01-30",
-      "linkedCatchments": [],
+      "linkedCatchments": [
+        "hydrobasins-v1c-sa12-6120526890"
+      ],
       "supportedHorizonsHours": [
         24,
         72
       ],
-      "spatialBasis": "unmapped",
+      "spatialBasis": "approximate_road_segment_association",
       "unresolved": [
         "Rainfall causation unverified.",
         "Date-only onset; no catchment link."
@@ -71,12 +73,14 @@
       "decision": "positive_event",
       "episodeId": "pe22-2024-03-02",
       "date": "2024-03-02",
-      "linkedCatchments": [],
+      "linkedCatchments": [
+        "hydrobasins-v1c-sa12-6120528440"
+      ],
       "supportedHorizonsHours": [
         24,
         72
       ],
-      "spatialBasis": "unmapped",
+      "spatialBasis": "approximate_road_segment_association",
       "unresolved": [
         "Date-only onset.",
         "No linked catchment for the matched road segment."
@@ -87,12 +91,14 @@
       "decision": "positive_event",
       "episodeId": "pe22-2024-03-02",
       "date": "2024-03-02",
-      "linkedCatchments": [],
+      "linkedCatchments": [
+        "hydrobasins-v1c-sa12-6120531630"
+      ],
       "supportedHorizonsHours": [
         24,
         72
       ],
-      "spatialBasis": "unmapped",
+      "spatialBasis": "approximate_road_segment_association",
       "unresolved": [
         "Date-only onset.",
         "No linked catchment for the matched road segment."
@@ -103,12 +109,14 @@
       "decision": "positive_event",
       "episodeId": "pe22-2024-03-24",
       "date": "2024-03-24",
-      "linkedCatchments": [],
+      "linkedCatchments": [
+        "hydrobasins-v1c-sa12-6120526890"
+      ],
       "supportedHorizonsHours": [
         24,
         72
       ],
-      "spatialBasis": "unmapped",
+      "spatialBasis": "approximate_road_segment_association",
       "unresolved": [
         "Initial NORMAL status conflicts with the impact narrative; the positive decision uses explicit impact evidence.",
         "Date-only onset.",
@@ -120,12 +128,14 @@
       "decision": "unknown",
       "episodeId": "pe22-2025-02-05",
       "date": "2025-02-05",
-      "linkedCatchments": [],
+      "linkedCatchments": [
+        "hydrobasins-v1c-sa12-6120534280"
+      ],
       "supportedHorizonsHours": [
         24,
         72
       ],
-      "spatialBasis": "unmapped",
+      "spatialBasis": "approximate_road_segment_association",
       "unresolved": [
         "Mixed/unspecified cause.",
         "Initial NORMAL status does not establish a verified negative.",

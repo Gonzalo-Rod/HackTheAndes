@@ -4,6 +4,7 @@ import { loadPlatformConfiguration, loadRealtimeConfiguration } from "@/config/e
 import { IncidentFeedSchema } from "@/contracts/platform";
 import { accessService, dashboardRepository, waitlistService } from "./runtime";
 import { failure, platformRoute } from "./http";
+import { resolveForecastRoad } from "./forecast-roads";
 
 export const readIncidents = platformRoute("dashboard.incidents", async () =>
   Response.json(
@@ -13,7 +14,14 @@ export const readIncidents = platformRoute("dashboard.incidents", async () =>
     }),
   ),
 );
-export const readSegments = platformRoute("dashboard.segments", async () => Response.json(await dashboardRepository().segments()));
+/** `?road=` selects a forecast road's segments; without it the pilot corridor is returned. */
+export const readSegments = platformRoute("dashboard.segments", async (request) => {
+  const roads = new URL(request.url).searchParams.getAll("road");
+  if (roads.length > 1) failure(400, "invalid_input", "Indica una sola carretera.");
+  if (!roads.length) return Response.json(await dashboardRepository().segments());
+  const road = await resolveForecastRoad(roads[0] ?? null);
+  return Response.json(await dashboardRepository().segments(road.geometryRevision));
+});
 export const readStats = platformRoute("dashboard.stats", async () =>
   Response.json(
     await dashboardRepository().stats(

@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { assessWindow, combineWindows, includePeak } from "../../src/domain/exposure/window.ts";
+import {
+  assessWindow,
+  capByLocalSusceptibility,
+  combineWindows,
+  includePeak,
+} from "../../src/domain/exposure/window.ts";
+import type { ExposureWindow } from "../../src/contracts/exposure.ts";
 import { DEFAULT_EXPOSURE_POLICY as policy } from "../../src/domain/exposure/policy.ts";
 const rain = (precipitationMm: number, hours = 6) => ({
   ok: true as const,
@@ -87,5 +93,47 @@ describe("experimental climate attention rules", () => {
       category: "high_attention",
       forecastRain: rain(7),
     });
+  });
+});
+
+describe("capByLocalSusceptibility (policy v2)", () => {
+  const priority: ExposureWindow = {
+    validFrom: "2026-10-18T06:00:00.000Z",
+    validUntil: "2026-10-18T12:00:00.000Z",
+    horizonHours: 6,
+    state: "assessed",
+    category: "priority",
+    forecastRain: { ok: true, precipitationMm: 1.2, hours: 6 },
+    reasons: ["rain_attention_threshold", "high_susceptibility_overlap"],
+  };
+  it("keeps escalation where the road crosses class 4 or 5 terrain", () => {
+    expect(capByLocalSusceptibility(priority, [2, 4], 4)).toEqual(priority);
+    expect(capByLocalSusceptibility(priority, [5], 4).category).toBe("priority");
+  });
+  it("caps to watch on low local classes, replacing the overlap reason", () => {
+    const capped = capByLocalSusceptibility(priority, [1, 3], 4);
+    expect(capped.category).toBe("watch");
+    expect(capped.reasons).toEqual(["rain_attention_threshold", "low_local_susceptibility"]);
+  });
+  it("caps segments without local classes with a distinct reason", () => {
+    expect(capByLocalSusceptibility(priority, undefined, 4).reasons).toContain(
+      "missing_local_susceptibility",
+    );
+    expect(capByLocalSusceptibility(priority, [], 4).category).toBe("watch");
+  });
+  it("leaves routine, watch and unknown windows untouched", () => {
+    const routine = {
+      ...priority,
+      category: "routine" as const,
+      reasons: ["rain_below_attention_threshold" as const],
+    };
+    const unknown = {
+      ...priority,
+      state: "unknown" as const,
+      category: null,
+      reasons: ["missing_rainfall" as const],
+    };
+    expect(capByLocalSusceptibility(routine, [1], 4)).toEqual(routine);
+    expect(capByLocalSusceptibility(unknown, [1], 4)).toEqual(unknown);
   });
 });

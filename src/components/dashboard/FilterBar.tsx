@@ -1,14 +1,15 @@
 "use client";
 
-import { CAUSE_META, CAUSE_ORDER, STATUS_META, STATUS_ORDER } from "@/components/alert-meta";
+import { CAUSE_META, CAUSE_ORDER, ORIGIN_META, STATUS_META, STATUS_ORDER } from "@/components/alert-meta";
 import { Icon } from "@/components/icons";
 import type { AlertCause, RoadStatus } from "@/contracts/road-alerts";
 import { toggleValue, type AlertFilters } from "@/domain/road-alerts/filters";
+import { ALERT_ORIGINS, type AlertOrigin } from "@/domain/road-alerts/origin";
 import { plural } from "@/lib/format";
 
 interface FilterBarProps {
   filters: AlertFilters;
-  facets: { statuses: Record<RoadStatus, number>; causes: Record<AlertCause, number> };
+  facets: { statuses: Record<RoadStatus, number>; causes: Record<AlertCause, number>; origins: Record<AlertOrigin, number> };
   regions: { key: string; label: string; count: number }[];
   resultCount: number;
   totalCount: number;
@@ -32,6 +33,25 @@ export function FilterBar({ filters, facets, regions, resultCount, totalCount, a
           onChange={(event) => onChange({ ...filters, query: event.target.value })}
         />
       </label>
+
+      <div className="pr-filter-group">
+        <span className="pr-filter-group__label">Fuente:</span>
+        <div className="pr-chipgroup" role="group" aria-label="Fuente y nivel de verificación">
+          {ALERT_ORIGINS.map((origin) => (
+            <button
+              key={origin}
+              type="button"
+              className={`pr-chip pr-chip--origin pr-chip--${origin}`}
+              aria-pressed={filters.origins.includes(origin)}
+              onClick={() => onChange({ ...filters, origins: toggleValue(filters.origins, origin) })}
+              title={ORIGIN_META[origin].hint}
+            >
+              <span className="pr-chip__text">{ORIGIN_META[origin].label}</span>
+              <span className="pr-chip__count">{facets.origins[origin]}</span>
+            </button>
+          ))}
+        </div>
+      </div>
 
       <div className="pr-filter-group">
         <span className="pr-filter-group__label">Estado:</span>

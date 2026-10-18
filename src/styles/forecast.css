@@ -34,6 +34,7 @@
 }
 .pr-forecast__controls {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   align-items: end;
   margin: 12px 0;
@@ -109,6 +110,14 @@
 .pr-forecast__event h3 {
   font-size: 15px;
   margin: 10px 0 6px;
+}
+.pr-forecast__road {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  opacity: 0.75;
+  margin: 0;
 }
 .pr-forecast__time {
   font-size: 11px;
@@ -200,7 +209,7 @@
 .pr-forecast__support {
   margin: 0.5rem 0;
   padding: 0.5rem 0.625rem;
-  border-left: 3px solid var(--accent);
+  border-left: 3px solid var(--primary);
   background: var(--surface);
   border-radius: var(--radius-sm);
 }

@@ -7,19 +7,17 @@ export interface MapStateOverlayProps {
   mapReady: boolean;
   mapError: string | null;
   dataError: string | null; // no data could be loaded at all
-  staleMessage: string | null; // data on screen, but the latest refresh failed or is cached
   refreshing: boolean;
   partialData?: boolean;
   onRetry: () => void;
 }
 
-/** Loading, error and stale-data states over the map. The map never appears blank without a reason. */
+/** Loading and error states over the map. The map never appears blank without a reason. */
 export function MapStateOverlay({
   loading,
   mapReady,
   mapError,
   dataError,
-  staleMessage,
   refreshing,
   partialData = false,
   onRetry,
@@ -55,23 +53,12 @@ export function MapStateOverlay({
       </div>
     );
   }
+  // Stale or cached sources are reported by the header data-status chip, not over the map.
+  if (!loading && mapReady) return null;
   return (
-    <>
-      {(loading || !mapReady) && (
-        <div className="pr-loading" role="status">
-          <span className="pr-loading__spinner" aria-hidden="true" />
-          {loading ? "Consultando alertas de SUTRAN…" : "Cargando el mapa…"}
-        </div>
-      )}
-      {(staleMessage || (partialData && dataError)) && (
-        <div className="pr-banner" role="status">
-          <Icon name="clock" size={13} />
-          <span>{staleMessage ?? `SUTRAN no disponible. Las referencias ambientales mantienen su fecha original. ${dataError}`}</span>
-          <button type="button" className="pr-btn pr-btn--link" onClick={onRetry} disabled={refreshing}>
-            Reintentar
-          </button>
-        </div>
-      )}
-    </>
+    <div className="pr-loading" role="status">
+      <span className="pr-loading__spinner" aria-hidden="true" />
+      {loading ? "Consultando alertas de SUTRAN…" : "Cargando el mapa…"}
+    </div>
   );
 }

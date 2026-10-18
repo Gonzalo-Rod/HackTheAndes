@@ -7,9 +7,9 @@ import { Icon, type IconName } from "@/components/icons";
 import type { SidebarTab } from "./types";
 
 const TABS: { value: SidebarTab; label: string; icon: IconName }[] = [
+  { value: "alertas", label: "Vías", icon: "pin" },
   { value: "pronostico", label: "Pronóstico", icon: "clock" },
   { value: "ambiente", label: "Clima y territorio", icon: "environment" },
-  { value: "alertas", label: "Vías", icon: "pin" },
   { value: "capas", label: "Capas", icon: "layers" },
 ];
 

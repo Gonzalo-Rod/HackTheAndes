@@ -257,6 +257,15 @@ archive features never become supervised examples automatically. The compiled
 assign operational warning levels or activate the risk API. Tests with synthetic
 fixtures verify the code path without claiming real-data forecast skill.
 
+## Forecast roads beyond PE-22
+
+`npm run road:prepare -- PE-5N PE-3N` downloads the national MTC/SUTRAN network once, then for each
+road builds geometry, catchments, INGEMMET/SENAMHI hazards, live weather and an exposure assessment
+under `data/roads/<code>/`, and records it in `data/roads/registry.json`. `--offline-geometry` reuses
+the saved `source.json`; `--register-only` records already prepared files (the PE-22 pilot keeps its
+original paths). `npm run road:import -- PE-5N` loads a registered road into Supabase. Raw INGEMMET
+captures stay in the ignored `data/.cache/roads/` folder. See `docs/data/multi-road-forecast.md`.
+
 ## Climate-exposure assessment
 
 The experimental assessment combines catchment forecast rainfall and INGEMMET

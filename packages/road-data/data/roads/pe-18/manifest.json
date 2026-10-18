@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "roadCode": "PE-18",
+  "geometryRevision": "ad47ba270afbce85229d0be0db6ecd9d17b747a92fa4e1dba2f3c8a9cacbc619",
+  "measuredLengthKm": 282.1752269176525,
+  "segmentCount": 283,
+  "kilometerCalibration": "unverified",
+  "files": {
+    "source.json": "8611b6706c064e63bf52e63f3e090b422f56915f28410a6c6a342f3c31c86793",
+    "corridor.geojson": "7df84aba591701c375ec8ca35d0c317bb9409ac247fc8482f49c3f2892527691",
+    "segments-1km.geojson": "d4e57d2131da603530b3d348cd147c029c1872a5bb58ad36ae3e3c1a225d6e41",
+    "diagnostics.json": "c2e81886df56d948f08f65b76c81a5a1025383b39e07b1b72e0026323fcd5f93"
+  }
+}

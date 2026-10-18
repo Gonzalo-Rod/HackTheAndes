@@ -3,6 +3,7 @@
 import { CAUSE_META, STATUS_META, sutranAlertUrl } from "@/components/alert-meta";
 import { Icon } from "@/components/icons";
 import type { RoadAlert } from "@/contracts/road-alerts";
+import { alertOrigin } from "@/domain/road-alerts/origin";
 import { formatCalendarDate, formatRelative } from "@/lib/format";
 
 interface MapCalloutProps {
@@ -18,7 +19,7 @@ interface MapCalloutProps {
 /** Dark card for the selected alert, anchored to the bottom of the map. */
 export function MapCallout({ alert, now, orbiting, is3d, onOpenDetail, onToggleOrbit, onClose }: MapCalloutProps) {
   const status = STATUS_META[alert.roadStatus];
-  const isCommunity = alert.id.startsWith("community:");
+  const isCommunity = alertOrigin(alert) === "comunidad";
   return (
     <section className="pr-callout" aria-label="Alerta seleccionada">
       <header className="pr-callout__head">

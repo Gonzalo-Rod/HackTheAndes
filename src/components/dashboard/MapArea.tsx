@@ -26,6 +26,10 @@ type PassThrough = Pick<
   | "selectedForecastId"
   | "onForecastSelect"
   | "hazards"
+  | "historyEvents"
+  | "nationalWarnings"
+  | "nationalRain"
+  | "roadNetwork"
   | "catchments"
   | "alerts"
   | "evidence"
@@ -81,6 +85,10 @@ export function MapArea({
   rainSegments,
   catchments,
   hazards,
+  historyEvents,
+  nationalWarnings,
+  nationalRain,
+  roadNetwork,
   forecastData,
   selectedForecastId,
   onForecastSelect,
@@ -135,6 +143,10 @@ export function MapArea({
         rainSegments={rainSegments}
         catchments={catchments}
         hazards={hazards}
+        historyEvents={historyEvents}
+        nationalWarnings={nationalWarnings}
+        nationalRain={nationalRain}
+        roadNetwork={roadNetwork}
         forecastData={forecastData}
         selectedForecastId={selectedForecastId}
         onForecastSelect={onForecastSelect}

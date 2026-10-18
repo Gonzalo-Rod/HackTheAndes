@@ -88,3 +88,44 @@
     display: none;
   }
 }
+
+.platform-form select {
+  border: 1px solid #a8b6ac;
+  padding: 12px;
+  border-radius: 8px;
+  background: #fff;
+  color: #233b39;
+  font: inherit;
+}
+.platform-modes {
+  display: grid;
+  gap: 8px;
+  border: 0;
+  padding: 0;
+}
+.platform-modes legend {
+  margin-bottom: 8px;
+}
+.platform-watches {
+  display: grid;
+  gap: 12px;
+  padding: 0;
+  list-style: none;
+}
+.platform-watches li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  border: 1px solid #d2d8cf;
+  border-radius: 12px;
+}
+.platform-watches li div {
+  display: grid;
+  gap: 4px;
+}
+.platform-watches span {
+  font-size: 14px;
+  color: #4f5f5c;
+}

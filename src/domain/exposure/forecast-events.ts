@@ -3,6 +3,7 @@ import type { ExposureLayer } from "@/contracts/exposure";
 export interface ForecastEvent {
   id: string;
   type: "possible_huaico";
+  roadCode: string;
   category: "priority" | "high_attention";
   validFrom: string;
   validUntil: string;
@@ -30,6 +31,12 @@ export interface ForecastProjection {
 }
 /** Floating point tolerance only; never bridge an unassessed road segment. */
 const CONTIGUOUS_TOLERANCE_KM = 0.000001;
+/** Longest stretch one item may name, so each card points at a concrete place to watch. */
+export const MAX_FORECAST_EVENT_KM = 10;
+/** Segment ids are `<road code>:<geometry revision>:<index>`, as built by the road data package. */
+export function roadCodeOf(segmentId: string): string {
+  return segmentId.split(":")[0] ?? segmentId;
+}
 export function projectForecastEvents(view: ExposureLayer | null, nowMs: number, horizonHours: 24 | 72): ForecastProjection {
   const base = { geometryRevision: view?.data.geometryRevision ?? null, capturedAt: view?.data.sources.weatherCapturedAt ?? null };
   const unavailable = (message: string): ForecastProjection => ({ ...base, state: "unavailable", message, windows: [] });
@@ -59,6 +66,7 @@ export function projectForecastEvents(view: ExposureLayer | null, nowMs: number,
       assessedSegments: 0,
       unknownSegments: 0,
     };
+    let previousCatchmentKey: string | null = null;
     for (const segment of segments) {
       const assessment = segment.windows.sixHourly[index];
       if (assessment.state !== "assessed" || !assessment.category || !assessment.forecastRain.ok) {
@@ -69,10 +77,14 @@ export function projectForecastEvents(view: ExposureLayer | null, nowMs: number,
       if (assessment.category !== "priority" && assessment.category !== "high_attention") continue;
       const susceptible = Math.max(0, ...segment.catchmentIds.map((id) => catchments.get(id)?.highSusceptibilityFraction ?? 0));
       const previous = window.events.at(-1);
+      // Items also break where the linked catchments change: a different basin is a different reason.
+      const catchmentKey = [...segment.catchmentIds].sort().join("|");
       if (
         previous &&
         previous.category === assessment.category &&
-        Math.abs(previous.endKm - segment.distanceFromOriginStartKm) <= CONTIGUOUS_TOLERANCE_KM
+        Math.abs(previous.endKm - segment.distanceFromOriginStartKm) <= CONTIGUOUS_TOLERANCE_KM &&
+        previousCatchmentKey === catchmentKey &&
+        segment.distanceFromOriginEndKm - previous.startKm <= MAX_FORECAST_EVENT_KM + CONTIGUOUS_TOLERANCE_KM
       ) {
         previous.endKm = segment.distanceFromOriginEndKm;
         previous.segmentIds.push(segment.segmentId);
@@ -81,9 +93,11 @@ export function projectForecastEvents(view: ExposureLayer | null, nowMs: number,
         previous.reasons = [...new Set([...previous.reasons, ...assessment.reasons])];
         continue;
       }
+      previousCatchmentKey = catchmentKey;
       window.events.push({
         id: `forecast:${reference.validFrom}:${segment.segmentId}:${assessment.category}`,
         type: "possible_huaico",
+        roadCode: roadCodeOf(segment.segmentId),
         category: assessment.category,
         validFrom: reference.validFrom,
         validUntil: reference.validUntil,

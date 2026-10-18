@@ -3,6 +3,9 @@ import type { Map as MLMap, Marker } from "maplibre-gl";
 import { STATUS_META, STATUS_PRIORITY } from "@/components/alert-meta";
 import { iconMarkup } from "@/components/icons";
 import type { RoadAlert } from "@/contracts/road-alerts";
+import { massMovementKind, type MassMovementKind } from "@/domain/road-alerts/mass-movement";
+
+const HAZARD_LABELS: Record<MassMovementKind, string> = { huaico: "HUAICO", deslizamiento: "DESLIZAMIENTO", derrumbe: "DERRUMBE" };
 
 // Alerts are HTML markers (real <button>s) so they are keyboard-focusable and announce
 // their status, cause and location to screen readers.
@@ -21,9 +24,10 @@ export interface MarkerSyncInput {
   onHover: (id: string | null) => void;
 }
 
-function chipLabel(alert: RoadAlert): string {
+function chipLabel(alert: RoadAlert, hazard: MassMovementKind | null): string {
   const km = alert.kmText.replace(/^km/i, "KM");
-  return [km, alert.roadCode].filter(Boolean).join(" · ") || alert.district;
+  const place = [km, alert.roadCode].filter(Boolean).join(" · ") || alert.district;
+  return hazard ? `${HAZARD_LABELS[hazard]} · ${place}` : place;
 }
 
 function createMarkerElement(alert: RoadAlert, input: Pick<MarkerSyncInput, "onSelect" | "onHover">): HTMLButtonElement {
@@ -56,13 +60,17 @@ function paintMarker(entry: MarkerEntry, alert: RoadAlert, input: MarkerSyncInpu
   el.style.setProperty("--marker-ink", status.ink);
   el.setAttribute("aria-label", `${status.label}: ${alert.title}. ${alert.roadCode} ${alert.kmText}, ${alert.district}, ${alert.region}`);
 
+  const hazard = massMovementKind(alert);
+  if (hazard) el.dataset.hazard = hazard;
+  else delete el.dataset.hazard;
+  const icon = hazard ? "mountain" : alert.cause;
   const dot = el.querySelector<HTMLSpanElement>(".pr-marker__dot");
-  if (dot && dot.dataset.cause !== alert.cause) {
-    dot.dataset.cause = alert.cause;
-    dot.innerHTML = iconMarkup(alert.cause, 14, 2.2); // static, trusted SVG markup
+  if (dot && dot.dataset.icon !== icon) {
+    dot.dataset.icon = icon;
+    dot.innerHTML = iconMarkup(icon, hazard ? 20 : 14, 2.2); // static, trusted SVG markup
   }
   const chip = el.querySelector<HTMLSpanElement>(".pr-marker__chip");
-  if (chip) chip.textContent = chipLabel(alert);
+  if (chip) chip.textContent = chipLabel(alert, hazard);
 
   const hidden = input.hiddenIds.has(alert.id);
   const selected = alert.id === input.selectedId;
@@ -72,11 +80,14 @@ function paintMarker(entry: MarkerEntry, alert: RoadAlert, input: MarkerSyncInpu
   el.classList.toggle("is-selected", selected);
   el.classList.toggle("is-hovered", hovered);
   el.classList.toggle("is-dimmed", input.selectedId !== null && !selected);
-  el.classList.toggle("has-chip", selected || hovered || severe);
+  // Mass movements always keep their label so they stand out at national zoom.
+  el.classList.toggle("has-chip", selected || hovered || severe || hazard !== null);
   el.tabIndex = hidden ? -1 : 0;
   el.setAttribute("aria-hidden", String(hidden));
   el.setAttribute("aria-pressed", String(selected));
-  entry.marker.getElement().style.zIndex = String(selected ? 30 : hovered ? 20 : 10 + STATUS_PRIORITY[alert.roadStatus]);
+  entry.marker.getElement().style.zIndex = String(
+    selected ? 30 : hovered ? 20 : hazard ? 15 + STATUS_PRIORITY[alert.roadStatus] : 10 + STATUS_PRIORITY[alert.roadStatus],
+  );
 }
 
 /** Hides markers outside the visible area; in steep 3D views far-away points can project into view. */
