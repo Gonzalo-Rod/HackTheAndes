@@ -8,7 +8,7 @@ const messageSchema = z.object({
     id: z.string(),
     messageType: z.literal("audio"),
     direction: z.literal("inbound"),
-    content: z.object({ mediaUrl: z.url(), mimeType: z.string().optional() }),
+    content: z.object({ mediaUrl: z.url().optional(), mimeType: z.string().optional() }),
   }),
 });
 export function allowedAudioUrl(value: string) {
@@ -21,24 +21,38 @@ export function allowedAudioUrl(value: string) {
     ["zavu.dev", "convex.cloud", "convex.site", "r2.dev"].some((host) => url.hostname.endsWith(`.${host}`))
   );
 }
-export function createZavuAudioSource(apiKey: string, fetchImpl?: typeof fetch): AudioSource {
+export function createZavuAudioSource(
+  apiKey: string,
+  fetchImpl?: typeof fetch,
+  sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms)),
+): AudioSource {
   return {
     async download(messageId, requestId) {
       // Resolve via authenticated provider metadata, never a URL supplied in the webhook.
-      const response = messageSchema.parse(
-        await getJson(`https://api.zavu.dev/v1/messages/${encodeURIComponent(messageId)}`, {
-          provider: "zavu",
-          operation: "audio.resolve",
-          requestId,
-          headers: { Authorization: `Bearer ${apiKey}` },
-          fetchImpl,
-        }),
-      );
-      if (response.message.id !== messageId || !allowedAudioUrl(response.message.content.mediaUrl))
-        throw new Error("Untrusted audio source");
-      const file = await getBoundedAudio(response.message.content.mediaUrl, MAX_AUDIO_BYTES, {
+      let response: z.infer<typeof messageSchema> | undefined;
+      // Zavu stores media asynchronously after delivering the initial webhook.
+      for (let attempt = 0; attempt < 3; attempt++) {
+        if (attempt) await sleep(attempt * 200);
+        response = messageSchema.parse(
+          await getJson(`https://api.zavu.dev/v1/messages/${encodeURIComponent(messageId)}`, {
+            provider: "zavu",
+            operation: "audio.resolve",
+            timeoutMs: 3000,
+            retries: 0,
+            requestId,
+            headers: { Authorization: `Bearer ${apiKey}` },
+            fetchImpl,
+          }),
+        );
+        if (response.message.id !== messageId) throw new Error("Audio identity mismatch");
+        if (response.message.content.mediaUrl) break;
+      }
+      const mediaUrl = response?.message.content.mediaUrl;
+      if (!response || !mediaUrl || !allowedAudioUrl(mediaUrl)) throw new Error("Untrusted audio source");
+      const file = await getBoundedAudio(mediaUrl, MAX_AUDIO_BYTES, {
         provider: "zavu-media",
         operation: "audio.download",
+        retries: 1,
         logTarget: "stored-audio",
         requestId,
         fetchImpl,

@@ -227,3 +227,8 @@ it.each(["REPORTE PRUEBA: Hay un derrumbe", "REPORTE PRUEBA. Hay un derrumbe"])(
     expect(s.getDraft()?.isTest).toBe(true);
   },
 );
+it("recognizes a spoken REPORTE DE PRUEBA marker without treating it as traction", async () => {
+  const s = setup();
+  await s.flow.route(s.message("REPORTE DE PRUEBA. Hay un derrumbe"), "req");
+  expect(s.getDraft()?.isTest).toBe(true);
+});

@@ -171,7 +171,8 @@ export function createReportFlow(deps: ReportFlowDependencies): ReportRouter {
           );
         const extracted = await deps.extractor.extract(message.text, requestId);
         if (!extracted) return save(reply(EXTRACTION_FAILED));
-        const isTest = (draft?.isTest ?? false) || /^(REPORTE|REPORTAR)\s+PRUEBA\b/.test(text) || deps.testPhoneKeys.includes(senderKey);
+        const isTest =
+          (draft?.isTest ?? false) || /^(REPORTE|REPORTAR)\s+(?:DE\s+)?PRUEBA\b/.test(text) || deps.testPhoneKeys.includes(senderKey);
         if (draft?.extraction.type && extracted.type && draft.extraction.type !== extracted.type)
           return save(
             reply("Hay un borrador de otro tipo de incidente. Usa REPORTE para iniciar uno nuevo, o CANCELAR para descartar el anterior."),

@@ -1,13 +1,12 @@
-import { randomUUID, createHash } from "node:crypto";
+import { randomUUID, createHash, randomBytes } from "node:crypto";
 import { describe, it, expect, afterAll } from "vitest";
 import { database } from "./pool";
 import { createSubscriptionRepository } from "./subscriptions";
 import { createAlertDeliveryRepository } from "./alert-deliveries";
-import { loadGeometryRevision, loadPlatformConfiguration } from "@/config/env";
+import { loadGeometryRevision } from "@/config/env";
 import type { AlertCandidate } from "@/contracts/notifications";
-const pool = database(),
-  config = loadPlatformConfiguration();
-const encryption = { key: config.CONTACT_ENCRYPTION_KEY, version: config.CONTACT_KEY_VERSION };
+const pool = database();
+const encryption = { key: randomBytes(32).toString("base64url"), version: "notification-test-v1" };
 const subscription = createSubscriptionRepository(pool, encryption),
   delivery = createAlertDeliveryRepository(pool, encryption, "https://example.test");
 const key = createHash("sha256").update(randomUUID()).digest("hex");
