@@ -73,3 +73,15 @@ it("bounds stalled requests and releases a failed authentication exchange", asyn
   stalled = false;
   expect(await client.purchase(id, "retry")).toEqual(sale);
 });
+
+it("accepts numeric-string Unix expiry timestamps returned by the live seller API", async () => {
+  const fetchImpl = vi.fn<typeof fetch>(async (_url, init) =>
+    Response.json(init?.method === "POST" ? { ...token, expires_at: "3600" } : { purchase: sale }),
+  );
+  expect(await createQatomPurchaseVerifier(config, { fetchImpl }, () => 0).purchase(id, "trace")).toEqual(sale);
+});
+it.each(["", "not-a-time", "3.5", "-3600", "Infinity"])("rejects an invalid string expiry %s", async (expires_at) => {
+  const fetchImpl = vi.fn<typeof fetch>(async () => Response.json({ ...token, expires_at }));
+  await expect(createQatomPurchaseVerifier(config, { fetchImpl }, () => 0).purchase(id, "trace")).rejects.toThrow();
+  expect(fetchImpl).toHaveBeenCalledTimes(1);
+});

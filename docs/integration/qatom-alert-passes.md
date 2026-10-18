@@ -89,14 +89,18 @@ before applying this to the shared database. Never modify an applied migration.
 6. For settled-sale verification, add the seller account API credentials as
    `QATOM_API_CLIENT_ID` and `QATOM_API_CLIENT_SECRET`. The verifier exchanges
    these at `POST /v4/account/oauth/token`, with HTTP Basic, and caches the
-   account token until one minute before its absolute `expires_at` timestamp.
+   account token until one minute before its absolute `expires_at` timestamp. The
+   live provider returns Unix seconds as a numeric string; the verifier accepts
+   that representation and the integer declared in its OpenAPI contract.
    Do not put `agent_...` credentials in these variables, copy interactive Codex
    tokens, or weaken the settled-sale check to bypass an authentication failure.
    Set `QATOM_CATALOG_ITEM_ID`, `QATOM_USD_TDN_DQ` (the seller's USD-TDN digital
    quantity hash), `QATOM_MCP_URL`, `QATOM_CLIENT_ID`, `QATOM_CLIENT_SECRET`, and
    `QATOM_FULFILMENT_TOKEN` server-side. Use the existing `OPENAI_API_KEY`; the
    optional `OPENAI_QATOM_MODEL` defaults to the established GPT-4.1 mini snapshot.
-   A partial/missing configuration fails closed with a WhatsApp retry message.
+   Retain both credential pairs: adding seller API credentials does not replace
+   the MCP agent credentials. A partial/missing configuration fails closed with
+   a WhatsApp retry message.
 7. Read the item back, activate it only after endpoint/header configuration, then
    test a real paid purchase with the driver's explicit approval. Check the real
    ledger, expiry, WhatsApp delivery and STOP. Free coverage can be checked first.

@@ -3,7 +3,12 @@ import type { QatomApiConfiguration } from "@/config/env";
 import { settledPurchaseSchema } from "@/contracts/alert-passes";
 import { getJson, postJson, type RequestOptions } from "@/integrations/http/fetch-json";
 
-const accountTokenSchema = z.object({ access_token: z.string().min(1), expires_at: z.number().int().positive() });
+// The live API serializes Unix expiry seconds as a string, unlike its OpenAPI integer schema.
+const expirySecondsSchema = z.union([
+  z.number().int().positive(),
+  z.string().regex(/^\d+$/).transform(Number).pipe(z.number().int().positive()),
+]);
+const accountTokenSchema = z.object({ access_token: z.string().min(1), expires_at: expirySecondsSchema });
 // Refresh one minute early so verification does not start with an almost-expired token.
 const TOKEN_REFRESH_MARGIN_MS = 60_000;
 
