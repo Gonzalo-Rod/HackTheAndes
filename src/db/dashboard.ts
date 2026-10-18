@@ -60,7 +60,7 @@ export function createDashboardRepository(pool: Pick<Pool, "query">, geometryRev
         `with real_reports as (
         select reporter_key from public.reports where not is_team and not is_test and not(reporter_key=any($1::text[]))
       ), real_subscriptions as (
-        select distinct phone_key from public.subscriptions where not is_team and not is_test and opted_out_at is null and not(phone_key=any($1::text[]))
+        select distinct phone_key from public.subscriptions where not is_team and not is_test and opted_out_at is null and route_active and alert_expires_at>now() and (alert_payment_id is not null or is_test) and not(phone_key=any($1::text[]))
       ), real_queries as (
         select phone_key from private.usage_events where kind='query_answered' and not is_team and not is_test and not is_automated and not(phone_key=any($1::text[]))
       ), real_activity as (

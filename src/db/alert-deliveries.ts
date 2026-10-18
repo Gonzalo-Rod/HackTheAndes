@@ -28,7 +28,7 @@ export function createAlertDeliveryRepository(pool: Pool, encryption: { key: str
   return {
     async subscriptions(revision: string) {
       const r = await pool.query(
-        "select id from public.subscriptions where opted_out_at is null and geometry_revision=$1 and alert_expires_at>now() and (alert_payment_id is not null or is_test) order by last_alert_at nulls first,id limit 1000",
+        "select id from public.subscriptions where opted_out_at is null and route_active and geometry_revision=$1 and alert_expires_at>now() and (alert_payment_id is not null or is_test) order by last_alert_at nulls first,id limit 1000",
         [revision],
       );
       return z
@@ -40,7 +40,7 @@ export function createAlertDeliveryRepository(pool: Pool, encryption: { key: str
       const candidates = z.array(alertCandidateSchema).max(5000).parse(rawCandidates);
       return transaction(pool, async (client) => {
         const result = await client.query(
-          `select id,km_start::float8 as "startKm",km_end::float8 as "endKm",range_label as label,is_test as "isTest",consent_at as "consentAt",last_alert_at as "lastAlertAt",last_inbound_at as "lastInboundAt" from public.subscriptions where id=$1 and opted_out_at is null and alert_expires_at>$2 and (alert_payment_id is not null or is_test) for update`,
+          `select id,km_start::float8 as "startKm",km_end::float8 as "endKm",range_label as label,is_test as "isTest",consent_at as "consentAt",last_alert_at as "lastAlertAt",last_inbound_at as "lastInboundAt" from public.subscriptions where id=$1 and opted_out_at is null and route_active and alert_expires_at>$2 and (alert_payment_id is not null or is_test) for update`,
           [subscriptionId, new Date(nowMs)],
         );
         if (!result.rowCount) return null;
@@ -102,7 +102,7 @@ export function createAlertDeliveryRepository(pool: Pool, encryption: { key: str
     },
     async destination(delivery: { id: string; leaseId: string }, nowMs: number) {
       const result = await pool.query(
-        `select c.ciphertext,c.iv,c.auth_tag as "authTag",c.key_version as "keyVersion",s.last_inbound_at as "lastInboundAt" from private.alert_deliveries d join public.subscriptions s on s.id=d.subscription_id join private.delivery_contacts c on c.id=s.contact_ref where d.id=$1 and d.lease_id=$2 and d.status='pending' and d.lease_until>$3 and d.expires_at>$3 and s.opted_out_at is null and s.consent_at=d.consent_at and c.disabled_at is null and s.alert_expires_at>$3 and (s.alert_payment_id is not null or s.is_test)`,
+        `select c.ciphertext,c.iv,c.auth_tag as "authTag",c.key_version as "keyVersion",s.last_inbound_at as "lastInboundAt" from private.alert_deliveries d join public.subscriptions s on s.id=d.subscription_id join private.delivery_contacts c on c.id=s.contact_ref where d.id=$1 and d.lease_id=$2 and d.status='pending' and d.lease_until>$3 and d.expires_at>$3 and s.opted_out_at is null and s.route_active and s.consent_at=d.consent_at and c.disabled_at is null and s.alert_expires_at>$3 and (s.alert_payment_id is not null or s.is_test)`,
         [delivery.id, delivery.leaseId, new Date(nowMs)],
       );
       if (!result.rowCount) return null;

@@ -43,6 +43,7 @@ function setup() {
       distanceFromRoadM: 40,
     },
   }));
+  const payments = { checkout: vi.fn(async () => null) };
   const flow = createSubscriptionFlow({
     repository,
     context,
@@ -52,8 +53,9 @@ function setup() {
     pepper: "synthetic-pepper",
     teamKeys: [],
     testKeys: [],
+    payments,
   });
-  return { repository, context, flow, draft: () => draft };
+  return { repository, context, payments, flow, draft: () => draft };
 }
 it("asks for origin and destination then proposes a reverse-direction route without activating", async () => {
   const s = setup();
@@ -117,4 +119,11 @@ it("shows a visible fallback when route lookup is unavailable", async () => {
   vi.mocked(s.repository.routeState).mockRejectedValue(new Error("Unavailable"));
   expect(await s.flow.handle(message("RUTA"), "r")).toContain("No cambió tu suscripción");
   expect(s.repository.act).not.toHaveBeenCalled();
+});
+it("confirms a route through its own command without preparing another checkout", async () => {
+  const s = setup();
+  await s.flow.handle(message("RUTA ACTIVAR ABCDEF12"), "r");
+  expect(s.repository.act).toHaveBeenLastCalledWith(expect.objectContaining({ action: { kind: "routeActivate", code: "ABCDEF12" } }));
+  expect(s.repository.act).not.toHaveBeenCalledWith(expect.objectContaining({ action: expect.objectContaining({ kind: "activate" }) }));
+  expect(s.payments.checkout).not.toHaveBeenCalled();
 });

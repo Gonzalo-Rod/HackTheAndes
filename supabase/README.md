@@ -214,3 +214,11 @@ Route subscriptions add `private.route_intake` through
 `20261018044500_route_alert_intake.sql`: encrypted, expiring origin/destination
 proposals with server-only access. Completed proposals reuse the existing typed
 subscription consent and alert outbox. See the [notification guide](../docs/integration/driver-notifications.md).
+
+Migration `20261018090000_separate_alert_pass_and_route.sql` separates pass access
+from active route notifications using `subscriptions.route_active`. Existing
+active route consent is preserved; new paid/DEMO pass grants leave routes off
+until `RUTA ACTIVAR`. Apply it with the matching application release. Old
+unconfirmed purchase/route proposals are discarded so drivers request fresh
+codes; existing checkout requests and settled payment records are preserved.
+STOP disables notifications without consuming or extending the remaining pass.

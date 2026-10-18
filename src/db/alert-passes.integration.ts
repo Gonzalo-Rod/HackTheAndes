@@ -9,6 +9,8 @@ import { expireAlertPasses } from "./expire-alert-passes";
 import { loadGeometryRevision } from "@/config/env";
 import type { AlertCandidate } from "@/contracts/notifications";
 import type { SettledPurchase } from "@/contracts/alert-passes";
+import { confirmTestRoute } from "@/test-fixtures/confirm-route";
+import { createWeeklyPdfRepository } from "./weekly-pdf";
 
 const pool = database(),
   now = Date.now();
@@ -73,6 +75,7 @@ afterAll(async () => {
     await pool.query("delete from public.subscriptions where phone_key=any($1::text[])", [keys]);
     await pool.query("delete from private.delivery_contacts where phone_key=any($1::text[])", [keys]);
     await pool.query("delete from private.subscription_intake where phone_key=any($1::text[])", [keys]);
+    await pool.query("delete from private.route_intake where phone_key=any($1::text[])", [keys]);
     await pool.query("delete from private.subscription_results where event_key=any($1::text[])", [events]);
   } finally {
     await pool.end();
@@ -125,6 +128,7 @@ it("blocks an already-claimed delivery at the exact expiry, even before cleanup"
   const p = await prepare(),
     sale = purchase();
   await fulfil(p.id, sale.transaction_id, sale, now + 2);
+  await confirmTestRoute((action) => subscriptions.act({ ...p.input, eventKey: event(), action }), range, now + 2);
   const row = await pool.query("select id from public.subscriptions where phone_key=$1", [p.key]);
   const id = String(row.rows[0].id);
   const claimed = await deliveries.claim(id, [candidate(p.expiresAt + 3_600_000)], p.expiresAt - 1);
@@ -179,11 +183,59 @@ it("retains free DEMO activation only when both sender and proposal are test-mar
   const input = { key, now: new Date(now).toISOString(), destination: "US.synthetic-free-demo", isTeam: false, isTest: true };
   await subscriptions.act({ ...input, eventKey: event(), action: { kind: "prepare", code: "ABCDEF12", range, isTest: true } });
   expect(await subscriptions.act({ ...input, eventKey: event(), action: { kind: "activate", code: "ABCDEF12" } })).toContain(
-    "DEMO · Suscripción activa",
+    "DEMO · Pase activo",
   );
   expect((await pool.query("select id from private.alert_pass_requests where phone_key=$1", [key])).rowCount).toBe(0);
   expect((await pool.query("select is_test,alert_payment_id from public.subscriptions where phone_key=$1", [key])).rows[0]).toEqual({
     is_test: true,
     alert_payment_id: null,
   });
+});
+
+it("separates paid access from route consent, reuses the pass across changes and STOP, and enforces expiry", async () => {
+  const p = await prepare(),
+    sale = purchase();
+  const act = (action: Parameters<typeof subscriptions.act>[0]["action"], at = now + 3) =>
+    subscriptions.act({ ...p.input, now: new Date(at).toISOString(), eventKey: event(), action });
+  const routeDraft = () => ({ id: randomUUID(), origin: null, isTest: false, expiresAt: new Date(now + 30 * 60_000).toISOString() });
+  expect(await act({ kind: "routeStart", draft: routeDraft() })).toContain("Necesitas un pase");
+  await fulfil(p.id, sale.transaction_id, sale, now + 2);
+  const read = async () =>
+    (
+      await pool.query(
+        "select id,route_active,alert_expires_at,alert_payment_id,km_start::float8 as start from public.subscriptions where phone_key=$1",
+        [p.key],
+      )
+    ).rows[0];
+  const pass = await read();
+  expect(pass.route_active).toBe(false);
+  expect(await deliveries.claim(pass.id, [candidate(p.expiresAt)], now + 3)).toBeNull();
+  expect(await act({ kind: "weeklyPrepare", code: "11223344" })).toContain("Primero");
+  expect(await confirmTestRoute(act, range, now + 3)).toContain("Sin otro pago");
+  await act({ kind: "weeklyPrepare", code: "11223344" });
+  await act({ kind: "weeklyActivate", code: "11223344" });
+  const weekly = createWeeklyPdfRepository(pool, encryption);
+  expect(await weekly.targets(range.geometryRevision, p.key)).toHaveLength(1);
+  const oldDelivery = await deliveries.claim(pass.id, [candidate(p.expiresAt)], now + 3);
+  expect(oldDelivery).not.toBeNull();
+  await confirmTestRoute((action) => act(action, now + 4), { ...range, startKm: 40, endKm: 60 }, now + 4);
+  if (!oldDelivery) throw new Error("Missing synthetic old route delivery");
+  expect(await deliveries.destination(oldDelivery, now + 4)).toBeNull();
+  expect(await weekly.targets(range.geometryRevision, p.key)).toHaveLength(0);
+  expect(await read()).toMatchObject({
+    id: pass.id,
+    start: 40,
+    route_active: true,
+    alert_expires_at: pass.alert_expires_at,
+    alert_payment_id: p.id,
+  });
+  expect(await act({ kind: "stop" }, now + 5)).toContain("tiempo restante");
+  expect((await read()).route_active).toBe(false);
+  expect(await act({ kind: "prepare", range, code: "AABBCCDD", isTest: false }, now + 6)).toContain("pase sigue vigente");
+  expect(await act({ kind: "activate", code: "AABBCCDD" }, now + 6)).toContain("pase sigue vigente");
+  expect(await confirmTestRoute((action) => act(action, now + 7), range, now + 7)).toContain("Ruta activa");
+  expect((await pool.query("select id from private.alert_pass_requests where phone_key=$1", [p.key])).rows).toHaveLength(1);
+  expect((await read()).alert_expires_at).toEqual(pass.alert_expires_at);
+  expect(await act({ kind: "routeStart", draft: routeDraft() }, p.expiresAt)).toContain("Necesitas un pase");
+  expect(await act({ kind: "routeActivate", code: "ABCDEF99" }, p.expiresAt)).toContain("Necesitas un pase");
 });

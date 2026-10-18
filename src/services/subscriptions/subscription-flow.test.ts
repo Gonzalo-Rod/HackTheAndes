@@ -29,20 +29,21 @@ function setup(testKeys: readonly string[] = []) {
   };
 }
 const message = (text: string) => ({ messageId: "synthetic", from: "US.synthetic", messageType: "text", channel: "whatsapp", text });
-it("asks for explicit authorization before a whole-corridor opt-in", async () => {
+it("asks for explicit authorization before purchasing access, independently of a route", async () => {
   const s = setup();
   await s.flow.handle(message("SUSCRIBIR PRUEBA"), "r");
   expect(s.repository.act).toHaveBeenCalledWith(
     expect.objectContaining({ action: expect.objectContaining({ kind: "prepare", isTest: true, code: "ABCDEF12" }) }),
   );
 });
-it("does not silently replace an unresolved requested stretch with the whole road", async () => {
+it("redirects the old combined subscription/range syntax without creating a purchase or route", async () => {
   const s = setup();
-  expect(await s.flow.handle(message("SUSCRIBIR Chosica–La Oroya"), "r")).toContain("No pude verificar");
+  expect(await s.flow.handle(message("SUSCRIBIR Chosica–La Oroya"), "r")).toContain("usa RUTA");
+  expect(s.context).not.toHaveBeenCalled();
   expect(s.repository.act).not.toHaveBeenCalled();
 });
-it("requires two endpoints instead of guessing a requested place", async () =>
-  expect(await setup().flow.handle(message("SUSCRIBIR Chosica"), "r")).toContain("dos lugares"));
+it("does not treat a subscription argument as an endpoint", async () =>
+  expect(await setup().flow.handle(message("SUSCRIBIR Chosica"), "r")).toContain("usa RUTA"));
 it("BAJA is deterministic and does not call the LLM or location service", async () => {
   const s = setup();
   await s.flow.handle(message("BAJA"), "r");

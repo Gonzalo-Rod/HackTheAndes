@@ -11,7 +11,9 @@ Photos, video, voice replies and calls are outside this implementation.
 
 1. Send a text or Spanish voice note. Voice input becomes text before the existing
    query/report router; publication still requires the typed `CONFIRMAR <code>`.
-2. Send `RUTA` (or `RUTA PRUEBA` for DEMO) and provide the **origin**, then the
+2. Buy access with `SUSCRIBIR`, accept `ACTIVAR <code>`, and complete Qatom
+   checkout (configured DEMO passes remain free). This alone does not start alerts.
+   With a valid pass, send `RUTA` (or `RUTA PRUEBA` for DEMO) and provide the **origin**, then the
    **destination**. Each endpoint can be a static WhatsApp pin within 500 m of the
    captured PE-22 axis, a uniquely resolved catalog landmark, or `KM 50.5` using
    approximate **map distance**, never an official road marker. Unknown places ask
@@ -19,12 +21,13 @@ Photos, video, voice replies and calls are outside this implementation.
    not tracked continuously, and raw pins are not stored in the route proposal.
    Forward/reverse travel uses the same interval on the single captured road axis;
    this does not calculate alternative roads, departure recommendations or an ETA.
-   `SUSCRIBIR` retains the whole-corridor option and named-endpoint compatibility.
-3. Review the proposed range and delivery terms, then type `ACTIVAR <code>`.
+   SUSCRIBIR purchases access only; old named-range arguments direct drivers to RUTA.
+3. Review the proposed range and delivery terms, then type `RUTA ACTIVAR <code>`.
+   This uses the existing pass without charging again or moving its expiry.
    The proposal expires in 30 minutes. A natural-language request alone does not
    create a subscription. Existing alerts continue while a replacement is drafted.
    `RUTA CANCELAR` discards either the endpoint draft or final activation proposal;
-   bare `CANCELAR` discards an active endpoint draft. Queries work during setup;
+   bare `CANCELAR` discards the current route draft/proposal. Queries work during setup;
    a new `REPORTE` asks the driver to finish/cancel the route to avoid pin ambiguity.
    Route replacement clears the old route's weekly PDF authorization; authorize
    `SEMANAL` separately for the new range.
@@ -35,11 +38,12 @@ Photos, video, voice replies and calls are outside this implementation.
 Only consenting subscribers with a current weekly pass receive proactive messages.
 The October 18 authorization adds a one-time USD 0.001 Qatom purchase for seven
 elapsed days from the original request, using OpenAI Responses and Qatom MCP;
-see [payment setup and verification](qatom-alert-passes.md). Existing `SUSCRIBIR`
-and `RUTA` flows now request payment after typed consent; `SUSCRIBIR 7 DIAS`
-explicitly requests the weekly corridor pass. `PAGAR` provides the checkout link
+see [payment setup and verification](qatom-alert-passes.md). `SUSCRIBIR`
+requests payment after typed consent; `RUTA` requires an existing pass and never
+starts a checkout. `PAGAR` provides the checkout link
 and `PAGO` checks status. No automatic renewal is created. One active
-PE-22 subscription per identity is supported; a newly paid range replaces it.
+PE-22 alert range per identity is supported; confirming another range replaces
+it within the existing pass.
 
 ## Alert eligibility and noise control
 
@@ -190,12 +194,16 @@ state is server-only and never returned to browser roles.
 
 ## Route storage and operational setup
 
-Apply `20261018044500_route_alert_intake.sql` with the existing database operator.
+Apply `20261018044500_route_alert_intake.sql` and the additive
+`20261018090000_separate_alert_pass_and_route.sql` with the existing database
+operator and matching application release. Existing active routes are preserved;
+old unconfirmed proposals are discarded because their consent combined purchase
+and route selection.
 Route proposals live in `private.route_intake`, with authenticated encryption,
 30-minute expiry, server-only RLS and no browser privileges. Commands reuse encrypted
 replay results and the per-sender transaction lock. A proposal ID/origin check rejects
-stale concurrent endpoint updates. Completed routes reuse the existing subscription
-range and delivery outbox, so no new credential or routing provider is required.
+stale concurrent endpoint updates. Final route proposals stay encrypted in route_intake until RUTA ACTIVAR.
+Confirmed routes reuse the existing subscription range and delivery outbox, so no new credential or routing provider is required.
 Expired encrypted proposals follow the same pruning policy as subscription drafts.
 
 The n8n SUTRAN and climate workflows append a non-blocking sub-workflow invocation;

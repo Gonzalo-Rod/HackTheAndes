@@ -52,6 +52,9 @@ afterAll(async () => {
   }
 });
 it("encrypts route drafts, preserves pin-command replay and requires explicit activation", async () => {
+  expect(await act({ kind: "routeStart", draft: draft() })).toContain("Necesitas un pase");
+  await act({ kind: "prepare", range, code: "12345678", isTest: true });
+  await act({ kind: "activate", code: "12345678" });
   const proposed = draft();
   expect(await act({ kind: "routeStart", draft: proposed })).toContain("empieza");
   const stored = await pool.query("select ciphertext from private.route_intake where phone_key=$1", [key]);
@@ -60,10 +63,14 @@ it("encrypts route drafts, preserves pin-command replay and requires explicit ac
   const prompt = await act({ kind: "routeOrigin", draftId: proposed.id, endpoint: origin }, now, e);
   expect((await state()).draft?.origin).toEqual(origin);
   expect((await state(now, e)).reply).toBe(prompt);
-  expect((await pool.query("select id from public.subscriptions where phone_key=$1", [key])).rowCount).toBe(0);
-  expect(await act({ kind: "routeDestination", draftId: proposed.id, origin, range, code: "ABCDEF12" })).toContain("ACTIVAR ABCDEF12");
+  expect((await pool.query("select route_active from public.subscriptions where phone_key=$1", [key])).rows[0].route_active).toBe(false);
+  expect(await act({ kind: "routeDestination", draftId: proposed.id, origin, range, code: "ABCDEF12" })).toContain("RUTA ACTIVAR ABCDEF12");
+  expect((await state()).draft?.proposal?.code).toBe("ABCDEF12");
+  expect(await act({ kind: "activate", code: "ABCDEF12" })).toContain("pase sigue vigente");
+  expect((await pool.query("select route_active from public.subscriptions where phone_key=$1", [key])).rows[0].route_active).toBe(false);
+  expect(await act({ kind: "routeActivate", code: "FFFFFFFF" })).toContain("no corresponde o expiró");
+  expect(await act({ kind: "routeActivate", code: "ABCDEF12" })).toContain("Ruta activa");
   expect((await state()).draft).toBeNull();
-  expect(await act({ kind: "activate", code: "ABCDEF12" })).toContain("Suscripción activa");
 });
 it("filters events to the chosen range and sends a new event immediately after another", async () => {
   const rows = await pool.query(
@@ -99,7 +106,7 @@ it("keeps existing consent while a new route is drafted and cancels its final pr
   await act({ kind: "routeOrigin", draftId: proposed.id, endpoint: origin });
   await act({ kind: "routeDestination", draftId: proposed.id, origin, range: { ...range, startKm: 40 }, code: "ABCDEF99" });
   await act({ kind: "routeCancel" });
-  expect(await act({ kind: "activate", code: "ABCDEF99" })).toContain("No hay una suscripción pendiente");
+  expect(await act({ kind: "routeActivate", code: "ABCDEF99" })).toContain("no corresponde o expiró");
   const rows = await pool.query("select km_start::float8 as start from public.subscriptions where phone_key=$1 and opted_out_at is null", [
     key,
   ]);
@@ -119,5 +126,8 @@ it("STOP erases the proposal and stops deliveries, with no browser access to rou
   expect((await state()).draft).toBeNull();
   const result = await pool.query("select has_table_privilege('anon','private.route_intake','select') as allowed");
   expect(result.rows[0].allowed).toBe(false);
-  expect((await pool.query("select id from public.subscriptions where phone_key=$1 and opted_out_at is null", [key])).rowCount).toBe(0);
+  expect(
+    (await pool.query("select route_active from public.subscriptions where phone_key=$1 and opted_out_at is null", [key])).rows[0]
+      .route_active,
+  ).toBe(false);
 });

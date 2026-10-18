@@ -30,6 +30,11 @@ on the captured PE-22 axis; static pins are not continuous phone tracking. Keep
 estimated possible-huaico alerts, duplicate suppression, five-minute recovery,
 typed activation and STOP/BAJA cancellation. Do not reintroduce the 30-minute
 delivery cooldown; see `docs/integration/driver-notifications.md`.
+**Separate purchase and route consent:** SUSCRIBIR purchases seven-day access;
+it does not start alerts. RUTA selects origin/destination with an existing valid
+pass, confirmed by RUTA ACTIVAR. Route changes and STOP preserve the remaining
+pass time and never create another charge or extend expiry. STOP disables route
+notifications and PDFs; route replacement still requires fresh weekly consent.
 **October 18 payment authorization:** implement a one-time 0.001 USD-TDN Qatom
 pass for seven elapsed days from the original WhatsApp request, using OpenAI
 Responses with Qatom MCP guest checkout, verified fulfilment and server-enforced

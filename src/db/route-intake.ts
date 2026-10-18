@@ -3,7 +3,10 @@ import { z } from "zod";
 import { decryptContact, encryptContact, EncryptedContactSchema } from "@/integrations/security/contacts";
 import { routeDraftSchema, type RouteAction, type RouteDraft } from "@/contracts/route-subscriptions";
 import { subscriptionRangeSchema } from "@/contracts/notifications";
-import { ROUTE_ORIGIN_PROMPT, routeDestinationPrompt, subscriptionProposal } from "@/domain/subscriptions/messages";
+import { ROUTE_ORIGIN_PROMPT, routeDestinationPrompt, routeProposal } from "@/domain/subscriptions/messages";
+import { readActiveAlertPass } from "./active-alert-pass";
+import { activateSubscription } from "./activate-subscription";
+import { passDeadline } from "@/domain/subscriptions/alert-pass";
 type Encryption = { key: string; version: string };
 export async function readRouteState(db: Pick<Pool, "query">, encryption: Encryption, key: string, eventKey: string, now: string) {
   const replay = await db.query(
@@ -29,19 +32,47 @@ async function saveDraft(db: PoolClient, encryption: Encryption, key: string, dr
     [key, value.ciphertext, value.iv, value.authTag, value.keyVersion, draft.expiresAt],
   );
 }
-export async function actRoute(db: PoolClient, encryption: Encryption, key: string, action: RouteAction, now: string) {
+export async function actRoute(
+  db: PoolClient,
+  encryption: Encryption,
+  input: { key: string; destination: string; now: string },
+  action: RouteAction,
+) {
+  const { key, now } = input;
   if (action.kind === "routeCancel") {
-    await db.query("delete from private.subscription_intake where phone_key=$1", [key]);
     await db.query("delete from private.route_intake where phone_key=$1", [key]);
     return "Propuesta de ruta descartada. No cambió tu suscripción actual. RUTA inicia otra; STOP cancela las alertas.";
   }
+  const pass = await readActiveAlertPass(db, key, now);
+  if (!pass) return "Necesitas un pase vigente. Escribe SUSCRIBIR para comprar 7 días; después RUTA elige tu tramo sin otro pago.";
   if (action.kind === "routeStart") {
-    await db.query("delete from private.subscription_intake where phone_key=$1", [key]);
+    if (action.draft.isTest && !pass.isTest)
+      return "RUTA PRUEBA requiere un pase DEMO de un número de prueba configurado. Usa RUTA para tu pase actual.";
     await saveDraft(db, encryption, key, action.draft);
     return ROUTE_ORIGIN_PROMPT;
   }
   const { draft } = await readRouteState(db, encryption, key, "", now);
+  if (action.kind === "routeActivate") {
+    if (!draft?.proposal || draft.proposal.code !== action.code)
+      return "El código de ruta no corresponde o expiró. Escribe RUTA para elegirla de nuevo; no se hizo ningún cobro.";
+    await activateSubscription(
+      db,
+      {
+        ...input,
+        isTeam: pass.isTeam,
+        isTest: pass.isTest,
+        expiresAt: pass.expiresAt.toISOString(),
+        paymentId: pass.paymentId,
+        range: draft.proposal.range,
+        routeActive: true,
+      },
+      encryption,
+    );
+    await db.query("delete from private.route_intake where phone_key=$1", [key]);
+    return `${pass.isTest ? "DEMO · " : ""}Ruta activa: ${draft.proposal.range.label}. Sin otro pago; tu pase vence ${passDeadline(pass.expiresAt.toISOString())} (Perú). Avisaremos de reportes SIN CONFIRMAR, cambios SUTRAN y posibles huaicos estimados. STOP o BAJA detiene las notificaciones sin perder el tiempo restante del pase. Los PDF requieren autorizar SEMANAL por separado.`;
+  }
   if (!draft || draft.id !== action.draftId) return "La propuesta de ruta cambió o expiró. Escribe RUTA para comenzar de nuevo.";
+  if (draft.proposal) return routeProposal(draft.proposal.range, draft.proposal.code);
   if (action.kind === "routeOrigin") {
     if (draft.origin) return "Ya elegiste un origen. Envía el destino o escribe RUTA para reiniciar.";
     await saveDraft(db, encryption, key, { ...draft, origin: action.endpoint });
@@ -50,10 +81,6 @@ export async function actRoute(db: PoolClient, encryption: Encryption, key: stri
   if (!draft.origin || JSON.stringify(draft.origin) !== JSON.stringify(action.origin))
     return "El origen cambió. Escribe RUTA para revisar la propuesta.";
   const range = subscriptionRangeSchema.parse(action.range);
-  await db.query(
-    "insert into private.subscription_intake(phone_key,code,range,is_test,expires_at,requested_at) values($1,$2,$3::jsonb,$4,$5,$5::timestamptz-interval '30 minutes') on conflict(phone_key) do update set code=excluded.code,range=excluded.range,is_test=excluded.is_test,expires_at=excluded.expires_at,requested_at=excluded.requested_at",
-    [key, action.code, JSON.stringify(range), draft.isTest, draft.expiresAt],
-  );
-  await db.query("delete from private.route_intake where phone_key=$1", [key]);
-  return subscriptionProposal(range, action.code, draft.isTest);
+  await saveDraft(db, encryption, key, { ...draft, proposal: { range, code: action.code } });
+  return routeProposal(range, action.code);
 }

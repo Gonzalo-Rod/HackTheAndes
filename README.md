@@ -104,6 +104,9 @@ server-only configuration (including separate MCP-agent and seller-API credentia
 
 ## WhatsApp integration
 
+See the [complete WhatsApp command guide](docs/integration/whatsapp-commands.md)
+for queries, reports, route alerts, payment, weekly PDFs and demonstration flows.
+
 B's Zavu snapshot is integrated on `feat/data-model`. The signed webhook answers
 road-status and estimated-exposure queries using the existing validated data
 services; a narrow OpenAI intent parser supports natural-language questions.

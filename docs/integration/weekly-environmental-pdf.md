@@ -2,13 +2,14 @@
 
 The participant requested PDF attachments instead of report links, delivered to
 drivers who explicitly opt in. This replaces the earlier organization-only F6
-delivery proposal. Existing company-report access remains unchanged; this feature
-does not require payments, a company account or departure planning.
+delivery proposal. Weekly PDFs require separate consent and an eligible active
+route and pass: a [paid weekly pass](qatom-alert-passes.md) or a configured
+free DEMO subscription. They do not require a company account or departure planning.
 
 ## Driver commands and consent
 
-1. Choose and authorize a stretch through the existing `SUSCRIBIR` / `ACTIVAR`
-   flow. This alone does **not** enable weekly PDFs.
+1. Purchase access through `SUSCRIBIR` / `ACTIVAR` (or obtain a configured DEMO
+   pass), then choose and confirm a stretch through `RUTA` / `RUTA ACTIVAR`. This alone does **not** enable weekly PDFs.
 2. Send `SEMANAL`. Review the stretch, Monday 07:00 Peru schedule and delivery
    explanation. Send the exact `SEMANAL ACTIVAR <code>` within 30 minutes.
 3. Send `PDF` to request an attachment now, or to retrieve a pending weekly PDF.

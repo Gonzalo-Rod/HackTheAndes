@@ -38,8 +38,10 @@ export function createRouteFlow(deps: {
       if (state.reply) return state.reply;
       if (explicit) {
         if (normalized === "RUTA CANCELAR") return act({ kind: "routeCancel" });
+        const activate = /^RUTA ACTIVAR ([A-F0-9]{8})$/.exec(normalized);
+        if (activate) return act({ kind: "routeActivate", code: activate[1] ?? "" });
         if (!/^RUTA(?:\s+PRUEBA)?$/.test(normalized))
-          return "Escribe RUTA para elegir origen y destino paso a paso. RUTA PRUEBA es una demostración; RUTA CANCELAR descarta la propuesta.";
+          return "RUTA elige origen y destino con tu pase vigente. RUTA ACTIVAR <código> confirma el tramo sin otro pago; RUTA CANCELAR descarta la propuesta.";
         return act({
           kind: "routeStart",
           draft: {
@@ -55,6 +57,8 @@ export function createRouteFlow(deps: {
       if (/^(REPORTE|REPORTAR)\b/.test(normalized))
         return "Estás eligiendo una ruta. Termínala o escribe CANCELAR antes de iniciar REPORTE; aún no se creó ese reporte.";
       if (["CANCELAR", "CANCEL"].includes(normalized)) return act({ kind: "routeCancel" });
+      if (draft.proposal)
+        return `Revisa el tramo propuesto y escribe RUTA ACTIVAR ${draft.proposal.code}, o RUTA CANCELAR. No se cambió tu ruta.`;
       const bounds = { ...(await deps.repository.bounds(deps.revision)), geometryRevision: deps.revision };
       const value = text.replace(/^(ORIGEN|DESTINO)\s*:?\s*/i, "").trim();
       const km = /^(?:KM|KILOMETRO)\s+(\d+(?:[.,]\d{1,3})?)$/i.exec(value);

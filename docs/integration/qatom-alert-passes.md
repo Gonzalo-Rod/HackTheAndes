@@ -8,9 +8,9 @@ Qatom collects payment; PeruRoad grants and expires alert access.
 
 ## Driver flow
 
-1. `SUSCRIBIR 7 DIAS` selects the available corridor. Existing `SUSCRIBIR` and
-   named stretches also use the weekly price. `RUTA` retains endpoint selection.
-2. Review the route, price, duration, uncertainty and cancellation terms. Type
+1. `SUSCRIBIR` / `SUSCRIBIR 7 DIAS` purchases access independently of route
+   selection. An existing valid pass directs the driver to RUTA without another purchase.
+2. Review the pass price, duration and cancellation terms. Type
    `ACTIVAR <code>` within 30 minutes. This creates an encrypted pending purchase
    request; it does not grant unpaid production access.
 3. The backend calls OpenAI's Responses API with the Qatom MCP tool. The only
@@ -26,18 +26,22 @@ Qatom collects payment; PeruRoad grants and expires alert access.
    secret Authorization fulfilment header, validates `X-Qatom-Transaction-Id`, and
    fetches `/v4/catalog/purchases/{transaction_id}`. Only the expected item, exactly
    `0.001`, the configured USD-TDN digital quantity, and an in-window settled sale
-   can activate the existing request. The original request pins recipient, route
-   and expiry. A unique transaction ledger and serialized transactions prevent
+   can activate the existing request. The original request pins recipient and expiry. Settlement grants access with
+   `route_active=false`; it never opts the driver into whole-corridor alerts. A unique transaction ledger and serialized transactions prevent
    duplicate activation or transaction reuse across requests.
 5. `PAGO` reports locally verified payment/access status. `PAGAR` returns the
    persisted checkout link or retries link creation after an outage. These commands
-   do not charge the driver. Alerts begin only when the fulfilment transaction
-   commits; a model's prose or a checkout-page redirect never grants access.
+   do not charge the driver. After fulfilment, the driver chooses origin/destination with `RUTA`, then
+   types `RUTA ACTIVAR <code>`. This activates alerts without a second payment;
+   changing routes preserves the payment ID and original expiry. A valid pass
+   alone is insufficient for delivery; a model's prose or a checkout-page redirect never grants access.
 6. Access ends at request time + 168 hours, even if payment was later. Eligibility,
    delivery claim and destination lookup check expiry independently. The existing
    five-minute recovery job reconciles `opted_out_at`, queued alerts, encrypted
    contact delivery and separately authorized PDF delivery after expiry. `STOP` or
-   `BAJA` cancels consent and pending payment activation immediately. A delayed
+   `BAJA` cancels notification consent and pending payment activation immediately,
+   while preserving time remaining on an already granted pass. RUTA can resume
+   alerts during that remaining time without another payment. A delayed
    callback cannot restore cancelled consent. Already accepted messages cannot
    be recalled. Cancellation does not issue a refund.
 
@@ -46,8 +50,8 @@ and requests a DEMO subscription. Typing PRUEBA alone cannot bypass payment.
 A configured test sender can explicitly use **`SUSCRIBIR PAGO PRUEBA`** to test a
 real USD 0.001 purchase. The proposal says **PRUEBA DE PAGO REAL**, requires typed
 ACTIVAR consent and verified settlement, and keeps both the request and resulting
-subscription test-marked for impact exclusion. Existing DEMO access is preserved
-until a paid replacement succeeds. `SUSCRIBIR PRUEBA` remains free for configured
+subscription test-marked for impact exclusion. A valid existing pass is reused;
+wait for expiry before starting another purchase, including a payment test. `SUSCRIBIR PRUEBA` remains free for configured
 test senders; unconfigured senders cannot use the payment-test command.
 
 DEMO grants also expire. Reporting, ESTADO and EXPOSICION remain free. Weekly PDFs
@@ -55,8 +59,11 @@ still require separate consent and are never automatically enrolled.
 
 ## Deployment and seller setup
 
-Apply the new migration together with
-the new application version. **Existing subscriptions have no paid grant and
+Apply `20261018060000_qatom_alert_passes.sql` and the additive
+`20261018090000_separate_alert_pass_and_route.sql` with the matching application
+version. The latter preserves existing active route consent and removes old
+unconfirmed proposals that bundled route selection and purchase; drivers must
+request fresh codes. It does not cancel settled sales or pending checkout requests. **Existing subscriptions have no paid grant and
 become ineligible under the new delivery checks**; they must request a new pass.
 No existing subscriber is billed or enrolled automatically. Coordinate the rollout
 before applying this to the shared database. Never modify an applied migration.

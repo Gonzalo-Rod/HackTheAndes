@@ -1,6 +1,5 @@
 import { createHash, randomUUID } from "node:crypto";
 import type { RoadContextRequest, RoadContextResponse } from "@peruroad/road-data/context/contracts";
-import { roadContextResponseSchema } from "@peruroad/road-data/context/contracts";
 import type { SubscriptionRouter, SubscriptionRange } from "@/contracts/notifications";
 import type { SubscriptionRepository, SubscriptionAction } from "@/db/subscriptions";
 import { keyedDigest, phoneKey } from "@/integrations/security/contacts";
@@ -67,38 +66,17 @@ export function createSubscriptionFlow(deps: {
           return "La prueba de pago es solo para números de prueba configurados. Para contratar alertas, escribe SUSCRIBIR 7 DIAS.";
         // The proposal selects paid versus free DEMO access; sender classification stays independent.
         const isTest = !paymentTest && (/\bPRUEBA\b/.test(normalized) || deps.testKeys.includes(key));
-        const requested = (paymentTest ? "" : text)
+        const requested = (paymentTest || intent === "subscribe" ? "" : text)
           .replace(/^(SUSCRIBIR|AV[IÍ]SAME)\s*/i, "")
           .replace(/^(?:7\s*D[IÍ]AS|UNA\s+SEMANA|POR\s+UNA\s+SEMANA)\s*/i, "")
           .replace(/\bPRUEBA\b/gi, "")
           .trim();
         let range: SubscriptionRange;
+        if (requested)
+          return "SUSCRIBIR compra el pase de 7 días. Para elegir origen y destino, usa RUTA después de activar tu pase; no pagarás otra vez por cambiar el tramo.";
         try {
           const bounds = await deps.repository.bounds(deps.revision);
-          if (!requested || /^(?:de\s+)?(?:la\s+)?(?:central|pe-?22|carretera central)$/i.test(requested))
-            range = { ...bounds, geometryRevision: deps.revision, label: "PE-22 · eje disponible Lima–La Oroya" };
-          else {
-            const ends = requested.split(/\s*[–—-]\s*|\s+a\s+/i).map((v) => v.trim());
-            if (ends.length !== 2 || !ends[0] || !ends[1])
-              return "Indica dos lugares: SUSCRIBIR Chosica–La Oroya, o SUSCRIBIR para todo el eje PE-22 disponible. Puedes añadir PRUEBA para una demostración.";
-            const positions = [];
-            for (const name of ends) {
-              const c = roadContextResponseSchema.parse(await deps.context({ kind: "place", name }, requestId));
-              if (
-                c.kind !== "location" ||
-                c.state !== "ready" ||
-                c.status !== "matched" ||
-                !c.location ||
-                c.location.geometryRevision !== deps.revision
-              )
-                return "No pude verificar ambos extremos del tramo. Usa lugares del catálogo PE-22, o SUSCRIBIR para todo el eje disponible.";
-              positions.push(c.location.distanceFromOriginKm);
-            }
-            const startKm = Math.min(...positions),
-              endKm = Math.max(...positions);
-            if (endKm <= startKm) return "Los extremos deben ser distintos. Ejemplo: SUSCRIBIR Chosica–La Oroya.";
-            range = { startKm, endKm, label: ends.join("–"), geometryRevision: deps.revision };
-          }
+          range = { ...bounds, geometryRevision: deps.revision, label: "PE-22 · acceso por 7 días; ruta por elegir" };
         } catch (error) {
           logger.warn({
             requestId,

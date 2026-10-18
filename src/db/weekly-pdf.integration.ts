@@ -6,6 +6,7 @@ import { createWeeklyPdfRepository } from "./weekly-pdf";
 import { readWeeklyObservations } from "./weekly-observations";
 import { loadGeometryRevision } from "@/config/env";
 import { syntheticWeeklyReport } from "@/test-fixtures/weekly-report";
+import { confirmTestRoute } from "@/test-fixtures/confirm-route";
 const pool = database(),
   encryption = { key: randomBytes(32).toString("base64url"), version: "synthetic-weekly-test" };
 const preferences = createSubscriptionRepository(pool, encryption),
@@ -47,6 +48,7 @@ it("requires separate typed weekly consent and preserves replayed command result
   expect(await act({ kind: "weeklyPrepare", code: "ABCDEF12" })).toContain("Primero");
   await act({ kind: "prepare", range, code: "12345678", isTest: true });
   await act({ kind: "activate", code: "12345678" });
+  await confirmTestRoute(act, range, now);
   expect(await repository.targets(range.geometryRevision, key)).toHaveLength(0);
   const event = createHash("sha256").update(randomUUID()).digest("hex");
   const prompt = await act({ kind: "weeklyPrepare", code: "ABCDEF12" }, event);

@@ -10,6 +10,7 @@ import { actWeeklyPreference, type WeeklyPreferenceAction } from "./weekly-prefe
 import { prepareAlertPass } from "./alert-pass-intake";
 import { activateSubscription } from "./activate-subscription";
 import { alertPassWindow, passDeadline } from "@/domain/subscriptions/alert-pass";
+import { readActiveAlertPass } from "./active-alert-pass";
 export type SubscriptionAction =
   | { kind: "prepare"; range: SubscriptionRange; code: string; isTest: boolean; requestedAt?: string }
   | { kind: "activate"; code: string }
@@ -56,11 +57,12 @@ export function createSubscriptionRepository(pool: Pool, encryption: { key: stri
         const action = input.action;
         if (
           action.kind === "routeStart" ||
+          action.kind === "routeActivate" ||
           action.kind === "routeCancel" ||
           action.kind === "routeOrigin" ||
           action.kind === "routeDestination"
         ) {
-          reply = await actRoute(client, encryption, input.key, action, input.now);
+          reply = await actRoute(client, encryption, input, action);
         } else if (action.kind === "weeklyPrepare" || action.kind === "weeklyActivate" || action.kind === "weeklyStop") {
           reply = await actWeeklyPreference(client, input.key, action, input.now);
         } else if (action.kind === "stop") {
@@ -68,10 +70,7 @@ export function createSubscriptionRepository(pool: Pool, encryption: { key: stri
             input.key,
           ]);
           await client.query("delete from private.route_intake where phone_key=$1", [input.key]);
-          await client.query("update public.subscriptions set opted_out_at=$2 where phone_key=$1 and opted_out_at is null", [
-            input.key,
-            input.now,
-          ]);
+          await client.query("update public.subscriptions set route_active=false where phone_key=$1 and opted_out_at is null", [input.key]);
           await client.query("delete from private.subscription_intake where phone_key=$1", [input.key]);
           await client.query("update private.delivery_contacts set disabled_at=$2 where phone_key=$1", [input.key, input.now]);
           await client.query(
@@ -87,44 +86,61 @@ export function createSubscriptionRepository(pool: Pool, encryption: { key: stri
             [input.key],
           );
           reply =
-            "Alertas canceladas. También se canceló el PDF semanal. No recibirás nuevas notificaciones automáticas. Para volver, escribe SUSCRIBIR.";
+            "Alertas canceladas. También se canceló el PDF semanal. Conservas el tiempo restante de tu pase; RUTA elige otro tramo sin pagar de nuevo mientras siga vigente.";
         } else if (action.kind === "prepare") {
-          const range = subscriptionRangeSchema.parse(action.range);
-          const requestedAt = z.iso.datetime().parse(action.requestedAt ?? input.now);
-          await client.query("delete from private.route_intake where phone_key=$1", [input.key]);
-          await client.query(
-            `insert into private.subscription_intake(phone_key,code,range,is_test,expires_at,requested_at) values($1,$2,$3::jsonb,$4,$5::timestamptz+interval '30 minutes',$5) on conflict(phone_key) do update set code=excluded.code,range=excluded.range,is_test=excluded.is_test,expires_at=excluded.expires_at,requested_at=excluded.requested_at`,
-            [input.key, action.code, JSON.stringify(range), action.isTest, requestedAt],
-          );
-          reply = subscriptionProposal(range, action.code, action.isTest, input.isTest && !action.isTest);
-        } else {
-          const pending = await client.query(
-            'select code,range,is_test as "isTest",expires_at as "expiresAt",requested_at as "requestedAt" from private.subscription_intake where phone_key=$1',
-            [input.key],
-          );
-          if (!pending.rowCount) reply = "No hay una suscripción pendiente. Escribe SUSCRIBIR para elegir el tramo.";
+          const pass = await readActiveAlertPass(client, input.key, input.now);
+          if (pass)
+            reply = `Tu pase sigue vigente hasta ${passDeadline(pass.expiresAt.toISOString())} (Perú). Escribe RUTA para elegir o cambiar el tramo sin otro pago.`;
           else {
-            const draft = z
-              .object({ code: z.string(), range: subscriptionRangeSchema, isTest: z.boolean(), expiresAt: z.date(), requestedAt: z.date() })
-              .parse(pending.rows[0]);
-            if (draft.code !== action.code || draft.expiresAt.getTime() <= Date.parse(input.now))
-              reply = "El código no corresponde o expiró. Escribe SUSCRIBIR para volver a elegir el tramo.";
-            else if (!draft.isTest || !input.isTest) reply = await prepareAlertPass(client, input, draft, encryption);
+            const range = subscriptionRangeSchema.parse(action.range);
+            const requestedAt = z.iso.datetime().parse(action.requestedAt ?? input.now);
+            await client.query("delete from private.route_intake where phone_key=$1", [input.key]);
+            await client.query(
+              `insert into private.subscription_intake(phone_key,code,range,is_test,expires_at,requested_at) values($1,$2,$3::jsonb,$4,$5::timestamptz+interval '30 minutes',$5) on conflict(phone_key) do update set code=excluded.code,range=excluded.range,is_test=excluded.is_test,expires_at=excluded.expires_at,requested_at=excluded.requested_at`,
+              [input.key, action.code, JSON.stringify(range), action.isTest, requestedAt],
+            );
+            reply = subscriptionProposal(action.code, action.isTest, input.isTest && !action.isTest);
+          }
+        } else {
+          const pass = await readActiveAlertPass(client, input.key, input.now);
+          if (pass)
+            reply = `Tu pase sigue vigente hasta ${passDeadline(pass.expiresAt.toISOString())} (Perú). Escribe RUTA para elegir o cambiar el tramo sin otro pago.`;
+          else {
+            const pending = await client.query(
+              'select code,range,is_test as "isTest",expires_at as "expiresAt",requested_at as "requestedAt" from private.subscription_intake where phone_key=$1',
+              [input.key],
+            );
+            if (!pending.rowCount)
+              reply = "No hay una compra pendiente. SUSCRIBIR solicita un pase; RUTA elige el tramo si ya tienes uno vigente.";
             else {
-              const { expiresAt } = alertPassWindow(draft.requestedAt.toISOString());
-              await activateSubscription(
-                client,
-                {
-                  ...input,
-                  isTest: true,
-                  range: draft.range,
-                  expiresAt,
-                  paymentId: null,
-                },
-                encryption,
-              );
-              await client.query("delete from private.subscription_intake where phone_key=$1", [input.key]);
-              reply = `DEMO · Suscripción activa: ${draft.range.label}. Vence ${passDeadline(expiresAt)} (Perú), sin renovación. Avisaremos de reportes SIN CONFIRMAR, cambios SUTRAN y posibles huaicos estimados. STOP o BAJA cancela. Los PDF requieren autorizar SEMANAL por separado. Si WhatsApp no permite enviar, la entrega queda pendiente; ESTADO y EXPOSICION siguen disponibles.`;
+              const draft = z
+                .object({
+                  code: z.string(),
+                  range: subscriptionRangeSchema,
+                  isTest: z.boolean(),
+                  expiresAt: z.date(),
+                  requestedAt: z.date(),
+                })
+                .parse(pending.rows[0]);
+              if (draft.code !== action.code || draft.expiresAt.getTime() <= Date.parse(input.now))
+                reply = "El código no corresponde o expiró. Escribe SUSCRIBIR para volver a solicitar el pase.";
+              else if (!draft.isTest || !input.isTest) reply = await prepareAlertPass(client, input, draft, encryption);
+              else {
+                const { expiresAt } = alertPassWindow(draft.requestedAt.toISOString());
+                await activateSubscription(
+                  client,
+                  {
+                    ...input,
+                    isTest: true,
+                    range: draft.range,
+                    expiresAt,
+                    paymentId: null,
+                  },
+                  encryption,
+                );
+                await client.query("delete from private.subscription_intake where phone_key=$1", [input.key]);
+                reply = `DEMO · Pase activo hasta ${passDeadline(expiresAt)} (Perú), sin renovación. Escribe RUTA para elegir origen y destino sin otro pago. Aún no se activaron alertas; los PDF requieren una ruta activa y autorizar SEMANAL por separado.`;
+              }
             }
           }
         }

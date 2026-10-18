@@ -14,7 +14,7 @@ export function createAlertPassPayments(deps: {
       if (!request) return null;
       if (request.status === "paid")
         return request.active
-          ? `Qatom confirmó tu pago. Alertas activas hasta ${passDeadline(request.expiresAt.toISOString())} (Perú). Sin renovación automática. BAJA cancela.`
+          ? `Qatom confirmó tu pago. Pase vigente hasta ${passDeadline(request.expiresAt.toISOString())} (Perú). Sin renovación automática. RUTA elige o cambia tu tramo sin otro pago; BAJA detiene las notificaciones.`
           : "Tu pase pagado venció o fue cancelado. No hay renovación ni cobro automático. SUSCRIBIR inicia una nueva solicitud.";
       if (request.status !== "pending" || request.expiresAt.getTime() <= deps.now())
         return "Esta solicitud fue cancelada o expiró. No se activaron alertas. Escribe SUSCRIBIR para iniciar otra.";
@@ -38,7 +38,7 @@ export function createAlertPassPayments(deps: {
           return "Qatom no está disponible para preparar el enlace. No se activaron nuevas alertas. Escribe PAGAR para reintentar; no se realizó un cobro desde este chat.";
         }
       }
-      return `Alertas por 7 días desde tu solicitud. Pago único: USD 0,001. Vence ${passDeadline(request.expiresAt.toISOString())} (Perú), sin renovación automática. Completa el pago en Qatom: ${url}\nSe habilita al verificar Qatom el cobro. Después escribe PAGO para consultar. BAJA cancela.`;
+      return `Pase por 7 días desde tu solicitud. Pago único: USD 0,001. Vence ${passDeadline(request.expiresAt.toISOString())} (Perú), sin renovación automática. Completa el pago en Qatom: ${url}\nSe habilita al verificar Qatom el cobro. Después escribe RUTA para elegir tu tramo sin otro pago, o PAGO para consultar. BAJA cancela las notificaciones.`;
     },
   };
 }

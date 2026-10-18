@@ -8,6 +8,14 @@ Yape and other commercial plans remain excluded. The implementation, rollout,
 configuration and launch-verification boundaries are documented in
 [Qatom alert passes](integration/qatom-alert-passes.md).
 
+**Separate access and route selection:** `SUSCRIBIR` purchases seven-day access,
+without starting alerts. With that pass, `RUTA` selects origin and destination;
+`RUTA ACTIVAR <code>` confirms notifications for the selected stretch. Route
+changes do not charge again or move expiry. STOP/BAJA stops notifications and
+weekly PDFs while preserving remaining pass time; drivers can use RUTA to resume.
+This supersedes older combined purchase/route descriptions below. See the
+[command guide](integration/whatsapp-commands.md).
+
 **Track:** Clima y Territorio
 **Project name:** *PeruRoad Climate*
 **One line:** A climate-exposure and preparedness dashboard for the Rímac–Carretera Central corridor that combines forecast rainfall, official terrain susceptibility and advisories with live road conditions and WhatsApp field reports, helping response teams prioritize attention and drivers receive relevant route alerts.

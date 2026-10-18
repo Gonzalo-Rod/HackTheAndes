@@ -5,7 +5,7 @@ import { environmentalReportSchema, reportPeriodSchema, type EnvironmentalReport
 import { weeklyDeliverySchema, weeklyTargetSchema, type WeeklyDelivery } from "@/contracts/weekly-pdf";
 import { EncryptedContactSchema, decryptContact } from "@/integrations/security/contacts";
 import { transaction } from "./transaction";
-const TARGET_SQL = `select s.id,jsonb_build_object('startKm',s.km_start,'endKm',s.km_end,'label',s.range_label,'geometryRevision',s.geometry_revision) as range,p.consent_at as "consentAt",s.is_test as "isTest" from public.subscriptions s join private.weekly_pdf_preferences p on p.subscription_id=s.id where s.opted_out_at is null and p.consent_at is not null and p.subscription_consent_at=s.consent_at and s.alert_expires_at>now() and (s.alert_payment_id is not null or s.is_test)`;
+const TARGET_SQL = `select s.id,jsonb_build_object('startKm',s.km_start,'endKm',s.km_end,'label',s.range_label,'geometryRevision',s.geometry_revision) as range,p.consent_at as "consentAt",s.is_test as "isTest" from public.subscriptions s join private.weekly_pdf_preferences p on p.subscription_id=s.id where s.opted_out_at is null and s.route_active and p.consent_at is not null and p.subscription_consent_at=s.consent_at and s.alert_expires_at>now() and (s.alert_payment_id is not null or s.is_test)`;
 /** A two-minute worker lease fits the job's bounded execution; file access survives provider fetches for three days. */
 const LEASE_MS = 120_000,
   DELIVERY_LIFETIME_MS = 72 * 3_600_000;
@@ -20,7 +20,7 @@ export function createWeeklyPdfRepository(pool: Pool, encryption: { key: string;
     },
     async latestPending(subscriptionId: string, nowMs: number) {
       const r = await pool.query(
-        "select d.period from private.weekly_pdf_deliveries d join public.subscriptions s on s.id=d.subscription_id join private.weekly_pdf_preferences p on p.subscription_id=s.id where d.subscription_id=$1 and d.status='pending' and d.expires_at>$2 and s.opted_out_at is null and p.consent_at=d.consent_at and p.subscription_consent_at=s.consent_at and s.alert_expires_at>$2 and (s.alert_payment_id is not null or s.is_test) order by d.created_at desc limit 1",
+        "select d.period from private.weekly_pdf_deliveries d join public.subscriptions s on s.id=d.subscription_id join private.weekly_pdf_preferences p on p.subscription_id=s.id where d.subscription_id=$1 and d.status='pending' and d.expires_at>$2 and s.opted_out_at is null and s.route_active and p.consent_at=d.consent_at and p.subscription_consent_at=s.consent_at and s.alert_expires_at>$2 and (s.alert_payment_id is not null or s.is_test) order by d.created_at desc limit 1",
         [subscriptionId, new Date(nowMs)],
       );
       return r.rowCount ? reportPeriodSchema.parse(r.rows[0]?.period) : null;
@@ -59,7 +59,7 @@ export function createWeeklyPdfRepository(pool: Pool, encryption: { key: string;
     },
     async destination(delivery: WeeklyDelivery, nowMs: number) {
       const r = await pool.query(
-        `select c.ciphertext,c.iv,c.auth_tag as "authTag",c.key_version as "keyVersion",s.last_inbound_at as "lastInboundAt" from private.weekly_pdf_deliveries d join public.subscriptions s on s.id=d.subscription_id join private.weekly_pdf_preferences p on p.subscription_id=s.id join private.delivery_contacts c on c.id=s.contact_ref where d.id=$1 and d.lease_id=$2 and d.lease_until>$3 and d.expires_at>$4 and d.status='pending' and s.opted_out_at is null and c.disabled_at is null and p.consent_at=d.consent_at and p.subscription_consent_at=s.consent_at and s.alert_expires_at>$3 and (s.alert_payment_id is not null or s.is_test)`,
+        `select c.ciphertext,c.iv,c.auth_tag as "authTag",c.key_version as "keyVersion",s.last_inbound_at as "lastInboundAt" from private.weekly_pdf_deliveries d join public.subscriptions s on s.id=d.subscription_id join private.weekly_pdf_preferences p on p.subscription_id=s.id join private.delivery_contacts c on c.id=s.contact_ref where d.id=$1 and d.lease_id=$2 and d.lease_until>$3 and d.expires_at>$4 and d.status='pending' and s.opted_out_at is null and s.route_active and c.disabled_at is null and p.consent_at=d.consent_at and p.subscription_consent_at=s.consent_at and s.alert_expires_at>$3 and (s.alert_payment_id is not null or s.is_test)`,
         [delivery.id, delivery.leaseId, new Date(nowMs), new Date(nowMs + 24 * 3_600_000)],
       );
       if (!r.rowCount) return null;
@@ -82,7 +82,7 @@ export function createWeeklyPdfRepository(pool: Pool, encryption: { key: string;
     },
     async pdf(id: string, nowMs: number) {
       const r = await pool.query(
-        `select d.pdf from private.weekly_pdf_deliveries d join public.subscriptions s on s.id=d.subscription_id join private.weekly_pdf_preferences p on p.subscription_id=s.id where d.id=$1 and d.expires_at>$2 and d.status in ('pending','sent') and s.opted_out_at is null and p.consent_at=d.consent_at and p.subscription_consent_at=s.consent_at and s.alert_expires_at>$2 and (s.alert_payment_id is not null or s.is_test)`,
+        `select d.pdf from private.weekly_pdf_deliveries d join public.subscriptions s on s.id=d.subscription_id join private.weekly_pdf_preferences p on p.subscription_id=s.id where d.id=$1 and d.expires_at>$2 and d.status in ('pending','sent') and s.opted_out_at is null and s.route_active and p.consent_at=d.consent_at and p.subscription_consent_at=s.consent_at and s.alert_expires_at>$2 and (s.alert_payment_id is not null or s.is_test)`,
         [id, new Date(nowMs)],
       );
       return r.rows[0]?.pdf ? z.instanceof(Buffer).parse(r.rows[0].pdf) : null;

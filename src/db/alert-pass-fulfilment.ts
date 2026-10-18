@@ -90,7 +90,7 @@ export function createAlertPassFulfilment(
         status: "active",
         expires_at: row.expiresAt.toISOString(),
         summary:
-          "Alertas activadas hasta el vencimiento indicado, sin renovación automática. Escribe PAGO en WhatsApp para consultar el estado.",
+          "Pase activado hasta el vencimiento indicado, sin renovación automática. Escribe RUTA en WhatsApp para elegir origen y destino sin otro pago; aún no se activaron alertas.",
       };
     });
 }

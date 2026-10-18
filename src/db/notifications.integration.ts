@@ -5,6 +5,7 @@ import { createSubscriptionRepository } from "./subscriptions";
 import { createAlertDeliveryRepository } from "./alert-deliveries";
 import { loadGeometryRevision } from "@/config/env";
 import type { AlertCandidate } from "@/contracts/notifications";
+import { confirmTestRoute } from "@/test-fixtures/confirm-route";
 const pool = database();
 const encryption = { key: randomBytes(32).toString("base64url"), version: "notification-test-v1" };
 const subscription = createSubscriptionRepository(pool, encryption),
@@ -53,7 +54,8 @@ describe("durable subscription and notification delivery", () => {
     expect(await act({ kind: "prepare", range, code: "12345678", isTest: true }, e)).toBe(prompt);
     expect(await act({ kind: "activate", code: "FFFFFFFF" })).toContain("expiró");
     expect((await pool.query("select id from public.subscriptions where phone_key=$1", [key])).rowCount).toBe(0);
-    expect(await act({ kind: "activate", code: "ABCDEF12" })).toContain("Suscripción activa");
+    expect(await act({ kind: "activate", code: "ABCDEF12" })).toContain("Pase activo");
+    await confirmTestRoute(act, range, now);
     const result = await pool.query(
       "select s.id,c.ciphertext from public.subscriptions s join private.delivery_contacts c on c.id=s.contact_ref where s.phone_key=$1",
       [key],

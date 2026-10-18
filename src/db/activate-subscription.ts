@@ -14,6 +14,7 @@ export async function activateSubscription(
     range: SubscriptionRange;
     expiresAt: string;
     paymentId: string | null;
+    routeActive?: boolean;
   },
   encryption: { key: string; version: string },
 ) {
@@ -28,9 +29,9 @@ export async function activateSubscription(
     [input.key],
   );
   const saved = await client.query(
-    `insert into public.subscriptions(contact_ref,phone_key,road_code,km_start,km_end,distance_reference,channel,consent_at,is_team,is_test,geometry_revision,range_label,last_inbound_at,alert_expires_at,alert_payment_id)
-     values($1,$2,'PE-22',$3,$4,'geometry_distance','whatsapp',$5,$6,$7,$8,$9,$5,$10,$11)
-     on conflict(phone_key,road_code) where opted_out_at is null do update set contact_ref=excluded.contact_ref,km_start=excluded.km_start,km_end=excluded.km_end,consent_at=excluded.consent_at,is_team=excluded.is_team,is_test=excluded.is_test,geometry_revision=excluded.geometry_revision,range_label=excluded.range_label,last_inbound_at=excluded.last_inbound_at,alert_expires_at=excluded.alert_expires_at,alert_payment_id=excluded.alert_payment_id returning id`,
+    `insert into public.subscriptions(contact_ref,phone_key,road_code,km_start,km_end,distance_reference,channel,consent_at,is_team,is_test,geometry_revision,range_label,last_inbound_at,alert_expires_at,alert_payment_id,route_active)
+     values($1,$2,'PE-22',$3,$4,'geometry_distance','whatsapp',$5,$6,$7,$8,$9,$5,$10,$11,$12)
+     on conflict(phone_key,road_code) where opted_out_at is null do update set contact_ref=excluded.contact_ref,km_start=excluded.km_start,km_end=excluded.km_end,consent_at=excluded.consent_at,is_team=excluded.is_team,is_test=excluded.is_test,geometry_revision=excluded.geometry_revision,range_label=excluded.range_label,last_inbound_at=excluded.last_inbound_at,alert_expires_at=excluded.alert_expires_at,alert_payment_id=excluded.alert_payment_id,route_active=excluded.route_active returning id`,
     [
       z.uuid().parse(savedContact.rows[0]?.id),
       input.key,
@@ -43,6 +44,7 @@ export async function activateSubscription(
       input.range.label,
       input.expiresAt,
       input.paymentId,
+      input.routeActive ?? false,
     ],
   );
   const id = z.uuid().parse(saved.rows[0]?.id);
