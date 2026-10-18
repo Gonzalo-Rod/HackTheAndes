@@ -30,3 +30,19 @@ export interface MessagingProvider {
 export interface TemplateSender {
   sendTemplate(message: OutboundText): Promise<Result<SentMessage, SendFailure>>;
 }
+
+/** A one-way text-to-speech phone call; the recipient hears `text` and cannot reply. */
+export type OutboundVoiceCall = {
+  /** E.164 phone number. */
+  to: string;
+  text: string;
+  /** BCP-47 tag for speech synthesis, e.g. `es-ES`. */
+  language: string;
+  /** Stable key so a retried request never dials twice. */
+  idempotencyKey: string;
+  requestId?: string;
+};
+
+export interface VoiceCaller {
+  placeTextToSpeechCall(call: OutboundVoiceCall): Promise<Result<SentMessage, SendFailure>>;
+}

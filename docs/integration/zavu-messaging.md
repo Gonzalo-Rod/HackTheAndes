@@ -24,7 +24,7 @@ intent parser and source-grounded query handlers.
 - Text reports now use the [confirmation and publication flow](whatsapp-reports.md):
   validated extraction, proposed/shared pin, explicit confirmation, then an
   unconfirmed community marker. `REPORTE PRUEBA` keeps a demo out of impact counts.
-- Voice input, explicit subscriptions and conditional alerts now use the [notification integration](driver-notifications.md). Photos and calls are excluded, and SMS fallback remains disabled.
+- Voice input, explicit subscriptions and conditional alerts now use the [notification integration](driver-notifications.md). Photos are excluded and SMS fallback remains disabled; operator-triggered incident calls are described below.
 
 This integration does not complete all of Role B. Text-report publication and
 community duplicate matching are implemented; full mixed-media grouping,
@@ -149,3 +149,23 @@ ranges, rainfall, susceptibility and uncertainty. WhatsApp alert eligibility
 continues to use the 24-hour summary; the finer dashboard windows are conditions
 for attention, not predicted occurrence times. See the
 [forecast integration guide](dashboard-forecast.md).
+
+## Incident report calls
+
+`npm run zavu:call-incident -- <E.164> [--dry-run]` reads the latest complete SUTRAN
+PE-22 poll, chooses the most relevant current incident (closures, then restrictions,
+newest first; expired and not-yet-valid records are skipped), and places a one-way
+Spanish text-to-speech call through Zavu (`POST /v1/messages`, `channel: "voice"`,
+no SMS fallback), followed by the same facts on WhatsApp. The call states the source
+time, marks stale data as possibly outdated, never claims other stretches are clear,
+and is not placed when the source is unavailable or no incident is current. A stable
+idempotency key per incident and recipient prevents a rerun from dialing twice.
+Zavu's conversational Voice Agent (`POST /v1/calls`) is not used because it stayed
+silent in earlier checks. Only call a number whose owner consented; unverified
+accounts are limited to 5 voice sends a day. This is a manual operator trigger; automatic
+calls to transport monitors are described in [route watch](route-watch.md).
+
+On October 17, 2026 at 23:13 (Lima), a call to the participant's consenting phone
+reporting the active km 51 SUTRAN incident was accepted by Zavu (status `sent`), and
+the WhatsApp follow-up reached `delivered`. Whether the call was heard as intended
+is pending the participant's confirmation.

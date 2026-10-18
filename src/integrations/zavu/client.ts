@@ -10,7 +10,7 @@ export const MAX_TEXT_LENGTH = 4_096;
 /** Zavu answers 409 with the original message when an idempotency key is reused. */
 const IDEMPOTENT_REPLAY_STATUS = 409;
 
-const messageResponseSchema = z.object({ message: z.object({ id: z.string().min(1) }) });
+export const messageResponseSchema = z.object({ message: z.object({ id: z.string().min(1) }) });
 // `daily_limit_exceeded` is top level; `a2p_limit_exceeded` and `rate_limit_exceeded` are wrapped in `error`.
 const errorBodySchema = z.object({ code: z.string().optional(), error: z.object({ code: z.string() }).optional() });
 
