@@ -4,7 +4,7 @@
     {
       "key": "whatsapp-alerts-7-days",
       "name": "PeruRoad Climate: WhatsApp alerts for 7 days",
-      "price": "0.01",
+      "price": "0.50",
       "currency": "USD-TDN",
       "method": "POST",
       "path": "/api/qatom/alert-pass",

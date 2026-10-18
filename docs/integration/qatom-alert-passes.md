@@ -1,7 +1,7 @@
 # Qatom weekly WhatsApp alert pass
 
 Participant authorization, October 18, 2026, with the participant's price update:
-one payment of **0.01 USD-TDN (USD 0.01)** for
+one payment of **0.50 USD-TDN (USD 0.50)** for
 **168 elapsed hours from the original WhatsApp request**.
 This supersedes the previous payment exclusion for this feature. There is no
 recurring subscription, automatic renewal or scheduled charge to cancel at Qatom.
@@ -21,15 +21,18 @@ Qatom collects payment; PeruRoad grants and expires alert access.
    handles payment and credentials. The server never spends a seller/agent wallet.
    The Responses MCP result can contain Qatom's three-line text receipt rather
    than JSON. The adapter accepts that exact receipt and validated JSON/MCP
-   envelopes, checks the displayed 0.01 price and trusted HTTPS checkout domain,
+   envelopes, checks the displayed 0.50 price and trusted HTTPS checkout domain,
    and ignores assistant prose. Parsing a link never activates a pass.
 4. Qatom calls `POST /api/qatom/alert-pass` after settlement. The backend checks its
    secret Authorization fulfilment header, validates `X-Qatom-Transaction-Id`, and
    fetches `/v4/catalog/purchases/{transaction_id}`. Only the expected item, exactly
-   `0.01`, the configured USD-TDN digital quantity, and an in-window settled sale
+   `0.50`, the configured USD-TDN digital quantity, and an in-window settled sale
    can activate the existing request. The original request pins recipient and expiry. Settlement grants access with
    `route_active=false`; it never opts the driver into whole-corridor alerts. A unique transaction ledger and serialized transactions prevent
    duplicate activation or transaction reuse across requests.
+   REST amounts `0.5`, `0.50` and `0.500` are compared as exact decimal strings
+   and normalized to `0.50`. Other amounts, exponent notation and precision
+   beyond three decimal places are rejected; no floating-point tolerance applies.
 5. `PAGO` reports locally verified payment/access status. `PAGAR` returns the
    persisted checkout link or retries link creation after an outage. These commands
    do not charge the driver. After fulfilment, the driver chooses origin/destination with `RUTA`, then
@@ -49,7 +52,7 @@ Qatom collects payment; PeruRoad grants and expires alert access.
 `PRUEBA` is free only when the sender is explicitly present in `TEST_PHONE_KEYS`
 and requests a DEMO subscription. Typing PRUEBA alone cannot bypass payment.
 A configured test sender can explicitly use **`SUSCRIBIR PAGO PRUEBA`** to test a
-real USD 0.01 purchase. The proposal says **PRUEBA DE PAGO REAL**, requires typed
+real USD 0.50 purchase. The proposal says **PRUEBA DE PAGO REAL**, requires typed
 ACTIVAR consent and verified settlement, and keeps both the request and resulting
 subscription test-marked for impact exclusion. A valid existing pass is reused;
 wait for expiry before starting another purchase, including a payment test. `SUSCRIBIR PRUEBA` remains free for configured
@@ -79,7 +82,7 @@ before applying this to the shared database. Never modify an applied migration.
    endpoint. An inactive draft should be created first for secret configuration.
 3. In Qatom account `hack-base`, use the dedicated weekly item **216** and update
    it from `qatom/catalog.json`: POST to the deployed `/api/qatom/alert-pass`,
-   price 0.01, public, featured. Keep it inactive during a price/deployment change
+   price 0.50, public, featured. Keep it inactive during a price/deployment change
    using the procedure below. Include the host's absolute `/llms.txt` URL in its
    description and keep it under 1,024 characters. Set the receipt descriptor in
    the same item update when needed. The existing item **215,
@@ -137,29 +140,58 @@ The authenticated MCP was verified against the running server
 recorded in the local progress log; neither
 this document nor a successful build establishes a real paid purchase.
 
-## Changing the weekly price to USD 0.01
+## Card checkout limits
+
+A supported USD-TDN catalog price does not guarantee that a card can be charged
+that amount. Qatom's seller-guide platform notes record an observed guest-card
+minimum of approximately USD 0.50. Its live API exposes Stripe payment intents
+for topping up a buyer wallet, and Stripe documents a USD 0.50 minimum when USD
+is the settlement currency. The amount of a card-funded wallet top-up can differ
+from the USD 0.50 item price; check what the hosted payment page actually shows.
+
+The participant selected USD 0.50 for this pass, meeting the documented USD
+minimum without establishing card acceptance. Prices below that minimum need
+a funded buyer-wallet path if the hosted checkout supports it. Confirm the card
+gateway's applicable minimum before future price changes through the coordinated
+procedure below. The application
+creates a checkout link only; it never pays for customers from the seller's
+agent wallet. Wallet payment involves the buyer's own account/authorization.
+
+A generic "payment cannot be made right now" message does not establish a
+minimum-amount failure or a bank decline. Check the amount presented for the
+card, Qatom's settled-sale ledger and the provider error code before diagnosing
+the cause. A deployed price response and a successful build do not verify card
+acceptance or a real paid launch.
+
+Source: [Stripe minimum charge amounts](https://docs.stripe.com/currencies#minimum-and-maximum-charge-amounts)
+and the Qatom OpenAPI charge-intent/checkout endpoints linked below.
+
+<a id="changing-the-weekly-price-to-usd-001"></a>
+
+## Changing the weekly price to USD 0.50
 
 `qatom/catalog.json` is the application price source. Checkout validation, settled
 sale validation, WhatsApp proposals/help/payment messages, the free plan and
 generated `llms.txt` all read that price. Saving this file does not change Qatom
-or a deployed build. The MCP catalog read on October 18 showed item **216 active
-at USD 0.001**; the local change does not itself update that listing.
+or a deployed build. The MCP catalog read after the participant's October 18
+dashboard change confirms item **216 active at USD 0.50**. The application still
+needs the matching deployment; the MCP read does not establish that deployment.
 
 1. Arrange a checkout maintenance window: pause new purchase requests and
    deactivate item **216** in the Qatom dashboard for account `hack-base`.
    Keep existing payment callbacks available while resolving older purchases.
-2. Resolve outstanding offers and checkout links at USD 0.001 before switching
-   builds. Pending requests do not store a price version, and `PAGAR` can reuse
+2. Resolve outstanding offers and checkout links at USD 0.001 or USD 0.01 before
+   switching builds. Pending requests do not store a price version, and `PAGAR` can reuse
    a persisted link; changing the catalog does not rewrite an existing link.
    The new build intentionally rejects the old price. If old offers or links
    remain usable, defer the switch until they have settled, expired or been
    reconciled with the seller. Do not delete payment records or mark an unpaid
    request as paid. Already granted passes retain their original expiry.
 3. Deploy this application version. Check `/api/subscriptions/plan` returns
-   `"price":"0.01"` and its summary says `USD 0,01`; `/llms.txt` must also show
-   `0.01 USD-TDN`. No additional database migration is needed for this price-only
+   `"price":"0.50"` and its summary says `USD 0,50`; `/llms.txt` must also show
+   `0.50 USD-TDN`. No additional database migration is needed for this price-only
    change; the feature's existing migrations are still required.
-4. Edit item **216** in Qatom: set its price to **0.01 USD-TDN**, update any old
+4. Edit item **216** in Qatom: set its price to **0.50 USD-TDN**, update any old
    price text in the description (the local description omits a duplicated
    price), and retain the correct absolute `/llms.txt` link. Remove the obsolete
    draft/inactive claim if launching. Save the item and read it back while it is
@@ -167,9 +199,15 @@ at USD 0.001**; the local change does not itself update that listing.
    MCP updates require the account owner's approval at the tool-provided link.
 5. Reactivate item **216** and resume purchase requests once both sides agree.
    Request a fresh `SUSCRIBIR 7 DIAS` proposal (or `SUSCRIBIR PAGO PRUEBA` for a
-   configured test sender), confirm the displayed USD 0.01 price, and use a new
+   configured test sender), confirm the displayed USD 0.50 price, and use a new
    checkout link. A real test payment requires the driver's approval; checkout
    creation alone does not verify settlement or grant access.
+
+For an unpaid request whose old link already failed, send `BAJA` after deployment,
+then `SUSCRIBIR 7 DIAS` (or the configured payment-test command) and confirm the
+fresh `ACTIVAR <code>` proposal. This creates a new request/link at USD 0.50.
+`PAGAR` alone can return the earlier saved USD 0.01 link, so do not use it to
+restart an old-price purchase.
 
 The credentials and currency identifier do not change with the price.
 `QATOM_CATALOG_ITEM_ID` continues to identify item **216**; `QATOM_USD_TDN_DQ`

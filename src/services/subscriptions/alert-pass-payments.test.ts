@@ -25,7 +25,7 @@ it("reuses a persisted link without another OpenAI request", async () => {
   const s = setup({ url: "https://checkout.m.todaq.net/saved", leaseId: null });
   const reply = await s.service.checkout("key", "trace");
   expect(reply).toContain("/saved");
-  expect(reply).toContain("Pago único: USD 0,01");
+  expect(reply).toContain("Pago único: USD 0,50");
   expect(s.provider.create).not.toHaveBeenCalled();
 });
 it.each([{ status: "cancelled" }, { status: "expired" }, { expiresAt: new Date(now) }])(

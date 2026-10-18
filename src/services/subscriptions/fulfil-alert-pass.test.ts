@@ -6,7 +6,7 @@ function setup() {
   const purchase = vi.fn(async (): Promise<SettledPurchase> => ({
     transaction_id: transactionId,
     catalog_item_id: 123,
-    amount: "0.01",
+    amount: "0.50",
     dq: "synthetic",
     settled_at: "2026-10-18T04:00:00Z",
     dispatch_status: "pending",
@@ -35,7 +35,7 @@ it("verifies the settled transaction with Qatom before fulfilling", async () => 
   const s = setup();
   expect((await s.handle(request())).status).toBe(200);
   expect(s.purchase).toHaveBeenCalledWith(transactionId, expect.any(String));
-  expect(s.fulfil).toHaveBeenCalledWith(transactionId, transactionId, expect.objectContaining({ amount: "0.01" }), 1000);
+  expect(s.fulfil).toHaveBeenCalledWith(transactionId, transactionId, expect.objectContaining({ amount: "0.50" }), 1000);
 });
 it("rejects malformed and extra callback fields", async () => {
   const s = setup();
