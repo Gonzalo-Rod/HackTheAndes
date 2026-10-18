@@ -48,13 +48,27 @@
 .pr-evidence-key {
   display: inline-block;
   flex: none;
-  width: 11px;
-  height: 11px;
-  margin-top: 2px;
-  border: 1px solid #fff;
-  border-radius: 3px;
-  background: #176e84;
-  box-shadow: 0 0 0 1px #176e84;
+  min-width: 11px;
+  margin: 0 2px;
+  color: #f5e6b5;
+  font-size: 12px;
+  font-weight: 750;
+  line-height: 1;
+  text-align: center;
+  text-shadow: 0 1px 2px #17242a;
+}
+.pr-evidence-key--reference {
+  color: #bfe5ed;
+}
+.pr-evidence-key--critical {
+  color: #f5e6b5;
+}
+.pr-evidence-key--area {
+  width: 13px;
+  height: 8px;
+  border: 1px solid #71848a;
+  background: #71848a24;
+  vertical-align: middle;
 }
 .pr-evidence-list {
   display: flex;

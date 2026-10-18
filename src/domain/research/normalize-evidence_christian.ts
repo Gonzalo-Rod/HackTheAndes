@@ -5,6 +5,25 @@ import { FIELD_LABELS, RECORD_LABELS } from "./evidence-labels_christian";
 
 type Kind = EnvironmentalRecord["kind"];
 const TYPES: Record<string, { label: string; kind: Kind; topics: ResearchTopic[]; summary: string }> = {
+  critical_zone_under_notice: {
+    label: "Zona crítica bajo aviso",
+    kind: "inventory",
+    topics: ["landslides", "rain"],
+    summary:
+      "Punto del inventario de zonas críticas de INGEMMET asociado al aviso SENAMHI 421; no es un pronóstico puntual ni un incidente confirmado.",
+  },
+  official_precipitation_warning_area: {
+    label: "Área oficial de lluvias",
+    kind: "forecast",
+    topics: ["rain", "water"],
+    summary: "Área de pronóstico oficial; no demuestra daño ni cierre vial.",
+  },
+  official_cold_warning_area: {
+    label: "Área oficial de frío nocturno",
+    kind: "forecast",
+    topics: ["frost", "agriculture"],
+    summary: "Área oficial de frío previsto; no demuestra daños por heladas.",
+  },
   measured_hydrology: {
     label: "Caudal registrado",
     kind: "observation",
@@ -189,15 +208,19 @@ export function normalizeEvidence(feature: EvidenceFeature): EnvironmentalRecord
   if (p.forecastDays?.some((day) => day.tminC !== null && day.tminC < 0)) topics.push("frost");
   const caveats = [
     feature.geometry
-      ? "Ubicación de referencia; no representa la extensión de un evento ni un tramo afectado."
+      ? feature.geometry.type === "Point"
+        ? "Punto publicado de referencia; no representa la extensión de un evento ni un tramo afectado."
+        : "Polígono oficial del pronóstico; no es una delimitación de daños ocurridos."
       : "Sin geometría verificada. Este registro se presenta como contexto, sin un pin en el mapa.",
     type.kind === "forecast"
       ? "Es un pronóstico: no confirma lluvia ocurrida, huaico ni interrupción de tránsito."
-      : type.kind === "scenario"
-        ? "Es un escenario de riesgo, no una emergencia actual. Los totales nacionales no se atribuyen al corredor."
-        : type.kind === "surveillance"
-          ? "Vigilancia no equivale a detección. No se verificó un brote local con fecha."
-          : "Describe el período del reporte; no demuestra el estado actual de una vía.",
+      : type.kind === "inventory"
+        ? "Punto del inventario oficial de zonas críticas asociado a un aviso meteorológico. El punto no es un pronóstico ni confirma que el peligro se haya activado; el aviso se muestra por separado como polígono SENAMHI."
+        : type.kind === "scenario"
+          ? "Es un escenario de riesgo, no una emergencia actual. Los totales nacionales no se atribuyen al corredor."
+          : type.kind === "surveillance"
+            ? "Vigilancia no equivale a detección. No se verificó un brote local con fecha."
+            : "Describe el período del reporte; no demuestra el estado actual de una vía.",
   ];
   if (p.coordinatePrecision?.includes("0.1 degree"))
     caveats.push("Coordenadas de estación redondeadas a 0,1° (aproximadamente 5,5 km por eje). Ubicación aproximada.");
@@ -205,8 +228,8 @@ export function normalizeEvidence(feature: EvidenceFeature): EnvironmentalRecord
 
   return {
     id: feature.id,
-    title: labels?.title ?? `${type.label} · ${location}`,
-    summary: labels?.summary ?? type.summary,
+    title: p.title ?? labels?.title ?? `${type.label} · ${location}`,
+    summary: p.summary ?? labels?.summary ?? type.summary,
     location,
     topics: [...new Set(topics)],
     kind: type.kind,
@@ -214,7 +237,9 @@ export function normalizeEvidence(feature: EvidenceFeature): EnvironmentalRecord
     sourceUrl: p.sourceUrl,
     sourceStatus: p.status,
     recordType: p.recordType,
-    coordinates: feature.geometry?.coordinates ?? null,
+    coordinates: feature.geometry?.type === "Point" ? feature.geometry.coordinates : null,
+    geometry: feature.geometry,
+    geometrySourceUrl: p.geometrySourceUrl ?? p.coordinateSourceUrl ?? textField(p.station, "coordinateSourceUrl"),
     coordinatePrecision: p.coordinatePrecision ?? null,
     issuedAt: p.issueDate ?? p.publicationDate ?? null,
     startsAt,
@@ -222,6 +247,6 @@ export function normalizeEvidence(feature: EvidenceFeature): EnvironmentalRecord
     periodLabel: p.scenarioPeriod ?? (p.publicationMonth ? `Publicación: ${p.publicationMonth}` : null),
     facts: [...factsFrom(p.values), ...nationalFacts(p), ...additionalFacts(p)],
     forecasts: p.forecastDays ?? [],
-    caveats,
+    caveats: [...caveats, ...p.limitations],
   };
 }

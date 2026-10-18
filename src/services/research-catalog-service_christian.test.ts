@@ -10,8 +10,11 @@ describe("integrated research catalog", () => {
   it("serves the real source registry, environmental evidence, weekly archive and original documents", async () => {
     const service = createResearchCatalogService({ loadFiles: loadResearchFiles, now });
     const catalog = await service.getCatalog("test");
-    expect(catalog.records).toHaveLength(22);
-    expect(catalog.sources).toHaveLength(39);
+    expect(catalog.records).toHaveLength(323);
+    expect(catalog.archivedRecordCount).toBe(13);
+    expect(catalog.records.every((record) => record.geometry && record.geometrySourceUrl && record.startsAt)).toBe(true);
+    expect(catalog.records.some((record) => record.id === "senasa-junin-fruit-fly-trap-network-reference")).toBe(false);
+    expect(catalog.sources).toHaveLength(41);
     expect(catalog.weeklyReports.length).toBeGreaterThan(0);
     expect(catalog.documents.some((document) => document.name === "problem-definition-and-notice-audit_christian.md")).toBe(true);
     expect(catalog.warnings).toEqual([]);
@@ -29,7 +32,7 @@ describe("integrated research catalog", () => {
       loadFiles: async () => ({ ...files, sources: null, weekly: [{ name: "invalid", data: {} }] }),
       now,
     }).getCatalog("test");
-    expect(catalog.records).toHaveLength(22);
+    expect(catalog.records).toHaveLength(323);
     expect(catalog.sources).toEqual([]);
     expect(catalog.weeklyReports).toEqual([]);
     expect(catalog.warnings).toHaveLength(3);
@@ -53,6 +56,6 @@ describe("integrated research catalog", () => {
     }).getCatalog("test");
     expect(catalog.weeklyReports).toEqual([]);
     expect(catalog.warnings.length).toBeGreaterThan(0);
-    expect(catalog.records).toHaveLength(22);
+    expect(catalog.records).toHaveLength(323);
   });
 });

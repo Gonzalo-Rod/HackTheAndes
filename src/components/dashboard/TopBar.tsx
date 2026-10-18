@@ -11,7 +11,7 @@ const STALE_AFTER_MS = 5 * 60_000;
 
 interface TopBarProps {
   scope: Scope;
-  counts: { pais: number; pe22: number };
+  counts: { pais: { roads: number; environment: number }; pe22: { roads: number; environment: number } };
   meta: AlertsMeta | null;
   loading: boolean;
   refreshing: boolean;
@@ -81,21 +81,25 @@ export function TopBar(props: TopBarProps) {
       </div>
       <div className="pr-topbar__sep" aria-hidden="true" />
       <div className="pr-topbar__scope-wrapper">
-        <nav className="pr-segmented pr-scope" aria-label="Operación y ruta de acceso">
+        <nav className="pr-segmented pr-scope" aria-label="Cobertura geográfica">
           <button type="button" aria-pressed={scope === "pe22"} className="pr-segmented__item" onClick={() => onScopeChange("pe22")}>
             <Icon name="route" size={14} />
-            <span>
-              Corredor PE-22 <span className="pr-muted pr-hide-sm">· Acceso Sierra Central</span>
+            <span>PE-22 y Mantaro</span>
+            <span className="pr-count" title={`${counts.pe22.roads} viales + ${counts.pe22.environment} ambientales`}>
+              {counts.pe22.roads + counts.pe22.environment}
             </span>
-            <span className="pr-count">{counts.pe22}</span>
           </button>
           <button type="button" aria-pressed={scope === "pais"} className="pr-segmented__item" onClick={() => onScopeChange("pais")}>
             <Icon name="globe" size={14} />
-            <span>Red Nacional</span>
-            <span className="pr-count">{counts.pais}</span>
+            <span>Todo el Perú</span>
+            <span className="pr-count" title={`${counts.pais.roads} viales + ${counts.pais.environment} ambientales`}>
+              {counts.pais.roads + counts.pais.environment}
+            </span>
           </button>
         </nav>
-        <span className="pr-scope__hint pr-hide-md">Elige una operación o ruta de acceso para ver avisos vigentes</span>
+        <span className="pr-scope__hint pr-hide-md">
+          {counts[scope].roads} viales + {counts[scope].environment} ambientales verificados
+        </span>
       </div>
       <div className="pr-topbar__spacer" />
       <span className="pr-topbar__date pr-hide-md">{now ? formatToday(now) : " "}</span>

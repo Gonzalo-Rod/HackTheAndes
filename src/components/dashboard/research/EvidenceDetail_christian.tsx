@@ -50,7 +50,13 @@ export function EvidenceDetail({ record, related, now, onBack, onCenter, onSelec
           <dd>{record.location}</dd>
         </div>
         <div>
-          <dt>{record.kind === "forecast" ? "Vigencia (Lima)" : "Período del registro"}</dt>
+          <dt>
+            {record.kind === "forecast"
+              ? "Vigencia (Lima)"
+              : record.kind === "inventory"
+                ? "Vigencia del aviso vinculado (Lima)"
+                : "Período del registro"}
+          </dt>
           <dd>{evidencePeriod(record)}</dd>
         </div>
         {record.issuedAt && (
@@ -65,16 +71,37 @@ export function EvidenceDetail({ record, related, now, onBack, onCenter, onSelec
         </div>
         <div>
           <dt>Ubicación en mapa</dt>
-          <dd>{record.coordinates ? "Referencia de estación / localidad" : "Sin coordenadas verificadas"}</dd>
+          <dd>
+            {record.geometry?.type === "Point"
+              ? record.recordType === "critical_zone_under_notice"
+                ? "Punto oficial de zona crítica · INGEMMET"
+                : "Referencia publicada de estación / localidad"
+              : "Polígono oficial de pronóstico · SENAMHI"}
+          </dd>
         </div>
+        {record.coordinates && (
+          <div>
+            <dt>Longitud / latitud · WGS84</dt>
+            <dd>
+              {record.coordinates
+                .map((value) => value.toLocaleString("en-US", { maximumFractionDigits: 6, useGrouping: false }))
+                .join(", ")}
+            </dd>
+          </div>
+        )}
       </dl>
       <div className="pr-evidence__actions">
         <a className="pr-btn pr-btn--accent" href={record.sourceUrl} target="_blank" rel="noopener noreferrer">
           Abrir fuente oficial <Icon name="external" size={12} />
         </a>
-        {record.coordinates && (
+        {record.geometrySourceUrl && (
+          <a className="pr-btn" href={record.geometrySourceUrl} target="_blank" rel="noopener noreferrer">
+            Ver coordenadas oficiales <Icon name="external" size={12} />
+          </a>
+        )}
+        {record.geometry && (
           <button type="button" className="pr-btn" onClick={onCenter}>
-            <Icon name="crosshair" size={13} /> Ver referencia
+            <Icon name="crosshair" size={13} /> Ver en mapa
           </button>
         )}
       </div>

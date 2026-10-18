@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { EvidenceGeometrySchema } from "./evidence-geometry_christian";
 
 import {
   EvidenceDateSchema,
@@ -16,17 +17,16 @@ const Period = z.object({ start: EvidenceDateSchema, end: EvidenceDateSchema });
 export const EvidenceFeatureSchema = z.object({
   type: z.literal("Feature"),
   id: z.string().min(1),
-  geometry: z
-    .object({
-      type: z.literal("Point"),
-      coordinates: z.tuple([z.number().min(-180).max(180), z.number().min(-90).max(90)]),
-    })
-    .nullable(),
+  geometry: EvidenceGeometrySchema.nullable(),
   properties: z.object({
     recordType: z.string().min(1),
     status: z.string(),
     provider: z.string(),
     sourceUrl: HttpUrlSchema,
+    coordinateSourceUrl: HttpUrlSchema.optional(),
+    geometrySourceUrl: HttpUrlSchema.optional(),
+    title: z.string().optional(),
+    summary: z.string().optional(),
     severity: z.string().optional(),
     station: JsonFields.optional(),
     location: z.union([z.string(), JsonFields]).optional(),

@@ -3,9 +3,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type RefObject } from "react";
 
 import type { MapViewHandle } from "@/components/map/MapView";
+import type { Scope } from "@/components/dashboard/types";
 import type { EnvironmentalRecord, ResearchCatalog, ResearchTopic } from "@/contracts/research_christian";
-import { boundsOfPoints } from "@/domain/geo/measure";
 import { groupEvidencePoints } from "@/domain/research/evidence-state_christian";
+import { CENTRAL_VIEW_BOUNDS, evidenceBounds, inCentralView } from "@/domain/research/map-evidence_christian";
 
 import { useResearchCatalog } from "./use-research-catalog_christian";
 
@@ -14,22 +15,30 @@ export function useEvidenceMap({
   mapRef,
   mapReady,
   onActivate,
+  scope,
 }: {
   initialData: ResearchCatalog | null;
   mapRef: RefObject<MapViewHandle | null>;
   mapReady: boolean;
   onActivate: () => void;
+  scope: Scope;
 }) {
   const state = useResearchCatalog(initialData);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [topic, setTopic] = useState<ResearchTopic | null>(null);
-  const records = useMemo(() => state.data?.records ?? [], [state.data]);
+  const allRecords = useMemo(() => state.data?.records ?? [], [state.data]);
+  const records = useMemo(() => (scope === "pais" ? allRecords : allRecords.filter(inCentralView)), [allRecords, scope]);
   const filtered = useMemo(() => records.filter((record) => topic === null || record.topics.includes(topic)), [records, topic]);
   const points = useMemo(() => groupEvidencePoints(filtered), [filtered]);
+  const areas = useMemo(() => filtered.filter((record) => record.geometry && record.geometry.type !== "Point"), [filtered]);
   const pendingFlight = useRef<string | null>(null);
   const center = useCallback(
     (record: EnvironmentalRecord) => {
       if (record.coordinates) mapRef.current?.flyToEvidence(record.coordinates);
+      else {
+        const bbox = evidenceBounds([record]);
+        if (bbox) mapRef.current?.flyToBounds(bbox);
+      }
     },
     [mapRef],
   );
@@ -70,10 +79,7 @@ export function useEvidenceMap({
   }, [records, mapReady, center]);
 
   const fit = () => {
-    const bbox = boundsOfPoints(
-      filtered.flatMap((record) => (record.coordinates ? [record.coordinates] : [])),
-      0.08,
-    );
+    const bbox = scope === "pe22" ? CENTRAL_VIEW_BOUNDS : evidenceBounds(filtered);
     onActivate();
     if (bbox) mapRef.current?.flyToBounds(bbox);
   };
@@ -81,5 +87,5 @@ export function useEvidenceMap({
     setTopic(next);
     select(null);
   };
-  return { state, records, points, topic, selectedId, select, center, fit, clearSelection, changeTopic };
+  return { state, records, allRecords, points, areas, topic, selectedId, select, center, fit, clearSelection, changeTopic };
 }

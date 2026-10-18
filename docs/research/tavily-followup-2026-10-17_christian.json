@@ -18,9 +18,10 @@
                                "initialSixTopicPassEstimate":  91,
                                "intermediateContinuationEstimate":  135,
                                "currentFollowUpEstimate":  136,
-                               "conservativeTotal":  700,
+                               "conservativeTotal":  726,
                                "cap":  2000,
-                               "actualBilledCredits":  null
+                               "actualBilledCredits":  null,
+                               "geometryVerificationPassEstimate":  26
                            },
     "searches":  [
                      {
@@ -553,7 +554,9 @@
                          "query":  "OUTAMINA Perú minería empresa; Outamina mining company Peru operations; OUTAMINA mining companies climate territory Peru; OUTAMINA empresa minera sitio oficial Peru",
                          "requestId":  null,
                          "searchCalls":  4,
-                         "resultUrls":  [],
+                         "resultUrls":  [
+
+                                        ],
                          "outcome":  "Four advanced search calls were made in an earlier pass, but their combined output was truncated. Exact-name verification was repeated below; no authoritative Outamina mine or corridor was confirmed."
                      },
                      {
@@ -924,5 +927,37 @@
                                      "customerSector":  "Mining companies",
                                      "outcome":  "No authoritative exact-name Outamina corporate page, mine, or corridor was verified. Search results centered on Antamina, so no identity or geography is inferred.",
                                      "memoFile":  "problem-definition-and-notice-audit_christian.md"
+                                 },
+    "geometryVerificationPass":  {
+                                     "schemaVersion":  1,
+                                     "retrievedAt":  "2026-10-18T02:28:30Z",
+                                     "tool":  "Tavily MCP",
+                                     "userCreditCap":  2000,
+                                     "searchCalls":  8,
+                                     "advancedSearchCalls":  8,
+                                     "extractCalls":  5,
+                                     "requestedUrlExtractions":  18,
+                                     "successfulUrlExtractions":  13,
+                                     "rateLimitedCalls":  1,
+                                     "conservativeEstimatedCredits":  26,
+                                     "previousCumulativeEstimate":  700,
+                                     "cumulativeEstimate":  726,
+                                     "actualBilledCredits":  null,
+                                     "estimateBasis":  "Existing ledger model: two estimated credits per advanced search and per advanced extraction attempt, including the rate-limited attempt. Tavily did not expose billing. This is an estimate, not an account balance.",
+                                     "outcome":  {
+                                                     "officialCriticalZonePoints":  303,
+                                                     "warningAreaRecords":  11,
+                                                     "distinctWeatherNotices":  [
+                                                                                    415,
+                                                                                    420,
+                                                                                    421,
+                                                                                    422
+                                                                                ],
+                                                     "retainedStationOrTownReferences":  9,
+                                                     "mapReadyEnvironmentalRecords":  323,
+                                                     "archivedUnlocatedOrUndatedRecords":  13,
+                                                     "sourceRegistryRecords":  41
+                                                 },
+                                     "ledgerFile":  "geography-verification-2026-10-17_christian.json"
                                  }
 }

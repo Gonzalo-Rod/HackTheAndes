@@ -24,16 +24,19 @@ describe("research evidence presentation", () => {
         liveSources: null,
       }),
     );
-    expect(html).toContain("Cobertura del demo: PE-22 y Valle del Mantaro");
+    expect(html).toContain("Todo el Perú · fuentes oficiales");
+    expect(html).toContain("Los 323 registros están en el mapa");
+    expect(html).toContain("zona crítica inventariada");
+    expect(html).toContain("Inventario de zonas críticas");
     expect(html).toContain("Aviso 422");
     expect(html).toContain("Pronóstico próximo");
-    expect(html).toContain("Fuentes y verificación · 39 referencias");
+    expect(html).toContain("Fuentes y verificación · 41 referencias");
     expect(html).toContain("noticias por verificar");
     expect(html).toContain("no se cuentan como alertas ni generan pines");
   });
-  it("lets an area-only warning open its official source without offering a fabricated map location", async () => {
+  it("uses the official forecast polygon and its daily validity instead of a fabricated point", async () => {
     const data = await createResearchCatalogService({ loadFiles: loadResearchFiles, now }).getCatalog("render-test");
-    const id = "senamhi-warning-422-central-andes-2026-10-18-19";
+    const id = "senamhi-area-422-day-1-level-2-2026";
     const html = renderToStaticMarkup(
       createElement(ResearchPanel, {
         state: { data, error: null, refreshing: false, refresh: async () => undefined },
@@ -46,10 +49,48 @@ describe("research evidence presentation", () => {
       }),
     );
     expect(html).toContain("Abrir fuente oficial");
-    expect(html).toContain("Sin coordenadas verificadas");
-    expect(html).toContain("Lluvia prevista 2026-10-18");
-    expect(html).not.toContain(">Ver referencia</button>");
-    expect(html).toContain("No se verificó la intersección");
+    expect(html).toContain("Polígono oficial de pronóstico · SENAMHI");
+    expect(html).toContain("Ver coordenadas oficiales");
+    expect(html).toContain("Ver en mapa");
+    expect(html).not.toContain("Sin coordenadas verificadas");
+    expect(html).toContain("no es una delimitación de daños ocurridos");
+  });
+  it("labels critical-zone points as inventory and dates them by the linked notice", async () => {
+    const data = await createResearchCatalogService({ loadFiles: loadResearchFiles, now }).getCatalog("render-test");
+    const html = renderToStaticMarkup(
+      createElement(ResearchPanel, {
+        state: { data, error: null, refreshing: false, refresh: async () => undefined },
+        now: now(),
+        topic: null,
+        selectedId: "ingemmet-critical-zone-159-notice-421-2026",
+        onSelect: () => undefined,
+        onCenter: () => undefined,
+        liveSources: null,
+      }),
+    );
+    expect(html).toContain("Inventario de zonas críticas");
+    expect(html).toContain("Aviso asociado vigente");
+    expect(html).toContain("Vigencia del aviso vinculado (Lima)");
+    expect(html).toContain("no es un pronóstico ni confirma que el peligro se haya activado");
+    expect(html).not.toContain("Pronóstico vigente");
+  });
+  it("does not open the undated SENASA reference as map evidence, even through an old link", async () => {
+    const data = await createResearchCatalogService({ loadFiles: loadResearchFiles, now }).getCatalog("render-test");
+    const html = renderToStaticMarkup(
+      createElement(ResearchPanel, {
+        state: { data, error: null, refreshing: false, refresh: async () => undefined },
+        now: now(),
+        topic: null,
+        selectedId: "senasa-junin-fruit-fly-trap-network-reference",
+        onSelect: () => undefined,
+        onCenter: () => undefined,
+        liveSources: null,
+      }),
+    );
+    expect(html).not.toContain("Vigilancia de mosca de la fruta");
+    expect(html).not.toContain("Trampas del reporte sin fecha");
+    expect(html).not.toContain("Referencia sin fecha");
+    expect(html).toContain("13 referencias sin fecha o geometría verificadas");
   });
   it("keeps the map usable for environmental evidence when SUTRAN is unavailable", () => {
     const html = renderToStaticMarkup(

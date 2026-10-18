@@ -30,6 +30,7 @@ import {
 } from "@/domain/road-alerts/timeline";
 import { rainAtKm, rainSegments } from "@/domain/weather/rain";
 import { countByRoad } from "@/domain/road-alerts/staleness";
+import { inCentralView } from "@/domain/research/map-evidence_christian";
 import { useAlertDetail } from "@/hooks/use-alert-detail";
 import { useCorridorRain } from "@/hooks/use-corridor-rain";
 import { useCorridor } from "@/hooks/use-corridor";
@@ -66,7 +67,7 @@ export function Dashboard({ initialResearch = null }: { initialResearch?: Resear
   const mapRef = useRef<MapViewHandle>(null);
   const [mapReady, setMapReady] = useState(false);
 
-  const [scope, setScope] = useState<Scope>("pe22");
+  const [scope, setScope] = useState<Scope>("pais");
   const [filters, setFilters] = useState<AlertFilters>(EMPTY_FILTERS);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
@@ -87,7 +88,9 @@ export function Dashboard({ initialResearch = null }: { initialResearch?: Resear
   const {
     state: researchState,
     records: evidenceRecords,
+    allRecords: allEvidenceRecords,
     points: evidencePoints,
+    areas: evidenceAreas,
     topic: researchTopic,
     selectedId: selectedEvidenceId,
     select: selectEvidence,
@@ -95,7 +98,7 @@ export function Dashboard({ initialResearch = null }: { initialResearch?: Resear
     fit: fitEvidence,
     clearSelection: clearEvidenceSelection,
     changeTopic,
-  } = useEvidenceMap({ initialData: initialResearch, mapRef, mapReady, onActivate: activateResearch });
+  } = useEvidenceMap({ initialData: initialResearch, mapRef, mapReady, onActivate: activateResearch, scope });
 
   const corridor = corridorState.status === "ready" ? corridorState.data : null;
   const allAlerts = useMemo(() => alertsState.data?.alerts ?? [], [alertsState.data]);
@@ -171,6 +174,9 @@ export function Dashboard({ initialResearch = null }: { initialResearch?: Resear
 
   const changeScope = (next: Scope) => {
     setScope(next);
+    setSelectedId(null);
+    clearEvidenceSelection();
+    window.history.replaceState(null, "", window.location.pathname);
     if (next === "pe22") mapRef.current?.flyToCorridor();
     else mapRef.current?.flyToPeru();
   };
@@ -200,7 +206,10 @@ export function Dashboard({ initialResearch = null }: { initialResearch?: Resear
     <div className="pr-app">
       <TopBar
         scope={scope}
-        counts={{ pais: allAlerts.length, pe22: pe22Count }}
+        counts={{
+          pais: { roads: allAlerts.length, environment: allEvidenceRecords.length },
+          pe22: { roads: pe22Count, environment: allEvidenceRecords.filter(inCentralView).length },
+        }}
         meta={alertsState.data?.meta ?? null}
         loading={loading}
         refreshing={alertsState.refreshing}
@@ -230,6 +239,7 @@ export function Dashboard({ initialResearch = null }: { initialResearch?: Resear
           handle={() => mapRef.current}
           alerts={filtered}
           evidence={evidencePoints}
+          evidenceAreas={evidenceAreas}
           selectedEvidenceId={selectedEvidenceId}
           initialScope={scope}
           onSelectEvidence={selectEvidence}
@@ -265,7 +275,7 @@ export function Dashboard({ initialResearch = null }: { initialResearch?: Resear
           tab={tab}
           alertsCount={filtered.length}
           hasSelection={selected !== null}
-          onTabChange={setTabChoice}
+          onTabChange={(next) => (next === "ambiente" ? activateResearch() : setTabChoice(next))}
           eventsContent={
             <EventList
               alerts={filtered}
@@ -284,6 +294,8 @@ export function Dashboard({ initialResearch = null }: { initialResearch?: Resear
             <ResearchPanel
               key={researchTopic ?? "all"}
               state={researchState}
+              records={evidenceRecords}
+              coverage={scope === "pais" ? "Todo el Perú · fuentes oficiales" : "PE-22 y entorno del Mantaro · ventana de consulta"}
               now={now}
               topic={researchTopic}
               selectedId={selectedEvidenceId}
@@ -323,7 +335,7 @@ export function Dashboard({ initialResearch = null }: { initialResearch?: Resear
                 corridor={corridor}
                 rain={rain}
                 rainError={rainState.error}
-                environmentalCount={evidenceRecords.filter((record) => record.coordinates !== null).length}
+                environmentalCount={evidenceRecords.length}
                 environmentalRetrievedAt={researchState.data?.retrievedAt ?? null}
                 now={now}
                 onChange={setLayers}

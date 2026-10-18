@@ -36,8 +36,9 @@ export function MapLegend({ layers }: { layers: LayerState }) {
         </span>
         {layers.environment && (
           <span className="pr-legend__item">
-            <span className="pr-evidence-key" />
-            Referencia ambiental
+            <span className="pr-evidence-key pr-evidence-key--reference">i</span>
+            <span className="pr-evidence-key pr-evidence-key--critical">!</span>
+            Clima y territorio
           </span>
         )}
         <button
@@ -54,6 +55,28 @@ export function MapLegend({ layers }: { layers: LayerState }) {
 
       {expanded && (
         <div className="pr-legend__body">
+          <div className="pr-legend__group">
+            <span className="pr-legend__title">Territorio</span>
+            <span className="pr-legend__row">
+              <span className="pr-legend__line" style={{ background: "#f6f0d7" }} />
+              Límite nacional de Perú
+            </span>
+          </div>
+          {layers.environment && (
+            <div className="pr-legend__group pr-legend__group--wide">
+              <span className="pr-legend__title">Clima y territorio · fuente verificada</span>
+              <span className="pr-legend__row">
+                <span className="pr-evidence-key pr-evidence-key--reference">i</span> Estación / localidad · observación o pronóstico
+              </span>
+              <span className="pr-legend__row">
+                <span className="pr-evidence-key pr-evidence-key--critical">!</span> Inventario de zona crítica INGEMMET bajo aviso · no es
+                un evento confirmado
+              </span>
+              <span className="pr-legend__row">
+                <span className="pr-evidence-key pr-evidence-key--area" /> Área y vigencia de pronóstico SENAMHI · no es daño ocurrido
+              </span>
+            </div>
+          )}
           <div className="pr-legend__group">
             <span className="pr-legend__title">Icono · motivo del evento</span>
             {LEGEND_CAUSES.map((cause) => (

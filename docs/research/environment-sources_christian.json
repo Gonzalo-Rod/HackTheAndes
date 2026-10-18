@@ -1,10 +1,10 @@
 {
     "schemaVersion":  1,
-    "generatedAt":  "2026-10-18T00:34:26Z",
+    "generatedAt":  "2026-10-18T02:28:30Z",
     "project":  "PeruRoad Climate",
     "scope":  "PE-22 / Rimac and Mantaro extension; national or out-of-corridor context explicitly labelled.",
     "verificationMethod":  "Tavily MCP search followed by official-page/PDF extraction",
-    "sourceRecordCount":  39,
+    "sourceRecordCount":  41,
     "interpretation":  "Verified source accessibility and documented information are not a live alert feed. Every record retains its geography, date and meaning. The follow-up verifies a station rainfall observation at Ingenio and a closed historical forest-fire crop-loss report at Ayas; it does not verify a current PE-22 road disruption or local pest outbreak.",
     "categoryCoverage":  {
                              "water":  [
@@ -29,7 +29,8 @@
                                            "cenepred-summer-2027-rain-risk-scenario",
                                            "indeci-monitoring-bulletin-290-2026",
                                            "cenepred-summer-2027-risk-scenario-update",
-                                           "cenepred-water-deficit-risk-2026-27-september"
+                                           "cenepred-water-deficit-risk-2026-27-september",
+                                           "senamhi-warning-wfs-verified-daily-polygons"
                                        ],
                              "frost":  [
                                            "senamhi-frost-398-2026",
@@ -43,7 +44,8 @@
                                            "indeci-yauli-frost-event-2026-06-11",
                                            "senamhi-lima-town-weather-forecast-2026-10-16",
                                            "senamhi-junin-town-weather-forecast-2026-10-16",
-                                           "indeci-monitoring-bulletin-290-2026"
+                                           "indeci-monitoring-bulletin-290-2026",
+                                           "senamhi-warning-wfs-verified-daily-polygons"
                                        ],
                              "landslides":  [
                                                 "cenepred-ond-2026-rain-scenario",
@@ -54,7 +56,8 @@
                                                 "ingemmet-pucruchacra-san-mateo-historical",
                                                 "cenepred-summer-2027-rain-risk-scenario",
                                                 "ingemmet-pucruchacra-san-mateo-report-2026-lead",
-                                                "cenepred-summer-2027-risk-scenario-update"
+                                                "cenepred-summer-2027-risk-scenario-update",
+                                                "ingemmet-critical-zones-under-weather-notice-geojson"
                                             ],
                              "rain":  [
                                           "senamhi-weather-422-2026",
@@ -74,7 +77,9 @@
                                           "senamhi-junin-town-weather-forecast-2026-10-16",
                                           "cenepred-summer-2027-rain-risk-scenario",
                                           "indeci-monitoring-bulletin-290-2026",
-                                          "cenepred-summer-2027-risk-scenario-update"
+                                          "cenepred-summer-2027-risk-scenario-update",
+                                          "ingemmet-critical-zones-under-weather-notice-geojson",
+                                          "senamhi-warning-wfs-verified-daily-polygons"
                                       ],
                              "agriculture":  [
                                                  "ingemmet-payhua-matucana-historical",
@@ -94,7 +99,8 @@
                                                  "senasa-junin-fruit-fly-surveillance-network",
                                                  "indeci-surco-forest-fire-crop-damage-2026",
                                                  "cenepred-summer-2027-risk-scenario-update",
-                                                 "cenepred-water-deficit-risk-2026-27-september"
+                                                 "cenepred-water-deficit-risk-2026-27-september",
+                                                 "senamhi-warning-wfs-verified-daily-polygons"
                                              ],
                              "pest_alerts":  [
                                                  "senamhi-agromet-bulletin-index",
@@ -112,10 +118,10 @@
                    "researchPassExtractionCalls":  18,
                    "conservativeEstimatedCredits":  91,
                    "priorHandoffAndContinuationEstimate":  88,
-                   "conservativeCumulativeEstimate":  688,
+                   "conservativeCumulativeEstimate":  726,
                    "userCreditCap":  2000,
                    "actualBilledCredits":  null,
-                   "basis":  "Initial source pass: 30 advanced searches and 18 extraction calls estimated at 91 credits. Earlier continuation: 58 searches and 5 extraction calls conservatively estimated at 135. Follow-up: 48 advanced searches (96), 9 extraction calls (18), and two crawls (10 estimated). Additional notice sweep: 13 advanced searches (26), two basic searches (2), and five advanced extraction calls (10). Final coverage audit: five advanced searches and one advanced extraction (12). Added to the earlier 88-credit handoff estimate; Tavily did not expose actual billing. Latest notice/problem review adds 73 advanced searches (146 estimated credits) and 27 advanced extractions (54 estimated credits); actual billing was not returned.",
+                   "basis":  "Initial source pass: 30 advanced searches and 18 extraction calls estimated at 91 credits. Earlier continuation: 58 searches and 5 extraction calls conservatively estimated at 135. Follow-up: 48 advanced searches (96), 9 extraction calls (18), and two crawls (10 estimated). Additional notice sweep: 13 advanced searches (26), two basic searches (2), and five advanced extraction calls (10). Final coverage audit: five advanced searches and one advanced extraction (12). Added to the earlier 88-credit handoff estimate; Tavily did not expose actual billing. Latest notice/problem review adds 73 advanced searches (146 estimated credits) and 27 advanced extractions (54 estimated credits); actual billing was not returned. Geographic verification adds eight advanced searches and five advanced extraction attempts (26 estimated credits, including one 429). The stale source-registry total 688 is reconciled to the main ledger\u0027s previous 700, giving 726 estimated cumulative credits. Actual billing remains unavailable.",
                    "intermediateFollowUpSearchCalls":  58,
                    "intermediateFollowUpExtractCalls":  5,
                    "intermediateFollowUpEstimatedCredits":  135,
@@ -138,7 +144,10 @@
                    "latestNoticeReviewSearchCalls":  73,
                    "latestNoticeReviewExtractCalls":  27,
                    "latestNoticeReviewRequestedUrls":  29,
-                   "latestNoticeReviewEstimatedCredits":  200
+                   "latestNoticeReviewEstimatedCredits":  200,
+                   "geometryVerificationPassEstimatedCredits":  26,
+                   "geometryVerificationPassSearchCalls":  8,
+                   "geometryVerificationPassExtractCalls":  5
                },
     "sources":  [
                     {
@@ -1720,6 +1729,58 @@
                                                },
                         "currentObservedIncidentEstablished":  false,
                         "researchFile":  "environment-map-evidence-2026-10-17_christian.json"
+                    },
+                    {
+                        "id":  "ingemmet-critical-zones-under-weather-notice-geojson",
+                        "provider":  "INGEMMET · SENAMHI",
+                        "title":  "Official critical-zone points linked to weather notices",
+                        "url":  "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_PERU_ALERTA/MapServer/0/query?where=1%3D1\u0026outFields=*\u0026returnGeometry=true\u0026outSR=4326\u0026f=geojson",
+                        "categories":  [
+                                           "landslides",
+                                           "rain"
+                                       ],
+                        "sourceKind":  "official_geospatial_feature_service",
+                        "geographicScope":  "Peru; the retrieved layer contains 303 critical zones in six northern departments linked to SENAMHI notice 421.",
+                        "verifiedAt":  "2026-10-18T02:28:30Z",
+                        "accessStatus":  "303 GeoJSON point features extracted successfully through Tavily from the official ArcGIS service.",
+                        "observedFacts":  [
+                                              "Each point publishes an OBJECTID, hazard, locality, exposed elements, notice number and INGEMMET zone level.",
+                                              "All 303 retrieved points are associated with notice 421; the source classifies 160 as Nivel 2 and 143 as Nivel 3."
+                                          ],
+                        "limitations":  [
+                                            "Critical zones under a forecast are not confirmed landslides, damaged assets or road closures.",
+                                            "INGEMMET's NIVEL classification is separate from SENAMHI's warning level; the point-level source value is preserved in the map record.",
+                                            "The layer has no incident-occurrence date; published forecast validity comes from the referenced SENAMHI notice.",
+                                            "Native CLI requests to these domains failed DNS in this environment. This is a documented capture, not an automatically refreshed feed."
+                                        ],
+                        "automation":  "Query official GeoJSON and validate the notice association and its validity before replacing the capture. Preserve previous captures and reject missing geometry or unmatched notices."
+                    },
+                    {
+                        "id":  "senamhi-warning-wfs-verified-daily-polygons",
+                        "provider":  "SENAMHI",
+                        "title":  "Official daily weather-warning polygons (WFS)",
+                        "url":  "https://idesep.senamhi.gob.pe/geoserver/g_aviso/ows?service=WFS\u0026version=1.0.0\u0026request=GetFeature\u0026typeName=g_aviso:view_aviso\u0026maxFeatures=50\u0026viewparams=qry:422_1_2026\u0026outputFormat=application/json",
+                        "categories":  [
+                                           "water",
+                                           "frost",
+                                           "rain",
+                                           "agriculture"
+                                       ],
+                        "sourceKind":  "official_geospatial_feature_service",
+                        "geographicScope":  "Peru; verified daily risk polygons from notices 415, 420, 421 and 422.",
+                        "verifiedAt":  "2026-10-18T02:28:30Z",
+                        "accessStatus":  "Eight official WFS responses extracted through Tavily; notice IDs, map IDs, issue dates and daily validity verified in feature properties.",
+                        "observedFacts":  [
+                                              "The retained 13 risk features form 11 daily warning-area records when equal notice/map/level features are grouped without changing their polygons.",
+                                              "Only Nivel 2 and higher are mapped; Nivel 1 national background polygons are excluded.",
+                                              "Warning 422 day one begins at 19:00 UTC (14:00 Lima) on 18 October 2026."
+                                          ],
+                        "limitations":  [
+                                            "Warning geometry is forecast coverage, not an observed event or proof of a road/mining-site impact.",
+                                            "A daily map can have a shorter validity than its parent notice.",
+                                            "No centroid, district pin or invented geometry replaces an official polygon."
+                                        ],
+                        "automation":  "Fetch published daily WFS maps, check IDs against requested notice/map/year, validate closed WGS84 rings and source dates, retain risk levels only and evaluate expiry from each map\u0027s published validity."
                     }
                 ]
 }

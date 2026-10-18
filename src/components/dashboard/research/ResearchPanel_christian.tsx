@@ -13,7 +13,7 @@ import { EvidenceDetail, evidencePeriod } from "./EvidenceDetail_christian";
 import { ResearchArchive } from "./ResearchArchive_christian";
 import { ResearchSources } from "./ResearchSources_christian";
 
-const INITIAL_RECORDS = 6;
+const INITIAL_RECORDS = 12;
 interface Props {
   state: ResearchCatalogState;
   now: number | null;
@@ -22,9 +22,21 @@ interface Props {
   onSelect: (id: string | null) => void;
   onCenter: (record: EnvironmentalRecord) => void;
   liveSources: ReactNode;
+  records?: EnvironmentalRecord[];
+  coverage?: string;
 }
 
-export function ResearchPanel({ state, now, topic, selectedId, onSelect, onCenter, liveSources }: Props) {
+export function ResearchPanel({
+  state,
+  now,
+  topic,
+  selectedId,
+  onSelect,
+  onCenter,
+  liveSources,
+  records: scopedRecords,
+  coverage = "Todo el Perú · fuentes oficiales",
+}: Props) {
   const [showAll, setShowAll] = useState(false);
   const { data, error } = state;
   if (!data)
@@ -40,7 +52,7 @@ export function ResearchPanel({ state, now, topic, selectedId, onSelect, onCente
       </div>
     );
   const nowMs = now ?? Date.parse(data.servedAt);
-  const filtered = data.records.filter((record) => topic === null || record.topics.includes(topic));
+  const filtered = (scopedRecords ?? data.records).filter((record) => topic === null || record.topics.includes(topic));
   const records = sortEvidence(filtered, nowMs);
   const selected = data.records.find((record) => record.id === selectedId);
   const relatedIds = selected
@@ -73,12 +85,16 @@ export function ResearchPanel({ state, now, topic, selectedId, onSelect, onCente
         <>
           <header className="pr-research__intro">
             <span className="pr-research__eyebrow">CLIMA Y TERRITORIO</span>
-            <h2>Señales oficiales para entender el entorno</h2>
-            <p>Agua, heladas, lluvias, laderas, cultivos y plagas. Cada registro conserva su fuente y período.</p>
-            <span className="pr-research__coverage">Cobertura del demo: PE-22 y Valle del Mantaro</span>
+            <h2>Riesgos y condiciones del territorio</h2>
+            <p>
+              Solo registros con ubicación, fecha y fuente oficial verificadas. El inventario de zonas críticas se distingue de los avisos y
+              eventos.
+            </p>
+            <span className="pr-research__coverage">{coverage}</span>
           </header>
           <p className="pr-research__guide">
-            <span className="pr-evidence-key" /> Marcadores azules: referencias ambientales. Los avisos sin coordenadas se consultan aquí.
+            <span className="pr-evidence-key" /> Los {records.length} registros están en el mapa. ! = zona crítica inventariada; i =
+            referencia; áreas sombreadas = pronósticos. Ningún punto confirma un incidente.
           </p>
           <div className="pr-evidence-list" aria-label="Evidencias ambientales">
             {(showAll ? records : records.slice(0, INITIAL_RECORDS)).map((record) => {
@@ -87,7 +103,13 @@ export function ResearchPanel({ state, now, topic, selectedId, onSelect, onCente
                 <button type="button" className="pr-evidence-card" key={record.id} onClick={() => onSelect(record.id)}>
                   <span className="pr-evidence__tags">
                     <span className={`pr-evidence__badge pr-evidence__badge--${timing.state}`}>{timing.label}</span>
-                    <span>{record.coordinates ? "Referencia en mapa" : "Sin pin"}</span>
+                    <span>
+                      {record.geometry?.type === "Point"
+                        ? record.recordType === "critical_zone_under_notice"
+                          ? "Zona crítica · no es un incidente"
+                          : "Estación / localidad"
+                        : "Área oficial"}
+                    </span>
                   </span>
                   <strong>{record.title}</strong>
                   <span className="pr-evidence-card__summary">{record.summary}</span>
@@ -102,10 +124,15 @@ export function ResearchPanel({ state, now, topic, selectedId, onSelect, onCente
               );
             })}
           </div>
-          {records.length === 0 && <p className="pr-research__muted">No hay registros verificados para este tema.</p>}
+          {records.length === 0 && (
+            <p className="pr-research__muted">
+              No se encontraron registros con fecha y geometría verificadas para este tema y cobertura. Esto no equivale a ausencia de
+              riesgo.
+            </p>
+          )}
           {records.length > INITIAL_RECORDS && (
             <button type="button" className="pr-btn pr-research__more" aria-expanded={showAll} onClick={() => setShowAll(!showAll)}>
-              {showAll ? "Mostrar menos" : `Ver las ${records.length} evidencias`}
+              {showAll ? "Resumir lista" : `Ver lista completa (${records.length}); todos ya están en el mapa`}
             </button>
           )}
         </>
@@ -125,7 +152,10 @@ export function ResearchPanel({ state, now, topic, selectedId, onSelect, onCente
       </details>
       <details className="pr-research__disclosure">
         <summary>Documentos y reportes de la investigación · {data.documents.length}</summary>
-        <p>Archivos originales de la recopilación. Las notas y las noticias pendientes no se convierten en alertas confirmadas.</p>
+        <p>
+          {data.archivedRecordCount} referencias sin fecha o geometría verificadas quedan solo en los documentos originales. Las noticias
+          pendientes tampoco generan pines.
+        </p>
         <ul className="pr-research__documents">
           {data.documents.map((document) => (
             <li key={document.name}>

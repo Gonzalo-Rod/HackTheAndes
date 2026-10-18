@@ -2,6 +2,7 @@ import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 
 import evidence from "../../../docs/research/environment-map-evidence-2026-10-17_christian.json";
+import verifiedEvidence from "../../../docs/research/verified-map-evidence-2026-10-17_christian.json";
 import sources from "../../../docs/research/environment-sources_christian.json";
 import type { ResearchDocument } from "@/contracts/research_christian";
 import { logger } from "@/lib/logger";
@@ -13,6 +14,10 @@ const MAX_RECENT_REPORTS = 8;
 const MAX_DOCUMENT_BYTES = 2_000_000;
 
 const TITLES: Record<string, string> = {
+  "official-map-geometries-2026-10-17": "Geometrías oficiales de INGEMMET y SENAMHI",
+  "verified-map-evidence-2026-10-17": "Puntos y áreas ambientales verificados",
+  "geography-verification-2026-10-17": "Auditoría geográfica y llamadas de Tavily",
+  "map-verification-handoff": "Reglas de verificación y cobertura del mapa",
   "environment-map-evidence-2026-10-17": "Evidencias ambientales y coordenadas",
   "environment-evidence-2026-10-17": "Observaciones ambientales originales",
   "environment-sources": "Catálogo de fuentes ambientales",
@@ -92,7 +97,18 @@ export async function loadResearchFiles(): Promise<ResearchFiles> {
       warnings.push("Un reporte semanal no pudo leerse y fue excluido.");
     }
   }
-  return { evidence, sources, weekly, documents: names.map(describeDocument), warnings };
+  return {
+    evidence: {
+      ...evidence,
+      retrievedAt: verifiedEvidence.retrievedAt,
+      projectScope: verifiedEvidence.projectScope,
+      features: [...evidence.features, ...verifiedEvidence.features],
+    },
+    sources,
+    weekly,
+    documents: names.map(describeDocument),
+    warnings,
+  };
 }
 
 export async function readResearchDocument(name: string): Promise<{ body: string; format: "md" | "json" } | null> {

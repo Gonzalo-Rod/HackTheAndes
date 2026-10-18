@@ -16,7 +16,8 @@ export function ResearchFilterBar({
   onFit: () => void;
 }) {
   const filtered = records.filter((record) => topic === null || record.topics.includes(topic));
-  const mapped = filtered.filter((record) => record.coordinates !== null).length;
+  const points = filtered.filter((record) => record.geometry?.type === "Point").length;
+  const areas = filtered.filter((record) => record.geometry && record.geometry.type !== "Point").length;
   return (
     <div className="pr-filterbar pr-research-toolbar">
       <label className="pr-select">
@@ -36,12 +37,12 @@ export function ResearchFilterBar({
         <Icon name="chevronDown" size={12} />
       </label>
       <span className="pr-research-toolbar__count">
-        <strong>{filtered.length}</strong> evidencias · <strong>{mapped}</strong> con coordenadas
+        <strong>{filtered.length}</strong> registros en mapa · {points} puntos · {areas} áreas oficiales
       </span>
-      <button type="button" className="pr-btn pr-btn--ghost" disabled={!mapped} onClick={onFit}>
-        <Icon name="crosshair" size={13} /> Ver referencias en mapa
+      <button type="button" className="pr-btn pr-btn--ghost" disabled={!filtered.length} onClick={onFit}>
+        <Icon name="crosshair" size={13} /> Ver todos en mapa
       </button>
-      <span className="pr-research-toolbar__hint pr-hide-sm">Pronósticos, observaciones y escenarios identificados por separado</span>
+      <span className="pr-research-toolbar__hint pr-hide-sm">Inventarios, pronósticos, observaciones y escenarios separados</span>
     </div>
   );
 }

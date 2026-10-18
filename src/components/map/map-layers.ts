@@ -46,6 +46,7 @@ const source = (map: MLMap, id: string) => map.getSource(id) as GeoJSONSource | 
 /** Adds the thematic sources and layers; static layers load by URL so parsing happens in the map worker. */
 export function addThematicLayers(map: MLMap, origin: string): void {
   map.addSource("regions", { type: "geojson", data: `${origin}/data/regiones.geojson` });
+  map.addSource("peru-boundary", { type: "geojson", data: `${origin}/data/peru-outline.geojson` });
   map.addSource("rivers", { type: "geojson", data: `${origin}/data/rios-quebradas.geojson` });
   map.addSource("network", { type: "geojson", data: `${origin}/data/red-vial-nacional.geojson`, tolerance: 0.5 });
   for (const id of ["corridor", "corridor-rain", "corridor-stretches", "corridor-km", "corridor-places", "profile-point"]) {
@@ -68,7 +69,36 @@ export function addThematicLayers(map: MLMap, origin: string): void {
     id: "regions-line",
     type: "line",
     source: "regions",
-    paint: { "line-color": PALETTE.boundary, "line-width": 0.8, "line-opacity": 0.55 },
+    paint: {
+      "line-color": PALETTE.boundary,
+      "line-width": 0.8,
+      // At national zoom the country perimeter should read as one shape; reveal
+      // department divisions only after a user zooms into regional detail.
+      "line-opacity": ["interpolate", ["linear"], ["zoom"], 3, 0, 7, 0, 8, 0.2, 10, 0.34, 12, 0.42],
+    },
+  });
+  const boundaryLayout = { "line-cap": "round", "line-join": "round" } as const;
+  map.addLayer({
+    id: "peru-boundary-casing",
+    type: "line",
+    source: "peru-boundary",
+    layout: boundaryLayout,
+    paint: {
+      "line-color": "#182a30",
+      "line-opacity": 0.88,
+      "line-width": ["interpolate", ["linear"], ["zoom"], 3, 3.2, 8, 4.2],
+    },
+  });
+  map.addLayer({
+    id: "peru-boundary-line",
+    type: "line",
+    source: "peru-boundary",
+    layout: boundaryLayout,
+    paint: {
+      "line-color": "#f6f0d7",
+      "line-opacity": 0.98,
+      "line-width": ["interpolate", ["linear"], ["zoom"], 3, 1.8, 8, 2.3],
+    },
   });
   // Riparian tree canopy corridor along rivers and quebradas
   map.addLayer({
@@ -116,8 +146,8 @@ export function addThematicLayers(map: MLMap, origin: string): void {
     id: "network-line",
     type: "line",
     source: "network",
-    layout: { "line-cap": "round", "line-join": "round" },
-    paint: { "line-color": "#6b6255", "line-width": ["interpolate", ["linear"], ["zoom"], 4, 0.6, 8, 1.5, 12, 2.8], "line-opacity": 0.7 },
+    layout: { visibility: "none", "line-cap": "round", "line-join": "round" },
+    paint: { "line-color": "#6b6255", "line-width": ["interpolate", ["linear"], ["zoom"], 4, 0.45, 8, 1.1, 12, 2], "line-opacity": 0.42 },
   });
   addCorridorLayers(map);
   for (const layer of createLabelLayers()) map.addLayer(layer);
@@ -273,9 +303,9 @@ export function applyLayerState(map: MLMap, layers: LayerState): void {
   map.setPaintProperty(
     "network-line",
     "line-color",
-    layers.networkColorBy === "condition" ? conditionColor : layers.satellite ? "#d97706" : "#6b6255",
+    layers.networkColorBy === "condition" ? conditionColor : layers.satellite ? "#d9d4c8" : "#6b6255",
   );
-  map.setPaintProperty("network-line", "line-opacity", layers.satellite ? layers.networkOpacity * 0.75 : layers.networkOpacity);
+  map.setPaintProperty("network-line", "line-opacity", layers.networkOpacity);
   map.setLayoutProperty("rivers-line", "visibility", visibility(layers.rivers));
   map.setPaintProperty("rivers-line", "line-opacity", layers.riversOpacity);
   if (map.getLayer("rivers-canopy")) {

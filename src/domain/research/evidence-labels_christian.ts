@@ -11,6 +11,7 @@ export const TOPIC_LABELS: Record<ResearchTopic, string> = {
 
 export const KIND_LABELS = {
   forecast: "Pronóstico",
+  inventory: "Inventario de zonas críticas",
   observation: "Observación",
   report: "Reporte histórico",
   scenario: "Escenario",
@@ -72,6 +73,13 @@ export const RECORD_LABELS: Record<string, { title: string; summary: string }> =
 };
 
 export const FIELD_LABELS: Record<string, string> = {
+  hazardType: "Peligro inventariado",
+  exposedElements: "Elementos expuestos",
+  zoneLevel: "Nivel de zona crítica (INGEMMET)",
+  noticeNumber: "Número de aviso SENAMHI",
+  mapDay: "Mapa diario del aviso",
+  sourceGeometryId: "Identificador de geometría oficial",
+  recommendation: "Recomendación en la capa oficial",
   rainfallMm: "Lluvia (mm)",
   rainyDays: "Días con lluvia",
   monthlyAnomalyPct: "Anomalía mensual (%)",

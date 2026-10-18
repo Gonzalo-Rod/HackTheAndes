@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { WeeklyStateSchema } from "./weekly-incident-report_christian";
+import { EvidenceCoordinatesSchema, EvidenceGeometrySchema } from "./evidence-geometry_christian";
 
 export const RESEARCH_TOPICS = ["water", "frost", "landslides", "rain", "agriculture", "pests"] as const;
 export const ResearchTopicSchema = z.enum(RESEARCH_TOPICS);
@@ -8,8 +9,7 @@ export type ResearchTopic = z.infer<typeof ResearchTopicSchema>;
 
 export const HttpUrlSchema = z.url().refine((value) => /^https?:\/\//i.test(value), "Expected an HTTP(S) URL");
 export const EvidenceDateSchema = z.union([z.iso.date(), z.iso.datetime({ offset: true })]);
-export const EvidenceKindSchema = z.enum(["forecast", "observation", "report", "scenario", "surveillance"]);
-const CoordinatesSchema = z.tuple([z.number().min(-180).max(180), z.number().min(-90).max(90)]);
+export const EvidenceKindSchema = z.enum(["forecast", "inventory", "observation", "report", "scenario", "surveillance"]);
 const FactSchema = z.object({ label: z.string(), value: z.string() });
 export const ForecastDaySchema = z.object({
   date: z.iso.date(),
@@ -31,7 +31,9 @@ export const EnvironmentalRecordSchema = z.object({
   sourceUrl: HttpUrlSchema,
   sourceStatus: z.string(),
   recordType: z.string(),
-  coordinates: CoordinatesSchema.nullable(),
+  coordinates: EvidenceCoordinatesSchema.nullable(),
+  geometry: EvidenceGeometrySchema.nullable(),
+  geometrySourceUrl: HttpUrlSchema.nullable(),
   coordinatePrecision: z.string().nullable(),
   issuedAt: EvidenceDateSchema.nullable(),
   startsAt: EvidenceDateSchema.nullable(),
@@ -76,5 +78,6 @@ export const ResearchCatalogSchema = z.object({
   weeklyReports: z.array(WeeklyStateSchema),
   documents: z.array(ResearchDocumentSchema),
   warnings: z.array(z.string()),
+  archivedRecordCount: z.number().int().nonnegative(),
 });
 export type ResearchCatalog = z.infer<typeof ResearchCatalogSchema>;

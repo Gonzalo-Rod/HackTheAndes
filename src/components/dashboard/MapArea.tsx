@@ -22,6 +22,7 @@ type PassThrough = Pick<
   MapViewProps,
   | "alerts"
   | "evidence"
+  | "evidenceAreas"
   | "selectedEvidenceId"
   | "initialScope"
   | "onSelectEvidence"
@@ -61,6 +62,7 @@ export function MapArea({
   now,
   alerts,
   evidence,
+  evidenceAreas,
   selectedEvidenceId,
   initialScope,
   onSelectEvidence,
@@ -93,6 +95,8 @@ export function MapArea({
         ref={mapRef}
         alerts={alerts}
         evidence={evidence}
+        evidenceAreas={evidenceAreas}
+        evidenceNow={now ?? 0}
         selectedEvidenceId={selectedEvidenceId}
         initialScope={initialScope}
         onSelectEvidence={onSelectEvidence}

@@ -4,9 +4,10 @@ import {
   ResearchSourceInputSchema,
   SourceFileSchema,
 } from "@/contracts/research-input_christian";
-import { ResearchCatalogSchema, type ResearchCatalog } from "@/contracts/research_christian";
+import { EnvironmentalRecordSchema, ResearchCatalogSchema, type ResearchCatalog } from "@/contracts/research_christian";
 import { WeeklyStateSchema } from "@/contracts/weekly-incident-report_christian";
 import { normalizeEvidence } from "@/domain/research/normalize-evidence_christian";
+import { isVerifiedMapRecord } from "@/domain/research/map-evidence_christian";
 import type { ResearchFiles } from "@/integrations/research-files/research-files_christian";
 import { logger } from "@/lib/logger";
 
@@ -24,6 +25,7 @@ export function createResearchCatalogService(dependencies: { loadFiles: () => Pr
         weeklyReports: [],
         documents: files.documents,
         warnings,
+        archivedRecordCount: 0,
       };
       const evidence = EvidenceFileSchema.safeParse(files.evidence);
       let rejected = 0;
@@ -33,12 +35,18 @@ export function createResearchCatalogService(dependencies: { loadFiles: () => Pr
         const ids = new Set<string>();
         for (const feature of evidence.data.features) {
           const parsed = EvidenceFeatureSchema.safeParse(feature);
-          const record = parsed.success ? normalizeEvidence(parsed.data) : null;
-          if (!record || ids.has(record.id)) {
+          const normalized = parsed.success ? normalizeEvidence(parsed.data) : null;
+          const checked = EnvironmentalRecordSchema.safeParse(normalized);
+          if (!checked.success || ids.has(checked.data.id)) {
             rejected++;
             continue;
           }
+          const record = checked.data;
           ids.add(record.id);
+          if (!isVerifiedMapRecord(record)) {
+            catalog.archivedRecordCount++;
+            continue;
+          }
           catalog.records.push(record);
         }
       } else warnings.push("Las evidencias ambientales no superaron la validación y no se muestran.");
@@ -69,6 +77,7 @@ export function createResearchCatalogService(dependencies: { loadFiles: () => Pr
         sources: catalog.sources.length,
         weeklyReports: catalog.weeklyReports.length,
         rejected,
+        archived: catalog.archivedRecordCount,
       });
       return ResearchCatalogSchema.parse(catalog);
     },

@@ -10,6 +10,7 @@ import type { LngLat } from "@/domain/geo/measure";
 import type { RainSegment } from "@/domain/weather/rain";
 import type { CorridorAlert } from "@/domain/road-alerts/corridor-placement";
 import type { EvidencePoint } from "@/domain/research/evidence-state_christian";
+import type { EnvironmentalRecord } from "@/contracts/research_christian";
 
 import { createBaseStyle, TERRAIN_SOURCE } from "./basemap-style";
 import { createCameraController, PERU_BOUNDS, type CameraController, type ScreenPadding } from "./map-camera";
@@ -23,8 +24,8 @@ import {
   setProfilePoint,
   startFlowAnimation,
 } from "./map-layers";
-import { cullMarkers, syncMarkers, type MarkerEntry } from "./map-markers";
-import { syncEvidenceMarkers } from "./evidence-markers_christian";
+import { cullMarkers, disposeMarkers, syncMarkers, type RoadMarkerEntry } from "./map-markers";
+import { addEnvironmentLayers, selectEnvironmentFeature, syncEnvironmentLayers } from "./environment-layers_christian";
 
 export type MapViewHandle = Omit<CameraController, "stopAll" | "flyToAlert"> & {
   flyToAlert: (alert: RoadAlert) => void;
@@ -35,6 +36,8 @@ export interface MapViewProps {
   ref?: Ref<MapViewHandle>;
   alerts: RoadAlert[];
   evidence: EvidencePoint[];
+  evidenceAreas: EnvironmentalRecord[];
+  evidenceNow: number;
   selectedEvidenceId: string | null;
   initialScope: Scope;
   hiddenIds: ReadonlySet<string>;
@@ -71,8 +74,7 @@ export function MapView(props: MapViewProps) {
   const mapRef = useRef<MLMap | null>(null);
   const markerClassRef = useRef<typeof import("maplibre-gl").Marker | null>(null);
   const cameraRef = useRef<CameraController | null>(null);
-  const markersRef = useRef(new Map<string, MarkerEntry>());
-  const evidenceMarkersRef = useRef(new Map<string, MarkerEntry>());
+  const markersRef = useRef(new Map<string, RoadMarkerEntry>());
   const readyRef = useRef(false);
   const [mapReady, setMapReady] = useState(false);
   const latest = useRef(props);
@@ -87,7 +89,6 @@ export function MapView(props: MapViewProps) {
     let stopFlow: (() => void) | null = null;
     let tooltip: Popup | null = null;
     const markers = markersRef.current;
-    const evidenceMarkers = evidenceMarkersRef.current;
 
     async function init() {
       const ml = await import("maplibre-gl");
@@ -135,6 +136,7 @@ export function MapView(props: MapViewProps) {
         map.resize();
         map.fitBounds(PERU_BOUNDS, { padding: 24, animate: false });
         addThematicLayers(map, window.location.origin);
+        addEnvironmentLayers(map);
         if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) stopFlow = startFlowAnimation(map);
         readyRef.current = true;
         setMapReady(true);
@@ -146,7 +148,6 @@ export function MapView(props: MapViewProps) {
         cullFrame = requestAnimationFrame(() => {
           cullFrame = 0;
           cullMarkers(map, markers);
-          cullMarkers(map, evidenceMarkers);
         });
       });
       map.on("rotate", () => latest.current.onBearingChange(map.getBearing(), map.getPitch()));
@@ -157,7 +158,9 @@ export function MapView(props: MapViewProps) {
       map.on("mousedown", stopOnUserInput);
       map.on("touchstart", stopOnUserInput);
       map.on("wheel", stopOnUserInput);
-      map.on("click", () => latest.current.onSelect(null));
+      map.on("click", (event) => {
+        if (!selectEnvironmentFeature(map, event, (id) => latest.current.onSelectEvidence(id))) latest.current.onSelect(null);
+      });
 
       // Hovering the national network shows the official road code, surface and condition.
       tooltip = new ml.Popup({ closeButton: false, closeOnClick: false, className: "pr-map-tip", offset: 10, maxWidth: "260px" });
@@ -196,10 +199,7 @@ export function MapView(props: MapViewProps) {
       cancelled = true;
       stopFlow?.();
       cameraRef.current?.stopAll();
-      markers.forEach(({ marker }) => marker.remove());
-      markers.clear();
-      evidenceMarkers.forEach(({ marker }) => marker.remove());
-      evidenceMarkers.clear();
+      disposeMarkers(markers);
       mapRef.current?.remove();
       mapRef.current = null;
       readyRef.current = false;
@@ -282,14 +282,15 @@ export function MapView(props: MapViewProps) {
 
   useEffect(() => {
     const map = mapRef.current;
-    const MarkerClass = markerClassRef.current;
-    if (!map || !MarkerClass) return;
-    syncEvidenceMarkers(map, MarkerClass, evidenceMarkersRef.current, {
-      points: layers.environment ? props.evidence : [],
-      selectedId: props.selectedEvidenceId,
-      onSelect: (id) => latest.current.onSelectEvidence(id),
-    });
-  }, [props.evidence, props.selectedEvidenceId, layers.environment, mapReady]);
+    if (!map || !readyRef.current) return;
+    syncEnvironmentLayers(
+      map,
+      layers.environment ? props.evidenceAreas : [],
+      layers.environment ? props.evidence : [],
+      props.selectedEvidenceId,
+      props.evidenceNow,
+    );
+  }, [props.evidence, props.evidenceAreas, props.selectedEvidenceId, props.evidenceNow, layers.environment, mapReady]);
 
   useImperativeHandle(ref, (): MapViewHandle => {
     const camera = () => cameraRef.current;

@@ -125,12 +125,12 @@ export function LayersPanel({
       />
       <LayerRow
         label="Referencias ambientales"
-        hint={`${environmentalCount} registros con coordenadas · no son incidentes viales`}
+        hint={`${environmentalCount} referencias oficiales; zonas críticas y pronósticos, no eventos confirmados`}
         freshness={{
           text: environmentalRetrievedAt ? `Captura revisada: ${formatDateTime(environmentalRetrievedAt)}` : "Investigación no disponible",
           warn: !environmentalRetrievedAt,
         }}
-        swatch={<span className="pr-evidence-key" />}
+        swatch={<span className="pr-evidence-key pr-evidence-key--critical">!</span>}
         checked={layers.environment}
         onToggle={(environment) => set({ environment })}
       />

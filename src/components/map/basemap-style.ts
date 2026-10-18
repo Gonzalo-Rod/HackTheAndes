@@ -273,27 +273,6 @@ export function createBaseStyle(): StyleSpecification {
         },
       },
       {
-        id: "boundary-region",
-        type: "line",
-        source: "omt",
-        "source-layer": "boundary",
-        filter: ["all", ["==", ["get", "admin_level"], 4], ["!=", ["get", "maritime"], 1]],
-        minzoom: 5,
-        paint: { "line-color": PALETTE.boundary, "line-opacity": 0.4, "line-width": 0.7, "line-dasharray": [3, 2] },
-      },
-      {
-        id: "boundary-country",
-        type: "line",
-        source: "omt",
-        "source-layer": "boundary",
-        filter: ["all", ["==", ["get", "admin_level"], 2], ["!=", ["get", "maritime"], 1]],
-        paint: {
-          "line-color": PALETTE.boundary,
-          "line-opacity": 0.85,
-          "line-width": ["interpolate", ["linear"], ["zoom"], 3, 0.8, 8, 1.6],
-        },
-      },
-      {
         id: "road-casing",
         type: "line",
         source: "omt",
