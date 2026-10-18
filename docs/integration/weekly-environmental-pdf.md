@@ -109,3 +109,20 @@ Local visual QA includes an explicitly synthetic layout sample and a DEMO PDF
 generated from the persisted assessment. These are not phone-delivery evidence.
 Hosted attachment receipt, automatic scheduled execution and out-of-window notice
 delivery must each be recorded separately; template submission is not approval.
+
+### Recorded participant verification (October 17, 2026)
+
+Implementation `01a7011` passed all nine CI/deployment checks and is READY on the
+shared Preview. The participant completed separate weekly consent, requested
+`PDF`, and confirmed that the attachment arrived and opened; Zavu independently
+reported `delivered` with message type `document`. This is a consenting participant
+DEMO check, not external-user traction. The new notice template was rechecked as
+`pending`, so out-of-window delivery is still unverified.
+
+The n8n workflow is published and read back active in `America/Lima`. Manual DEMO
+execution `57` reached the authenticated endpoint with zero weekly recipients;
+after opt-in, execution `58` sent one PDF through the automation path. Manual
+execution is not evidence that a Monday schedule has already fired. Offline
+validation passed 365 application tests and 255 package tests; the database suite
+passed 22 checks, including a regression for selecting only files belonging to
+current weekly consent. Both unsigned hosted job and PDF requests returned 401.

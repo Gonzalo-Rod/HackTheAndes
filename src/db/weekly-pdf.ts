@@ -20,7 +20,7 @@ export function createWeeklyPdfRepository(pool: Pool, encryption: { key: string;
     },
     async latestPending(subscriptionId: string, nowMs: number) {
       const r = await pool.query(
-        "select period from private.weekly_pdf_deliveries where subscription_id=$1 and status='pending' and expires_at>$2 order by created_at desc limit 1",
+        "select d.period from private.weekly_pdf_deliveries d join public.subscriptions s on s.id=d.subscription_id join private.weekly_pdf_preferences p on p.subscription_id=s.id where d.subscription_id=$1 and d.status='pending' and d.expires_at>$2 and s.opted_out_at is null and p.consent_at=d.consent_at and p.subscription_consent_at=s.consent_at order by d.created_at desc limit 1",
         [subscriptionId, new Date(nowMs)],
       );
       return r.rowCount ? reportPeriodSchema.parse(r.rows[0]?.period) : null;

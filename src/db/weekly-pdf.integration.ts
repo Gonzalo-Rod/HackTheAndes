@@ -90,6 +90,18 @@ it("weekly-only opt-out leaves short alerts active and revokes pending PDF acces
   expect(rows.rows[0].status).toBe("cancelled");
   expect(await repository.pdf(rows.rows[0].id, now)).toBeNull();
 });
+it("ignores pending files from replaced weekly consent and rejects a stale worker target", async () => {
+  await act({ kind: "weeklyPrepare", code: "ABCDEF12" });
+  await act({ kind: "weeklyActivate", code: "ABCDEF12" });
+  const [target] = await repository.targets(range.geometryRevision, key);
+  if (!target) throw new Error("Missing replacement consent");
+  await pool.query("update private.weekly_pdf_deliveries set status='pending',consent_at=$2 where subscription_id=$1", [
+    target.id,
+    new Date(now - 1),
+  ]);
+  expect(await repository.latestPending(target.id, now)).toBeNull();
+  expect(await repository.claim(target.id, syntheticWeeklyReport().period, now, new Date(now - 1))).toBeNull();
+});
 it("BAJA cancels weekly consent and short alerts; real-data counts are sanitized", async () => {
   await act({ kind: "weeklyPrepare", code: "ABCDEF12" });
   await act({ kind: "weeklyActivate", code: "ABCDEF12" });
