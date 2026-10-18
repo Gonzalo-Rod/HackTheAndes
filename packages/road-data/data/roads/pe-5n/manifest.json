@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "roadCode": "PE-5N",
+  "geometryRevision": "02e9a58aaad1f63fd050946da9e9febfd1a480e5fc348f71f5846c28cf5c3033",
+  "measuredLengthKm": 1541.2044800290382,
+  "segmentCount": 1542,
+  "kilometerCalibration": "unverified",
+  "files": {
+    "source.json": "142f1182b9342bb28f3b74b9959172c4b5bba65a328f7b3a7e2f918c75d05957",
+    "corridor.geojson": "8652d51877d5d3e22e488a3fd8904de571a8dab33a54811a7441e062a76e5d58",
+    "segments-1km.geojson": "8c88e48c8198c7280dc5a823c9505f225f61cea211730e72d65a525d70ebb3a1",
+    "diagnostics.json": "9790ea135dcad86eabd2e92a139a137b6060fe4522cf40754de12ab1fe55c220"
+  }
+}

@@ -33,8 +33,10 @@ delivery cooldown; see `docs/integration/driver-notifications.md`.
 **Latest scope update (2026-10-18):** the incident dashboard covers all of Peru:
 national SUTRAN alerts lead, community reports carry an explicit "No confirmado" source
 filter, and nationwide Provías emergencies give display-only history (see
-`docs/data/national-road-events.md`). Climate exposure, WhatsApp routes and database
-ingestion remain on the PE-22 pilot corridor. Company monitors can register continuous
+`docs/data/national-road-events.md`). Climate exposure covers every road listed in the
+reviewed registry `packages/road-data/data/roads/registry.json` (prepared with `road:prepare`,
+loaded with `road:import`; see `docs/data/multi-road-forecast.md`). WhatsApp routes, route watch,
+the gazetteer and database ingestion remain on the PE-22 pilot corridor. Company monitors can register continuous
 route watches or truck trips that trigger urgent calls; see
 `docs/integration/route-watch.md`.
 Payments, Qatom and Yape remain outside the participant-authorized implementation

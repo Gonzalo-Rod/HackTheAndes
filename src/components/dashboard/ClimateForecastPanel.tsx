@@ -20,19 +20,50 @@ export function ClimateForecastPanel({ forecast, visible, onToggle, onFocus, sup
   useEffect(() => {
     selectedRef.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
   }, [forecast.selected?.id]);
-  const { projection, window: active, view } = forecast;
+  const { projection, window: active, roads, coverage } = forecast;
+  const roadNames = new Map(roads.map((road) => [road.roadCode, road.name]));
+  const view =
+    forecast.views[forecast.roadFilter ?? roads[0]?.roadCode ?? ""] ?? Object.values(forecast.views).find((item) => item) ?? null;
+  const readyRoads = coverage.filter((road) => road.state === "ready").length;
   return (
     <section className="pr-panel pr-forecast" aria-labelledby="forecast-title">
       <header className="pr-panel__head">
         <h2 id="forecast-title">Posibles huaicos</h2>
         <span className="pr-forecast__tag">ESTIMACIÓN</span>
       </header>
-      <p className="pr-forecast__note">Corredor piloto: Carretera Central (PE-22). El resto del país aún no tiene esta estimación.</p>
+      {roads.length > 0 && (
+        <p className="pr-forecast__note">
+          {readyRoads} de {roads.length} carreteras con estimación vigente:{" "}
+          {coverage.map((road, index) => (
+            <span
+              key={road.roadCode}
+              className={road.state === "ready" ? undefined : "pr-muted"}
+              title={road.state === "ready" ? undefined : road.message}
+            >
+              {index > 0 && " · "}
+              {road.roadCode}
+              {road.state !== "ready" && " (sin datos vigentes)"}
+            </span>
+          ))}
+          . Las demás vías nacionales aún no tienen esta estimación; no implica ausencia de peligro.
+        </p>
+      )}
       {projection.capturedAt && <p className="pr-forecast__note">Lluvia actualizada: {formatDateTime(projection.capturedAt)} (Perú).</p>}
       <p className="pr-forecast__intro">
         Lluvia prevista sobre terreno susceptible. No son huaicos reportados ni probabilidades calculadas.
       </p>
       <div className="pr-forecast__controls">
+        <label>
+          Carretera
+          <select value={forecast.roadFilter ?? ""} onChange={(event) => forecast.setRoadFilter(event.target.value || null)}>
+            <option value="">Todas ({roads.length})</option>
+            {roads.map((road) => (
+              <option key={road.roadCode} value={road.roadCode}>
+                {road.roadCode} · {road.name}
+              </option>
+            ))}
+          </select>
+        </label>
         <label>
           Horizonte
           <select value={forecast.horizonHours} onChange={(event) => forecast.setHorizonHours(event.target.value === "72" ? 72 : 24)}>
@@ -100,8 +131,9 @@ export function ClimateForecastPanel({ forecast, visible, onToggle, onFocus, sup
                   <span>{event.category === "high_attention" ? "Atención alta" : "Atención prioritaria"}</span>
                 </header>
                 <h3>
-                  Km aprox. {event.startKm.toFixed(1)}–{event.endKm.toFixed(1)}
+                  {event.roadCode} · Km aprox. {event.startKm.toFixed(1)}–{event.endKm.toFixed(1)}
                 </h3>
+                {roadNames.get(event.roadCode) && <p className="pr-forecast__road">{roadNames.get(event.roadCode)}</p>}
                 <p className="pr-forecast__time">
                   <Icon name="clock" size={12} /> {formatForecastWindow(event)}
                 </p>
@@ -118,7 +150,9 @@ export function ClimateForecastPanel({ forecast, visible, onToggle, onFocus, sup
                 {event.reasons.includes("antecedent_wet_weather") && (
                   <p className="pr-forecast__note">La lluvia acumulada previa también eleva la atención.</p>
                 )}
-                <p className="pr-forecast__note">Distancias del mapa, no km oficiales. Ubicación y vínculo con la cuenca aproximados.</p>
+                <p className="pr-forecast__note">
+                  Distancia desde el inicio de la vía en el mapa, no km oficiales. Ubicación y vínculo con la cuenca aproximados.
+                </p>
                 <button type="button" className="pr-btn" disabled={!forecast.map.bounds[event.id]} onClick={() => onFocus(event)}>
                   <Icon name="pin" size={13} /> Ver tramo en mapa
                 </button>

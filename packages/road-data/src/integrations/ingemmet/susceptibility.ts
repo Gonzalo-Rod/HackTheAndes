@@ -8,6 +8,22 @@ import type { Position } from "../../contracts/road-geometry.ts";
 const BASE =
   "https://geocatminnube.ingemmet.gob.pe/arcgis/rest/services/SERV_SUSCEPTIBLE_MOV_MASA_REGIONAL/MapServer/1";
 const LABELS = ["Muy Baja", "Baja", "Media", "Alta", "Muy Alta"] as const;
+// Each ArcGIS query takes ~10 s; a few in flight keeps long roads tractable without hammering the server.
+const MAX_CONCURRENT_QUERIES = 4;
+
+/** Maps in input order with at most `limit` calls in flight. */
+async function mapInOrder<T, R>(items: readonly T[], limit: number, call: (item: T) => Promise<R>) {
+  const results = new Array<R>(items.length);
+  let next = 0;
+  async function worker() {
+    while (next < items.length) {
+      const index = next++;
+      results[index] = await call(items[index] as T);
+    }
+  }
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
+  return results;
+}
 const idsSchema = z.object({ objectIds: z.array(z.number().int().nonnegative()).max(100_000) });
 const resultSchema = z.object({
   type: z.literal("FeatureCollection"),
@@ -59,7 +75,7 @@ export function createSusceptibilityProvider(transport: JsonTransport) {
           type: "esriGeometryMultipoint",
           value: { points: samples.slice(offset, offset + 30), spatialReference: { wkid: 4326 } },
         });
-      for (const geometry of geometries) {
+      const idQueries = await mapInOrder(geometries, MAX_CONCURRENT_QUERIES, async (geometry) => {
         const params = new URLSearchParams({
           f: "json",
           where: "1=1",
@@ -73,13 +89,17 @@ export function createSusceptibilityProvider(transport: JsonTransport) {
         const response = idsSchema.parse(
           await transport.getJson(url, { provider: "ingemmet", requestId }),
         );
-        response.objectIds.forEach((id) => identifiers.add(id));
-        sourceUrls.push(url);
+        return { url, objectIds: response.objectIds };
+      });
+      for (const query of idQueries) {
+        query.objectIds.forEach((id) => identifiers.add(id));
+        sourceUrls.push(query.url);
       }
-      const features = [];
       const ids = [...identifiers].sort((a, b) => a - b);
-      for (let offset = 0; offset < ids.length; offset += 100) {
-        const batch = ids.slice(offset, offset + 100);
+      const batches = Array.from({ length: Math.ceil(ids.length / 100) }, (_, index) =>
+        ids.slice(index * 100, index * 100 + 100),
+      );
+      const pages = await mapInOrder(batches, MAX_CONCURRENT_QUERIES, async (batch) => {
         const params = new URLSearchParams({
           f: "geojson",
           objectIds: batch.join(","),
@@ -99,8 +119,9 @@ export function createSusceptibilityProvider(transport: JsonTransport) {
           new Set(response.features.map((f) => f.properties.objectid)).size !== batch.length
         )
           throw new Error("Incomplete susceptibility polygon response");
-        features.push(
-          ...response.features.map((f) =>
+        return {
+          url,
+          features: response.features.map((f) =>
             susceptibilityFeatureSchema.parse({
               type: "Feature",
               id: f.properties.objectid,
@@ -113,9 +134,10 @@ export function createSusceptibilityProvider(transport: JsonTransport) {
               },
             }),
           ),
-        );
-        sourceUrls.push(url);
-      }
+        };
+      });
+      const features = pages.flatMap((page) => page.features);
+      sourceUrls.push(...pages.map((page) => page.url));
       return {
         type: "FeatureCollection" as const,
         features,

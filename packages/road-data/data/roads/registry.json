@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "roads": [
+    {
+      "roadCode": "PE-16A",
+      "name": "CARRETERA PATIVILCA - CAJATAMBO - OYON",
+      "geometryRevision": "82ced754a69646d09216672b44644955e8a3d4bde47991b5c19c1b6ce7e1256c",
+      "measuredLengthKm": 204.4346479188752,
+      "segmentCount": 205,
+      "catchmentCount": 14,
+      "weatherGridCount": 16,
+      "preparedAt": "2026-10-18T07:51:01.692Z"
+    },
+    {
+      "roadCode": "PE-22",
+      "name": "CARRETERA CENTRAL",
+      "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+      "measuredLengthKm": 173.87272270170928,
+      "segmentCount": 174,
+      "catchmentCount": 13,
+      "weatherGridCount": 24,
+      "preparedAt": "2026-10-18T07:10:44.600Z"
+    },
+    {
+      "roadCode": "PE-5N",
+      "name": "CARRETERA LONGITUDINAL DE LA SELVA NORTE",
+      "geometryRevision": "02e9a58aaad1f63fd050946da9e9febfd1a480e5fc348f71f5846c28cf5c3033",
+      "measuredLengthKm": 1541.2044800290382,
+      "segmentCount": 1542,
+      "catchmentCount": 154,
+      "weatherGridCount": 166,
+      "preparedAt": "2026-10-18T08:21:43.136Z"
+    }
+  ]
+}

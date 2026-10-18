@@ -3,7 +3,7 @@ import { mkdir, readFile, writeFile, rename, rm } from "node:fs/promises";
 import { resolve, join } from "node:path";
 import { createFetchJsonTransport } from "../src/integrations/http/json-transport.ts";
 import { createSutranRoadNetworkAdapter } from "../src/integrations/sutran/road-network.ts";
-import { preparePe22Geometry } from "../src/services/prepare-pe22.ts";
+import { prepareRoadGeometry } from "../src/services/prepare-road-geometry.ts";
 import { roadNetworkSnapshotSchema } from "../src/contracts/road-geometry.ts";
 
 const outputDir = resolve(import.meta.dirname, "../data/pe22");
@@ -18,11 +18,14 @@ if (args.some((arg) => arg !== "--offline")) {
     const sourcePath = join(outputDir, "source.json");
     const input: unknown = args.includes("--offline")
       ? JSON.parse(await readFile(sourcePath, "utf8"))
-      : await createSutranRoadNetworkAdapter({ transport: createFetchJsonTransport() }).fetchPe22({
-          requestId,
-        });
+      : await createSutranRoadNetworkAdapter({ transport: createFetchJsonTransport() }).fetchRoad(
+          "PE-22",
+          {
+            requestId,
+          },
+        );
     const snapshot = roadNetworkSnapshotSchema.parse(input);
-    const result = preparePe22Geometry(snapshot);
+    const result = prepareRoadGeometry(snapshot);
     if (!result.ok) {
       console.error(
         JSON.stringify({

@@ -2,7 +2,7 @@ import { randomUUID, createHash } from "node:crypto";
 import { readFile, writeFile, rename, rm } from "node:fs/promises";
 import { createFetchJsonTransport } from "../src/integrations/http/json-transport.ts";
 import { createOpenMeteoElevationProvider } from "../src/integrations/open-meteo/elevation.ts";
-import { preparePe22Geometry } from "../src/services/prepare-pe22.ts";
+import { prepareRoadGeometry } from "../src/services/prepare-road-geometry.ts";
 import { preparePe22Elevation } from "../src/services/prepare-pe22-elevation.ts";
 import {
   elevationSnapshotSchema,
@@ -51,7 +51,7 @@ function printSnapshot(
 }
 
 try {
-  const geometry = preparePe22Geometry(
+  const geometry = prepareRoadGeometry(
     JSON.parse(await readFile(new URL("../data/pe22/source.json", import.meta.url), "utf8")),
   );
   if (!geometry.ok) throw new Error("Source road geometry is unavailable");

@@ -13,6 +13,7 @@ export async function prepareCatchmentWeather({
   requestId,
   now,
   samplePlan,
+  snapDegrees,
 }: {
   catchments: unknown;
   provider: WeatherProvider;
@@ -20,16 +21,25 @@ export async function prepareCatchmentWeather({
   requestId: string;
   now: Date;
   samplePlan?: WeatherCapture | undefined;
+  /**
+   * Rounds samples to the model grid before requesting, so each grid cell costs one location call.
+   * With `cell_selection=nearest` the provider returns the same cell either way.
+   */
+  snapDegrees?: number | undefined;
 }): Promise<WeatherCapture> {
   const catchments = catchmentSnapshotSchema.parse(input);
   const points: [number, number][] = [];
   const indexes = new Map<string, number>();
+  const snap = (value: number) =>
+    snapDegrees ? Number((Math.round(value / snapDegrees) * snapDegrees).toFixed(6)) : value;
+  const requestKey = (sample: { longitude: number; latitude: number }) =>
+    `${snap(sample.longitude)},${snap(sample.latitude)}`;
   for (const feature of catchments.features)
     for (const sample of feature.properties.samplePoints) {
-      const key = `${sample.longitude},${sample.latitude}`;
+      const key = requestKey(sample);
       if (!indexes.has(key)) {
         indexes.set(key, points.length);
-        points.push([sample.longitude, sample.latitude]);
+        points.push([snap(sample.longitude), snap(sample.latitude)]);
       }
     }
   if (
@@ -76,7 +86,7 @@ export async function prepareCatchmentWeather({
         }
       } else
         for (const sample of feature.properties.samplePoints) {
-          const index = indexes.get(`${sample.longitude},${sample.latitude}`);
+          const index = indexes.get(requestKey(sample));
           if (index === undefined) throw new Error("Missing weather sample index");
           const grid = response.series[index];
           if (!grid) throw new Error("Missing weather sample grid");

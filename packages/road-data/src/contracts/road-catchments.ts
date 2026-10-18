@@ -80,6 +80,8 @@ export const catchmentSnapshotSchema = z
     diagnostics: z.object({
       crossingCount: z.number().int().positive(),
       containingBasinCount: z.number().int().nonnegative().optional(),
+      // Crossings whose upstream union exceeded the area cap and use only their local basin.
+      localOnlyLargeRiverCount: z.number().int().positive().optional(),
       coarseBasinCount: z.number().int().positive(),
       linkedSegments: z.number().int().positive(),
     }),

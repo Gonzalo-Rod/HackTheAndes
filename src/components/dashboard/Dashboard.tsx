@@ -126,9 +126,11 @@ export function Dashboard({ initialResearch = null }: { initialResearch?: Resear
   };
 
   const evidenceRecords = evidence.state.data ? evidence.allRecords : null;
+  // The official evidence catalog covers the PE-22 surroundings only.
+  const supportApplies = forecast.roadFilter === null || forecast.roadFilter === "PE-22";
   const support = useMemo(
-    () => (forecast.window ? forecastSupport(forecast.window, evidenceRecords) : null),
-    [forecast.window, evidenceRecords],
+    () => (forecast.window && supportApplies ? forecastSupport(forecast.window, evidenceRecords) : null),
+    [forecast.window, evidenceRecords, supportApplies],
   );
 
   const loading = alertsState.status === "loading";

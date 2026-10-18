@@ -3,8 +3,8 @@ import { randomBytes } from "node:crypto";
 import { afterAll, test } from "vitest";
 import { createDatabasePool } from "../../src/db/pool.ts";
 import { loadDatabaseConfiguration } from "../../src/config/env.ts";
-import { buildPe22Corridor } from "../../src/domain/road-data/build-corridor.ts";
-import { persistPe22Geometry } from "../../src/db/import-geometry.ts";
+import { buildRoadCorridor } from "../../src/domain/road-data/build-corridor.ts";
+import { persistRoadGeometry } from "../../src/db/import-geometry.ts";
 import { preparePe22Elevation } from "../../src/services/prepare-pe22-elevation.ts";
 import { importPe22Elevation } from "../../src/services/import-pe22-elevation.ts";
 import { shortSnapshot } from "../geometry/support.ts";
@@ -15,9 +15,9 @@ async function fixture() {
   const revision = randomBytes(32).toString("hex");
   revisions.push(revision);
   const source = shortSnapshot();
-  const geometry = buildPe22Corridor(source, () => revision);
+  const geometry = buildRoadCorridor(source, () => revision);
   assert.ok(geometry.ok);
-  await persistPe22Geometry(pool, source, geometry.value);
+  await persistRoadGeometry(pool, source, geometry.value);
   const elevation = await preparePe22Elevation({
     segments: geometry.value.segments,
     clock: () => new Date("2026-10-17T21:00:00Z"),

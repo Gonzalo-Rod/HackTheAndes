@@ -86,6 +86,19 @@ it("selects the newest source capture rather than a late retry of older weather"
   );
   expect(await repository.readLatest("f".repeat(64))).toBeNull();
 });
+it("prunes assessments older than the retention cutoff but always keeps the newest", async () => {
+  // Saved so far: `record` and one capture an hour older.
+  const cutoff = new Date(
+    Date.parse(record.assessment.sources.weatherCapturedAt) + 1,
+  ).toISOString();
+  expect(await repository.prune(revision, cutoff)).toBe(1);
+  expect((await repository.readLatest(revision))?.assessment.assessmentId).toBe(
+    record.assessment.assessmentId,
+  );
+  const future = new Date(Date.parse(cutoff) + 86_400_000).toISOString();
+  expect(await repository.prune(revision, future)).toBe(0);
+  expect(await repository.readLatest(revision)).not.toBeNull();
+});
 it("rejects corrupt payloads before insertion and checks stored content hashes on read", async () => {
   const bad = structuredClone(record);
   bad.assessment.policySha256 = "0".repeat(64);

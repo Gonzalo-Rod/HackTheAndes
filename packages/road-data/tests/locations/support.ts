@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { preparePe22Geometry } from "../../src/services/prepare-pe22.ts";
+import { prepareRoadGeometry } from "../../src/services/prepare-road-geometry.ts";
 import { shortSnapshot } from "../geometry/support.ts";
 import {
   landmarkSourceSchema,
@@ -10,7 +10,7 @@ import {
 import { landmarkQueryUrl } from "../../src/integrations/mtc/landmarks.ts";
 
 export function geometry() {
-  const built = preparePe22Geometry(shortSnapshot());
+  const built = prepareRoadGeometry(shortSnapshot());
   assert.ok(built.ok);
   return built.value;
 }

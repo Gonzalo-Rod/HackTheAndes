@@ -17,6 +17,8 @@ const nextConfig: NextConfig = {
       "./node_modules/@peruroad/road-data/data/events/pe22-events.json",
       "./node_modules/@peruroad/road-data/data/events/national-events.json",
       "./node_modules/@peruroad/road-data/data/exposure/*.gz",
+      "./node_modules/@peruroad/road-data/data/roads/registry.json",
+      "./node_modules/@peruroad/road-data/data/roads/*/exposure.json.gz",
     ],
     // Research documents are read at request time; retain them in serverless bundles.
     "/": researchFiles,

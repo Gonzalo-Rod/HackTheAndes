@@ -114,12 +114,10 @@ export async function fetchCommunityIncidents(): Promise<IncidentFeed> {
     "reportes comunitarios",
   );
 }
-export async function fetchSegments(): Promise<SegmentCollection> {
-  return parseOrThrow(
-    SegmentsSchema,
-    await getJson("/api/segments", { provider: PROVIDER, operation: "dashboard.segments", retries: 0 }),
-    "segmentos",
-  );
+/** Without a road code the pilot corridor is returned. */
+export async function fetchSegments(roadCode?: string): Promise<SegmentCollection> {
+  const url = roadCode ? `/api/segments?${new URLSearchParams({ road: roadCode })}` : "/api/segments";
+  return parseOrThrow(SegmentsSchema, await getJson(url, { provider: PROVIDER, operation: "dashboard.segments", retries: 0 }), "segmentos");
 }
 export async function fetchStats(): Promise<PublicStats> {
   return parseOrThrow(
@@ -162,12 +160,22 @@ export async function fetchCatchmentWeather() {
   );
 }
 
-export async function fetchExposure() {
+export async function fetchExposure(roadCode: string) {
   const { ExposureLayerSchema } = await import("@/contracts/exposure");
+  const query = new URLSearchParams({ horizonHours: "72", road: roadCode });
   return parseOrThrow(
     ExposureLayerSchema,
-    await getJson("/api/exposure?horizonHours=72", { provider: PROVIDER, operation: "dashboard.exposure", retries: 0 }),
-    "exposición climática",
+    await getJson(`/api/exposure?${query}`, { provider: PROVIDER, operation: "dashboard.exposure", retries: 0 }),
+    `exposición climática ${roadCode}`,
+  );
+}
+
+export async function fetchForecastRoads() {
+  const { ForecastRoadsResponseSchema } = await import("@/contracts/forecast-roads");
+  return parseOrThrow(
+    ForecastRoadsResponseSchema,
+    await getJson("/api/exposure/roads", { provider: PROVIDER, operation: "dashboard.forecastRoads", retries: 1 }),
+    "carreteras con estimación",
   );
 }
 

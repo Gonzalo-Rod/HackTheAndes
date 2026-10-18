@@ -3,6 +3,7 @@ import type { ExposureLayer } from "@/contracts/exposure";
 export interface ForecastEvent {
   id: string;
   type: "possible_huaico";
+  roadCode: string;
   category: "priority" | "high_attention";
   validFrom: string;
   validUntil: string;
@@ -32,6 +33,10 @@ export interface ForecastProjection {
 const CONTIGUOUS_TOLERANCE_KM = 0.000001;
 /** Longest stretch one item may name, so each card points at a concrete place to watch. */
 export const MAX_FORECAST_EVENT_KM = 10;
+/** Segment ids are `<road code>:<geometry revision>:<index>`, as built by the road data package. */
+export function roadCodeOf(segmentId: string): string {
+  return segmentId.split(":")[0] ?? segmentId;
+}
 export function projectForecastEvents(view: ExposureLayer | null, nowMs: number, horizonHours: 24 | 72): ForecastProjection {
   const base = { geometryRevision: view?.data.geometryRevision ?? null, capturedAt: view?.data.sources.weatherCapturedAt ?? null };
   const unavailable = (message: string): ForecastProjection => ({ ...base, state: "unavailable", message, windows: [] });
@@ -92,6 +97,7 @@ export function projectForecastEvents(view: ExposureLayer | null, nowMs: number,
       window.events.push({
         id: `forecast:${reference.validFrom}:${segment.segmentId}:${assessment.category}`,
         type: "possible_huaico",
+        roadCode: roadCodeOf(segment.segmentId),
         category: assessment.category,
         validFrom: reference.validFrom,
         validUntil: reference.validUntil,

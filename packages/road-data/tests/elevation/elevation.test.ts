@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { test } from "vitest";
-import { preparePe22Geometry } from "../../src/services/prepare-pe22.ts";
+import { prepareRoadGeometry } from "../../src/services/prepare-road-geometry.ts";
 import {
   planElevationSamples,
   validateElevationSnapshot,
@@ -14,7 +14,7 @@ import {
 import { shortSnapshot, capturedSnapshot } from "../geometry/support.ts";
 
 function segments() {
-  const result = preparePe22Geometry(shortSnapshot());
+  const result = prepareRoadGeometry(shortSnapshot());
   assert.ok(result.ok);
   return result.value.segments;
 }
@@ -51,7 +51,7 @@ test("samples follow curved geometry instead of averaging its endpoints", () => 
 });
 
 test("the captured corridor produces one midpoint per segment without changing the base contract", () => {
-  const geometry = preparePe22Geometry(capturedSnapshot());
+  const geometry = prepareRoadGeometry(capturedSnapshot());
   assert.ok(geometry.ok);
   const before = JSON.stringify(geometry.value.segments);
   const plan = planElevationSamples(geometry.value.segments);
@@ -165,7 +165,7 @@ test("unavailable or misaligned providers cannot produce a confirmed snapshot", 
 });
 
 test("the captured elevation cache matches the current road revision and sampling plan", () => {
-  const geometry = preparePe22Geometry(capturedSnapshot());
+  const geometry = prepareRoadGeometry(capturedSnapshot());
   assert.ok(geometry.ok);
   const plan = planElevationSamples(geometry.value.segments);
   assert.ok(plan.ok);

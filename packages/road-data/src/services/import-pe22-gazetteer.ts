@@ -6,7 +6,7 @@ import {
   type LocationResult,
 } from "../contracts/road-locations.ts";
 import { persistGazetteer, type GazetteerImportSummary } from "../db/gazetteer.ts";
-import { preparePe22Geometry } from "./prepare-pe22.ts";
+import { prepareRoadGeometry } from "./prepare-road-geometry.ts";
 import { validateGazetteerSnapshot } from "./prepare-pe22-gazetteer.ts";
 
 export async function importPe22Gazetteer(
@@ -33,7 +33,7 @@ export async function importPe22Gazetteer(
       },
     };
   const source = z.object({ source_snapshot: z.unknown() }).parse(result.rows[0]);
-  const geometry = preparePe22Geometry(source.source_snapshot);
+  const geometry = prepareRoadGeometry(source.source_snapshot);
   if (
     !geometry.ok ||
     geometry.value.corridor.properties.geometryRevision !== snapshot.geometryRevision

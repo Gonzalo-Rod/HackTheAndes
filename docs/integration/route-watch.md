@@ -11,7 +11,7 @@ phone to call on the company page (`/empresa`). Two modes exist:
   hours after the estimated arrival.
 
 The monitor sees active watches with their call counts and can stop one. Continuous watches need
-migration `20261018060000_route_watch_window.sql` (adds `trips.watch_until`); apply it before
+migration `20261018080000_route_watch_window.sql` (adds `trips.watch_until`); apply it before
 deploying this code, because listing and evaluating watches read that column.
 
 ## Endpoints

@@ -1,30 +1,29 @@
-import { readFile, mkdir, writeFile, rename, rm } from "node:fs/promises";
+import { mkdir, writeFile, rename, rm } from "node:fs/promises";
 import { randomUUID } from "node:crypto";
-import { gunzipSync, gzipSync } from "node:zlib";
+import { gzipSync } from "node:zlib";
 import { loadBundledCatchments } from "../hydrobasins/snapshot.ts";
 import { readBundledHazards } from "../hydrobasins/model-input-files.ts";
-import { readBundledWeather } from "../open-meteo/weather-files.ts";
-import { displaySegmentsSchema } from "../../contracts/road-geometry.ts";
+import { readWeatherFile } from "../open-meteo/weather-files.ts";
+import { displaySegmentsSchema, PILOT_ROAD_CODE } from "../../contracts/road-geometry.ts";
 import { validateExposureRecord } from "../../domain/exposure/record.ts";
-const bundledPath = new URL("../../../data/exposure/latest.json.gz", import.meta.url);
-export async function loadBundledExposureSources() {
+import { readRoadJson, roadFiles } from "../road-files.ts";
+export async function loadBundledExposureSources(roadCode: string = PILOT_ROAD_CODE) {
+  const files = roadFiles(roadCode);
   const [weather, hazards, catchments, segments] = await Promise.all([
-    readBundledWeather("live.json.gz"),
-    readBundledHazards(),
-    loadBundledCatchments(),
-    readFile(new URL("../../../data/pe22/segments-1km.geojson", import.meta.url), "utf8").then(
-      (v) => displaySegmentsSchema.parse(JSON.parse(v)),
-    ),
+    readWeatherFile(files.weatherLive),
+    readBundledHazards(roadCode),
+    loadBundledCatchments(roadCode),
+    readRoadJson(files.segments).then((value) => displaySegmentsSchema.parse(value)),
   ]);
   return { weather, hazards, catchments, segments };
 }
-export async function readBundledExposure() {
-  const data = await readFile(bundledPath);
-  return validateExposureRecord(
-    JSON.parse(gunzipSync(data, { maxOutputLength: 8 * 1024 * 1024 }).toString("utf8")),
-  );
+export async function readBundledExposure(roadCode: string = PILOT_ROAD_CODE) {
+  return validateExposureRecord(await readRoadJson(roadFiles(roadCode).exposure));
 }
-export async function writeExposureRecord(input: unknown, path: URL = bundledPath) {
+export async function writeExposureRecord(
+  input: unknown,
+  path: URL = roadFiles(PILOT_ROAD_CODE).exposure,
+) {
   const record = validateExposureRecord(input);
   await mkdir(new URL("./", path), { recursive: true });
   const temporary = new URL(`${path.href}.${randomUUID()}.tmp`);

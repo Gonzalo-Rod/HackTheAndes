@@ -150,7 +150,9 @@ establish real-driver transcription accuracy.
 - `src/domain/alerts/`: deterministic change/range/bundle rules with injected time.
 - `src/services/alerts/` and `src/db/alert-deliveries.ts`: source eligibility,
   consent recheck, delivery leases, retry keys, cooldown and durable checkpoints.
-- `POST /api/jobs/climate`: hourly weather refresh on C's reviewed grid/spatial plan;
+- `POST /api/jobs/climate`: hourly weather refresh on C's reviewed grid/spatial plan
+  for every road in the forecast registry (one road failing never blocks the others;
+  the response lists each road and keeps PE-22's fields at the top level);
   stores weather and a new reproducible immutable assessment. Failures retain the
   previous dated data. No static hazard map is silently represented as refreshed.
 - `POST /api/jobs/alerts`: collect eligible changes and evaluate active subscriptions.

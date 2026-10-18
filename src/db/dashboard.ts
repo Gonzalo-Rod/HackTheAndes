@@ -43,7 +43,7 @@ export function createDashboardRepository(pool: Pick<Pool, "query">, geometryRev
         fetchedAt: new Date().toISOString(),
       });
     },
-    async segments() {
+    async segments(revision: string = geometryRevision) {
       const result = await pool.query(
         `select jsonb_build_object('type','FeatureCollection','geometryRevision',r.id,
         'distanceReference','geometry_distance','retrievedAt',to_char(r.retrieved_at at time zone 'UTC','YYYY-MM-DD"T"HH24:MI:SS.MS"Z"'),
@@ -51,7 +51,7 @@ export function createDashboardRepository(pool: Pick<Pool, "query">, geometryRev
         'properties',jsonb_build_object('startDistanceKm',s.distance_from_origin_start_km,'endDistanceKm',s.distance_from_origin_end_km,
         'elevationM',s.elevation_m,'officialKmStart',s.official_km_start,'officialKmEnd',s.official_km_end,'kilometerCalibration',s.kilometer_calibration)) order by s.distance_from_origin_start_km),'[]'::jsonb)) as data
         from public.geometry_revisions r join public.segments s on s.geometry_revision=r.id where r.id=$1 group by r.id`,
-        [geometryRevision],
+        [revision],
       );
       return SegmentsSchema.parse(result.rows[0]?.data);
     },

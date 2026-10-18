@@ -17,6 +17,8 @@
     "prepack": "npm run build",
     "test:exports": "node --input-type=module -e \"await import('@peruroad/road-data'); await import('@peruroad/road-data/contracts'); await import('@peruroad/road-data/ingestion'); await import('@peruroad/road-data/geometry'); await import('@peruroad/road-data/geometry/contracts'); await import('@peruroad/road-data/database'); await import('@peruroad/road-data/jobs'); await import('@peruroad/road-data/elevation'); await import('@peruroad/road-data/elevation/contracts'); await import('@peruroad/road-data/locations'); await import('@peruroad/road-data/locations/contracts'); await import('@peruroad/road-data/context'); await import('@peruroad/road-data/context/contracts'); await import('@peruroad/road-data/catchments'); await import('@peruroad/road-data/catchments/contracts'); await import('@peruroad/road-data/weather'); await import('@peruroad/road-data/weather/contracts'); await import('@peruroad/road-data/model-inputs'); await import('@peruroad/road-data/model-inputs/spatial-contracts'); await import('@peruroad/road-data/model-inputs/event-contracts'); await import('@peruroad/road-data/training'); await import('@peruroad/road-data/training/contracts'); await import('@peruroad/road-data/exposure'); await import('@peruroad/road-data/exposure/contracts'); await import('@peruroad/road-data/road-history'); await import('@peruroad/road-data/road-history/contracts'); await import('@peruroad/road-data/official-warnings');\"",
     "pe22:prepare": "node scripts/prepare-pe22.ts",
+    "road:prepare": "node scripts/prepare-road.ts",
+    "road:import": "node --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/import-road.ts",
     "senamhi:check": "node scripts/check-senamhi.ts",
     "db:migrate": "node --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/migrate-database.ts",
     "supabase:configure": "node --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/bootstrap-supabase.ts",
@@ -195,6 +197,8 @@
     "data/events",
     "data/spatial",
     "data/exposure",
-    "data/pe22/segments-1km.geojson"
+    "data/pe22/segments-1km.geojson",
+    "data/roads/registry.json",
+    "data/roads/*/exposure.json.gz"
   ]
 }

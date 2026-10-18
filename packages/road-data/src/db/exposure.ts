@@ -26,6 +26,8 @@ function readRow(input: unknown): ExposureRecord {
 export interface ExposureRepository {
   save(input: unknown): Promise<{ state: "stored" | "preserved"; record: ExposureRecord }>;
   readLatest(geometryRevision: string): Promise<ExposureRecord | null>;
+  /** Deletes a revision's assessments captured before `capturedBefore`, always keeping the newest one. */
+  prune(geometryRevision: string, capturedBefore: string): Promise<number>;
 }
 export function createExposureRepository(pool: Pick<Pool, "query">): ExposureRepository {
   return {
@@ -63,6 +65,18 @@ export function createExposureRepository(pool: Pick<Pool, "query">): ExposureRep
         [geometryRevision, exposureHash(DEFAULT_EXPOSURE_POLICY)],
       );
       return result.rows[0] ? readRow(result.rows[0]) : null;
+    },
+    async prune(geometryRevision, capturedBefore) {
+      hash.parse(geometryRevision);
+      z.iso.datetime({ offset: true }).parse(capturedBefore);
+      const result = await pool.query(
+        `delete from public.climate_exposure_assessments
+         where geometry_revision=$1 and weather_captured_at<$2
+           and id <> (select id from public.climate_exposure_assessments where geometry_revision=$1
+                      order by weather_captured_at desc,assessed_at desc,id desc limit 1)`,
+        [geometryRevision, capturedBefore],
+      );
+      return result.rowCount ?? 0;
     },
   };
 }
