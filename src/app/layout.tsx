@@ -15,7 +15,7 @@ const geist = Geist({ variable: "--font-geist", subsets: ["latin"], display: "sw
 const jetbrains = JetBrains_Mono({ variable: "--font-jetbrains", subsets: ["latin"], display: "swap", weight: ["400", "500"] });
 
 export const metadata: Metadata = {
-  title: "PeruRoad Climate · Clima, territorio y accesos",
+  title: "GeoMora · Clima, territorio y accesos",
   description:
     "Estado vial de SUTRAN y evidencias oficiales de clima y territorio: agua, heladas, lluvias, laderas, agricultura y plagas, con fuentes, fechas y límites de cobertura.",
 };

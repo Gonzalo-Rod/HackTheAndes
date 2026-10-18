@@ -76,7 +76,7 @@ export function TopBar(props: TopBarProps) {
       <div className="pr-brand">
         <LogoMark />
         <div className="pr-brand__text">
-          <span className="pr-brand__name">PeruRoad Climate</span>
+          <span className="pr-brand__name">GeoMora</span>
           <span className="pr-brand__sub">Monitoreo vial y ambiental · Outamina</span>
         </div>
       </div>

@@ -21,7 +21,7 @@ export function addForecastLayers(map: MLMap) {
   map.addSource("climate-forecast", {
     type: "geojson",
     data: { type: "FeatureCollection", features: [] },
-    attribution: "PeruRoad · exposición estimada · Open-Meteo / INGEMMET",
+    attribution: "GeoMora · exposición estimada · Open-Meteo / INGEMMET",
   });
   map.addSource("climate-forecast-anchors", { type: "geojson", data: { type: "FeatureCollection", features: [] } });
   // Estimated, not reported: violet and blurred, unlike the solid red rings of reported huaicos.
