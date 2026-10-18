@@ -39,6 +39,22 @@ It retains weather time, rule version, assessment ID, geometry revision, sources
 and unknown kilometers. Stale/unusable assessments have no actionable categories
 or fresh forecast totals. A stored PDF never silently refreshes.
 
+The driver-facing rainfall table uses approximate road-kilometer ranges instead
+of HydroBASINS identifiers, with separate **report-period** and **following-three-day**
+columns in millimeters. It uses the maximum across all linked drainage areas for
+each period, matching the exposure policy; missing values in any required area
+remain unavailable. Only contiguous stretches with equal displayed rainfall are
+combined, preserving gaps and the selected stretch boundaries. These rainfall
+figures are not water depth on the road or confirmed huaico predictions.
+
+The optional `outlook.rainfallStretches` field extends the existing v1 JSON
+contract without invalidating stored reports. New PDFs show plain Spanish,
+explicit missing data, named sources and approximate kilometers; detailed source
+URLs, assessment ID, rule version and geometry revision remain in the stored JSON
+and PDF metadata. Existing stored PDF bytes are immutable; send `PDF` after the
+new deployment to request the revised format. A legacy JSON report without road
+rainfall detail renders a clear unavailable message instead of internal codes.
+
 Archive start and incomplete monitoring are explicit. Zero records do not prove
 zero events; neither a full week of monitoring nor closure duration is inferred
 from source validity dates. Closure hours stay unavailable until an independently
@@ -100,7 +116,8 @@ of remaining file availability. Previously downloaded files cannot be revoked.
 ## Verification
 
 Offline tests cover Lima week boundaries, fractional-distance clipping, unknown
-coverage, missing rainfall, source mismatch, summary grounding, PDF output,
+coverage, missing rainfall, clipped kilometer ranges, maximum-across-area rainfall,
+legacy report compatibility, source mismatch, summary grounding, PDF output,
 signature tampering/expiry, window handling and provider failures/retries. Opt-in
 database tests cover independent typed consent, encrypted destinations, concurrent
 leases, replay/retry identity, RLS, weekly-only opt-out and global cancellation.

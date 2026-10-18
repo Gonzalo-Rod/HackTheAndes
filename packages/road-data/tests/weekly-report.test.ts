@@ -40,8 +40,12 @@ describe("weekly environmental reporting", () => {
       1,
     );
     expect(report.outlook.kilometers.unknown).toBeGreaterThan(0);
+    expect(report.outlook.rainfallStretches?.length).toBeGreaterThan(0);
+    expect(
+      report.outlook.rainfallStretches?.every((s) => s.startKm >= 0.25 && s.endKm <= 10.5),
+    ).toBe(true);
     expect(report.observations.closureHours).toBeNull();
-    expect(report.limitations.join(" ")).toContain("Cero registros no acredita ausencia");
+    expect(report.limitations.join(" ")).toContain("cero avisos no significa");
   });
   it("makes stale exposure unknown and never serves its rain as a fresh outlook", async () => {
     const input = await inputs();
@@ -51,6 +55,7 @@ describe("weekly environmental reporting", () => {
     const r = buildEnvironmentalReport(input);
     expect(r.outlook.kilometers.unknown).toBeCloseTo(10.25, 1);
     expect(r.outlook.catchments.every((c) => c.rainMmNext72h === null)).toBe(true);
+    expect(r.outlook.rainfallStretches?.every((s) => s.rainMmNext72h === null)).toBe(true);
   });
   it("does not redistribute missing historical rainfall or fabricate an earlier archive", async () => {
     const input = await inputs();
@@ -58,6 +63,30 @@ describe("weekly environmental reporting", () => {
     const r = buildEnvironmentalReport(input);
     expect(r.observations.firstRecordedAt).toBeNull();
     expect(r.outlook.catchments.every((c) => c.rainMmPeriod === null)).toBe(true);
+  });
+  it("reads stored v1 reports without the new road rainfall display", async () => {
+    const report = buildEnvironmentalReport(await inputs());
+    const { rainfallStretches: _stretches, ...legacyOutlook } = report.outlook;
+    expect(environmentalReportSchema.safeParse({ ...report, outlook: legacyOutlook }).success).toBe(
+      true,
+    );
+  });
+  it("rejects rainfall stretches outside the subscription or across overlapping ranges", async () => {
+    const report = buildEnvironmentalReport(await inputs());
+    const parse = (rainfallStretches: unknown) =>
+      environmentalReportSchema.safeParse({
+        ...report,
+        outlook: { ...report.outlook, rainfallStretches },
+      }).success;
+    const rain = { rainMmPeriod: null, rainMmNext72h: 4 };
+    expect(parse([{ ...rain, startKm: 0, endKm: 1 }])).toBe(false);
+    expect(
+      parse([
+        { ...rain, startKm: 1, endKm: 2 },
+        { ...rain, startKm: 1.5, endKm: 3 },
+      ]),
+    ).toBe(false);
+    expect(parse([{ ...rain, startKm: 2, endKm: 2 }])).toBe(false);
   });
   it("rejects geometry mismatches and summary claims outside computed facts", async () => {
     const input = await inputs();

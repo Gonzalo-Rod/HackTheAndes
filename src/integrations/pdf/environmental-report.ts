@@ -24,6 +24,15 @@ export async function renderEnvironmentalPdf(raw: EnvironmentalReport): Promise<
   const pdf = await PDFDocument.create();
   pdf.setTitle("PeruRoad Climate - Informe ambiental semanal");
   pdf.setAuthor("PeruRoad Climate");
+  // Provenance stays available without exposing internal identifiers on driver-facing pages.
+  pdf.setSubject(
+    JSON.stringify({
+      assessmentId: report.outlook.assessmentId,
+      geometryRevision: report.range.geometryRevision,
+      policyVersion: report.outlook.policyVersion,
+      sources: report.sources,
+    }),
+  );
   pdf.setCreationDate(new Date(report.generatedAt));
   pdf.setModificationDate(new Date(report.generatedAt));
   const regular = await pdf.embedFont(StandardFonts.Helvetica),
@@ -96,29 +105,29 @@ export async function renderEnvironmentalPdf(raw: EnvironmentalReport): Promise<
     9,
     muted,
   );
-  paragraph(`Periodo del archivo: ${formatReportDate(report.period.start)} - ${formatReportDate(report.period.end)} (Perú).`, 9, muted);
+  paragraph(`Periodo del informe: ${formatReportDate(report.period.start)} - ${formatReportDate(report.period.end)} (Perú).`, 9, muted);
   paragraph(`Generado: ${formatReportDate(report.generatedAt)} (Perú).`, 9, muted);
   page.drawRectangle({ x: MARGIN - 8, y: y - 40, width: WIDTH - 2 * MARGIN + 16, height: 42, color: pale });
   y -= 13;
-  paragraph("EXPOSICIÓN ESTIMADA. No es una predicción de huaico ni una garantía de vía segura.", 9, teal, true);
+  paragraph("ATENCIÓN POR LLUVIA Y TERRENO. Riesgo estimado; no confirma un huaico ni una vía segura.", 9, teal, true);
   y -= 10;
   heading("Resumen");
   for (const id of report.summaryIds) {
     const fact = report.facts.find((f) => f.id === id);
     if (fact) paragraph(`- ${fact.text}`);
   }
-  heading("Cobertura del archivo");
+  heading("Qué incluyen los avisos");
   paragraph(
-    `Primer sondeo SUTRAN completo registrado: ${report.observations.firstRecordedAt ? formatReportDate(report.observations.firstRecordedAt) : "sin evidencia disponible"}. La fecha no demuestra monitoreo continuo.`,
+    `Primer registro completo de SUTRAN disponible: ${report.observations.firstRecordedAt ? formatReportDate(report.observations.firstRecordedAt) : "sin evidencia disponible"}. No implica que hayamos vigilado la vía desde entonces sin interrupciones.`,
     9,
   );
   paragraph(
-    "Los conteos corresponden a registros incorporados por PeruRoad durante el periodo, no a un inventario completo de desastres. Comunidad y SUTRAN pueden describir el mismo evento.",
+    "Contamos los avisos que recibimos durante el periodo. No conocemos todos los eventos ocurridos; un aviso de la comunidad puede referirse al mismo evento que una alerta de SUTRAN.",
     9,
   );
-  heading("Pronóstico capturado y cobertura espacial");
+  heading("Dónde prestar más atención");
   paragraph(
-    `Captura de lluvia: ${formatReportDate(report.outlook.capturedAt)}. Estado al generar: ${report.outlook.state === "ready" ? "vigente" : report.outlook.state === "stale" ? "desactualizado" : "no disponible"}.`,
+    `Pronóstico consultado: ${formatReportDate(report.outlook.capturedAt)}. Al preparar el informe estaba: ${report.outlook.state === "ready" ? "vigente" : report.outlook.state === "stale" ? "desactualizado" : "no disponible"}.`,
     9,
   );
   paragraph(
@@ -126,40 +135,98 @@ export async function renderEnvironmentalPdf(raw: EnvironmentalReport): Promise<
     9,
   );
   const labels = {
-    routine: "Sin señal elevada bajo estas reglas",
+    routine: "Sin señal elevada en esta evaluación",
     watch: "Atención",
     priority: "Atención prioritaria",
     high_attention: "Atención alta",
-    unknown: "Sin evaluación suficiente/vigente",
+    unknown: "Sin datos suficientes o actualizados",
   };
   for (const key of Object.keys(labels) as (keyof typeof labels)[])
     paragraph(`${labels[key]}: ${report.outlook.kilometers[key].toFixed(2)} km`, 9);
-  heading("Lluvia por cuenca asociada (modelada)", 80 + report.outlook.catchments.length * 19);
+  heading("Lluvia estimada por tramo", 255);
   paragraph(
-    "Periodo del archivo / siguientes 72 h desde la captura. Un guion indica datos incompletos o no vigentes; los valores no se suman entre cuencas.",
+    "Es la lluvia estimada en zonas que pueden aportar agua a estos tramos. No es la altura del agua en la carretera ni confirma que habrá un huaico.",
+    9,
+  );
+  paragraph(
+    "Los mm indican cantidad de lluvia. 'Sin datos' indica información incompleta o vencida, no ausencia de lluvia. Las comas separan tramos distintos.",
     9,
     muted,
   );
-  if (!report.outlook.catchments.length) paragraph("Sin cuencas asociadas verificadas para este tramo.");
-  for (const c of report.outlook.catchments)
+  paragraph(
+    `Pronóstico de 3 días: ${formatReportDate(report.outlook.validFrom)} - ${formatReportDate(report.outlook.validUntil)} (Perú).`,
+    9,
+    muted,
+  );
+  const stretches = report.outlook.rainfallStretches;
+  if (!stretches) paragraph("Este informe anterior no incluye lluvia por km. Envía PDF al bot para pedir uno nuevo.", 9);
+  else if (!stretches.length) paragraph("No tenemos zonas vinculadas a este tramo para estimar su lluvia.", 9);
+  else {
+    function rainfallHeader() {
+      page.drawRectangle({ x: MARGIN - 5, y: y - 7, width: WIDTH - 2 * MARGIN + 10, height: 23, color: pale });
+      for (const [text, x] of [
+        ["Tramo aprox.", MARGIN],
+        ["Periodo del informe (mm)", 280],
+        ["3 días siguientes (mm)", 417],
+      ] as const)
+        page.drawText(text, { x, y, size: 9, font: bold, color: teal });
+      y -= 25;
+    }
+    // Equal rainfall can share a table row; separated kilometer ranges stay explicit.
+    const rows = new Map<string, { ranges: string[]; rainMmPeriod: number | null; rainMmNext72h: number | null }>();
+    for (const stretch of stretches) {
+      const key = JSON.stringify([stretch.rainMmPeriod, stretch.rainMmNext72h]);
+      const row = rows.get(key) ?? { ranges: [], rainMmPeriod: stretch.rainMmPeriod, rainMmNext72h: stretch.rainMmNext72h };
+      row.ranges.push(`${stretch.startKm.toFixed(1)} a ${stretch.endKm.toFixed(1)}`);
+      rows.set(key, row);
+    }
+    rainfallHeader();
+    for (const row of rows.values()) {
+      const lines = ["Km"];
+      for (const range of row.ranges) {
+        const last = lines.length - 1;
+        const next = `${lines[last]}${lines[last] === "Km" ? " " : ", "}${range}`;
+        if (regular.widthOfTextAtSize(next, 9) > 205) {
+          lines[last] += ",";
+          lines.push(range);
+        } else lines[last] = next;
+      }
+      // Bounded chunks keep long lists on the page, repeating their rainfall values.
+      const maxLinesPerRow = 12;
+      for (let offset = 0; offset < lines.length; offset += maxLinesPerRow) {
+        const chunk = lines.slice(offset, offset + maxLinesPerRow);
+        const rowHeight = Math.max(20, chunk.length * 14 + 6);
+        if (y - rowHeight < 65) {
+          newPage();
+          paragraph("Lluvia estimada por tramo (continuación)", 11, teal, true);
+          rainfallHeader();
+        }
+        for (const [index, line] of chunk.entries())
+          page.drawText(line, { x: MARGIN, y: y - index * 14, size: 9, font: regular, color: ink });
+        for (const [text, x] of [
+          [row.rainMmPeriod === null ? "Sin datos" : row.rainMmPeriod.toFixed(1), 280],
+          [row.rainMmNext72h === null ? "Sin datos" : row.rainMmNext72h.toFixed(1), 417],
+        ] as const)
+          page.drawText(text, { x, y, size: 9, font: regular, color: ink });
+        y -= rowHeight;
+      }
+      page.drawLine({ start: { x: MARGIN, y: y + 5 }, end: { x: WIDTH - MARGIN, y: y + 5 }, color: pale, thickness: 0.5 });
+    }
+    y -= 5;
     paragraph(
-      `${c.id}: ${c.rainMmPeriod === null ? "-" : c.rainMmPeriod.toFixed(1) + " mm"} / ${c.rainMmNext72h === null ? "-" : c.rainMmNext72h.toFixed(1) + " mm"}`,
-      9,
+      "Solo se muestran tramos con zonas vinculadas. Si hay varias, se usa la mayor lluvia estimada; no se suman sus valores. Los km no son hitos oficiales.",
+      8,
+      muted,
     );
-  heading("Límites e interpretación", 225);
+  }
+  heading("Ten en cuenta", 225);
   for (const text of report.limitations) paragraph(`- ${text}`, 9, muted);
-  heading("Fuentes y trazabilidad");
-  for (const source of [
-    ...new Set(
-      report.sources.map((value) => {
-        const url = new URL(value);
-        return `${url.origin}${url.pathname}`;
-      }),
-    ),
-  ])
-    paragraph(source, 8, muted);
-  paragraph(`Evaluación: ${report.outlook.assessmentId}; reglas: ${report.outlook.policyVersion}`, 8, muted);
-  paragraph(`Geometría: ${report.range.geometryRevision}`, 8, muted);
+  heading("De dónde viene la información", 100);
+  paragraph(
+    "Clima: Open-Meteo (modelo IFS). Terreno: INGEMMET. Avisos viales: SUTRAN y comunidad. Zonas de drenaje: HydroBASINS, con asociación aproximada a la vía.",
+    9,
+    muted,
+  );
   paragraph(
     "SEMANAL BAJA cancela solo los informes. BAJA cancela informes y alertas. Este documento no contiene datos del remitente.",
     9,

@@ -20,7 +20,7 @@ export async function generateWeeklyReport(range: ReportRange, period: ReportPer
       ? report.limitations
       : [
           ...report.limitations,
-          "Resumen automático de respaldo: el servicio de selección de hechos no estuvo disponible; se muestran las frases calculadas por las reglas.",
+          "El resumen automático no estuvo disponible. Se muestran directamente los datos calculados para este informe.",
         ],
   });
   return { report, pdf: await renderEnvironmentalPdf(report) };

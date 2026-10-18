@@ -60,6 +60,9 @@ it("serializes delivery leases, preserves PDF retries and enforces browser isola
   if (!target) throw new Error("Missing synthetic consent");
   const report = syntheticWeeklyReport();
   report.range = range;
+  report.outlook.rainfallStretches = report.outlook.rainfallStretches?.filter(
+    (stretch) => stretch.startKm >= range.startKm && stretch.endKm <= range.endKm,
+  );
   const claims = await Promise.all([
     repository.claim(target.id, report.period, now, target.consentAt),
     repository.claim(target.id, report.period, now, target.consentAt),
@@ -73,6 +76,7 @@ it("serializes delivery leases, preserves PDF retries and enforces browser isola
   const retry = await repository.claim(target.id, report.period, now + 1, target.consentAt);
   expect(retry?.id).toBe(delivery.id);
   expect(retry?.report?.range).toEqual(range);
+  expect(retry?.report?.outlook.rainfallStretches).toEqual(report.outlook.rainfallStretches);
   expect(await repository.pdf(delivery.id, now)).not.toBeNull();
   const grants = await pool.query("select has_table_privilege('anon','private.weekly_pdf_deliveries','select') as allowed");
   expect(grants.rows[0].allowed).toBe(false);

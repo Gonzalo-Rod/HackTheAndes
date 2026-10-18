@@ -22,6 +22,10 @@ export function syntheticWeeklyReport(): EnvironmentalReport {
       validUntil: "2026-10-21T02:00:00.000Z",
       state: "ready",
       kilometers: { routine: 10, watch: 8, priority: 15, high_attention: 5, unknown: 136 },
+      rainfallStretches: [
+        { startKm: 0, endKm: 5, rainMmPeriod: null, rainMmNext72h: 12.5 },
+        { startKm: 10, endKm: 15, rainMmPeriod: 8.4, rainMmNext72h: null },
+      ],
       catchments: [{ id: "synthetic-catchment-01", rainMmPeriod: null, rainMmNext72h: 12.5 }],
     },
     facts: [

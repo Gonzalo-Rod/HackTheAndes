@@ -11,6 +11,16 @@ export const reportRangeSchema = z
     geometryRevision: z.string().regex(/^[a-f0-9]{64}$/),
   })
   .strict();
+export const reportRainfallStretchSchema = z
+  .object({
+    startKm: z.number().nonnegative(),
+    endKm: z.number().positive(),
+    rainMmPeriod: z.number().nonnegative().nullable(),
+    rainMmNext72h: z.number().nonnegative().nullable(),
+  })
+  .strict()
+  .refine((stretch) => stretch.endKm > stretch.startKm, "Invalid rainfall stretch");
+export type ReportRainfallStretch = z.infer<typeof reportRainfallStretchSchema>;
 export const environmentalReportSchema = z
   .object({
     schemaVersion: z.literal(1),
@@ -44,6 +54,8 @@ export const environmentalReportSchema = z
             unknown: z.number().nonnegative(),
           })
           .strict(),
+        // Optional so stored v1 reports remain readable during delivery retries.
+        rainfallStretches: z.array(reportRainfallStretchSchema).max(10_000).optional(),
         catchments: z
           .array(
             z
@@ -73,6 +85,18 @@ export const environmentalReportSchema = z
       report.range.startKm >= report.range.endKm
     )
       context.addIssue({ code: "custom", message: "Invalid report period or range" });
+    if (
+      report.outlook.rainfallStretches?.some(
+        (stretch, index, stretches) =>
+          stretch.startKm < report.range.startKm ||
+          stretch.endKm > report.range.endKm ||
+          (index > 0 && stretch.startKm < (stretches[index - 1]?.endKm ?? report.range.startKm)),
+      )
+    )
+      context.addIssue({
+        code: "custom",
+        message: "Rainfall stretches must be ordered within the report range",
+      });
     if (
       new Set(report.summaryIds).size !== report.summaryIds.length ||
       report.summaryIds.some((id) => !report.facts.some((fact) => fact.id === id))

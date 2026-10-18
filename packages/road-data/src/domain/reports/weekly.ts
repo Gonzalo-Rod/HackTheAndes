@@ -1,5 +1,6 @@
 import type { ExposureView } from "../../contracts/exposure-view.ts";
 import type { WeatherCapture } from "../../contracts/catchment-weather.ts";
+import { buildRainfallStretches } from "./rainfall.ts";
 import { aggregateRain } from "../weather/aggregate.ts";
 import {
   environmentalReportSchema,
@@ -80,23 +81,23 @@ export function buildEnvironmentalReport(input: {
   const facts = [
     {
       id: "official",
-      text: `Alertas ambientales SUTRAN incorporadas al archivo en el periodo: ${input.observations.officialEnvironmentalAlerts}. No equivale al total de eventos ocurridos.`,
+      text: `Alertas de SUTRAN por lluvias, derrumbes u otros peligros ambientales registradas en este periodo: ${input.observations.officialEnvironmentalAlerts}. El registro puede estar incompleto.`,
     },
     {
       id: "community",
-      text: `Incidentes ambientales comunitarios registrados: ${input.observations.communityEnvironmentalIncidents}. Son reportes no confirmados; no se suman a SUTRAN como eventos únicos.`,
+      text: `Avisos de la comunidad sobre peligros ambientales: ${input.observations.communityEnvironmentalIncidents}. Aún no están confirmados y pueden repetir alertas de SUTRAN.`,
     },
     {
       id: "exposure",
-      text: `Exposición climática estimada de atención prioritaria o alta en las próximas 72 h: ${elevatedKm.toFixed(2)} km del eje mapeado. No predice que ocurrirá un huaico.`,
+      text: `Tramos que requieren mayor atención por lluvia y terreno susceptible en los próximos 3 días: ${elevatedKm.toFixed(2)} km aproximados. Esto no confirma que ocurrirá un huaico.`,
     },
     {
       id: "coverage",
-      text: `Tramo sin evaluación suficiente o vigente: ${kilometers.unknown.toFixed(2)} km. Sin datos no significa sin peligro.`,
+      text: `Tramos sin datos suficientes o actualizados: ${kilometers.unknown.toFixed(2)} km. Sin datos no significa sin peligro.`,
     },
     {
       id: "rain",
-      text: `Cuencas asociadas al tramo: ${catchments.length}; con lluvia modelada completa para el periodo: ${catchments.filter((c) => c.rainMmPeriod !== null).length}.`,
+      text: `Lluvia estimada disponible para los próximos 3 días en ${catchments.filter((c) => c.rainMmNext72h !== null).length} de ${catchments.length} zonas vinculadas al tramo. Las zonas sin datos no se consideran secas.`,
     },
   ];
   return environmentalReportSchema.parse({
@@ -119,16 +120,17 @@ export function buildEnvironmentalReport(input: {
       state: exposure.meta.state,
       kilometers,
       catchments,
+      rainfallStretches: buildRainfallStretches(exposure.data.segments, range, catchments),
     },
     facts,
     summaryIds: facts.map((f) => f.id),
     limitations: [
-      "Cobertura del archivo parcial: el primer registro no demuestra vigilancia continua. Cero registros no acredita ausencia de eventos.",
-      "Las horas de cierre no están verificadas; no se calculan con fechas de vigencia ni con ausencia de alertas.",
-      "Lluvia modelada IFS, resolución aproximada de 25 km; no son mediciones de pluviómetros. Cuencas aproximadas y susceptibilidad regional INGEMMET.",
-      "Km medidos sobre la geometría disponible; no son hitos oficiales. Los tramos sin asociación o con datos vencidos permanecen desconocidos.",
-      "Las cifras de exposición describen el pronóstico capturado al generar el informe, no eventos ocurridos durante la semana. Este PDF no se actualiza automáticamente.",
-      "No certifica vía segura ni sustituye avisos oficiales o instrucciones de las autoridades.",
+      "El registro es parcial: cero avisos no significa que no hayan ocurrido eventos. No tenemos horas de cierre verificadas.",
+      "La lluvia es una estimación del modelo del tiempo, no una medición en la carretera. El modelo cubre zonas de unos 25 km; el terreno se evalúa con información regional de INGEMMET.",
+      "Las zonas que pueden aportar agua a la vía se han asociado de forma aproximada. La cantidad de lluvia por sí sola no confirma un huaico.",
+      "Los km son aproximados y no son los hitos oficiales de la carretera. Sin datos o con datos vencidos, el riesgo sigue siendo desconocido.",
+      "El pronóstico corresponde a las fechas indicadas, no a eventos ocurridos durante la semana. Este PDF no se actualiza al abrirlo.",
+      "Revisa los avisos oficiales y sigue a las autoridades. Este informe no garantiza que la vía esté segura.",
     ],
     sources: [
       ...new Set([...exposure.data.sources.sourceUrls, "https://alertasviales.sutran.gob.pe/"]),
