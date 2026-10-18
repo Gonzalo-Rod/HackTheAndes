@@ -1,0 +1,131 @@
+.platform-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 32px 24px 80px;
+  color: #233b39;
+  overflow-y: auto;
+  height: 100dvh;
+}
+.platform-page nav {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 36px;
+}
+.platform-page h1 {
+  font-size: clamp(28px, 5vw, 44px);
+  margin-bottom: 16px;
+}
+.platform-page p {
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+.platform-page section {
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid #d2d8cf;
+}
+.platform-page h2 {
+  margin-bottom: 20px;
+}
+.platform-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+.platform-metrics article {
+  display: grid;
+  padding: 20px;
+  gap: 8px;
+  border: 1px solid #d2d8cf;
+  border-radius: 12px;
+}
+.platform-metrics strong {
+  font-size: 32px;
+}
+.platform-form {
+  max-width: 520px;
+  display: grid;
+  gap: 18px;
+}
+.platform-form label {
+  display: grid;
+  gap: 8px;
+  line-height: 1.5;
+}
+.platform-form input {
+  border: 1px solid #a8b6ac;
+  padding: 12px;
+  border-radius: 8px;
+  background: #fff;
+  color: #233b39;
+  font: inherit;
+}
+.platform-form .platform-consent {
+  display: flex;
+  align-items: flex-start;
+}
+.platform-consent input {
+  margin-top: 6px;
+}
+.platform-form button {
+  justify-content: center;
+  padding: 14px;
+  border: 1px solid #a8b6ac;
+  cursor: pointer;
+}
+
+.pr-topbar__community {
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 11px;
+}
+@media (max-width: 1450px) {
+  .pr-topbar__community {
+    display: none;
+  }
+}
+
+.platform-form select {
+  border: 1px solid #a8b6ac;
+  padding: 12px;
+  border-radius: 8px;
+  background: #fff;
+  color: #233b39;
+  font: inherit;
+}
+.platform-modes {
+  display: grid;
+  gap: 8px;
+  border: 0;
+  padding: 0;
+}
+.platform-modes legend {
+  margin-bottom: 8px;
+}
+.platform-watches {
+  display: grid;
+  gap: 12px;
+  padding: 0;
+  list-style: none;
+}
+.platform-watches li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  border: 1px solid #d2d8cf;
+  border-radius: 12px;
+}
+.platform-watches li div {
+  display: grid;
+  gap: 4px;
+}
+.platform-watches span {
+  font-size: 14px;
+  color: #4f5f5c;
+}

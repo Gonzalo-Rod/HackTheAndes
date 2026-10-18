@@ -7,3 +7,26 @@ dist/
 .env.*
 !.env.example
 /getting-started/PROGRESS.md
+
+# Next.js and TypeScript build output
+/out/
+/build/
+.vercel
+*.tsbuildinfo
+next-env.d.ts
+
+# Raw downloads cached by scripts/build-static-layers.ts
+/scripts/.cache/
+
+# Copied from node_modules by scripts/copy-maplibre-worker.mjs
+/public/maplibre/
+
+# Offline geospatial tooling and raw continental source archives
+.venv/
+__pycache__/
+*.pyc
+/packages/road-data/data/.cache/
+
+# Generated PDF previews and local visual QA
+/output/pdf/
+/tmp/pdfs/

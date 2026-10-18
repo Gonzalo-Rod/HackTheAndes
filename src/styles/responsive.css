@@ -1,0 +1,152 @@
+/* Tablet: narrower side columns. */
+@media (max-width: 1560px) {
+  .pr-chip--quiet .pr-chip__label {
+    display: none;
+  }
+}
+
+@media (max-width: 1280px) {
+  .pr-main {
+    grid-template-columns: minmax(0, 1fr) 300px;
+  }
+  .pr-dock {
+    grid-template-columns: minmax(0, 1fr) 250px;
+  }
+  .pr-hide-md {
+    display: none;
+  }
+  .pr-chip--quiet .pr-chip__label {
+    display: none;
+  }
+}
+
+/* Phone and small tablet: a single scrolling column. */
+@media (max-width: 900px) {
+  .pr-app {
+    display: block;
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+  }
+  .pr-topbar {
+    flex-wrap: wrap;
+    height: auto;
+    row-gap: 8px;
+    padding: 8px 12px;
+  }
+  .pr-topbar__sep,
+  .pr-topbar__spacer,
+  .pr-hide-sm {
+    display: none;
+  }
+  .pr-brand {
+    flex: 1;
+  }
+  .pr-scope {
+    order: 3;
+    width: 100%;
+  }
+  .pr-scope .pr-segmented__item {
+    flex: 1;
+    justify-content: center;
+  }
+  .pr-filterbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    padding: 7px 12px;
+  }
+  .pr-search {
+    min-width: 170px;
+  }
+  .pr-main {
+    display: flex;
+    flex-direction: column;
+  }
+  .pr-mapwrap {
+    height: 64vh;
+    min-height: 380px;
+  }
+  .pr-dock {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+  }
+  .pr-timeline__bar {
+    flex-wrap: wrap;
+    height: auto;
+    row-gap: 6px;
+  }
+  .pr-timeline__status {
+    width: 100%;
+    margin-left: 0;
+    white-space: normal;
+  }
+  .pr-charts {
+    grid-template-columns: repeat(3, 84vw);
+    height: 200px;
+    flex: none;
+    scroll-snap-type: x mandatory;
+  }
+  .pr-chart {
+    scroll-snap-align: start;
+  }
+  .pr-events {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+  .pr-events__list {
+    max-height: 320px;
+  }
+  .pr-sidebar {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+  .pr-sidebar__body {
+    overflow: visible;
+  }
+  .pr-legend {
+    bottom: auto;
+    top: 58px;
+    width: 190px;
+  }
+  .pr-maptools .pr-btn {
+    height: 30px;
+    padding: 0 10px;
+    font-size: 11.5px;
+  }
+  .pr-mapctl .pr-select--compact,
+  .pr-mapctl__zoom {
+    display: none;
+  }
+  .pr-callout {
+    bottom: 58px;
+  }
+  .pr-callout__figures dd {
+    font-size: 15px;
+  }
+  .pr-mapwrap .maplibregl-ctrl-bottom-right {
+    bottom: 52px;
+  }
+}
+
+@media (max-width: 520px) {
+  .pr-brand__sub {
+    display: none;
+  }
+  .pr-fresh__label {
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .pr-callout__figures {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+  .pr-callout__code {
+    display: none;
+  }
+  .pr-figures {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

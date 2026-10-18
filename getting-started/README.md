@@ -113,8 +113,11 @@ publish the entire log. The history may become public.
 
 ## Working documents
 
-- [Team Plan](../docs/team-plan.md): the chosen product direction and full MVP
-  scope, with the current rubric and a 30-hour implementation schedule.
+- [Team Plan](../docs/team-plan.md): the chosen product direction, its "Current state"
+  (coverage, payment, verified results and remaining priorities), with departure
+  planning deferred, the current rubric and 30-hour schedule.
+- [Climate exposure](../docs/data/climate-exposure.md): the current assessment,
+  live-condition and driver WhatsApp alert plan, including implementation status.
 - [PROGRESS.md](PROGRESS.md): local history of decisions, implementation, checks,
   blockers, and next steps, with one short paragraph per update.
 - [PROGRESS_TEMPLATE.md](PROGRESS_TEMPLATE.md): a template for a 2-to-4-sentence
@@ -125,11 +128,11 @@ publish the entire log. The history may become public.
 ## Initial state
 
 The repository was empty when preparation began. The team chose `environmental`
-and has since added a Team Plan for WhatsApp hazard reporting on the Carretera
-Central. The participant chose to retain its original approach and full MVP
-scope, with the rubric and schedule updated. User validation, team name,
-integrations, data access, demo, and presentation remain pending; the plan does
-not establish that these have been completed.
+and wrote a Team Plan for WhatsApp hazard reporting on the Carretera Central. It
+has since pivoted to climate exposure and preparedness, and grown to a national
+dashboard with PE-22 as the in-depth pilot; the Team Plan's "Current state"
+section is the up-to-date summary and [PROGRESS.md](PROGRESS.md) records each step.
+Independent user validation, the demo and the presentation remain pending.
 
 All future work and documentation will be in English. Public sources may change;
 keep the review date and record any new guidance from the organizers or the

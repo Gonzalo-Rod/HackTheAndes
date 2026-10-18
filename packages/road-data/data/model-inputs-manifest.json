@@ -1,0 +1,387 @@
+{
+  "schemaVersion": 1,
+  "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+  "preparedAt": "2026-10-18T06:41:29.099Z",
+  "artifacts": [
+    {
+      "file": "weather/live.json.gz",
+      "sha256": "21bd16f1fa5a0c978a62374ea585f3603edd01e79fe72fb8a88717619aeacf11"
+    },
+    {
+      "file": "weather/previous_runs-2023-12-24-2023-12-31.json.gz",
+      "sha256": "d8b29bee29d2baf9f773098665eb21443cc7a649c01ffe854ec803ed2e563731"
+    },
+    {
+      "file": "weather/previous_runs-2024-01-01-2024-04-30.json.gz",
+      "sha256": "3d6ad2a39c92a52e41012e9215f9f3ea03cfa8bfd99fcca01698874843dff404"
+    },
+    {
+      "file": "weather/previous_runs-2024-12-24-2024-12-31.json.gz",
+      "sha256": "ed0a6e612e270918fdfdc97ce65235449c46df1d0c1941af1be45bf7898bc8fb"
+    },
+    {
+      "file": "weather/previous_runs-2025-01-01-2025-04-30.json.gz",
+      "sha256": "2dd8330e8778916e9501d88d89b1e3ffac9aee0e4cf2502e103638277a298e27"
+    },
+    {
+      "file": "weather/reanalysis-2023-02-01-2023-03-31.json.gz",
+      "sha256": "ef8f1dfd40dd94e9b315e9e75c3d94999e8870d15a1e854a20f9c2eaf787cd60"
+    },
+    {
+      "file": "weather/reanalysis-2023-12-24-2024-04-30.json.gz",
+      "sha256": "cd40880f92e299dc19009283939c3bdc249546b40b3c59f10e6fa7f4331afb7c"
+    },
+    {
+      "file": "weather/reanalysis-2024-12-24-2025-04-30.json.gz",
+      "sha256": "d3bb726bee8785639c678a43b486b53d5d949db84f4e9b70b4d0599f8b0d9c40"
+    },
+    {
+      "file": "pe22/catchments.json",
+      "sha256": "d05fce4f2f53100b182becad23ec5bd8c5748e4ae2bffb53379c577273437e80"
+    },
+    {
+      "file": "pe22/catchment-terrain.json",
+      "sha256": "a3cd500e31d12035139e88ff9be126252447eaf9257b009c7914ccd73f8f3f94"
+    },
+    {
+      "file": "pe22/hazards.json",
+      "sha256": "5b36d0cba9f1b3fba8d44e735365ccc18cc41d20256a97ff2d71d22e4ca330c1"
+    },
+    {
+      "file": "events/pe22-events.json",
+      "sha256": "0e408c627600e178b75689617c01600a76353b0cabc408f43742b06ee85c9416"
+    },
+    {
+      "file": "events/coen-reviewed.json",
+      "sha256": "b24451f0ce1c5463625eec62e060bdc57a422d30d0ac5f0059f4028a4830a620"
+    },
+    {
+      "file": "spatial/hazards-source.json.gz",
+      "sha256": "292f8463c5e4628c258262246e96e6a97a737f7b41b948c2dfecf35771acc5da"
+    },
+    {
+      "file": "spatial/hydrographic-units.json.gz",
+      "sha256": "908bfc7c49b6dbc2fc682ad78216d1202d7cdbab4c238786e5f7f1686ca33f16"
+    }
+  ],
+  "weather": [
+    {
+      "file": "live.json.gz",
+      "kind": "operational",
+      "model": "ecmwf_ifs025",
+      "grids": 24,
+      "catchments": 13,
+      "coverage": [
+        {
+          "variable": "precipitation",
+          "totalHours": 5784,
+          "knownHours": 5784,
+          "firstKnown": "2026-10-11T06:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "file": "previous_runs-2023-12-24-2023-12-31.json.gz",
+      "kind": "previous_runs",
+      "model": "ecmwf_ifs025",
+      "grids": 12,
+      "catchments": 11,
+      "coverage": [
+        {
+          "variable": "precipitation_previous_day1",
+          "totalHours": 2304,
+          "knownHours": 0,
+          "firstKnown": null
+        },
+        {
+          "variable": "precipitation_previous_day2",
+          "totalHours": 2304,
+          "knownHours": 0,
+          "firstKnown": null
+        },
+        {
+          "variable": "precipitation_previous_day3",
+          "totalHours": 2304,
+          "knownHours": 0,
+          "firstKnown": null
+        },
+        {
+          "variable": "precipitation_previous_day4",
+          "totalHours": 2304,
+          "knownHours": 0,
+          "firstKnown": null
+        }
+      ]
+    },
+    {
+      "file": "previous_runs-2024-01-01-2024-04-30.json.gz",
+      "kind": "previous_runs",
+      "model": "ecmwf_ifs025",
+      "grids": 12,
+      "catchments": 11,
+      "coverage": [
+        {
+          "variable": "precipitation_previous_day1",
+          "totalHours": 34848,
+          "knownHours": 25080,
+          "firstKnown": "2024-02-03T22:00:00.000Z"
+        },
+        {
+          "variable": "precipitation_previous_day2",
+          "totalHours": 34848,
+          "knownHours": 24792,
+          "firstKnown": "2024-02-04T22:00:00.000Z"
+        },
+        {
+          "variable": "precipitation_previous_day3",
+          "totalHours": 34848,
+          "knownHours": 24504,
+          "firstKnown": "2024-02-05T22:00:00.000Z"
+        },
+        {
+          "variable": "precipitation_previous_day4",
+          "totalHours": 34848,
+          "knownHours": 24216,
+          "firstKnown": "2024-02-06T22:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "file": "previous_runs-2024-12-24-2024-12-31.json.gz",
+      "kind": "previous_runs",
+      "model": "ecmwf_ifs025",
+      "grids": 12,
+      "catchments": 11,
+      "coverage": [
+        {
+          "variable": "precipitation_previous_day1",
+          "totalHours": 2304,
+          "knownHours": 2304,
+          "firstKnown": "2024-12-24T00:00:00.000Z"
+        },
+        {
+          "variable": "precipitation_previous_day2",
+          "totalHours": 2304,
+          "knownHours": 2304,
+          "firstKnown": "2024-12-24T00:00:00.000Z"
+        },
+        {
+          "variable": "precipitation_previous_day3",
+          "totalHours": 2304,
+          "knownHours": 2304,
+          "firstKnown": "2024-12-24T00:00:00.000Z"
+        },
+        {
+          "variable": "precipitation_previous_day4",
+          "totalHours": 2304,
+          "knownHours": 2304,
+          "firstKnown": "2024-12-24T00:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "file": "previous_runs-2025-01-01-2025-04-30.json.gz",
+      "kind": "previous_runs",
+      "model": "ecmwf_ifs025",
+      "grids": 12,
+      "catchments": 11,
+      "coverage": [
+        {
+          "variable": "precipitation_previous_day1",
+          "totalHours": 34560,
+          "knownHours": 34560,
+          "firstKnown": "2025-01-01T00:00:00.000Z"
+        },
+        {
+          "variable": "precipitation_previous_day2",
+          "totalHours": 34560,
+          "knownHours": 34560,
+          "firstKnown": "2025-01-01T00:00:00.000Z"
+        },
+        {
+          "variable": "precipitation_previous_day3",
+          "totalHours": 34560,
+          "knownHours": 34560,
+          "firstKnown": "2025-01-01T00:00:00.000Z"
+        },
+        {
+          "variable": "precipitation_previous_day4",
+          "totalHours": 34560,
+          "knownHours": 34560,
+          "firstKnown": "2025-01-01T00:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "file": "reanalysis-2023-02-01-2023-03-31.json.gz",
+      "kind": "reanalysis",
+      "model": "era5",
+      "grids": 12,
+      "catchments": 11,
+      "coverage": [
+        {
+          "variable": "precipitation",
+          "totalHours": 16992,
+          "knownHours": 16992,
+          "firstKnown": "2023-02-01T00:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "file": "reanalysis-2023-12-24-2024-04-30.json.gz",
+      "kind": "reanalysis",
+      "model": "era5",
+      "grids": 12,
+      "catchments": 11,
+      "coverage": [
+        {
+          "variable": "precipitation",
+          "totalHours": 37152,
+          "knownHours": 37152,
+          "firstKnown": "2023-12-24T00:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "file": "reanalysis-2024-12-24-2025-04-30.json.gz",
+      "kind": "reanalysis",
+      "model": "era5",
+      "grids": 12,
+      "catchments": 11,
+      "coverage": [
+        {
+          "variable": "precipitation",
+          "totalHours": 36864,
+          "knownHours": 36864,
+          "firstKnown": "2024-12-24T00:00:00.000Z"
+        }
+      ]
+    }
+  ],
+  "spatial": {
+    "sourceSusceptibilityPolygons": 335,
+    "displaySusceptibilityPolygons": 239,
+    "invalidSourcePolygons": 138,
+    "nationalWarnings": 10,
+    "warningsIntersectingRegion": 0,
+    "segments": 174,
+    "segmentsWithKnownSusceptibility": 174,
+    "estimatedSlopeCatchments": 11,
+    "hydrographicCoverage": [
+      {
+        "catchmentId": "hydrobasins-v1c-sa12-6120521890",
+        "coverageFraction": 0.9999998334749273
+      },
+      {
+        "catchmentId": "hydrobasins-v1c-sa12-6120524120",
+        "coverageFraction": 0.9999994676287179
+      },
+      {
+        "catchmentId": "hydrobasins-v1c-sa12-6120524610",
+        "coverageFraction": 0.9981305559139105
+      },
+      {
+        "catchmentId": "hydrobasins-v1c-sa12-6120526890",
+        "coverageFraction": 1
+      },
+      {
+        "catchmentId": "hydrobasins-v1c-sa12-6120527040",
+        "coverageFraction": 0.9999999584493433
+      },
+      {
+        "catchmentId": "hydrobasins-v1c-sa12-6120528440",
+        "coverageFraction": 1
+      },
+      {
+        "catchmentId": "hydrobasins-v1c-sa12-6120528530",
+        "coverageFraction": 0.9999999682634527
+      },
+      {
+        "catchmentId": "hydrobasins-v1c-sa12-6120531630",
+        "coverageFraction": 0.9999999680050363
+      },
+      {
+        "catchmentId": "hydrobasins-v1c-sa12-6120532050",
+        "coverageFraction": 0.9999999714333015
+      },
+      {
+        "catchmentId": "hydrobasins-v1c-sa12-6120534280",
+        "coverageFraction": 1
+      },
+      {
+        "catchmentId": "hydrobasins-v1c-sa12-6120534860",
+        "coverageFraction": 1
+      },
+      {
+        "catchmentId": "hydrobasins-v1c-sa12-6121171470",
+        "coverageFraction": 1
+      },
+      {
+        "catchmentId": "hydrobasins-v1c-sa12-6121171790",
+        "coverageFraction": 1
+      }
+    ],
+    "kilometerCalibration": "unverified"
+  },
+  "eventCoverage": [
+    {
+      "id": "provias:19631",
+      "date": "2024-01-30",
+      "located": true,
+      "weatherCompleteAcrossCatchments": false
+    },
+    {
+      "id": "provias:19753",
+      "date": "2024-02-21",
+      "located": true,
+      "weatherCompleteAcrossCatchments": true
+    },
+    {
+      "id": "provias:19754",
+      "date": "2024-02-22",
+      "located": true,
+      "weatherCompleteAcrossCatchments": true
+    },
+    {
+      "id": "provias:19830",
+      "date": "2024-03-02",
+      "located": true,
+      "weatherCompleteAcrossCatchments": true
+    },
+    {
+      "id": "provias:19833",
+      "date": "2024-03-02",
+      "located": true,
+      "weatherCompleteAcrossCatchments": true
+    },
+    {
+      "id": "provias:19985",
+      "date": "2024-03-24",
+      "located": true,
+      "weatherCompleteAcrossCatchments": true
+    },
+    {
+      "id": "provias:20934",
+      "date": "2025-02-05",
+      "located": true,
+      "weatherCompleteAcrossCatchments": true
+    },
+    {
+      "id": "coen:sinpad-224418",
+      "date": "2025-02-22",
+      "located": false,
+      "weatherCompleteAcrossCatchments": true
+    }
+  ],
+  "events": {
+    "candidates": 8,
+    "negativeExamples": 0,
+    "trainingReady": false
+  },
+  "readiness": {
+    "weatherPipeline": "implemented",
+    "spatialInputs": "implemented_with_documented_uncertainty",
+    "historicalInputs": "captured_and_validated",
+    "supervisedForecastTraining": "blocked_by_label_coverage_and_as_of_design"
+  }
+}

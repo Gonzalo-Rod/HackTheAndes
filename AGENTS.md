@@ -10,8 +10,51 @@ required external identifiers unchanged.
 
 Before working, read `getting-started/README.md`, `docs/team-plan.md`,
 and the recent entries in `getting-started/PROGRESS.md`. The Team Plan is the
-team's chosen product direction: follow its original approach and full MVP scope,
-with the updated five-criterion rubric and 30-hour schedule. Do not treat proposed
+team's chosen product direction: follow the participant-approved climate-exposure
+pivot, retaining driver WhatsApp alerts, live road conditions and the planned
+product surfaces, with the updated five-criterion rubric and 30-hour schedule.
+See `docs/data/climate-exposure.md` for the assessment and alert boundaries.
+**Latest participant decision:** environmental monitoring and preparedness take
+priority. Departure planning (F9), its engine, WhatsApp departure questions and
+D's planner/chart are deferred beyond hackathon delivery; do not treat them as
+remaining completion requirements. Preserve existing honest unavailable API
+responses. Prioritize report verification, reliable alerts, exposure/coverage
+validation and environmental explanations/indicators in the Team Plan checkpoint.
+Weekly reports now use separately authorized driver PDF attachments; see
+`docs/integration/weekly-environmental-pdf.md`. Do not enroll existing short-alert
+subscribers automatically or replace PDF delivery with a public report link.
+**Latest alert update:** source changes trigger route-filtered WhatsApp alerts;
+include active public community reports as explicitly unconfirmed, without treating
+the placeholder confidence score as verification. `RUTA` selects a registered road
+(`RUTA PE-32`, or the code after `RUTA`), then origin/destination on that road's
+captured axis; static pins are not continuous phone tracking. Keep
+estimated possible-huaico alerts, duplicate suppression, five-minute recovery,
+typed activation and STOP/BAJA cancellation. Do not reintroduce the 30-minute
+delivery cooldown; see `docs/integration/driver-notifications.md`.
+**Separate purchase and route consent:** SUSCRIBIR purchases seven-day access;
+it does not start alerts. RUTA selects the road and origin/destination with an
+existing valid pass, confirmed by RUTA ACTIVAR; a phone keeps one active route. Route changes and STOP preserve the remaining
+pass time and never create another charge or extend expiry. STOP disables route
+notifications and PDFs; route replacement still requires fresh weekly consent.
+**October 18 payment authorization (price updated by the participant):** implement
+a one-time 0.50 USD-TDN Qatom pass for seven elapsed days from the original
+WhatsApp request, using OpenAI
+Responses with Qatom MCP guest checkout, verified fulfilment and server-enforced
+expiry. See `docs/integration/qatom-alert-passes.md`; this is the only payment in
+scope. Yape and the other commercial plans remain excluded.
+**Latest scope update (2026-10-18):** the incident dashboard covers all of Peru:
+national SUTRAN alerts lead, community reports carry an explicit "No confirmado" source
+filter, and nationwide Provías emergencies give display-only history (see
+`docs/data/national-road-events.md`). Climate exposure covers every road listed in the
+reviewed registry `packages/road-data/data/roads/registry.json` (prepared with `road:prepare`,
+loaded with `road:import`; see `docs/data/multi-road-forecast.md`). WhatsApp `ESTADO` and
+`EXPOSICION` queries (road codes and pins) and `RUTA` route alerts cover every registered road;
+off PE-22, route alerts take official alerts from the live national SUTRAN feed. WhatsApp reports,
+the gazetteer, the SUTRAN database archive, weekly PDFs and company route watch remain on the
+PE-22 pilot. Replies link into the dashboard with `?carretera=`/`?alerta=`. Company monitors can
+register continuous route watches or truck trips that trigger urgent calls; see
+`docs/integration/route-watch.md`. `docs/team-plan.md` "Current state" summarizes this coverage.
+Do not treat proposed
 integrations, metrics, or predictions as verified results. Before writing code,
 read the engineering principles and quality rules below.
 
@@ -20,6 +63,13 @@ The chosen track is **Climate and Territory**
 technical complexity, 25% functionality, 20% technical quality, 15% problem and
 impact, and 10% clarity. Do not replace it with the older rubric still shown in
 the online guide at the time of our initial review.
+
+Climate exposure combines forecast rainfall, mapped susceptibility and valid
+official advisories to prioritize attention. Keep estimated exposure, official
+advisories, confirmed incidents and unverified community reports distinct in APIs,
+the map and messages. Missing/stale data never establishes safety or clearance.
+The logistic pipeline remains deferred research; do not make fitting it a delivery
+gate or describe exposure scores as calibrated disruption probabilities.
 
 ## Engineering principles
 
@@ -31,6 +81,38 @@ change, including code written by agents.
 
 ### Structure and design
 
+- **Independent Data & Model package.** Member C's implementation lives in
+  `packages/road-data/`, with its own package manifest, lockfile, TypeScript,
+  ESLint, Vitest, and build configuration. Run its commands with
+  `npm --prefix packages/road-data ...`. Keep this tooling inside the package
+  while teammates develop the application locally. Coordinate root application
+  dependencies and workspace setup with member A during integration.
+- **Offline spatial tooling.** Python preparation lives in `packages/road-data/python/`
+  with pinned `requirements-data.lock.txt`; `.venv/` and bulk source caches are ignored.
+  Server applications consume validated JSON through the compiled TypeScript package.
+  See `docs/data/pe22-catchments.md`; Python is not a deployment dependency.
+- **Path scope.** The `src/` paths below are relative to the application root
+  for application code and to `packages/road-data/` for the Data & Model package.
+  The package mirrors the same layers and exposes compiled entry points for
+  server adapters and shared contracts; consumers use those entry points.
+- **API application.** The initial Next.js server integration lives in `apps/api/`
+  with independent tooling and a local dependency on `packages/road-data/`.
+  See `apps/api/README.md`; build the data package before the API. Keep this
+  application separate from teammates' root frontend setup until integration is
+  coordinated. Run Next.js type generation and builds sequentially because both
+  manage `.next/`. Do not include local environment files in deployable artifacts.
+- **Coordinated frontend integration.** The participant approved integrating Role
+  D's `400bb8d` snapshot into `feat/data-model`. Root `src/` now owns the integrated
+  dashboard and A's application APIs, security helpers, access and waitlist. Root
+  tooling excludes the independent projects; build `packages/road-data` before
+  installing the root application. The existing `apps/api` deployment and n8n
+  URL remain independent. See `docs/platform-api.md` and the root `README.md`.
+- **Shared database.** Team-wide SQL migrations live in `supabase/migrations/`.
+  Database operator commands and the initial Postgres adapter live in
+  `packages/road-data/`; see `supabase/README.md`. Never edit an applied migration:
+  add a new migration and run the database integration checks. The
+  `peruroad_backend` login and secret API key are server-only; browser roles have
+  no operational-table access until explicit application access rules are added.
 - **Separation of concerns.** Keep four layers and import only downward:
   - `src/app/` (routes, pages, route handlers): parse input, call a service,
     shape the response. No business rules here.
@@ -118,6 +200,9 @@ change, including code written by agents.
   other member, with CI passing.
 - Keep pull requests small and focused. Commit messages are imperative English
   ("Add Zavu webhook signature check").
+- **Participant update:** continue all Role C work and its API/database integration
+  on `feat/data-model`, with one consolidated PR to `main`. Do not create a new
+  branch for each implementation step. Role D's visualization branch remains untouched after the authorized snapshot integration; `main` still requires review and passing CI.
 
 ## Technical quality rules and verifications
 
@@ -136,8 +221,8 @@ Run the full list again at the 05:30 feature freeze and the 07:00 code freeze.
 | Input validation | All external input is parsed with zod before use. Unknown WhatsApp message types, empty messages, oversized media and malformed payloads are handled explicitly | Tests with invalid and unexpected payloads for each webhook and public API route |
 | Paid access | Every paid route and paid WhatsApp feature checks an active pass on the server. Client-side checks are only cosmetic | Tests for no pass, an expired pass, an active pass and the wrong organization |
 | Public endpoints | Public write endpoints (waitlist, report intake) are rate-limited and validate input size | A manual check with repeated requests returns 429 |
-| Required tests | Unit tests (Vitest) cover: **extraction** (normalizing LLM output on 10–20 real anonymized road messages, including bad LLM output), **dedupe**, **confidence**, **risk** and **dispatch decision** (one test per rule and the boundary values), plus webhook signatures, encryption and entitlements | `npm test` passes locally and in CI. Tests run without network access or real credentials, using the fakes behind the interfaces |
-| Edge cases | Each domain module tests its edge cases: a place outside PE-22, a pin more than 500 m from the road, a voice note that fails to transcribe, a duplicate webhook, a SUTRAN response that is empty or changed, a departure outside the 72 h forecast range, a pass that expires during a trip, and Lima time zone boundaries | Named test cases exist for each item that applies to the module |
+| Required tests | Unit tests (Vitest) cover: **extraction** (normalizing LLM output on 10–20 real anonymized road messages, including bad LLM output), **dedupe**, **confidence**, **climate exposure** and **alert eligibility** (one test per rule and boundary; deferred dispatch requires tests only if later implemented), plus webhook signatures, encryption and entitlements | `npm test` passes locally and in CI. Tests run without network access or real credentials, using the fakes behind the interfaces |
+| Edge cases | Each domain module tests its edge cases: a place outside PE-22, a pin more than 500 m from the road, a voice note that fails to transcribe, a duplicate webhook, a SUTRAN response that is empty or changed, a query outside the captured forecast range, a pass that expires during a trip, and Lima time zone boundaries | Named test cases exist for each item that applies to the module |
 | CI | Every pull request runs lint, type check (`tsc --noEmit`), tests and the secrets scan | A pull request cannot merge with a red check |
 | Reproducible setup | A fresh clone runs with the README steps, `.env.example` and the database migrations. The demo uses seeded data, not manual database edits | A member who did not write the feature follows the README on a clean checkout before the code freeze |
 

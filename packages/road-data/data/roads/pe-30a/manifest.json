@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "roadCode": "PE-30A",
+  "geometryRevision": "4f1f9529271caf3af9df1b934a37b633c4cd50a74b4f8c93bc619ad558c2a0d4",
+  "measuredLengthKm": 442.4816592452459,
+  "segmentCount": 443,
+  "kilometerCalibration": "unverified",
+  "files": {
+    "source.json": "0ff14cd140e54115f6232d9a4e6f97643dcb1476fcc972ab5794340d8858eac7",
+    "corridor.geojson": "e38499822e205fc9f084aff547d7798fbcbd8c69abae42765918e56f3af19657",
+    "segments-1km.geojson": "fae004f20f7b3fe10a1ec906d3118feb4595b231d2171384abc87d1787a6679c",
+    "diagnostics.json": "f2fa6d1ad43ade15c28c107f459ec761a6b6d9434859a0e17bc389fee52bc0e1"
+  }
+}

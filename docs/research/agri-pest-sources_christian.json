@@ -1,0 +1,553 @@
+{
+  "schemaVersion": 1,
+  "title": "Verified agriculture and pest source research for PeruRoad Climate",
+  "verifiedAt": "2026-10-18T00:05:30Z",
+  "scope": "PE-22 / Rimac corridor and Mantaro / Junin; national and out-of-corridor products explicitly labelled",
+  "toolPolicy": "Discovery and extraction used Tavily MCP only; source accessibility is not an API contract.",
+  "sources": [
+    {
+      "verifiedAt": "2026-10-17T23:25:09Z",
+      "publicationDate": null,
+      "validity": null,
+      "availableFormats": [
+        "HTML"
+      ],
+      "accessStatus": "tavily_extraction_success",
+      "id": "senamhi-agromet-bulletin-index",
+      "provider": "SENAMHI",
+      "title": "Official agrometeorological bulletin catalogue",
+      "url": "https://www.senamhi.gob.pe?p=boletines",
+      "categories": [
+        "agriculture",
+        "pest_alerts"
+      ],
+      "sourceKind": "official_source_directory",
+      "geographicScope": "Peru; individual products have different coverage",
+      "observedFacts": [
+        "Catalogue links dated October 2026 potato and maize risk outlooks, daily insect and disease conditions, and Sierra impact reports."
+      ],
+      "limitations": [
+        "A catalogue date is not an outbreak date; linked documents require separate validation."
+      ],
+      "automation": "html_link_discovery_verified: Parse product sections and linked PDF URLs. Do not construct filenames or infer missing editions.",
+      "extractionEvidence": {
+        "method": "tavily_extract",
+        "success": true,
+        "callIndex": 0
+      }
+    },
+    {
+      "verifiedAt": "2026-10-17T23:25:09Z",
+      "publicationDate": null,
+      "validity": {
+        "start": "2026-10-01",
+        "end": "2026-12-31"
+      },
+      "availableFormats": [
+        "PDF"
+      ],
+      "accessStatus": "tavily_extraction_success",
+      "extractionEvidence": {
+        "method": "tavily_extract",
+        "success": true,
+        "callIndex": 1
+      },
+      "id": "senamhi-potato-risk-oct-dec-2026",
+      "provider": "SENAMHI",
+      "title": "Potato agroclimatic risk outlook, October–December 2026",
+      "url": "https://www.senamhi.gob.pe/load/file/02954SENA-104.pdf",
+      "categories": [
+        "agriculture",
+        "water",
+        "frost"
+      ],
+      "sourceKind": "official_forecast",
+      "geographicScope": "National regional outlook; includes Sierra Central",
+      "observedFacts": [
+        "Sierra Central outlook describes mainly low/medium risk, localized high risk, and sensitivity to moisture availability and abrupt temperature drops. Monthly updates are stated."
+      ],
+      "limitations": [
+        "Forecast, not confirmed crop losses. No Mantaro field coordinates or exact issue day extracted. Regional text cannot locate a PE-22 incident."
+      ],
+      "automation": "pdf_text_extraction_verified: Discover updates from catalogue; preserve forecast period and region. Map interpretation needs manual review."
+    },
+    {
+      "verifiedAt": "2026-10-17T23:25:09Z",
+      "publicationDate": null,
+      "validity": {
+        "start": "2026-10-01",
+        "end": "2026-12-31"
+      },
+      "availableFormats": [
+        "PDF"
+      ],
+      "accessStatus": "tavily_extraction_success",
+      "extractionEvidence": {
+        "method": "tavily_extract",
+        "success": true,
+        "callIndex": 2,
+        "previousBasicAttemptFailed": true
+      },
+      "id": "senamhi-maize-risk-oct-dec-2026",
+      "provider": "SENAMHI",
+      "title": "Maize agroclimatic risk outlook, October–December 2026",
+      "url": "https://www.senamhi.gob.pe/load/file/02955SENA-106.pdf",
+      "categories": [
+        "agriculture",
+        "water",
+        "frost"
+      ],
+      "sourceKind": "official_forecast",
+      "geographicScope": "National regional outlook; includes Sierra Central",
+      "observedFacts": [
+        "Sierra Central outlook identifies mostly low/medium risk, planting moisture constraints and possible localized hail, wind or abrupt temperature effects. Monthly updates are stated."
+      ],
+      "limitations": [
+        "Forecast, not observed damage. Basic extraction initially failed; advanced extraction succeeded. Exact issue day and field coordinates unavailable."
+      ],
+      "automation": "advanced_pdf_extraction_verified: Discover catalogue link; retain seasonal scale. Never turn regional outlook into a confirmed road disruption."
+    },
+    {
+      "verifiedAt": "2026-10-17T23:25:09Z",
+      "publicationDate": "2026-10-12",
+      "validity": {
+        "start": "2026-10-12",
+        "end": "2026-10-15"
+      },
+      "availableFormats": [
+        "PDF"
+      ],
+      "accessStatus": "tavily_extraction_success",
+      "extractionEvidence": {
+        "method": "tavily_extract",
+        "success": true,
+        "callIndex": 1
+      },
+      "id": "senamhi-insect-conditions-oct12-15-2026",
+      "provider": "SENAMHI",
+      "title": "Insect pest environmental conditions outlook N284",
+      "url": "https://www.senamhi.gob.pe/load/file/02976SENA-1133.pdf",
+      "categories": [
+        "agriculture",
+        "pest_alerts"
+      ],
+      "sourceKind": "experimental_official_forecast",
+      "geographicScope": "Coastal fruit fly and Amazonian coffee borer outlook; no local Mantaro outbreak",
+      "observedFacts": [
+        "Predicts environmental suitability for fruit fly and coffee borer; identifies hourly GFS input at 27×27 km. Product states experimental evaluation status."
+      ],
+      "limitations": [
+        "Expired at verification. Suitability is not a pest detection. Text extraction includes stray February dates and layout residues; maps need review."
+      ],
+      "automation": "pdf_text_extraction_verified: Retain forecast label and four-day validity; block expired forecasts from current-alert presentation.",
+      "dateEvidence": "Publication date is the catalogue label; forecast dates independently match the PDF heading."
+    },
+    {
+      "verifiedAt": "2026-10-17T23:25:09Z",
+      "publicationDate": "2026-10-12",
+      "validity": {
+        "start": "2026-10-12",
+        "end": "2026-10-15"
+      },
+      "availableFormats": [
+        "PDF"
+      ],
+      "accessStatus": "tavily_extraction_success",
+      "extractionEvidence": {
+        "method": "tavily_extract",
+        "success": true,
+        "callIndex": 1
+      },
+      "id": "senamhi-disease-conditions-oct12-15-2026",
+      "provider": "SENAMHI",
+      "title": "Crop disease environmental conditions outlook N284",
+      "url": "https://www.senamhi.gob.pe/load/file/02977SENA-1133.pdf",
+      "categories": [
+        "agriculture",
+        "pest_alerts"
+      ],
+      "sourceKind": "experimental_official_forecast",
+      "geographicScope": "Selected national stations; Huaral, Huánuco and other regions",
+      "observedFacts": [
+        "Includes coffee rust, strawberry grey mould, blueberry botrytis and grape powdery mildew. Describes predictive models and GFS input at 27×27 km."
+      ],
+      "limitations": [
+        "Expired at verification; experimental product. Environmental risk is not confirmed infection. Huaral and Huánuco are not the target PE-22/Mantaro corridor."
+      ],
+      "automation": "pdf_text_extraction_verified: Keep station geography and disease-specific forecast periods; require review before assigning a local alert.",
+      "dateEvidence": "Publication date is the catalogue label; forecast dates independently match the PDF heading."
+    },
+    {
+      "verifiedAt": "2026-10-17T23:25:09Z",
+      "publicationDate": null,
+      "validity": null,
+      "availableFormats": [
+        "PDF"
+      ],
+      "accessStatus": "tavily_extraction_success",
+      "extractionEvidence": {
+        "method": "tavily_extract",
+        "success": true,
+        "callIndex": 1
+      },
+      "id": "senamhi-sierra-crop-impacts-sep29-oct5-2026",
+      "provider": "SENAMHI",
+      "title": "Sierra agrometeorological impacts, September29–October5 2026",
+      "url": "https://www.senamhi.gob.pe/load/file/02974SENA-164.pdf",
+      "categories": [
+        "agriculture",
+        "water",
+        "pest_alerts"
+      ],
+      "sourceKind": "official_observation_report",
+      "geographicScope": "Extracted stations in Cajamarca, Ancash and Arequipa; no Junin entry",
+      "observedFacts": [
+        "Contains dated crop phenology, measured weather and recommendations. At Quilcate, reports potato condition and rainfall; fungal disease is discussed as potential risk."
+      ],
+      "limitations": [
+        "Historical report interval: 2026-09-29 to 2026-10-05. Catalogue date is 2026-09-29, not proven publication date. No confirmed target-corridor pest outbreak."
+      ],
+      "automation": "pdf_text_extraction_verified: Preserve observation interval separately from forecast validity; distinguish measured values from conditional disease advice.",
+      "observationPeriod": {
+        "start": "2026-09-29",
+        "end": "2026-10-05"
+      }
+    },
+    {
+      "verifiedAt": "2026-10-17T23:25:09Z",
+      "publicationDate": null,
+      "validity": null,
+      "availableFormats": [
+        "HTML"
+      ],
+      "accessStatus": "tavily_extraction_success",
+      "id": "senasa-sigia-pesticide-registry",
+      "provider": "SENASA",
+      "title": "SIGIA public pesticide registration consultation",
+      "url": "https://servicios.senasa.gob.pe/SIGIAWeb/sigia_consulta_cultivo.html",
+      "categories": [
+        "agriculture",
+        "pest_alerts"
+      ],
+      "sourceKind": "official_registry",
+      "geographicScope": "National pesticide registry",
+      "observedFacts": [
+        "Extracted page identifies agricultural-input management and pesticide registry queries by product, crop and pest."
+      ],
+      "limitations": [
+        "Not a pest occurrence feed. Extracted HTML contains navigation, not query results or a documented API."
+      ],
+      "automation": "manual_review_required: Use for registry reference only; public query/API automation and export formats remain unverified.",
+      "extractionEvidence": {
+        "method": "tavily_extract",
+        "success": true,
+        "callIndex": 0
+      }
+    },
+    {
+      "verifiedAt": "2026-10-17T23:25:09Z",
+      "publicationDate": null,
+      "validity": null,
+      "availableFormats": [
+        "HTML"
+      ],
+      "accessStatus": "tavily_extraction_success",
+      "id": "senasa-surveillance-verification-guidance",
+      "provider": "SENASA",
+      "title": "Official explanation of phytosanitary surveillance verification",
+      "url": "https://www.senasa.gob.pe/senasacontigo/vigilancia-fitosanitaria-permite-detectar-oportunamente-presencia-de-plagas",
+      "categories": [
+        "agriculture",
+        "pest_alerts"
+      ],
+      "sourceKind": "official_process_guidance",
+      "geographicScope": "National process; examples from Cusco",
+      "observedFacts": [
+        "Explains monitoring, occurrence notifications, specialist verification and diagnostic-centre samples before recording pest information."
+      ],
+      "limitations": [
+        "Undated article body; current site-header date is not its publication date. Guidance is not a current outbreak or public dataset."
+      ],
+      "automation": "manual_review_required: Require dated official detection/diagnosis and locality before accepting pest occurrence; no documented public feed extracted.",
+      "extractionEvidence": {
+        "method": "tavily_extract",
+        "success": true,
+        "callIndex": 2
+      }
+    },
+    {
+      "verifiedAt": "2026-10-18T00:05:30Z",
+      "publicationDate": "2026-10-14",
+      "eventDate": "2026-09-30T12:49:00-05:00",
+      "validity": null,
+      "availableFormats": ["Six-page official COEN PDF"],
+      "accessStatus": "tavily_extraction_success; report later closes the event",
+      "id": "indeci-surco-forest-fire-crop-damage-2026",
+      "provider": "INDECI / COEN",
+      "title": "Complementary report 14162: forest fire at Ayas, Surco, Huarochirí",
+      "url": "https://portal.indeci.gob.pe/wp-content/uploads/2026/10/REPORTE-COMPLEMENTARIO-N.%C2%BA-14162-14OCT2026-INCENDIO-FORESTAL-EN-EL-DISTRITO-DE-SURCO-LIMA-5.pdf",
+      "categories": ["agriculture"],
+      "sourceKind": "official_closed_emergency_report",
+      "geographicScope": "Ayas annex, Surco district, Huarochirí province, Lima; exact point and affected-field polygon unavailable.",
+      "observedFacts": [
+        "A forest fire began at Ayas on 30 September 2026 at 12:49; the COEN report says it was extinguished and subsequently closed.",
+        "The damage table updated 2 October 10:55 reports 45 ha of agricultural crops affected and 25 ha of natural cover destroyed.",
+        "Affected crops/vegetation named include avocado, cherimoya, alfalfa, quince, tuna and eucalyptus; no deaths or injuries were reported."
+      ],
+      "limitations": [
+        "This historical closed incident is not a current fire alert or a road closure.",
+        "The damage table's stated update time should be retained; later report time is not the damage-measurement time.",
+        "The document names the Ayas annex but provides no exact point coordinate or affected-field polygon."
+      ],
+      "automation": "Version report updates, separate occurrence and damage-assessment times, retain area units/crop list/closed status, and leave geometry null unless an official point or field polygon is supplied.",
+      "extractionEvidence": {"method": "tavily_extract", "success": true, "requestId": "59fa5ffa-5dcc-45ac-af35-9df4d8307d8c"}
+    }
+  ],
+  "findings": {
+    "verifiedCurrentLocalPestOutbreaks": 0,
+    "verifiedLocalAgriculturalFireDamageReports": 1,
+    "interpretation": "No dated local plant-pest detection was verified; the follow-up did verify one closed local wildfire report with agricultural crop loss. Lack of a pest record is not evidence of absence.",
+    "primaryAutomationCandidate": "SENAMHI bulletin catalogue HTML links and separately validated PDFs",
+    "sigiaCorrection": "Pesticide registration data, not phytosanitary outbreak notifications."
+  },
+  "rejectedOrDeferred": [
+    {
+      "url": "https://siea.midagri.gob.pe/portal/",
+      "reason": "Advanced Tavily extraction failed; no export or API claim verified."
+    },
+    {
+      "url": "https://www.senasa.gob.pe/senasacontigo/junin-vigilancia-fitosanitaria-previene-el-establecimiento-de-plagas-forestales-en-bosque-dorado",
+      "reason": "Official Mantaro surveillance article extracted, but body lacks reliable publication/observation date; prevention is not detection. Excluded from current alerts."
+    },
+    {
+      "url": "https://www.senamhi.gob.pe/main.php?dp=junin&p=boletines",
+      "reason": "Extraction succeeded but returned a short portal shell. National catalogue supplied concrete PDF links instead."
+    }
+  ],
+  "queries": [
+    {
+      "query": "site.senamhi.gob.pe \"Junín\" \"riesgo agroclimático\" \"octubre\" \"2026\"",
+      "search_depth": "advanced",
+      "include_domains": [
+        "senamhi.gob.pe"
+      ],
+      "max_results": 5
+    },
+    {
+      "query": "site.senasa.gob.pe alerta fitosanitaria Junín plagas papa vigilancia SIGIA",
+      "search_depth": "advanced",
+      "include_domains": [
+        "senasa.gob.pe"
+      ],
+      "max_results": 5
+    },
+    {
+      "query": "site.gob.pe senasa Junín \"2026\" \"plagas\"",
+      "search_depth": "advanced",
+      "include_domains": [
+        "gob.pe"
+      ],
+      "max_results": 5
+    },
+    {
+      "query": "site.gob.pe/institucion/senasa \"alerta fitosanitaria\" 2026",
+      "include_domains": [
+        "gob.pe"
+      ],
+      "search_depth": "advanced",
+      "max_results": 5
+    },
+    {
+      "query": "site.senasa.gob.pe \"vigilancia fitosanitaria\" \"SIGIA\"",
+      "include_domains": [
+        "senasa.gob.pe"
+      ],
+      "search_depth": "advanced",
+      "max_results": 5
+    },
+    {
+      "query": "site.senamhi.gob.pe \"Junín\" \"agrometeorológico\" \"2026\" \"octubre\"",
+      "include_domains": [
+        "senamhi.gob.pe"
+      ],
+      "search_depth": "advanced",
+      "max_results": 5
+    },
+    {
+      "query": "site.senasa.gob.pe \"reportes fitosanitarios\" \"vigilancia\"",
+      "search_depth": "advanced",
+      "max_results": 4,
+      "include_domains": [
+        "senasa.gob.pe"
+      ]
+    },
+    {
+      "query": "site.gob.pe senasa \"plagas cuarentenarias bajo control oficial\"",
+      "search_depth": "basic",
+      "max_results": 3,
+      "include_domains": [
+        "gob.pe"
+      ]
+    },
+    {
+      "query": "site.siea.midagri.gob.pe \"estadística\" \"agrícola\" \"mensual\" 2026",
+      "include_domains": [
+        "siea.midagri.gob.pe"
+      ],
+      "search_depth": "basic",
+      "max_results": 3
+    }
+  ],
+  "calls": [
+    {
+      "index": 0,
+      "type": "tavily_search",
+      "queryIndex": 0,
+      "depth": "advanced",
+      "success": true,
+      "requestId": "6c0bfa9b-fb5d-4235-870d-a265deae633f"
+    },
+    {
+      "index": 1,
+      "type": "tavily_search",
+      "queryIndex": 1,
+      "depth": "advanced",
+      "success": true,
+      "requestId": "558f5a97-ee44-46cd-b259-cc8db3a37b2b"
+    },
+    {
+      "index": 2,
+      "type": "tavily_search",
+      "queryIndex": 2,
+      "depth": "advanced",
+      "success": true,
+      "requestId": "417e979e-0909-485e-bb93-c78aa4d611a7"
+    },
+    {
+      "index": 3,
+      "type": "tavily_search",
+      "queryIndex": 3,
+      "depth": "advanced",
+      "success": true,
+      "requestId": "f7c2c007-98f4-4bf8-9d6c-6d27e932900e"
+    },
+    {
+      "index": 4,
+      "type": "tavily_search",
+      "queryIndex": 4,
+      "depth": "advanced",
+      "success": true,
+      "requestId": "e0063ccb-baa8-45ce-a1a9-80fbf0558b7d"
+    },
+    {
+      "index": 5,
+      "type": "tavily_search",
+      "queryIndex": 5,
+      "depth": "advanced",
+      "success": true,
+      "requestId": "c00e0a58-f57c-4349-a9d9-cd21a43544eb"
+    },
+    {
+      "index": 6,
+      "type": "tavily_search",
+      "queryIndex": 6,
+      "depth": "advanced",
+      "success": true,
+      "requestId": "bb7832f6-d3e3-4ef3-98af-1aefd7ef5c75"
+    },
+    {
+      "index": 7,
+      "type": "tavily_search",
+      "queryIndex": 7,
+      "depth": "basic",
+      "success": true,
+      "requestId": "b518c907-bdf2-48af-b523-1a7cce45d728"
+    },
+    {
+      "index": 8,
+      "type": "tavily_search",
+      "queryIndex": 8,
+      "depth": "basic",
+      "success": true,
+      "requestId": "415bc219-b363-4884-be00-4567db962533"
+    },
+    {
+      "index": 9,
+      "type": "tavily_extract",
+      "extractCallIndex": 0,
+      "urls": [
+        "https://www.senamhi.gob.pe?p=boletines",
+        "https://www.senamhi.gob.pe/main.php?dp=junin&p=boletines",
+        "https://servicios.senasa.gob.pe/SIGIAWeb/sigia_consulta_cultivo.html",
+        "https://www.senasa.gob.pe/senasacontigo/junin-vigilancia-fitosanitaria-previene-el-establecimiento-de-plagas-forestales-en-bosque-dorado"
+      ],
+      "extract_depth": "basic",
+      "format": "markdown",
+      "successfulUrls": [
+        "https://www.senamhi.gob.pe?p=boletines",
+        "https://servicios.senasa.gob.pe/SIGIAWeb/sigia_consulta_cultivo.html",
+        "https://www.senamhi.gob.pe/main.php?dp=junin&p=boletines",
+        "https://www.senasa.gob.pe/senasacontigo/junin-vigilancia-fitosanitaria-previene-el-establecimiento-de-plagas-forestales-en-bosque-dorado"
+      ],
+      "failedUrls": [],
+      "requestId": "ddf1ce3d-9ccd-4777-aa88-ab6ea3d484f3"
+    },
+    {
+      "index": 10,
+      "type": "tavily_extract",
+      "extractCallIndex": 1,
+      "urls": [
+        "https://www.senamhi.gob.pe/load/file/02954SENA-104.pdf",
+        "https://www.senamhi.gob.pe/load/file/02955SENA-106.pdf",
+        "https://www.senamhi.gob.pe/load/file/02976SENA-1133.pdf",
+        "https://www.senamhi.gob.pe/load/file/02977SENA-1133.pdf",
+        "https://www.senamhi.gob.pe/load/file/02974SENA-164.pdf"
+      ],
+      "extract_depth": "basic",
+      "format": "markdown",
+      "successfulUrls": [
+        "https://www.senamhi.gob.pe/load/file/02977SENA-1133.pdf",
+        "https://www.senamhi.gob.pe/load/file/02974SENA-164.pdf",
+        "https://www.senamhi.gob.pe/load/file/02954SENA-104.pdf",
+        "https://www.senamhi.gob.pe/load/file/02976SENA-1133.pdf"
+      ],
+      "failedUrls": [
+        {
+          "url": "https://www.senamhi.gob.pe/load/file/02955SENA-106.pdf",
+          "error": "Failed to fetch url"
+        }
+      ],
+      "requestId": "7fc04d8a-ed41-4e29-9c17-cfb283fceb84"
+    },
+    {
+      "index": 11,
+      "type": "tavily_extract",
+      "extractCallIndex": 2,
+      "urls": [
+        "https://siea.midagri.gob.pe/portal/",
+        "https://www.senasa.gob.pe/senasacontigo/vigilancia-fitosanitaria-permite-detectar-oportunamente-presencia-de-plagas",
+        "https://www.senamhi.gob.pe/load/file/02955SENA-106.pdf"
+      ],
+      "extract_depth": "advanced",
+      "format": "markdown",
+      "successfulUrls": [
+        "https://www.senasa.gob.pe/senasacontigo/vigilancia-fitosanitaria-permite-detectar-oportunamente-presencia-de-plagas",
+        "https://www.senamhi.gob.pe/load/file/02955SENA-106.pdf"
+      ],
+      "failedUrls": [
+        {
+          "url": "https://siea.midagri.gob.pe/portal/",
+          "error": "Failed to fetch url"
+        }
+      ],
+      "requestId": "d0e05b2e-8d56-40fa-b298-d643bf9f059b"
+    }
+  ],
+  "estimatedCredits": {
+    "search": 16,
+    "extract": 4,
+    "total": 20,
+    "basis": "Seven advanced searches ×2, two basic searches ×1, two basic extraction batches ×1, one advanced extraction batch ×2. Rounded batch estimate; billed balance not exposed.",
+    "actualBilledCredits": null
+  }
+}

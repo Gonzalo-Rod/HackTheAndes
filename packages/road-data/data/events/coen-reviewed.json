@@ -1,0 +1,44 @@
+{
+  "events": [
+    {
+      "id": "coen:sinpad-224418",
+      "provider": "coen",
+      "sourceIds": [
+        "2411-2025",
+        "5032-2025",
+        "SINPAD-224418"
+      ],
+      "sourceUrls": [
+        "https://portal.indeci.gob.pe/wp-content/uploads/2025/02/REPORTE-COMPLEMENTARIO-N.%C2%BA-2411-22-FEB2025-DESLIZAMIENTO-EN-EL-DISTRITO-DE-SURCO-LIMA-1-1.pdf",
+        "https://portal.indeci.gob.pe/wp-content/uploads/2025/02/REPORTE-COMPLEMENTARIO-N.%C2%BA-5032-19ABR2025-DESLIZAMIENTO-EN-EL-DISTRITO-DE-SURCO-LIMA-2.pdf"
+      ],
+      "date": "2025-02-22",
+      "occurrenceFromUtc": "2025-02-22T09:30:00Z",
+      "occurrenceUntilUtc": "2025-02-22T16:53:00Z",
+      "timePrecision": "conflicting_hours",
+      "timeCandidatesUtc": [
+        "2025-02-22T09:30:00Z",
+        "2025-02-22T16:52:00Z"
+      ],
+      "position": null,
+      "sourceKmStart": 68.8,
+      "sourceKmEnd": null,
+      "hazardType": "landslide",
+      "rawType": "DESLIZAMIENTO",
+      "trigger": "rainfall_reported",
+      "initialRoadStatus": "unverified",
+      "spatialMatch": {
+        "state": "needs_geocoding",
+        "distanceM": null,
+        "segmentId": null
+      },
+      "labelStatus": "candidate_review_required",
+      "notes": [
+        "Two reports describe the same event; they are one candidate.",
+        "The initial occurrence time is 04:30 Lima; the update gives 11:52. Preserve both.",
+        "The updated report identifies PE-22 at Surco km 68+800. Coordinates remain unverified."
+      ],
+      "rawHazard": "DESLIZAMIENTO"
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+import { it, expect, vi } from "vitest";
+import { createSubscriptionFlow, senderKey } from "./subscription-flow";
+import type { SubscriptionRepository } from "@/db/subscriptions";
+const revision = "a".repeat(64),
+  now = Date.parse("2026-10-18T03:00:00Z");
+function setup(testKeys: readonly string[] = []) {
+  const repository: SubscriptionRepository = {
+    routeState: vi.fn(async () => ({ reply: null, draft: null })),
+    bounds: vi.fn(async () => ({ startKm: 0, endKm: 174 })),
+    touch: vi.fn(async () => {}),
+    act: vi.fn(async (input) => input.action.kind),
+  };
+  const context = vi.fn(async () => {
+    throw new Error("Unavailable");
+  });
+  return {
+    repository,
+    context,
+    flow: createSubscriptionFlow({
+      repository,
+      context,
+      revision,
+      pepper: "synthetic-pepper",
+      teamKeys: [],
+      testKeys,
+      now: () => now,
+      newId: () => "abcdef12-0000-4000-8000-000000000000",
+    }),
+  };
+}
+const message = (text: string) => ({ messageId: "synthetic", from: "US.synthetic", messageType: "text", channel: "whatsapp", text });
+it("asks for explicit authorization before purchasing access, independently of a route", async () => {
+  const s = setup();
+  await s.flow.handle(message("SUSCRIBIR PRUEBA"), "r");
+  expect(s.repository.act).toHaveBeenCalledWith(
+    expect.objectContaining({ action: expect.objectContaining({ kind: "prepare", isTest: true, code: "ABCDEF12" }) }),
+  );
+});
+it("redirects the old combined subscription/range syntax without creating a purchase or route", async () => {
+  const s = setup();
+  expect(await s.flow.handle(message("SUSCRIBIR Chosica–La Oroya"), "r")).toContain("usa RUTA");
+  expect(s.context).not.toHaveBeenCalled();
+  expect(s.repository.act).not.toHaveBeenCalled();
+});
+it("does not treat a subscription argument as an endpoint", async () =>
+  expect(await setup().flow.handle(message("SUSCRIBIR Chosica"), "r")).toContain("usa RUTA"));
+it("BAJA is deterministic and does not call the LLM or location service", async () => {
+  const s = setup();
+  await s.flow.handle(message("BAJA"), "r");
+  expect(s.context).not.toHaveBeenCalled();
+  expect(s.repository.act).toHaveBeenCalledWith(expect.objectContaining({ action: { kind: "stop" } }));
+});
+it("accepts the exact typed activation code", async () => {
+  const s = setup();
+  await s.flow.handle(message("ACTIVAR ABCDEF12"), "r");
+  expect(s.repository.act).toHaveBeenCalledWith(expect.objectContaining({ action: { kind: "activate", code: "ABCDEF12" } }));
+});
+it("preserves report/query messages for their existing handlers", async () =>
+  expect(await setup().flow.handle(message("REPORTE derrumbe"), "r")).toBeNull());
+it("recognizes the seven-day command without treating the duration as a place", async () => {
+  const s = setup();
+  await s.flow.handle(message("SUSCRIBIR 7 DIAS"), "r");
+  expect(s.context).not.toHaveBeenCalled();
+  expect(s.repository.act).toHaveBeenCalledWith(expect.objectContaining({ action: expect.objectContaining({ kind: "prepare" }) }));
+});
+it("anchors a request to the provider message time instead of delayed processing", async () => {
+  const s = setup();
+  await s.flow.handle({ ...message("SUSCRIBIR 7 DIAS"), providerTimestamp: now - 60_000 }, "r");
+  expect(s.repository.act).toHaveBeenCalledWith(
+    expect.objectContaining({ action: expect.objectContaining({ requestedAt: new Date(now - 60_000).toISOString() }) }),
+  );
+});
+
+it("allows a configured DEMO sender to explicitly request a real checkout without changing its test identity", async () => {
+  const key = senderKey("US.synthetic", "synthetic-pepper");
+  const s = setup([key]);
+  await s.flow.handle(message("SUSCRIBIR PAGO PRUEBA"), "trace");
+  expect(s.context).not.toHaveBeenCalled();
+  expect(s.repository.act).toHaveBeenCalledWith(
+    expect.objectContaining({
+      isTest: true,
+      action: expect.objectContaining({ kind: "prepare", isTest: false }),
+    }),
+  );
+});
+it("keeps ordinary DEMO subscriptions free for configured test senders", async () => {
+  const s = setup([senderKey("US.synthetic", "synthetic-pepper")]);
+  await s.flow.handle(message("SUSCRIBIR PRUEBA"), "trace");
+  expect(s.repository.act).toHaveBeenCalledWith(
+    expect.objectContaining({
+      isTest: true,
+      action: expect.objectContaining({ kind: "prepare", isTest: true }),
+    }),
+  );
+});
+it("does not expose the payment-test command as a free-pass bypass for unknown senders", async () => {
+  const s = setup();
+  expect(await s.flow.handle(message("SUSCRIBIR PAGO PRUEBA"), "trace")).toContain("SUSCRIBIR 7 DIAS");
+  expect(s.repository.act).not.toHaveBeenCalled();
+});

@@ -1,0 +1,275 @@
+{
+  "schemaVersion": 1,
+  "retrievedAt": "2026-10-18T02:28:30Z",
+  "tool": "Tavily MCP",
+  "userCreditCap": 2000,
+  "searchCalls": 8,
+  "advancedSearchCalls": 8,
+  "extractCalls": 5,
+  "requestedUrlExtractions": 18,
+  "successfulUrlExtractions": 13,
+  "rateLimitedCalls": 1,
+  "conservativeEstimatedCredits": 26,
+  "previousCumulativeEstimate": 700,
+  "cumulativeEstimate": 726,
+  "actualBilledCredits": null,
+  "estimateBasis": "Existing ledger model: two estimated credits per advanced search and per advanced extraction attempt, including the rate-limited attempt. Tavily did not expose billing. This is an estimate, not an account balance.",
+  "outcome": {
+    "officialCriticalZonePoints": 303,
+    "warningAreaRecords": 11,
+    "distinctWeatherNotices": [
+      415,
+      420,
+      421,
+      422
+    ],
+    "retainedStationOrTownReferences": 9,
+    "mapReadyEnvironmentalRecords": 323,
+    "archivedUnlocatedOrUndatedRecords": 13,
+    "sourceRegistryRecords": 41
+  },
+  "verificationRules": [
+    "Official source geometry and official geometry-provenance URL required.",
+    "A verified observation/publication date is required; forecasts also require their published start/end.",
+    "Notice and daily map IDs must match the WFS query; source issue and validity dates are preserved.",
+    "Source polygons are not replaced with centroids; each INGEMMET critical-zone coordinate is retained for clustering.",
+    "SENAMHI Nivel 1 background geometry is excluded; risk features at the same notice/map/level are grouped without altering their coordinates.",
+    "Critical zones under forecast are not confirmed incidents. Station references are not affected-field geometries."
+  ],
+  "limitations": [
+    "Native CLI DNS failed for the official geospatial hosts both inside the sandbox and on an approved retry.",
+    "Tavily returned HTTP 429 on the final extraction attempt; no additional successful extraction is claimed.",
+    "INGEMMET's retrieved alert layer links its 303 points to notice 421 in six northern departments; it does not establish a PE-22 landslide.",
+    "No dated local pest outbreak with verified geometry was obtained; the undated SENASA reference is archived only.",
+    "Environmental data is a documented capture. Browser polling re-reads the catalog, not the external geospatial providers."
+  ],
+  "searches": [
+    {
+      "query": "site:senamhi.gob.pe geoserver g_aviso view_aviso GeoJSON aviso meteorologico",
+      "requestId": "900424e7-903a-4f00-ad30-eade3f04ce2c",
+      "resultUrls": [
+        "https://www.senamhi.gob.pe/main.php?dp=lima&p=aviso-meteorologico",
+        "https://www.senamhi.gob.pe?p=aviso-meteorologico",
+        "https://www.senamhi.gob.pe/main.php?dp=junin&p=aviso-meteorologico",
+        "https://www.senamhi.gob.pe?dp=lima&p=aviso-meteorologico",
+        "https://www.senamhi.gob.pe/main.php?dp=cajamarca&p=aviso-meteorologico"
+      ]
+    },
+    {
+      "query": "site:senamhi.gob.pe aviso 422 18 19 octubre 2026 precipitacion",
+      "requestId": "819ddc7b-99b4-4476-b899-e283eccedd48",
+      "resultUrls": [
+        "https://www.senamhi.gob.pe/servicios?p=aviso-meteorologico-vigente&a=2026&b=26342&c=00&d=SENA",
+        "https://www.senamhi.gob.pe/servicios?p=aviso-meteorologico-detalle&a=2026&b=25482&c=00&d=SENA",
+        "https://www.senamhi.gob.pe?p=aviso-meteorologico-detalle&a=2026&b=29247&c=00&d=SENA",
+        "https://www.senamhi.gob.pe/servicios?p=aviso-meteorologico-vigente&a=2025&b=24342&c=00&d=SENA",
+        "https://www.senamhi.gob.pe?p=aviso-meteorologico-vigente&a=2026&b=25544&c=00&d=SENA"
+      ]
+    },
+    {
+      "query": "site:ingemmet.gob.pe zonas críticas 2026 geocatmin ArcGIS servicio mapa",
+      "requestId": "10eb1a95-3754-44ea-baca-1ac081b189ad",
+      "resultUrls": [
+        "https://portal.ingemmet.gob.pe",
+        "https://geocatmin.ingemmet.gob.pe/geocatmin",
+        "https://geocatmin.ingemmet.gob.pe/geocatmin_v3",
+        "https://geocatmin.ingemmet.gob.pe/portal/home/item.html?id=202d4b384d1541638688e9ea8570dc51",
+        "https://geocatmin.ingemmet.gob.pe/portal/home/webmap/viewer.html?webmap=202d4b384d1541638688e9ea8570dc51"
+      ]
+    },
+    {
+      "query": "site:senamhi.gob.pe Huayao Ingenio catálogo estaciones coordenadas 112056 111097",
+      "requestId": "17c05779-2339-4f07-a50a-94bfb3ccfb17",
+      "resultUrls": [
+        "https://www.senamhi.gob.pe/pdf/anexos-atlas-climatico.pdf",
+        "https://www.senamhi.gob.pe/site/descarga-datos",
+        "https://www.senamhi.gob.pe?p=estaciones"
+      ]
+    },
+    {
+      "query": "site:geocatmin.ingemmet.gob.pe/arcgis/rest/services zonas criticas",
+      "requestId": "3f29928e-3d47-40ab-b19b-6f2b9ed9a532",
+      "resultUrls": [
+        "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_PERU_ALERTA/MapServer/1",
+        "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_PELIGROS_GEOLOGICOS/MapServer/2",
+        "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_PERU_ALERTA/MapServer/0",
+        "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_PERU_ALERTA/MapServer/1/queryAttachments",
+        "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_PERU_ALERTA/MapServer/1/queryAnalytic"
+      ]
+    },
+    {
+      "query": "site:idesep.senamhi.gob.pe geoserver g_aviso view_aviso",
+      "requestId": "ed852c78-a89b-49ce-9554-30b1799bc022",
+      "resultUrls": [
+        "https://idesep.senamhi.gob.pe/geoserver/g_03_05/wms?REQUEST=GetCapabilities&SERVICE=WMS",
+        "https://idesep.senamhi.gob.pe/geoserver/g_03_05/wms?SERVICE=WMS&REQUEST=GetCapabilities",
+        "https://idesep.senamhi.gob.pe/portalidesep/idesep_componente_catalogo_geoservicios.jsp",
+        "https://idesep.senamhi.gob.pe/portalidesep/wms.do"
+      ]
+    },
+    {
+      "query": "site:senamhi.gob.pe avisos meteorológicos WFS GeoJSON",
+      "requestId": "4df59f4c-546d-4d0f-b3df-09fccd96d3a6",
+      "resultUrls": [
+        "https://www.senamhi.gob.pe/main.php?dp=la-libertad&p=avisos-meteorologicos",
+        "https://www.senamhi.gob.pe/mapas/mapa-avisos-incendios/index.php?av=4&nl=4&mp=1&fc=2024",
+        "https://www.senamhi.gob.pe/main.php?dp=arequipa&p=avisos-meteorologicos",
+        "https://www.senamhi.gob.pe/servicios?p=aviso-meteorologico",
+        "https://www.senamhi.gob.pe?dp=lima&p=aviso-meteorologico"
+      ]
+    },
+    {
+      "query": "site:sigrid.cenepred.gob.pe MapServer zonas críticas movimientos masa",
+      "requestId": "c77e5a8c-77d4-4430-b00a-7059f93bb89d",
+      "resultUrls": [
+        "https://sigrid.cenepred.gob.pe/sigridv3/storage/biblioteca/22390_estudio-de-escenario-de-riesgo-por-lluvias-para-el-verano-2027-basado-en-el-informe-tecnico-n0-09-2026senamhi-dma-spc.pdf",
+        "https://sigrid.cenepred.gob.pe/sigridv3/storage/biblioteca//21425_estudio-de-escenarios-de-riesgo-por-lluvias-para-el-periodo-marzo-mayo-2026-con-base-en-el-informe-tecnico-n0-002-2026senamhi-dma-spc.pdf",
+        "https://sigrid.cenepred.gob.pe/sigridv3/documento/biblioteca?c=+Movimiento+en+Masa&p=101",
+        "https://sigrid.cenepred.gob.pe/sigridv3/storage/biblioteca//16934_opinion-tecnica-n0-14-2023-opinion-tecnica-del-informe-de-analisis-de-riesgo-del-centro-poblado-santiago-de-anchucaya.pdf",
+        "https://sigrid.cenepred.gob.pe/sigridv3/documento/biblioteca?c=INSTITUTO+GEOLOGICO+MINERO+Y+METALURGICO+%28INGEMMET%29&p=26"
+      ]
+    }
+  ],
+  "extractions": [
+    {
+      "urls": [
+        "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_PERU_ALERTA/MapServer/1",
+        "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_PERU_ALERTA/MapServer/0",
+        "https://www.senamhi.gob.pe/?p=aviso-meteorologico-vigente&a=2026&b=29287&c=00&d=SENA"
+      ],
+      "requestId": "b9780a69-a433-4162-9aee-406f0279413e",
+      "successes": [
+        {
+          "url": "https://www.senamhi.gob.pe/?p=aviso-meteorologico-vigente&a=2026&b=29287&c=00&d=SENA",
+          "contentCharacters": 2237
+        },
+        {
+          "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_PERU_ALERTA/MapServer/0",
+          "contentCharacters": 1777
+        },
+        {
+          "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_PERU_ALERTA/MapServer/1",
+          "contentCharacters": 2276
+        }
+      ],
+      "failed": [],
+      "providerStatus": null,
+      "providerError": null,
+      "providerDetail": null
+    },
+    {
+      "urls": [
+        "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_PERU_ALERTA/MapServer/1/query?where=1%3D1&outFields=OBJECTID,PELIGROS_G,REGION,PROVINCIA,DISTRITO,PARAJE,LONGITUD,LATITUD,F_REGISTRO,F_CAMBIO,REGISTRO,URL_BOLETIN&returnGeometry=true&outSR=4326&resultRecordCount=5&f=geojson",
+        "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_PERU_ALERTA/MapServer/0/query?where=1%3D1&outFields=*&returnGeometry=true&outSR=4326&f=geojson",
+        "https://idesep.senamhi.gob.pe/geoserver/g_aviso/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=g_aviso:view_aviso&maxFeatures=50&viewparams=qry:422_1_2026&outputFormat=application/json"
+      ],
+      "requestId": "e6ef56b0-c746-4663-918d-1cdb64dcd170",
+      "successes": [
+        {
+          "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_PERU_ALERTA/MapServer/0/query?where=1%3D1&outFields=*&returnGeometry=true&outSR=4326&f=geojson",
+          "contentCharacters": 123322
+        },
+        {
+          "url": "https://idesep.senamhi.gob.pe/geoserver/g_aviso/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=g_aviso:view_aviso&maxFeatures=50&viewparams=qry:422_1_2026&outputFormat=application/json",
+          "contentCharacters": 2332979
+        }
+      ],
+      "failed": [
+        {
+          "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_PERU_ALERTA/MapServer/1/query?where=1%3D1&outFields=OBJECTID,PELIGROS_G,REGION,PROVINCIA,DISTRITO,PARAJE,LONGITUD,LATITUD,F_REGISTRO,F_CAMBIO,REGISTRO,URL_BOLETIN&returnGeometry=true&outSR=4326&resultRecordCount=5&f=geojson",
+          "error": "Failed to fetch url"
+        }
+      ],
+      "providerStatus": null,
+      "providerError": null,
+      "providerDetail": null
+    },
+    {
+      "urls": [
+        "https://idesep.senamhi.gob.pe/geoserver/g_aviso/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=g_aviso:view_aviso&maxFeatures=50&viewparams=qry:421_1_2026&outputFormat=application/json",
+        "https://idesep.senamhi.gob.pe/geoserver/g_aviso/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=g_aviso:view_aviso&maxFeatures=50&viewparams=qry:421_2_2026&outputFormat=application/json",
+        "https://idesep.senamhi.gob.pe/geoserver/g_aviso/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=g_aviso:view_aviso&maxFeatures=50&viewparams=qry:422_2_2026&outputFormat=application/json",
+        "https://www.senamhi.gob.pe/?p=aviso-meteorologico-vigente&a=2026&b=29287&c=00&d=SENA"
+      ],
+      "requestId": "17551ee0-bb0b-4f50-aa11-9938db2fa4a2",
+      "successes": [
+        {
+          "url": "https://www.senamhi.gob.pe/?p=aviso-meteorologico-vigente&a=2026&b=29287&c=00&d=SENA",
+          "contentCharacters": 250512
+        },
+        {
+          "url": "https://idesep.senamhi.gob.pe/geoserver/g_aviso/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=g_aviso:view_aviso&maxFeatures=50&viewparams=qry:421_2_2026&outputFormat=application/json",
+          "contentCharacters": 2360356
+        },
+        {
+          "url": "https://idesep.senamhi.gob.pe/geoserver/g_aviso/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=g_aviso:view_aviso&maxFeatures=50&viewparams=qry:422_2_2026&outputFormat=application/json",
+          "contentCharacters": 2345406
+        },
+        {
+          "url": "https://idesep.senamhi.gob.pe/geoserver/g_aviso/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=g_aviso:view_aviso&maxFeatures=50&viewparams=qry:421_1_2026&outputFormat=application/json",
+          "contentCharacters": 2340892
+        }
+      ],
+      "failed": [],
+      "providerStatus": null,
+      "providerError": null,
+      "providerDetail": null
+    },
+    {
+      "urls": [
+        "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_PERU_ALERTA/MapServer/1/query?where=UPPER(REGION)%20IN%20(%27LIMA%27,%27JUNIN%27,%27JUN%C3%8DN%27)&outFields=*&returnGeometry=true&outSR=4326&resultRecordCount=1000&f=geojson",
+        "https://idesep.senamhi.gob.pe/geoserver/g_aviso/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=g_aviso:view_aviso&maxFeatures=50&viewparams=qry:415_3_2026&outputFormat=application/json",
+        "https://idesep.senamhi.gob.pe/geoserver/g_aviso/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=g_aviso:view_aviso&maxFeatures=50&viewparams=qry:420_1_2026&outputFormat=application/json",
+        "https://idesep.senamhi.gob.pe/geoserver/g_aviso/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=g_aviso:view_aviso&maxFeatures=50&viewparams=qry:420_2_2026&outputFormat=application/json",
+        "https://idesep.senamhi.gob.pe/geoserver/g_aviso/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=g_aviso:view_aviso&maxFeatures=50&viewparams=qry:421_3_2026&outputFormat=application/json"
+      ],
+      "requestId": "16335cbc-722a-4245-96de-fe7deea136c3",
+      "successes": [
+        {
+          "url": "https://idesep.senamhi.gob.pe/geoserver/g_aviso/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=g_aviso:view_aviso&maxFeatures=50&viewparams=qry:420_1_2026&outputFormat=application/json",
+          "contentCharacters": 2330800
+        },
+        {
+          "url": "https://idesep.senamhi.gob.pe/geoserver/g_aviso/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=g_aviso:view_aviso&maxFeatures=50&viewparams=qry:415_3_2026&outputFormat=application/json",
+          "contentCharacters": 2341206
+        },
+        {
+          "url": "https://idesep.senamhi.gob.pe/geoserver/g_aviso/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=g_aviso:view_aviso&maxFeatures=50&viewparams=qry:420_2_2026&outputFormat=application/json",
+          "contentCharacters": 2333422
+        },
+        {
+          "url": "https://idesep.senamhi.gob.pe/geoserver/g_aviso/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=g_aviso:view_aviso&maxFeatures=50&viewparams=qry:421_3_2026&outputFormat=application/json",
+          "contentCharacters": 2348451
+        }
+      ],
+      "failed": [
+        {
+          "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_PERU_ALERTA/MapServer/1/query?where=UPPER(REGION)%20IN%20(%27LIMA%27,%27JUNIN%27,%27JUN%C3%8DN%27)&outFields=*&returnGeometry=true&outSR=4326&resultRecordCount=1000&f=geojson",
+          "error": "Failed to fetch url"
+        }
+      ],
+      "providerStatus": null,
+      "providerError": null,
+      "providerDetail": null
+    },
+    {
+      "urls": [
+        "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_PERU_ALERTA/MapServer/1/query?where=1%3D1&outFields=*&returnGeometry=true&outSR=4326&resultRecordCount=5&f=pjson",
+        "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_PELIGROS_GEOLOGICOS/MapServer/2/query?where=1%3D1&outFields=*&geometry=-77.4,-12.8,-74.7,-10.8&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&returnGeometry=true&outSR=4326&f=geojson",
+        "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_PERU_ALERTA/MapServer/1/query?where=1%3D1&outFields=*&geometry=-77.4,-12.8,-74.7,-10.8&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&returnGeometry=true&outSR=4326&f=geojson"
+      ],
+      "requestId": null,
+      "successes": [],
+      "failed": [],
+      "providerStatus": 429,
+      "providerError": "Extract failed",
+      "providerDetail": {
+        "error": "Your request has been blocked due to excessive requests. Please reduce the rate of requests. Verify you are using production API keys."
+      }
+    }
+  ],
+  "evidenceFiles": [
+    "official-map-geometries-2026-10-17_christian.json",
+    "verified-map-evidence-2026-10-17_christian.json"
+  ]
+}

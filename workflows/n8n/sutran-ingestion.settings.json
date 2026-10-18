@@ -1,0 +1,10 @@
+{
+  "executionOrder": "v1",
+  "availableInMCP": true,
+  "timezone": "America/Lima",
+  "saveExecutionProgress": false,
+  "saveManualExecutions": true,
+  "saveDataErrorExecution": "all",
+  "saveDataSuccessExecution": "all",
+  "executionTimeout": 150
+}

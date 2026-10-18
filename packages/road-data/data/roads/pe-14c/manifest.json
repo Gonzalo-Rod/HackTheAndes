@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "roadCode": "PE-14C",
+  "geometryRevision": "dfa34eb49db4872f605ecaf5249636969dc84c3653f3ec0eb12b7f2a08040490",
+  "measuredLengthKm": 223.2854437633833,
+  "segmentCount": 224,
+  "kilometerCalibration": "unverified",
+  "files": {
+    "source.json": "69096d294b7e749e31cbd8deaf87198272bc7f0f8afa2c18838cf616fbefb802",
+    "corridor.geojson": "eb92bec1b205f9204331f8a8caa5ba3582458bbd12706e142fba52731d20adfc",
+    "segments-1km.geojson": "3497661336ccf18d91ed5013be29f897e102f9a9f903b91c247d5cb50719cc19",
+    "diagnostics.json": "e459beb964e2dae3f17a21be7982f6390b39332b5de33b8b772045513154ccb0"
+  }
+}

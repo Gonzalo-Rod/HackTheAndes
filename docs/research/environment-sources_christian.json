@@ -1,0 +1,1786 @@
+{
+    "schemaVersion":  1,
+    "generatedAt":  "2026-10-18T02:28:30Z",
+    "project":  "PeruRoad Climate",
+    "scope":  "PE-22 / Rimac and Mantaro extension; national or out-of-corridor context explicitly labelled.",
+    "verificationMethod":  "Tavily MCP search followed by official-page/PDF extraction",
+    "sourceRecordCount":  41,
+    "interpretation":  "Verified source accessibility and documented information are not a live alert feed. Every record retains its geography, date and meaning. The follow-up verifies a station rainfall observation at Ingenio and a closed historical forest-fire crop-loss report at Ayas; it does not verify a current PE-22 road disruption or local pest outbreak.",
+    "categoryCoverage":  {
+                             "water":  [
+                                           "senamhi-hydromet-observation-guide",
+                                           "senamhi-accumulated-rain-guide",
+                                           "senamhi-chirilu-monitoring",
+                                           "ana-snirh-service",
+                                           "ana-river-monitoring-2026-07-31",
+                                           "cenepred-ond-2026-rain-scenario",
+                                           "ingemmet-geocatmin-hazard-metadata",
+                                           "indeci-coen-emergency-archive",
+                                           "indeci-quebradas-191-2026",
+                                           "ingemmet-payhua-matucana-historical",
+                                           "ingemmet-pucruchacra-san-mateo-historical",
+                                           "senamhi-potato-risk-oct-dec-2026",
+                                           "senamhi-maize-risk-oct-dec-2026",
+                                           "senamhi-sierra-crop-impacts-sep29-oct5-2026",
+                                           "senamhi-chirilu-rainfall-bulletin-03-2026",
+                                           "senamhi-station-atlas-coordinates",
+                                           "senamhi-chirilu-rainfall-bulletin-04-2026",
+                                           "senamhi-hydro-seasonal-forecast-oct2026-feb2027",
+                                           "cenepred-summer-2027-rain-risk-scenario",
+                                           "indeci-monitoring-bulletin-290-2026",
+                                           "cenepred-summer-2027-risk-scenario-update",
+                                           "cenepred-water-deficit-risk-2026-27-september",
+                                           "senamhi-warning-wfs-verified-daily-polygons"
+                                       ],
+                             "frost":  [
+                                           "senamhi-frost-398-2026",
+                                           "senamhi-hydromet-observation-guide",
+                                           "senamhi-station-historical-download",
+                                           "senamhi-potato-risk-oct-dec-2026",
+                                           "senamhi-maize-risk-oct-dec-2026",
+                                           "senamhi-sierra-crop-impact-40-2026",
+                                           "senamhi-agriculture-cold-impacts-2026-10-02",
+                                           "senamhi-station-atlas-coordinates",
+                                           "indeci-yauli-frost-event-2026-06-11",
+                                           "senamhi-lima-town-weather-forecast-2026-10-16",
+                                           "senamhi-junin-town-weather-forecast-2026-10-16",
+                                           "indeci-monitoring-bulletin-290-2026",
+                                           "senamhi-warning-wfs-verified-daily-polygons"
+                                       ],
+                             "landslides":  [
+                                                "cenepred-ond-2026-rain-scenario",
+                                                "ingemmet-geocatmin-hazard-metadata",
+                                                "indeci-coen-emergency-archive",
+                                                "indeci-quebradas-191-2026",
+                                                "ingemmet-payhua-matucana-historical",
+                                                "ingemmet-pucruchacra-san-mateo-historical",
+                                                "cenepred-summer-2027-rain-risk-scenario",
+                                                "ingemmet-pucruchacra-san-mateo-report-2026-lead",
+                                                "cenepred-summer-2027-risk-scenario-update",
+                                                "ingemmet-critical-zones-under-weather-notice-geojson"
+                                            ],
+                             "rain":  [
+                                          "senamhi-weather-422-2026",
+                                          "senamhi-hydromet-observation-guide",
+                                          "senamhi-station-historical-download",
+                                          "senamhi-accumulated-rain-guide",
+                                          "senamhi-chirilu-monitoring",
+                                          "cenepred-ond-2026-rain-scenario",
+                                          "indeci-coen-emergency-archive",
+                                          "indeci-quebradas-191-2026",
+                                          "ingemmet-payhua-matucana-historical",
+                                          "senamhi-rainfall-24h-290-2026",
+                                          "senamhi-chirilu-rainfall-bulletin-03-2026",
+                                          "senamhi-chirilu-rainfall-bulletin-04-2026",
+                                          "senamhi-hydro-seasonal-forecast-oct2026-feb2027",
+                                          "senamhi-lima-town-weather-forecast-2026-10-16",
+                                          "senamhi-junin-town-weather-forecast-2026-10-16",
+                                          "cenepred-summer-2027-rain-risk-scenario",
+                                          "indeci-monitoring-bulletin-290-2026",
+                                          "cenepred-summer-2027-risk-scenario-update",
+                                          "ingemmet-critical-zones-under-weather-notice-geojson",
+                                          "senamhi-warning-wfs-verified-daily-polygons"
+                                      ],
+                             "agriculture":  [
+                                                 "ingemmet-payhua-matucana-historical",
+                                                 "ingemmet-pucruchacra-san-mateo-historical",
+                                                 "senamhi-agromet-bulletin-index",
+                                                 "senamhi-potato-risk-oct-dec-2026",
+                                                 "senamhi-maize-risk-oct-dec-2026",
+                                                 "senamhi-insect-conditions-oct12-15-2026",
+                                                 "senamhi-disease-conditions-oct12-15-2026",
+                                                 "senamhi-sierra-crop-impacts-sep29-oct5-2026",
+                                                 "senasa-sigia-pesticide-registry",
+                                                 "senasa-surveillance-verification-guidance",
+                                                 "senamhi-chirilu-rainfall-bulletin-03-2026",
+                                                 "senamhi-sierra-crop-impact-40-2026",
+                                                 "senamhi-agriculture-cold-impacts-2026-10-02",
+                                                 "senamhi-station-atlas-coordinates",
+                                                 "senasa-junin-fruit-fly-surveillance-network",
+                                                 "indeci-surco-forest-fire-crop-damage-2026",
+                                                 "cenepred-summer-2027-risk-scenario-update",
+                                                 "cenepred-water-deficit-risk-2026-27-september",
+                                                 "senamhi-warning-wfs-verified-daily-polygons"
+                                             ],
+                             "pest_alerts":  [
+                                                 "senamhi-agromet-bulletin-index",
+                                                 "senamhi-insect-conditions-oct12-15-2026",
+                                                 "senamhi-disease-conditions-oct12-15-2026",
+                                                 "senamhi-sierra-crop-impacts-sep29-oct5-2026",
+                                                 "senasa-sigia-pesticide-registry",
+                                                 "senasa-surveillance-verification-guidance",
+                                                 "senasa-junin-fruit-fly-surveillance-network",
+                                                 "indeci-monitoring-bulletin-290-2026"
+                                             ]
+                         },
+    "budget":  {
+                   "researchPassSearchCalls":  30,
+                   "researchPassExtractionCalls":  18,
+                   "conservativeEstimatedCredits":  91,
+                   "priorHandoffAndContinuationEstimate":  88,
+                   "conservativeCumulativeEstimate":  726,
+                   "userCreditCap":  2000,
+                   "actualBilledCredits":  null,
+                   "basis":  "Initial source pass: 30 advanced searches and 18 extraction calls estimated at 91 credits. Earlier continuation: 58 searches and 5 extraction calls conservatively estimated at 135. Follow-up: 48 advanced searches (96), 9 extraction calls (18), and two crawls (10 estimated). Additional notice sweep: 13 advanced searches (26), two basic searches (2), and five advanced extraction calls (10). Final coverage audit: five advanced searches and one advanced extraction (12). Added to the earlier 88-credit handoff estimate; Tavily did not expose actual billing. Latest notice/problem review adds 73 advanced searches (146 estimated credits) and 27 advanced extractions (54 estimated credits); actual billing was not returned. Geographic verification adds eight advanced searches and five advanced extraction attempts (26 estimated credits, including one 429). The stale source-registry total 688 is reconciled to the main ledger\u0027s previous 700, giving 726 estimated cumulative credits. Actual billing remains unavailable.",
+                   "intermediateFollowUpSearchCalls":  58,
+                   "intermediateFollowUpExtractCalls":  5,
+                   "intermediateFollowUpEstimatedCredits":  135,
+                   "latestFollowUpSearchCalls":  48,
+                   "latestFollowUpAdvancedSearchCalls":  48,
+                   "latestFollowUpExtractCalls":  9,
+                   "latestFollowUpRequestedUrls":  23,
+                   "latestFollowUpCrawlCalls":  2,
+                   "latestFollowUpEstimatedCredits":  124,
+                   "additionalNoticeSweepSearchCalls":  15,
+                   "additionalNoticeSweepAdvancedSearchCalls":  13,
+                   "additionalNoticeSweepBasicSearchCalls":  2,
+                   "additionalNoticeSweepExtractCalls":  5,
+                   "additionalNoticeSweepRequestedUrls":  10,
+                   "additionalNoticeSweepEstimatedCredits":  38,
+                   "finalCoverageAuditSearchCalls":  5,
+                   "finalCoverageAuditExtractCalls":  1,
+                   "finalCoverageAuditRequestedUrls":  1,
+                   "finalCoverageAuditEstimatedCredits":  12,
+                   "latestNoticeReviewSearchCalls":  73,
+                   "latestNoticeReviewExtractCalls":  27,
+                   "latestNoticeReviewRequestedUrls":  29,
+                   "latestNoticeReviewEstimatedCredits":  200,
+                   "geometryVerificationPassEstimatedCredits":  26,
+                   "geometryVerificationPassSearchCalls":  8,
+                   "geometryVerificationPassExtractCalls":  5
+               },
+    "sources":  [
+                    {
+                        "id":  "senamhi-weather-422-2026",
+                        "provider":  "SENAMHI",
+                        "title":  "Weather notice 422: precipitation in the central and southern Andes",
+                        "url":  "https://www.senamhi.gob.pe/?p=aviso-meteorologico-vigente\u0026a=2026\u0026b=29287\u0026c=00\u0026d=SENA",
+                        "categories":  [
+                                           "rain"
+                                       ],
+                        "sourceKind":  "forecast_notice",
+                        "geographicScope":  "Central/southern Andes. Explicit potentially affected provinces include Huarochiri, Yauli, Huancayo, Concepcion, Jauja and Chupaca; exact road overlap remains uncomputed.",
+                        "verifiedAt":  "2026-10-17T23:27:07Z",
+                        "publicationDate":  "2026-10-16",
+                        "validity":  {
+                                         "start":  "2026-10-18T14:00:00-05:00",
+                                         "end":  "2026-10-19T23:59:00-05:00"
+                                     },
+                        "availableFormats":  [
+                                                 "HTML notice with multiple numbered panels",
+                                                 "Advertised WFS SHAPE-ZIP links for each forecast day; binary files not retrieved"
+                                             ],
+                        "accessStatus":  "Notice body extracted successfully; forecast validity starts after retrieval time.",
+                        "observedFacts":  [
+                                              "The exact notice 422 panel has a yellow severity level and an issue date of October 16, 2026.",
+                                              "It forecasts precipitation, including snow, hail, sleet and rain, for October 18–19; central-Andes rainfall forecast is 8–11 mm/day on October 18 and 9–13 mm/day for central/southern Andes on October 19.",
+                                              "The affected-area lists explicitly include Huarochiri, Yauli and Huancayo. Hail is forecast above 2,800 m and significant snowfall above 3,800 m."
+                                          ],
+                        "limitations":  [
+                                            "A forecast is not evidence that rain, snow, a landslide or a closure has occurred.",
+                                            "Province-level inclusion does not establish that every PE-22 segment lies inside the warning polygon.",
+                                            "The same response includes notices 415–423; parsing the first issue date would attach the wrong date to notice 422.",
+                                            "Catalogue links with -prueba returned the generic institutional page; the non-prueba notice route supplied the actual numbered content."
+                                        ],
+                        "automation":  "Discover links in the official national notice catalogue, extract and isolate the exact notice-number panel, validate issue/start/end, archive the content and follow only actual advertised polygon links. Mark as forecast; compute polygon intersection before segment attribution.",
+                        "linkedDownloadEndpoints":  [
+                                                        "https://idesep.senamhi.gob.pe/geoserver/g_aviso/ows?service=WFS\u0026version=1.0.0\u0026request=GetFeature\u0026typeName=g_aviso:view_aviso\u0026format_options=filename:shp_aviso_422_1_2026.zip\u0026maxFeatures=50\u0026viewparams=qry:422_1_2026\u0026outputFormat=SHAPE-ZIP",
+                                                        "https://idesep.senamhi.gob.pe/geoserver/g_aviso/ows?service=WFS\u0026version=1.0.0\u0026request=GetFeature\u0026typeName=g_aviso:view_aviso\u0026format_options=filename:shp_aviso_422_2_2026.zip\u0026maxFeatures=50\u0026viewparams=qry:422_2_2026\u0026outputFormat=SHAPE-ZIP"
+                                                    ],
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true,
+                                                   "requestId":  "c3ea46ee-af5f-4604-81af-43a98c69a54b",
+                                                   "note":  "Isolated the text between the headings for notice 422 and notice 423; dates and affected provinces were read from that panel."
+                                               },
+                        "researchFile":  "hydromet-sources_christian.json",
+                        "currentObservedIncidentEstablished":  false
+                    },
+                    {
+                        "id":  "senamhi-frost-398-2026",
+                        "provider":  "SENAMHI",
+                        "title":  "Historical weather notice 398: night-temperature decrease in the central and southern Andes",
+                        "url":  "https://www.senamhi.gob.pe/?p=aviso-meteorologico-detalle\u0026a=2026\u0026b=29187\u0026c=00\u0026d=SENA",
+                        "categories":  [
+                                           "frost"
+                                       ],
+                        "sourceKind":  "historical_forecast_notice",
+                        "geographicScope":  "Explicitly includes Junin and the provinces Huancayo, Concepcion, Jauja, Junin, Tarma, Yauli and Chupaca among other areas.",
+                        "verifiedAt":  "2026-10-17T23:27:07Z",
+                        "publicationDate":  "2026-10-03",
+                        "validity":  {
+                                         "start":  "2026-10-05T00:00:00-05:00",
+                                         "end":  "2026-10-07T23:59:00-05:00"
+                                     },
+                        "availableFormats":  [
+                                                 "HTML notice with numbered panels",
+                                                 "Advertised daily WFS SHAPE-ZIP links; binary files not retrieved"
+                                             ],
+                        "accessStatus":  "Extracted successfully; validity expired before this research.",
+                        "observedFacts":  [
+                                              "The exact notice 398 panel has a red overall severity and was issued on October 3, 2026, for October 5–7.",
+                                              "Its October 5 text forecasts central-Andes minimum temperatures between 0 and -6 C above 3,500 m.",
+                                              "The first daily affected-area list explicitly names Junin and relevant Mantaro/Yauli provinces."
+                                          ],
+                        "limitations":  [
+                                            "This is an expired forecast, not a current frost alert or a measured frost occurrence.",
+                                            "Overall red severity cannot be assigned to every listed province without the daily polygons.",
+                                            "A separate notice 410 title also mentions the central Andes, but its extracted province lists do not include Lima or Junin; do not infer local coverage from broad titles."
+                                        ],
+                        "automation":  "Archive as historical forecast evidence with its original validity. A local frost alert requires a still-valid notice polygon or a timestamped station minimum observation; never reactivate this expired notice.",
+                        "linkedDownloadEndpoints":  [
+                                                        "https://idesep.senamhi.gob.pe/geoserver/g_aviso/ows?service=WFS\u0026version=1.0.0\u0026request=GetFeature\u0026typeName=g_aviso:view_aviso\u0026format_options=filename:shp_aviso_398_1_2026.zip\u0026maxFeatures=50\u0026viewparams=qry:398_1_2026\u0026outputFormat=SHAPE-ZIP",
+                                                        "https://idesep.senamhi.gob.pe/geoserver/g_aviso/ows?service=WFS\u0026version=1.0.0\u0026request=GetFeature\u0026typeName=g_aviso:view_aviso\u0026format_options=filename:shp_aviso_398_2_2026.zip\u0026maxFeatures=50\u0026viewparams=qry:398_2_2026\u0026outputFormat=SHAPE-ZIP",
+                                                        "https://idesep.senamhi.gob.pe/geoserver/g_aviso/ows?service=WFS\u0026version=1.0.0\u0026request=GetFeature\u0026typeName=g_aviso:view_aviso\u0026format_options=filename:shp_aviso_398_3_2026.zip\u0026maxFeatures=50\u0026viewparams=qry:398_3_2026\u0026outputFormat=SHAPE-ZIP"
+                                                    ],
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true,
+                                                   "requestId":  "19ea803f-9447-4a22-940a-7553273782b1",
+                                                   "note":  "Parsed the exact notice 398 panel after the current notice panels, including the first daily affected-area list."
+                                               },
+                        "researchFile":  "hydromet-sources_christian.json",
+                        "currentObservedIncidentEstablished":  false
+                    },
+                    {
+                        "id":  "senamhi-hydromet-observation-guide",
+                        "provider":  "SENAMHI / gob.pe",
+                        "title":  "Official guide to Peru hydrometeorological observations",
+                        "url":  "https://www.gob.pe/9313-conocer-los-datos-hidrometeorologicos-del-peru",
+                        "categories":  [
+                                           "water",
+                                           "rain",
+                                           "frost"
+                                       ],
+                        "sourceKind":  "official_service_documentation",
+                        "geographicScope":  "Peru nationwide station network. Station availability and time coverage must be checked for each PE-22/Mantaro location.",
+                        "verifiedAt":  "2026-10-17T23:27:07Z",
+                        "publicationDate":  null,
+                        "validity":  null,
+                        "availableFormats":  [
+                                                 "HTML service documentation",
+                                                 "Linked interactive station portal; no machine-readable payload obtained"
+                                             ],
+                        "accessStatus":  "Official guide extracted; linked station portal extracted only its station-type labels.",
+                        "observedFacts":  [
+                                              "The guide describes observations of maximum/minimum air temperature, precipitation, humidity and river levels.",
+                                              "Conventional-station values are displayed daily; automatic-station temperature, precipitation and water-level variables are described as hourly.",
+                                              "It separates conventional/automatic stations and real-time/delayed transmission. Real-time conventional stations transmit at 07:00, 13:00 and 19:00."
+                                          ],
+                        "limitations":  [
+                                            "The guide\u0027s displayed last-change date is July 30, 2020; it documents service behavior rather than proving a current station feed.",
+                                            "No actual Chosica, Matucana or Huancayo observation values or dates were extracted.",
+                                            "River level and discharge are different variables; do not convert without the station rating curve."
+                                        ],
+                        "automation":  "Use the linked official station portal to discover actual station metadata and payloads. Validate station identifier, coordinates, variable, unit, observation time and missing-value flags before ingestion; display unavailable until a payload is obtained.",
+                        "serviceUrl":  "https://www.senamhi.gob.pe/servicios/?p=estaciones",
+                        "lastChangeDate":  "2020-07-30",
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true,
+                                                   "requestId":  "19ea803f-9447-4a22-940a-7553273782b1",
+                                                   "note":  "Service guide body read; related station-page extraction request c3ea46ee-af5f-4604-81af-43a98c69a54b exposed only portal labels."
+                                               },
+                        "researchFile":  "hydromet-sources_christian.json",
+                        "currentObservedIncidentEstablished":  false
+                    },
+                    {
+                        "id":  "senamhi-station-historical-download",
+                        "provider":  "SENAMHI / gob.pe",
+                        "title":  "Official meteorological station-data download instructions",
+                        "url":  "https://www.gob.pe/9312-conocer-los-datos-hidrometeorologicos-del-peru-descargar-los-datos-meteorologicos",
+                        "categories":  [
+                                           "rain",
+                                           "frost"
+                                       ],
+                        "sourceKind":  "authenticated_historical_download_documentation",
+                        "geographicScope":  "Meteorological stations nationwide; exact local station coverage not obtained.",
+                        "verifiedAt":  "2026-10-17T23:27:07Z",
+                        "publicationDate":  null,
+                        "validity":  null,
+                        "availableFormats":  [
+                                                 "HTML service documentation",
+                                                 "Documented comma-separated TXT station download; actual data file not downloaded"
+                                             ],
+                        "accessStatus":  "Instructions extracted. Download requires a registered user and the password sent by SENAMHI.",
+                        "observedFacts":  [
+                                              "The official instructions document daily station files in TXT with comma-separated columns for year, month, day, precipitation type, and maximum/minimum temperature.",
+                                              "Registration and the emailed SENAMHI password are required before download."
+                                          ],
+                        "limitations":  [
+                                            "This is a documented download format, not an authenticated data extraction.",
+                                            "No account was created and no credentials or personal information were submitted.",
+                                            "No public API endpoint or current measurement payload was found."
+                                        ],
+                        "automation":  "Use an authorized existing account for a supervised historical download and ingest the resulting TXT with explicit date/unit/missing-value validation. Do not build an unattended scraper that assumes an anonymous CSV endpoint.",
+                        "serviceUrl":  "https://www.senamhi.gob.pe/servicios/?p=descarga-datos-meteorologicos",
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true,
+                                                   "requestId":  "f2610b98-6183-4984-8d67-946972a7cf4b",
+                                                   "note":  "Read the official format and registration requirements; the linked portal itself previously extracted only the page heading."
+                                               },
+                        "researchFile":  "hydromet-sources_christian.json",
+                        "currentObservedIncidentEstablished":  false
+                    },
+                    {
+                        "id":  "senamhi-accumulated-rain-guide",
+                        "provider":  "SENAMHI / gob.pe",
+                        "title":  "Official accumulated-rainfall monitoring service",
+                        "url":  "https://www.gob.pe/9314-consultar-los-datos-de-lluvia-acumulada-a-nivel-nacional",
+                        "categories":  [
+                                           "rain",
+                                           "water"
+                                       ],
+                        "sourceKind":  "official_observation_service_documentation",
+                        "geographicScope":  "SENAMHI station network nationwide; local station availability still to be checked.",
+                        "verifiedAt":  "2026-10-17T23:27:07Z",
+                        "publicationDate":  null,
+                        "validity":  null,
+                        "availableFormats":  [
+                                                 "HTML service documentation",
+                                                 "Linked interactive accumulated-rainfall station charts; no export/API format obtained"
+                                             ],
+                        "accessStatus":  "Official guide extracted successfully; chart data were not retrieved.",
+                        "observedFacts":  [
+                                              "The service is documented as comparing the current year\u0027s daily accumulated rainfall with historical averages and historical accumulated ranges.",
+                                              "The guide says the information updates automatically each day and the user selects a station."
+                                          ],
+                        "limitations":  [
+                                            "The displayed last-change date is March 13, 2023; it is not an observation timestamp.",
+                                            "A cumulative annual curve does not directly provide a recent 24-hour catchment rainfall amount.",
+                                            "No present station rainfall value or downloadable series was extracted."
+                                        ],
+                        "automation":  "Inspect only the linked official portal for an actual station series. Store dates and accumulation definition; derive short-window rainfall only from compatible consecutive values with valid timestamps and reset handling.",
+                        "serviceUrl":  "https://www.senamhi.gob.pe/servicios/?p=lluvia-acumulada",
+                        "lastChangeDate":  "2023-03-13",
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true,
+                                                   "requestId":  "19ea803f-9447-4a22-940a-7553273782b1",
+                                                   "note":  "Read guide body and actual service link."
+                                               },
+                        "researchFile":  "hydromet-sources_christian.json",
+                        "currentObservedIncidentEstablished":  false
+                    },
+                    {
+                        "id":  "senamhi-chirilu-monitoring",
+                        "provider":  "SENAMHI",
+                        "title":  "CHIRILU hydrological monitoring and forecasts",
+                        "url":  "https://www.senamhi.gob.pe?p=monitoreo-chirilu",
+                        "categories":  [
+                                           "water",
+                                           "rain"
+                                       ],
+                        "sourceKind":  "official_observation_and_forecast_portal",
+                        "geographicScope":  "Chillon, Rimac and Lurin basins; Chosica is explicitly identified as the Rimac control station in Lurigancho, Lima.",
+                        "verifiedAt":  "2026-10-17T23:27:07Z",
+                        "publicationDate":  null,
+                        "validity":  null,
+                        "availableFormats":  [
+                                                 "HTML landing page",
+                                                 "Linked rainfall bulletin PDF",
+                                                 "Displayed forecast images and river-camera sections; no underlying numeric feed obtained"
+                                             ],
+                        "accessStatus":  "Landing page extracted successfully; discharge table remained at a loading placeholder.",
+                        "observedFacts":  [
+                                              "The page identifies Chosica as a principal Rimac hydrological control point.",
+                                              "The table headings distinguish today\u0027s value, historical anomaly, day-to-day trend and red threshold.",
+                                              "The page describes short-term flow forecasts using calibrated RS MINERVE models with ETA-SENAMHI/GFS rainfall inputs, and links a rainfall bulletin."
+                                          ],
+                        "limitations":  [
+                                            "No live flow, river-level, anomaly or station observation time was present in the extraction; the table was still loading.",
+                                            "Observed flow, model forecast and camera footage require separate provenance and timestamps.",
+                                            "The linked PDF\u0027s age must be read inside the bulletin; the portal phrase \u0027last 10 days\u0027 does not establish its freshness."
+                                        ],
+                        "automation":  "Archive the official landing page and follow its actual bulletin link. Keep numeric observations unavailable until a timestamped station payload is obtained; ingest model forecasts separately from observations.",
+                        "linkedBulletinUrl":  "https://www.senamhi.gob.pe/load/file/02269SENA-112.pdf",
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true,
+                                                   "requestId":  "059f23d4-805c-4282-ac21-31b7ee2dda0c",
+                                                   "note":  "Read station descriptions, table headings, loading state, model description and exact bulletin URL."
+                                               },
+                        "researchFile":  "hydromet-sources_christian.json",
+                        "currentObservedIncidentEstablished":  false
+                    },
+                    {
+                        "id":  "ana-snirh-service",
+                        "provider":  "Autoridad Nacional del Agua / gob.pe",
+                        "title":  "Official access to the National Water Resources Information System",
+                        "url":  "https://www.gob.pe/86460-acceder-al-sistema-nacional-de-informacion-de-recursos-hidricos",
+                        "categories":  [
+                                           "water"
+                                       ],
+                        "sourceKind":  "official_service_documentation",
+                        "geographicScope":  "Peru nationwide. Rimac/Mantaro stations and downloadable series not verified.",
+                        "verifiedAt":  "2026-10-17T23:27:07Z",
+                        "publicationDate":  null,
+                        "validity":  null,
+                        "availableFormats":  [
+                                                 "HTML service documentation",
+                                                 "Link to SNIRH portal; underlying portal extraction failed"
+                                             ],
+                        "accessStatus":  "Official service guide extracted; actual SNIRH portal could not be fetched by Tavily.",
+                        "observedFacts":  [
+                                              "ANA\u0027s official service page links to the SNIRH portal.",
+                                              "The documentation identifies water observatory, water-data/statistical analysis and national water-plan monitoring as services inside the platform."
+                                          ],
+                        "limitations":  [
+                                            "A service description is not a current river measurement.",
+                                            "Tavily failed to retrieve the linked portal; no API, station list, download format or live Rimac/Mantaro payload was verified.",
+                                            "CHIRILU observatory subpages also failed extraction; their search snippets were retained only as discovery leads."
+                                        ],
+                        "automation":  "Use the verified official service URL as the discovery entry. Before building a collector, identify an actual accessible data endpoint or authorized download and validate metadata; expose source unavailable while the portal cannot be read.",
+                        "serviceUrl":  "https://snirh.ana.gob.pe/snirhPortal/",
+                        "portalExtractionEvidence":  {
+                                                         "method":  "tavily_extract",
+                                                         "success":  false,
+                                                         "requestId":  "08e26d52-0979-408e-ab97-09f106b86441",
+                                                         "error":  "Failed to fetch url"
+                                                     },
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true,
+                                                   "requestId":  "f2610b98-6183-4984-8d67-946972a7cf4b",
+                                                   "note":  "Official service page read; exact SNIRH link followed in a separate failed Tavily extraction."
+                                               },
+                        "researchFile":  "hydromet-sources_christian.json",
+                        "currentObservedIncidentEstablished":  false
+                    },
+                    {
+                        "id":  "ana-river-monitoring-2026-07-31",
+                        "provider":  "Autoridad Nacional del Agua / gob.pe",
+                        "title":  "ANA describes its river-flow monitoring, ONRH and ANDREA tools",
+                        "url":  "https://www.gob.pe/institucion/ana/noticias/1424775-ana-herramientas-digitales-permiten-el-monitoreo-permanente-de-los-caudales-en-rios",
+                        "categories":  [
+                                           "water"
+                                       ],
+                        "sourceKind":  "official_provider_capability_report",
+                        "geographicScope":  "Peru nationwide; article does not supply current Rimac or Mantaro measurements.",
+                        "verifiedAt":  "2026-10-17T23:27:07Z",
+                        "publicationDate":  "2026-07-31",
+                        "validity":  null,
+                        "availableFormats":  [
+                                                 "HTML dated official article"
+                                             ],
+                        "accessStatus":  "Official article body extracted successfully.",
+                        "observedFacts":  [
+                                              "The article is dated July 31, 2026 at 15:16 local time.",
+                                              "ANA states that ONRH disseminates levels/flows using its automatic hydrological network and interoperability with SENAMHI.",
+                                              "It describes ANDREA as a tool for hydrological-series analysis, inconsistency detection and data completion."
+                                          ],
+                        "limitations":  [
+                                            "These are provider statements about system capabilities, not independently verified feed availability.",
+                                            "The article contains no current local observation table or documented machine-readable endpoint.",
+                                            "Planned interventions mentioned in the article are not evidence of road events."
+                                        ],
+                        "automation":  "Use as provenance for selecting the official system, then require a timestamped observation or actual downloadable data product before producing numeric water alerts.",
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true,
+                                                   "requestId":  "f2610b98-6183-4984-8d67-946972a7cf4b",
+                                                   "note":  "Read publication timestamp and tool descriptions inside the official article."
+                                               },
+                        "researchFile":  "hydromet-sources_christian.json",
+                        "currentObservedIncidentEstablished":  false
+                    },
+                    {
+                        "id":  "cenepred-ond-2026-rain-scenario",
+                        "provider":  "CENEPRED / SIGRID",
+                        "title":  "Estudio de escenario de riesgo por lluvias para el periodo octubre - diciembre 2026 (Con base en el Informe Técnico N° 12-2026/SENAMHI-DMA-SVC)",
+                        "url":  "https://sigrid.cenepred.gob.pe/sigridv3/documento/22910",
+                        "categories":  [
+                                           "landslides",
+                                           "rain",
+                                           "water"
+                                       ],
+                        "sourceKind":  "seasonal_risk_scenario",
+                        "geographicScope":  "National Peru; corridor-specific exposure must be obtained from the published tables or shapes.",
+                        "verifiedAt":  "2026-10-17T23:24:52Z",
+                        "publicationDate":  null,
+                        "validity":  {
+                                         "start":  "2026-10-01",
+                                         "end":  "2026-12-31"
+                                     },
+                        "availableFormats":  [
+                                                 "HTML",
+                                                 "ZIP / EXCEL",
+                                                 "ZIP / MAPA",
+                                                 "ZIP / SHAPE"
+                                             ],
+                        "accessStatus":  "Official document page successfully extracted; downloadable archives not fetched.",
+                        "observedFacts":  [
+                                              "A national scenario evaluates potential population exposure under October–December 2026 rain forecasts.",
+                                              "The official page publishes Excel, map and shape download links."
+                                          ],
+                        "limitations":  [
+                                            "Seasonal exposure is not an observed landslide, closure or a precise 24–72 hour corridor warning.",
+                                            "Publication gives the year only; archive contents and district-level records remain unverified."
+                                        ],
+                        "automation":  "Periodically inspect the official page, download only the current linked archives and spatially intersect verified shapes with the project corridor.",
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true,
+                                                   "requestId":  "9d166df1-2ec4-4e5e-a3e6-8809d362ddb0",
+                                                   "detail":  "Official HTML yielded title, publication year, nationwide scope and all three ZIP URLs."
+                                               },
+                        "publishedDownloads":  [
+                                                   {
+                                                       "format":  "HTML",
+                                                       "url":  "https://sigrid.cenepred.gob.pe/sigridv3/documento/22910",
+                                                       "status":  "extracted"
+                                                   },
+                                                   {
+                                                       "format":  "ZIP / EXCEL",
+                                                       "url":  "https://sigrid.cenepred.gob.pe/sigridv3/storage/escenario_trimestral/101_tabla.zip",
+                                                       "status":  "published_link_not_downloaded"
+                                                   },
+                                                   {
+                                                       "format":  "ZIP / MAPA",
+                                                       "url":  "https://sigrid.cenepred.gob.pe/sigridv3/storage/escenario_trimestral/101_mapas.zip",
+                                                       "status":  "published_link_not_downloaded"
+                                                   },
+                                                   {
+                                                       "format":  "ZIP / SHAPE",
+                                                       "url":  "https://sigrid.cenepred.gob.pe/sigridv3/storage/escenario_trimestral/101_shape.zip",
+                                                       "status":  "published_link_not_downloaded"
+                                                   }
+                                               ],
+                        "automationPlan":  {
+                                               "priority":  "high",
+                                               "method":  "Periodically inspect the official page, download only the current linked archives and spatially intersect verified shapes with the project corridor.",
+                                               "cadence":  "weekly_and_when_reissued",
+                                               "requiresHumanReview":  true,
+                                               "readiness":  "published_download_links_verified_contents_pending"
+                                           },
+                        "researchFile":  "landslide-sources_christian.json",
+                        "currentObservedIncidentEstablished":  false
+                    },
+                    {
+                        "id":  "ingemmet-geocatmin-hazard-metadata",
+                        "provider":  "INGEMMET via official GEOIDEP metadata catalogue",
+                        "title":  "GEOCATMIN Peligros Geológicos, Zonas Criticas y Susceptibilidad a Movimientos en Masa, Cartografia de peligros",
+                        "url":  "https://catalogo.geoidep.gob.pe/metadatos/srv/api/records/c5580ab5-7277-4858-8d16-a982bd2cc23b",
+                        "categories":  [
+                                           "landslides",
+                                           "water"
+                                       ],
+                        "sourceKind":  "hazard_inventory_and_susceptibility_metadata",
+                        "geographicScope":  "National Peru; regional inventory and hazard polygons may support PE-22 and Mantaro spatial joins.",
+                        "verifiedAt":  "2026-10-17T23:24:52Z",
+                        "publicationDate":  "2025-01-30",
+                        "validity":  null,
+                        "availableFormats":  [
+                                                 "HTML metadata",
+                                                 "ESRI Shapefile ZIP",
+                                                 "ESRI Shapefile ZIP"
+                                             ],
+                        "accessStatus":  "Official national metadata record extracted. Port-8443 archive links advertised but not tested.",
+                        "observedFacts":  [
+                                              "Metadata identifies ESRI Shapefile distribution and WGS 1984 coordinates.",
+                                              "Field hazard cartography is marked updated January 2025; photointerpreted cartography June 2024.",
+                                              "The provider explicitly separates susceptibility from event timing."
+                                          ],
+                        "limitations":  [
+                                            "Different layer families have different update dates.",
+                                            "Copyright is recorded; public access does not establish unrestricted redistribution.",
+                                            "Published metadata is not verification that every archive remains downloadable."
+                                        ],
+                        "automation":  "Cache downloaded official layers by content hash, inspect CRS/schema, retain source dates and clip locally to the corridor; never create incident records from susceptibility alone.",
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true,
+                                                   "requestId":  "571c4873-d6b6-4b12-9f57-7cbcf2ad31a7",
+                                                   "detail":  "Official metadata includes current distribution filenames, WGS 1984, ESRI Shapefile and susceptibility limitations."
+                                               },
+                        "publishedDownloads":  [
+                                                   {
+                                                       "format":  "HTML metadata",
+                                                       "url":  "https://catalogo.geoidep.gob.pe/metadatos/srv/api/records/c5580ab5-7277-4858-8d16-a982bd2cc23b",
+                                                       "status":  "extracted"
+                                                   },
+                                                   {
+                                                       "format":  "ESRI Shapefile ZIP",
+                                                       "url":  "https://metadatos.ingemmet.gob.pe:8443/geonetwork/srv/api/records/c5580ab5-7277-4858-8d16-a982bd2cc23b/attachments/CartografiaPeligros_30012025.zip",
+                                                       "status":  "published_link_not_downloaded"
+                                                   },
+                                                   {
+                                                       "format":  "ESRI Shapefile ZIP",
+                                                       "url":  "https://metadatos.ingemmet.gob.pe:8443/geonetwork/srv/api/records/c5580ab5-7277-4858-8d16-a982bd2cc23b/attachments/CartografiaPeligroFotointerpretado.zip",
+                                                       "status":  "published_link_not_downloaded"
+                                                   }
+                                               ],
+                        "automationPlan":  {
+                                               "priority":  "high",
+                                               "method":  "Cache downloaded official layers by content hash, inspect CRS/schema, retain source dates and clip locally to the corridor; never create incident records from susceptibility alone.",
+                                               "cadence":  "monthly",
+                                               "requiresHumanReview":  true,
+                                               "readiness":  "metadata_and_exact_distribution_urls_verified"
+                                           },
+                        "researchFile":  "landslide-sources_christian.json",
+                        "currentObservedIncidentEstablished":  false
+                    },
+                    {
+                        "id":  "indeci-coen-emergency-archive",
+                        "provider":  "INDECI / COEN",
+                        "title":  "Reportes Preliminares / Complementarios / Emergencias",
+                        "url":  "https://portal.indeci.gob.pe/informe/reportes-preliminares-complementarios-emergencias",
+                        "categories":  [
+                                           "landslides",
+                                           "rain",
+                                           "water"
+                                       ],
+                        "sourceKind":  "official_occurrence_report_index",
+                        "geographicScope":  "National Peru; retain only explicitly matched corridor districts/provinces and event dates.",
+                        "verifiedAt":  "2026-10-17T23:24:52Z",
+                        "publicationDate":  null,
+                        "validity":  null,
+                        "availableFormats":  [
+                                                 "HTML index"
+                                             ],
+                        "accessStatus":  "Official index extracted; report pages and PDF download links were visible.",
+                        "observedFacts":  [
+                                              "Index contains separately identified preliminary/complementary emergency reports and links to their official PDFs.",
+                                              "On this capture, the visible recent list included October 17, 2026 reports and short-term bulletins."
+                                          ],
+                        "limitations":  [
+                                            "A recent index page is not a complete historical incident inventory.",
+                                            "Changing complementary titles may retain an older URL slug; dedupe and version by document/report identity and content.",
+                                            "This extraction did not confirm a current PE-22 landslide."
+                                        ],
+                        "automation":  "Discover individual reports from the official index or existing collector, extract each linked official PDF, validate event date, publication date, geography and report number separately, and retain amendments.",
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true,
+                                                   "requestId":  "9d166df1-2ec4-4e5e-a3e6-8809d362ddb0",
+                                                   "detail":  "HTML exposes individual emergency and bulletin URLs plus PDF download links."
+                                               },
+                        "publishedDownloads":  [
+                                                   {
+                                                       "format":  "HTML index",
+                                                       "url":  "https://portal.indeci.gob.pe/informe/reportes-preliminares-complementarios-emergencias",
+                                                       "status":  "extracted"
+                                                   }
+                                               ],
+                        "automationPlan":  {
+                                               "priority":  "high",
+                                               "method":  "Discover individual reports from the official index or existing collector, extract each linked official PDF, validate event date, publication date, geography and report number separately, and retain amendments.",
+                                               "cadence":  "hourly_or_daily",
+                                               "requiresHumanReview":  true,
+                                               "readiness":  "official_index_verified"
+                                           },
+                        "researchFile":  "landslide-sources_christian.json",
+                        "currentObservedIncidentEstablished":  false
+                    },
+                    {
+                        "id":  "indeci-quebradas-191-2026",
+                        "provider":  "INDECI / COEN, based on short-term warning N°290",
+                        "title":  "Boletín informativo de aviso de corto plazo ante posible activación de quebradas N°191-2026-INDECI/COEN",
+                        "url":  "https://portal.indeci.gob.pe/emergencias/boletin-informativo-de-aviso-de-corto-plazo-ante-posible-activacion-de-quebradas-n191-17-10-2026/",
+                        "categories":  [
+                                           "landslides",
+                                           "rain",
+                                           "water"
+                                       ],
+                        "sourceKind":  "short_term_hazard_forecast",
+                        "geographicScope":  "Extracted exposure table lists Amazonas / Condorcanqui. No PE-22, Lima or Junín exposure was established.",
+                        "verifiedAt":  "2026-10-17T23:24:52Z",
+                        "publicationDate":  "2026-10-17",
+                        "validity":  {
+                                         "start":  "2026-10-17T18:00:00Z",
+                                         "end":  "2026-10-18T18:00:00Z"
+                                     },
+                        "availableFormats":  [
+                                                 "HTML",
+                                                 "PDF"
+                                             ],
+                        "accessStatus":  "Official detail page and linked PDF both extracted.",
+                        "observedFacts":  [
+                                              "PDF validity is 13:00 October 17 to 13:00 October 18, 2026 in Peru.",
+                                              "The warning considers forecast rainfall, prior seven-day rainfall and mass-movement susceptibility.",
+                                              "Extracted exposed province is Condorcanqui, Amazonas."
+                                          ],
+                        "limitations":  [
+                                            "Exclude this bulletin from a PE-22 alert because extracted geography is outside the corridor.",
+                                            "A possibility warning is not confirmation of a huaico; mapped or image-only extent still requires visual/geospatial review."
+                                        ],
+                        "automation":  "Poll official hazard-monitoring listings, follow each real PDF link, extract issue/expiry times and explicit geography; reject outside-corridor or expired warnings.",
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true,
+                                                   "requestId":  "97c5b890-4189-4739-8c02-7009eb650f3b",
+                                                   "detail":  "PDF yielded validity interval, methodology and Amazonas/Condorcanqui exposure; page request c11ff6f4-5f13-4c86-9119-f792f58eadca also succeeded."
+                                               },
+                        "publishedDownloads":  [
+                                                   {
+                                                       "format":  "HTML",
+                                                       "url":  "https://portal.indeci.gob.pe/emergencias/boletin-informativo-de-aviso-de-corto-plazo-ante-posible-activacion-de-quebradas-n191-17-10-2026/",
+                                                       "status":  "extracted"
+                                                   },
+                                                   {
+                                                       "format":  "PDF",
+                                                       "url":  "https://portal.indeci.gob.pe/wp-content/uploads/2026/10/BOLET%C3%8DN-INFORMATIVO-DE-AVISO-DE-CORTO-PLAZO-ANTE-POSIBLE-ACTIVACI%C3%93N-DE-QUEBRADAS-N%C2%B0191-17-10-2026.pdf",
+                                                       "status":  "extracted"
+                                                   }
+                                               ],
+                        "automationPlan":  {
+                                               "priority":  "high",
+                                               "method":  "Poll official hazard-monitoring listings, follow each real PDF link, extract issue/expiry times and explicit geography; reject outside-corridor or expired warnings.",
+                                               "cadence":  "hourly",
+                                               "requiresHumanReview":  true,
+                                               "readiness":  "pdf_text_verified_geographic_exclusion_required"
+                                           },
+                        "researchFile":  "landslide-sources_christian.json",
+                        "currentObservedIncidentEstablished":  false
+                    },
+                    {
+                        "id":  "ingemmet-payhua-matucana-historical",
+                        "provider":  "INGEMMET, official SIGRID mirror",
+                        "title":  "Movimientos en masa: deslizamientos y huaycos en la cuenca de la quebrada Payhua",
+                        "url":  "http://sigrid.cenepred.gob.pe/docs/PARA%20PUBLICAR/INGEMMET/Movimientos%20en%20masa,%20deslizamientos%20y%20huaycos%20Qda.%20Paihua.pdf",
+                        "categories":  [
+                                           "landslides",
+                                           "rain",
+                                           "water",
+                                           "agriculture"
+                                       ],
+                        "sourceKind":  "historical_site_hazard_study",
+                        "geographicScope":  "Payhua catchment opposite Matucana, Huarochirí, Lima; Rímac and Carretera Central.",
+                        "verifiedAt":  "2026-10-17T23:24:52Z",
+                        "publicationDate":  null,
+                        "validity":  null,
+                        "availableFormats":  [
+                                                 "PDF"
+                                             ],
+                        "accessStatus":  "Full text extracted from the official SIGRID mirror.",
+                        "observedFacts":  [
+                                              "Study connects Payhua debris flows, slope instability, Rímac blockage and exposure of Matucana and the Central road.",
+                                              "It documents historical events and agricultural land exposure; the body discusses planned work in 2006."
+                                          ],
+                        "limitations":  [
+                                            "Historical technical context, not a 2026 active hazard or a current landslide footprint.",
+                                            "Exact publication date was not recoverable from extraction.",
+                                            "Numerical modeled volumes and old population figures should not become present-day measurements."
+                                        ],
+                        "automation":  "Archive once as historical explanatory evidence; manually digitize any relevant map with scale and document provenance before use.",
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true,
+                                                   "requestId":  "97c5b890-4189-4739-8c02-7009eb650f3b",
+                                                   "detail":  "Full PDF text yielded title, Matucana/Payhua geography, historical chronology, cultivation exposure and dated study context."
+                                               },
+                        "publishedDownloads":  [
+                                                   {
+                                                       "format":  "PDF",
+                                                       "url":  "http://sigrid.cenepred.gob.pe/docs/PARA%20PUBLICAR/INGEMMET/Movimientos%20en%20masa,%20deslizamientos%20y%20huaycos%20Qda.%20Paihua.pdf",
+                                                       "status":  "extracted"
+                                                   }
+                                               ],
+                        "automationPlan":  {
+                                               "priority":  "medium",
+                                               "method":  "Archive once as historical explanatory evidence; manually digitize any relevant map with scale and document provenance before use.",
+                                               "cadence":  "one_time_then_revision_check",
+                                               "requiresHumanReview":  true,
+                                               "readiness":  "historical_pdf_text_verified"
+                                           },
+                        "researchFile":  "landslide-sources_christian.json",
+                        "currentObservedIncidentEstablished":  false
+                    },
+                    {
+                        "id":  "ingemmet-pucruchacra-san-mateo-historical",
+                        "provider":  "INGEMMET, official SIGRID mirror",
+                        "title":  "Deslizamiento de tierras en el cerro Pucruchacra (Distrito San Mateo de Huanchor, provincia Huarochirí, región Lima)",
+                        "url":  "http://sigrid.cenepred.gob.pe/docs/PARA%20PUBLICAR/INGEMMET/Informe%20tecnico%20deslizamiento%20de%20tierras%20Cerro%20Pucruchacra.pdf",
+                        "categories":  [
+                                           "landslides",
+                                           "water",
+                                           "agriculture"
+                                       ],
+                        "sourceKind":  "historical_site_hazard_study",
+                        "geographicScope":  "Cerro Pucruchacra / San Mateo de Huanchor; Central road km 93+000, Lima.",
+                        "verifiedAt":  "2026-10-17T23:24:52Z",
+                        "publicationDate":  null,
+                        "validity":  null,
+                        "availableFormats":  [
+                                                 "PDF"
+                                             ],
+                        "accessStatus":  "Full text extracted from official SIGRID mirror; distinct direct-repository 2026 lead failed extraction.",
+                        "observedFacts":  [
+                                              "Historical report identifies a critical zone at Central road km 93+000 and discusses irrigation, groundwater and cultivation.",
+                                              "Fieldwork described in the text occurred in August 2011, with desk work completed in September 2011."
+                                          ],
+                        "limitations":  [
+                                            "Report introduction says August 16, 2011 while another passage refers to August 14; exact event day remains unresolved.",
+                                            "Do not treat the report as a current alert or as the separate 2026 repository report.",
+                                            "Publication date is unverified; dated fieldwork is not necessarily publication date."
+                                        ],
+                        "automation":  "Keep as historical context and a candidate site for later official monitoring; human review must resolve the event date before evaluation-set ingestion.",
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true,
+                                                   "requestId":  "97c5b890-4189-4739-8c02-7009eb650f3b",
+                                                   "detail":  "Full PDF text yielded San Mateo location, km 93+000, 2011 fieldwork, groundwater/irrigation discussion and inconsistent event dates."
+                                               },
+                        "publishedDownloads":  [
+                                                   {
+                                                       "format":  "PDF",
+                                                       "url":  "http://sigrid.cenepred.gob.pe/docs/PARA%20PUBLICAR/INGEMMET/Informe%20tecnico%20deslizamiento%20de%20tierras%20Cerro%20Pucruchacra.pdf",
+                                                       "status":  "extracted"
+                                                   }
+                                               ],
+                        "automationPlan":  {
+                                               "priority":  "medium",
+                                               "method":  "Keep as historical context and a candidate site for later official monitoring; human review must resolve the event date before evaluation-set ingestion.",
+                                               "cadence":  "one_time_then_revision_check",
+                                               "requiresHumanReview":  true,
+                                               "readiness":  "historical_pdf_verified_event_date_conflict"
+                                           },
+                        "researchFile":  "landslide-sources_christian.json",
+                        "currentObservedIncidentEstablished":  false
+                    },
+                    {
+                        "verifiedAt":  "2026-10-17T23:25:09Z",
+                        "publicationDate":  null,
+                        "validity":  null,
+                        "availableFormats":  [
+                                                 "HTML"
+                                             ],
+                        "accessStatus":  "tavily_extraction_success",
+                        "id":  "senamhi-agromet-bulletin-index",
+                        "provider":  "SENAMHI",
+                        "title":  "Official agrometeorological bulletin catalogue",
+                        "url":  "https://www.senamhi.gob.pe?p=boletines",
+                        "categories":  [
+                                           "agriculture",
+                                           "pest_alerts"
+                                       ],
+                        "sourceKind":  "official_source_directory",
+                        "geographicScope":  "Peru; individual products have different coverage",
+                        "observedFacts":  [
+                                              "Catalogue links dated October 2026 potato and maize risk outlooks, daily insect and disease conditions, and Sierra impact reports."
+                                          ],
+                        "limitations":  [
+                                            "A catalogue date is not an outbreak date; linked documents require separate validation."
+                                        ],
+                        "automation":  "html_link_discovery_verified: Parse product sections and linked PDF URLs. Do not construct filenames or infer missing editions.",
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true,
+                                                   "callIndex":  0
+                                               },
+                        "researchFile":  "agri-pest-sources_christian.json",
+                        "currentObservedIncidentEstablished":  false
+                    },
+                    {
+                        "verifiedAt":  "2026-10-17T23:25:09Z",
+                        "publicationDate":  null,
+                        "validity":  {
+                                         "start":  "2026-10-01",
+                                         "end":  "2026-12-31"
+                                     },
+                        "availableFormats":  [
+                                                 "PDF"
+                                             ],
+                        "accessStatus":  "tavily_extraction_success",
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true,
+                                                   "callIndex":  1
+                                               },
+                        "id":  "senamhi-potato-risk-oct-dec-2026",
+                        "provider":  "SENAMHI",
+                        "title":  "Potato agroclimatic risk outlook, October–December 2026",
+                        "url":  "https://www.senamhi.gob.pe/load/file/02954SENA-104.pdf",
+                        "categories":  [
+                                           "agriculture",
+                                           "water",
+                                           "frost"
+                                       ],
+                        "sourceKind":  "official_forecast",
+                        "geographicScope":  "National regional outlook; includes Sierra Central",
+                        "observedFacts":  [
+                                              "Sierra Central outlook describes mainly low/medium risk, localized high risk, and sensitivity to moisture availability and abrupt temperature drops. Monthly updates are stated."
+                                          ],
+                        "limitations":  [
+                                            "Forecast, not confirmed crop losses. No Mantaro field coordinates or exact issue day extracted. Regional text cannot locate a PE-22 incident."
+                                        ],
+                        "automation":  "pdf_text_extraction_verified: Discover updates from catalogue; preserve forecast period and region. Map interpretation needs manual review.",
+                        "researchFile":  "agri-pest-sources_christian.json",
+                        "currentObservedIncidentEstablished":  false
+                    },
+                    {
+                        "verifiedAt":  "2026-10-17T23:25:09Z",
+                        "publicationDate":  null,
+                        "validity":  {
+                                         "start":  "2026-10-01",
+                                         "end":  "2026-12-31"
+                                     },
+                        "availableFormats":  [
+                                                 "PDF"
+                                             ],
+                        "accessStatus":  "tavily_extraction_success",
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true,
+                                                   "callIndex":  2,
+                                                   "previousBasicAttemptFailed":  true
+                                               },
+                        "id":  "senamhi-maize-risk-oct-dec-2026",
+                        "provider":  "SENAMHI",
+                        "title":  "Maize agroclimatic risk outlook, October–December 2026",
+                        "url":  "https://www.senamhi.gob.pe/load/file/02955SENA-106.pdf",
+                        "categories":  [
+                                           "agriculture",
+                                           "water",
+                                           "frost"
+                                       ],
+                        "sourceKind":  "official_forecast",
+                        "geographicScope":  "National regional outlook; includes Sierra Central",
+                        "observedFacts":  [
+                                              "Sierra Central outlook identifies mostly low/medium risk, planting moisture constraints and possible localized hail, wind or abrupt temperature effects. Monthly updates are stated."
+                                          ],
+                        "limitations":  [
+                                            "Forecast, not observed damage. Basic extraction initially failed; advanced extraction succeeded. Exact issue day and field coordinates unavailable."
+                                        ],
+                        "automation":  "advanced_pdf_extraction_verified: Discover catalogue link; retain seasonal scale. Never turn regional outlook into a confirmed road disruption.",
+                        "researchFile":  "agri-pest-sources_christian.json",
+                        "currentObservedIncidentEstablished":  false
+                    },
+                    {
+                        "verifiedAt":  "2026-10-17T23:25:09Z",
+                        "publicationDate":  "2026-10-12",
+                        "validity":  {
+                                         "start":  "2026-10-12",
+                                         "end":  "2026-10-15"
+                                     },
+                        "availableFormats":  [
+                                                 "PDF"
+                                             ],
+                        "accessStatus":  "tavily_extraction_success",
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true,
+                                                   "callIndex":  1
+                                               },
+                        "id":  "senamhi-insect-conditions-oct12-15-2026",
+                        "provider":  "SENAMHI",
+                        "title":  "Insect pest environmental conditions outlook N284",
+                        "url":  "https://www.senamhi.gob.pe/load/file/02976SENA-1133.pdf",
+                        "categories":  [
+                                           "agriculture",
+                                           "pest_alerts"
+                                       ],
+                        "sourceKind":  "experimental_official_forecast",
+                        "geographicScope":  "Coastal fruit fly and Amazonian coffee borer outlook; no local Mantaro outbreak",
+                        "observedFacts":  [
+                                              "Predicts environmental suitability for fruit fly and coffee borer; identifies hourly GFS input at 27×27 km. Product states experimental evaluation status."
+                                          ],
+                        "limitations":  [
+                                            "Expired at verification. Suitability is not a pest detection. Text extraction includes stray February dates and layout residues; maps need review."
+                                        ],
+                        "automation":  "pdf_text_extraction_verified: Retain forecast label and four-day validity; block expired forecasts from current-alert presentation.",
+                        "dateEvidence":  "Publication date is the catalogue label; forecast dates independently match the PDF heading.",
+                        "researchFile":  "agri-pest-sources_christian.json",
+                        "currentObservedIncidentEstablished":  false
+                    },
+                    {
+                        "verifiedAt":  "2026-10-17T23:25:09Z",
+                        "publicationDate":  "2026-10-12",
+                        "validity":  {
+                                         "start":  "2026-10-12",
+                                         "end":  "2026-10-15"
+                                     },
+                        "availableFormats":  [
+                                                 "PDF"
+                                             ],
+                        "accessStatus":  "tavily_extraction_success",
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true,
+                                                   "callIndex":  1
+                                               },
+                        "id":  "senamhi-disease-conditions-oct12-15-2026",
+                        "provider":  "SENAMHI",
+                        "title":  "Crop disease environmental conditions outlook N284",
+                        "url":  "https://www.senamhi.gob.pe/load/file/02977SENA-1133.pdf",
+                        "categories":  [
+                                           "agriculture",
+                                           "pest_alerts"
+                                       ],
+                        "sourceKind":  "experimental_official_forecast",
+                        "geographicScope":  "Selected national stations; Huaral, Huánuco and other regions",
+                        "observedFacts":  [
+                                              "Includes coffee rust, strawberry grey mould, blueberry botrytis and grape powdery mildew. Describes predictive models and GFS input at 27×27 km."
+                                          ],
+                        "limitations":  [
+                                            "Expired at verification; experimental product. Environmental risk is not confirmed infection. Huaral and Huánuco are not the target PE-22/Mantaro corridor."
+                                        ],
+                        "automation":  "pdf_text_extraction_verified: Keep station geography and disease-specific forecast periods; require review before assigning a local alert.",
+                        "dateEvidence":  "Publication date is the catalogue label; forecast dates independently match the PDF heading.",
+                        "researchFile":  "agri-pest-sources_christian.json",
+                        "currentObservedIncidentEstablished":  false
+                    },
+                    {
+                        "verifiedAt":  "2026-10-17T23:25:09Z",
+                        "publicationDate":  null,
+                        "validity":  null,
+                        "availableFormats":  [
+                                                 "PDF"
+                                             ],
+                        "accessStatus":  "tavily_extraction_success",
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true,
+                                                   "callIndex":  1
+                                               },
+                        "id":  "senamhi-sierra-crop-impacts-sep29-oct5-2026",
+                        "provider":  "SENAMHI",
+                        "title":  "Sierra agrometeorological impacts, September29–October5 2026",
+                        "url":  "https://www.senamhi.gob.pe/load/file/02974SENA-164.pdf",
+                        "categories":  [
+                                           "agriculture",
+                                           "water",
+                                           "pest_alerts"
+                                       ],
+                        "sourceKind":  "official_observation_report",
+                        "geographicScope":  "Extracted stations in Cajamarca, Ancash and Arequipa; no Junin entry",
+                        "observedFacts":  [
+                                              "Contains dated crop phenology, measured weather and recommendations. At Quilcate, reports potato condition and rainfall; fungal disease is discussed as potential risk."
+                                          ],
+                        "limitations":  [
+                                            "Historical report interval: 2026-09-29 to 2026-10-05. Catalogue date is 2026-09-29, not proven publication date. No confirmed target-corridor pest outbreak."
+                                        ],
+                        "automation":  "pdf_text_extraction_verified: Preserve observation interval separately from forecast validity; distinguish measured values from conditional disease advice.",
+                        "observationPeriod":  {
+                                                  "start":  "2026-09-29",
+                                                  "end":  "2026-10-05"
+                                              },
+                        "researchFile":  "agri-pest-sources_christian.json",
+                        "currentObservedIncidentEstablished":  false
+                    },
+                    {
+                        "verifiedAt":  "2026-10-17T23:25:09Z",
+                        "publicationDate":  null,
+                        "validity":  null,
+                        "availableFormats":  [
+                                                 "HTML"
+                                             ],
+                        "accessStatus":  "tavily_extraction_success",
+                        "id":  "senasa-sigia-pesticide-registry",
+                        "provider":  "SENASA",
+                        "title":  "SIGIA public pesticide registration consultation",
+                        "url":  "https://servicios.senasa.gob.pe/SIGIAWeb/sigia_consulta_cultivo.html",
+                        "categories":  [
+                                           "agriculture",
+                                           "pest_alerts"
+                                       ],
+                        "sourceKind":  "official_registry",
+                        "geographicScope":  "National pesticide registry",
+                        "observedFacts":  [
+                                              "Extracted page identifies agricultural-input management and pesticide registry queries by product, crop and pest."
+                                          ],
+                        "limitations":  [
+                                            "Not a pest occurrence feed. Extracted HTML contains navigation, not query results or a documented API."
+                                        ],
+                        "automation":  "manual_review_required: Use for registry reference only; public query/API automation and export formats remain unverified.",
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true,
+                                                   "callIndex":  0
+                                               },
+                        "researchFile":  "agri-pest-sources_christian.json",
+                        "currentObservedIncidentEstablished":  false
+                    },
+                    {
+                        "verifiedAt":  "2026-10-17T23:25:09Z",
+                        "publicationDate":  null,
+                        "validity":  null,
+                        "availableFormats":  [
+                                                 "HTML"
+                                             ],
+                        "accessStatus":  "tavily_extraction_success",
+                        "id":  "senasa-surveillance-verification-guidance",
+                        "provider":  "SENASA",
+                        "title":  "Official explanation of phytosanitary surveillance verification",
+                        "url":  "https://www.senasa.gob.pe/senasacontigo/vigilancia-fitosanitaria-permite-detectar-oportunamente-presencia-de-plagas",
+                        "categories":  [
+                                           "agriculture",
+                                           "pest_alerts"
+                                       ],
+                        "sourceKind":  "official_process_guidance",
+                        "geographicScope":  "National process; examples from Cusco",
+                        "observedFacts":  [
+                                              "Explains monitoring, occurrence notifications, specialist verification and diagnostic-centre samples before recording pest information."
+                                          ],
+                        "limitations":  [
+                                            "Undated article body; current site-header date is not its publication date. Guidance is not a current outbreak or public dataset."
+                                        ],
+                        "automation":  "manual_review_required: Require dated official detection/diagnosis and locality before accepting pest occurrence; no documented public feed extracted.",
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true,
+                                                   "callIndex":  2
+                                               },
+                        "researchFile":  "agri-pest-sources_christian.json",
+                        "currentObservedIncidentEstablished":  false
+                    },
+                    {
+                        "provider":  "SENAMHI",
+                        "verifiedAt":  "2026-10-17T23:26:50Z",
+                        "publicationDate":  null,
+                        "accessStatus":  "Tavily extracted official page or PDF; source-linked binaries were not downloaded.",
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true,
+                                                   "requestId":  "a82d1046-d0ac-4f80-873f-43e2ace2550f"
+                                               },
+                        "researchFile":  "environment-evidence-2026-10-17_christian.json",
+                        "currentObservedIncidentEstablished":  false,
+                        "id":  "senamhi-rainfall-24h-290-2026",
+                        "title":  "Short-term rainfall notice 290 of 2026",
+                        "url":  "https://www.senamhi.gob.pe/main.php?dp=junin\u0026p=aviso-24H",
+                        "categories":  [
+                                           "rain"
+                                       ],
+                        "sourceKind":  "official_forecast",
+                        "geographicScope":  "National notice with regional sierra/selva/coast ranges; exact PE-22 polygon intersection unverified.",
+                        "validity":  {
+                                         "start":  "2026-10-17T13:00:00-05:00",
+                                         "end":  "2026-10-18T13:00:00-05:00"
+                                     },
+                        "validityEndBasis":  "Calculated from the explicit start timestamp and 24-hour duration, not a separately printed end time.",
+                        "availableFormats":  [
+                                                 "HTML",
+                                                 "Advertised SHAPE ZIP link; binary not inspected"
+                                             ],
+                        "observedFacts":  [
+                                              "Official warning 290 is orange; it states a 24-hour forecast starting at 13:00 Lima on October 17.",
+                                              "Regional sierra forecast range is 5-20 mm/day; this is not measured rainfall at a corridor station."
+                                          ],
+                        "limitations":  [
+                                            "Publication timestamp not separately extracted.",
+                                            "A Junin page parameter cannot establish polygon coverage.",
+                                            "ZIP contents and road intersection were not verified."
+                                        ],
+                        "automation":  "Discover actual dated notice links and advertised ZIPs, preserve forecast semantics and validate polygon overlap before local attribution.",
+                        "publishedDownloads":  [
+                                                   {
+                                                       "url":  "https://www.senamhi.gob.pe/load/file/02249SENA-3494.zip",
+                                                       "status":  "published_link_not_downloaded"
+                                                   }
+                                               ]
+                    },
+                    {
+                        "provider":  "SENAMHI",
+                        "verifiedAt":  "2026-10-17T23:26:50Z",
+                        "publicationDate":  null,
+                        "accessStatus":  "Tavily extracted official page or PDF; source-linked binaries were not downloaded.",
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true,
+                                                   "requestId":  "a82d1046-d0ac-4f80-873f-43e2ace2550f"
+                                               },
+                        "researchFile":  "environment-evidence-2026-10-17_christian.json",
+                        "currentObservedIncidentEstablished":  false,
+                        "id":  "senamhi-chirilu-rainfall-bulletin-03-2026",
+                        "title":  "CHIRILU rainfall monitoring bulletin 03-2026",
+                        "url":  "https://www.senamhi.gob.pe/load/file/02269SENA-112.pdf",
+                        "categories":  [
+                                           "rain",
+                                           "water",
+                                           "agriculture"
+                                       ],
+                        "sourceKind":  "historical_monitoring_and_station_reference",
+                        "geographicScope":  "Chillon, Rimac and Lurin basins; includes Mantaro headwater reference at Marcapomacocha.",
+                        "validity":  null,
+                        "availableFormats":  [
+                                                 "PDF"
+                                             ],
+                        "observationPeriod":  {
+                                                  "start":  "2026-09-21",
+                                                  "end":  "2026-09-30"
+                                              },
+                        "climatologyReferencePeriod":  "1991-2020",
+                        "observedFacts":  [
+                                              "Bulletin 03 covers September 21-30, 2026, and contains station identifiers, coordinates and elevations.",
+                                              "Seven project-relevant station references were transcribed into the evidence snapshot."
+                                          ],
+                        "limitations":  [
+                                            "Historical monitoring, not an October 17 measurement.",
+                                            "Normal values belong to 1991-2020 climatology and are not current rain.",
+                                            "The bulletin states a next update on October 10; no newer edition was inferred."
+                                        ],
+                        "automation":  "Find newer editions through the official catalogue, retain observation and climatology windows separately, and validate actual station payloads before current-data presentation."
+                    },
+                    {
+                        "id":  "senamhi-sierra-crop-impact-40-2026",
+                        "provider":  "SENAMHI",
+                        "title":  "Agrometeorological impacts report - Sierra, 6-12 October 2026 (No. 40)",
+                        "url":  "https://www.gob.pe/institucion/senamhi/informes-publicaciones/8727498-reporte-agrometeorologico-de-impactos-sierra-06-al-12-de-octubre-del-2026",
+                        "categories":  [
+                                           "agriculture",
+                                           "frost",
+                                           "rain"
+                                       ],
+                        "sourceKind":  "official_observation_report",
+                        "geographicScope":  "Sierra report; verified local sections for Huayao, Ingenio and Comas, Junin.",
+                        "verifiedAt":  "2026-10-17T23:52:29Z",
+                        "publicationDate":  "2026-10-15",
+                        "accessStatus":  "Official report page and linked PDF extracted with Tavily.",
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true
+                                               },
+                        "observedFacts":  [
+                                              "Published 15 October; observation/reporting period is 6-12 October 2026.",
+                                              "At Huayao, maize var. Cusqueado was at seven leaves; SENAMHI reports frost to -3.5 C, two consecutive days near 0 C, and severe crop damage.",
+                                              "At Ingenio, artichoke was in good condition and resisted an earlier-October frost without reported damage; no rain was recorded and crop water depended on irrigation.",
+                                              "At Comas, potato var. Yungay was healthy; 2.5 mm rainfall was reported and irrigation maintained available water."
+                                          ],
+                        "limitations":  [
+                                            "The Huayao frost day and affected-field boundary are not specified.",
+                                            "Official station coordinates are rounded to 0.1 degree; they are approximate station markers, not field geometry.",
+                                            "Crop impacts do not establish a road closure or segment hazard."
+                                        ],
+                        "automation":  "Extract the linked PDF from the official report page; preserve the report interval and station name; never treat an approximate station marker as a field boundary.",
+                        "currentObservedIncidentEstablished":  false,
+                        "researchFile":  "environment-map-evidence-2026-10-17_christian.json",
+                        "observationPeriod":  {
+                                                  "start":  "2026-10-06",
+                                                  "end":  "2026-10-12"
+                                              }
+                    },
+                    {
+                        "id":  "senamhi-agriculture-cold-impacts-2026-10-02",
+                        "provider":  "SENAMHI",
+                        "title":  "Panorama of central and southern highland agriculture under low temperatures",
+                        "url":  "https://www.gob.pe/institucion/senamhi/noticias/1451967-panorama-del-sector-agropecuario-de-la-sierra-central-y-sur-ante-las-bajas-temperaturas",
+                        "categories":  [
+                                           "agriculture",
+                                           "frost"
+                                       ],
+                        "sourceKind":  "official_observed_agriculture_impact",
+                        "geographicScope":  "Central highlands, including the Mantaro Valley in Junin; not a point report.",
+                        "verifiedAt":  "2026-10-17T23:52:29Z",
+                        "publicationDate":  "2026-10-02",
+                        "accessStatus":  "Official SENAMHI press release extracted with Tavily.",
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true
+                                               },
+                        "observedFacts":  [
+                                              "SENAMHI published the notice on 2 October 2026.",
+                                              "It reports cold-related damage to maize, potato and quinoa in central highland production areas.",
+                                              "In the Mantaro Valley, it describes burned maize leaves during crop development and impacts to the small crop campaign and first 2026-2027 sowings."
+                                          ],
+                        "limitations":  [
+                                            "Area-level report without an exact event day or affected-field coordinates.",
+                                            "Do not count it as a separate event from Huayao without deduplication."
+                                        ],
+                        "automation":  "Keep as area-level observed crop impact with null geometry unless an exact field location is officially supplied.",
+                        "currentObservedIncidentEstablished":  false,
+                        "researchFile":  "environment-map-evidence-2026-10-17_christian.json"
+                    },
+                    {
+                        "id":  "senamhi-station-atlas-coordinates",
+                        "provider":  "SENAMHI",
+                        "title":  "Official climate atlas station list and coordinates",
+                        "url":  "https://www.senamhi.gob.pe/pdf/anexos-atlas-climatico.pdf",
+                        "categories":  [
+                                           "water",
+                                           "frost",
+                                           "agriculture"
+                                       ],
+                        "sourceKind":  "official_station_reference_catalog",
+                        "geographicScope":  "National meteorological station list; includes Huayao, Ingenio, Matucana, Casapalca, Chosica and La Oroya.",
+                        "verifiedAt":  "2026-10-17T23:52:29Z",
+                        "publicationDate":  null,
+                        "accessStatus":  "Official PDF table extracted with Tavily.",
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true
+                                               },
+                        "observedFacts":  [
+                                              "The annex lists station codes, names, administrative areas, longitude, latitude and altitude.",
+                                              "Huayao (112056) is in Huachac, Chupaca, Junin; Ingenio (111097) is in Santa Rosa de Ocopa, Concepcion, Junin.",
+                                              "The atlas values for several Junin stations, including Huayao, Ingenio and La Oroya, are rounded to 0.1 degree."
+                                          ],
+                        "limitations":  [
+                                            "Station coordinates are reference points, not farm boundaries or forecast-grid centroids.",
+                                            "Do not infer a current instrument or active observation from an atlas row."
+                                        ],
+                        "automation":  "Join source observations to station codes where available; retain source precision and mark 0.1-degree coordinates approximate.",
+                        "currentObservedIncidentEstablished":  false,
+                        "researchFile":  "environment-map-evidence-2026-10-17_christian.json"
+                    },
+                    {
+                        "id":  "indeci-yauli-frost-event-2026-06-11",
+                        "provider":  "INDECI / COEN",
+                        "title":  "Emergency report: frost in Yauli district, Junin",
+                        "url":  "https://portal.indeci.gob.pe/emergencias/reporte-complementario-n-8033-13-6-2026-coen-indeci-1830-horas-reporte-n-1-helada-en-el-distrito-de-yauli-junin",
+                        "categories":  [
+                                           "frost"
+                                       ],
+                        "sourceKind":  "official_emergency_report",
+                        "geographicScope":  "Yauli district, Yauli province, Junin; named sectors Yauli, Pachachaca, Manuel Montero and Pomacocha.",
+                        "verifiedAt":  "2026-10-17T23:52:29Z",
+                        "publicationDate":  "2026-07-31",
+                        "accessStatus":  "Official INDECI report page extracted with Tavily.",
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true
+                                               },
+                        "observedFacts":  [
+                                              "The report records a frost occurrence at 10:26 on 11 June 2026.",
+                                              "It reports health effects from acute respiratory infections (IRAS) in the listed sectors."
+                                          ],
+                        "limitations":  [
+                                            "No point coordinates were extracted; use district/sector labels only.",
+                                            "Historical June event, not a current frost alert and not a crop-loss report."
+                                        ],
+                        "automation":  "Parse the official occurrence timestamp and named administrative locations; keep geometry null until an official location is published.",
+                        "currentObservedIncidentEstablished":  false,
+                        "researchFile":  "environment-map-evidence-2026-10-17_christian.json"
+                    },
+                    {
+                        "id":  "senamhi-chirilu-rainfall-bulletin-04-2026",
+                        "provider":  "SENAMHI",
+                        "title":  "CHIRILU monthly rainfall monitoring bulletin 04-2026 (September 2026)",
+                        "url":  "https://www.senamhi.gob.pe/load/file/02231SENA-94.pdf",
+                        "categories":  [
+                                           "rain",
+                                           "water",
+                                           "agriculture"
+                                       ],
+                        "sourceKind":  "official_monthly_rainfall_observation",
+                        "geographicScope":  "Chillon, Rimac and Lurin basins and Mantaro headwaters; Casapalca is a local upper-Rimac station.",
+                        "verifiedAt":  "2026-10-17T23:52:29Z",
+                        "publicationDate":  null,
+                        "accessStatus":  "Official PDF extracted with Tavily.",
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true
+                                               },
+                        "observedFacts":  [
+                                              "September 2026 was predominantly dry across CHIRILU and Mantaro headwaters, with rainfall episodes on Sep 5-10, 15-17, 23-24 and 28-29.",
+                                              "Casapalca recorded 36.3 mm over 14 rainy days, a +36 percent monthly anomaly.",
+                                              "Low and middle basin areas had widespread rainfall deficits; Casapalca was one of two western-slope stations above normal."
+                                          ],
+                        "limitations":  [
+                                            "Historical September monitoring, not current rainfall.",
+                                            "The basin summary cannot be assigned to individual road segments."
+                                        ],
+                        "automation":  "Discover the latest bulletin through SENAMHI\u0027s catalogue; preserve observation month and station values separately from forecasts.",
+                        "currentObservedIncidentEstablished":  false,
+                        "researchFile":  "environment-map-evidence-2026-10-17_christian.json",
+                        "publicationMonth":  "2026-09",
+                        "observationPeriod":  {
+                                                  "start":  "2026-09-01",
+                                                  "end":  "2026-09-30"
+                                              }
+                    },
+                    {
+                        "id":  "senamhi-hydro-seasonal-forecast-oct2026-feb2027",
+                        "provider":  "SENAMHI",
+                        "title":  "Seasonal hydrological forecast No. 10-2026, October 2026-February 2027",
+                        "url":  "https://www.senamhi.gob.pe/load/file/02694SENA-74.pdf",
+                        "categories":  [
+                                           "water",
+                                           "rain"
+                                       ],
+                        "sourceKind":  "official_seasonal_hydrological_forecast",
+                        "geographicScope":  "National forecast; central Pacific rivers include the Rimac.",
+                        "verifiedAt":  "2026-10-17T23:52:29Z",
+                        "publicationDate":  null,
+                        "accessStatus":  "Official SENAMHI PDF extracted with Tavily.",
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true
+                                               },
+                        "observedFacts":  [
+                                              "The report projects initially normal mean monthly flows in the central Pacific rivers.",
+                                              "Rimac, Santa, Chancay-Huaral, Chillon, Lurin, Mala and Canete are projected to transition to above-normal flows from December 2026.",
+                                              "The forecast uses monthly mean flow scenarios and is updated monthly; uncertainty increases with lead time."
+                                          ],
+                        "limitations":  [
+                                            "Seasonal basin forecast, not a station reading or near-term warning.",
+                                            "No road-segment threshold or local flood impact is implied."
+                                        ],
+                        "automation":  "Store the forecast horizon and monthly categories; do not render it as current discharge or a local flood alert.",
+                        "currentObservedIncidentEstablished":  false,
+                        "researchFile":  "environment-map-evidence-2026-10-17_christian.json",
+                        "publicationMonth":  "2026-10",
+                        "validity":  {
+                                         "start":  "2026-10-01",
+                                         "end":  "2027-02-28"
+                                     }
+                    },
+                    {
+                        "id":  "senamhi-lima-town-weather-forecast-2026-10-16",
+                        "provider":  "SENAMHI",
+                        "title":  "Lima local weather forecast page, issued 16 October 2026",
+                        "url":  "https://www.senamhi.gob.pe/main.php?dp=lima\u0026p=pronostico-meteorologico",
+                        "categories":  [
+                                           "rain",
+                                           "frost"
+                                       ],
+                        "sourceKind":  "official_town_weather_forecast",
+                        "geographicScope":  "Named town forecasts for Chosica, Matucana and Casapalca.",
+                        "verifiedAt":  "2026-10-17T23:52:29Z",
+                        "publicationDate":  "2026-10-16",
+                        "accessStatus":  "Official SENAMHI forecast page extracted with Tavily.",
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true
+                                               },
+                        "observedFacts":  [
+                                              "The extracted page is issued 16 October and contains forecasts for 17-18 October.",
+                                              "Matucana forecasts a light-rain tendency on 17-18 October; Casapalca forecasts light showers; Chosica descriptions do not mention rain."
+                                          ],
+                        "limitations":  [
+                                            "Forecasts are town-level, not observed station conditions.",
+                                            "Town names and approximate station references do not establish kilometer-level road exposure."
+                                        ],
+                        "automation":  "Refresh the official page and retain issue date, forecast date, town name, temperatures and original text description.",
+                        "currentObservedIncidentEstablished":  false,
+                        "researchFile":  "environment-map-evidence-2026-10-17_christian.json",
+                        "validity":  {
+                                         "start":  "2026-10-17",
+                                         "end":  "2026-10-18"
+                                     }
+                    },
+                    {
+                        "id":  "senamhi-junin-town-weather-forecast-2026-10-16",
+                        "provider":  "SENAMHI",
+                        "title":  "Junin local weather forecast page, issued 16 October 2026",
+                        "url":  "https://www.senamhi.gob.pe?dp=junin\u0026p=pronostico-meteorologico",
+                        "categories":  [
+                                           "rain",
+                                           "frost"
+                                       ],
+                        "sourceKind":  "official_town_weather_forecast",
+                        "geographicScope":  "Named town forecasts for La Oroya, Huancayo and Yanacancha.",
+                        "verifiedAt":  "2026-10-17T23:52:29Z",
+                        "publicationDate":  "2026-10-16",
+                        "accessStatus":  "Official SENAMHI forecast page extracted with Tavily.",
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true
+                                               },
+                        "observedFacts":  [
+                                              "The extracted page is issued 16 October and provides a 17-21 October forecast horizon.",
+                                              "La Oroya is forecast to receive light/moderate rain on 17-19 October.",
+                                              "Yanacancha has a forecast minimum of -2 C on 17 October and 0 C on 18 October.",
+                                              "Huancayo forecasts light-rain tendency on 17-18 October; exact temperatures were absent for those dates."
+                                          ],
+                        "limitations":  [
+                                            "Forecasts are not observations.",
+                                            "Huancayo and Yanacancha forecast coordinates were not verified; no point geometry should be invented."
+                                        ],
+                        "automation":  "Preserve missing temperatures as null and require verified locality coordinates before mapping a point.",
+                        "currentObservedIncidentEstablished":  false,
+                        "researchFile":  "environment-map-evidence-2026-10-17_christian.json",
+                        "validity":  {
+                                         "start":  "2026-10-17",
+                                         "end":  "2026-10-21"
+                                     }
+                    },
+                    {
+                        "id":  "senasa-junin-fruit-fly-surveillance-network",
+                        "provider":  "SENASA",
+                        "title":  "Junin fruit-fly trapping and surveillance network",
+                        "url":  "https://www.senasa.gob.pe/senasacontigo/junin-senasa-controla-incidencia-de-mosca-de-la-fruta-mediante-sistema-de-trampeo",
+                        "categories":  [
+                                           "agriculture",
+                                           "pest_alerts"
+                                       ],
+                        "sourceKind":  "official_surveillance_reference",
+                        "geographicScope":  "Junin, including Mantaro Valley provinces Jauja, Concepcion, Huancayo and Chupaca.",
+                        "verifiedAt":  "2026-10-17T23:52:29Z",
+                        "publicationDate":  null,
+                        "accessStatus":  "Official SENASA page extracted with Tavily; article publication date unresolved.",
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true
+                                               },
+                        "observedFacts":  [
+                                              "The extracted article describes 495 fruit-fly traps across Junin, including 102 for Mantaro Valley provinces.",
+                                              "It describes trapping and fruit sampling as surveillance methods used to assess infestation boundaries."
+                                          ],
+                        "limitations":  [
+                                            "Original publication date is not established; reported trap counts cannot be presented as current.",
+                                            "Surveillance coverage is not an outbreak or a confirmed local infestation.",
+                                            "Trap coordinates were not present in the extraction."
+                                        ],
+                        "automation":  "Use only as source-process context until SENASA supplies a dated current inventory or diagnosed detection.",
+                        "currentObservedIncidentEstablished":  false,
+                        "researchFile":  "environment-map-evidence-2026-10-17_christian.json"
+                    },
+                    {
+                        "id":  "cenepred-summer-2027-rain-risk-scenario",
+                        "provider":  "CENEPRED / SIGRID",
+                        "title":  "Summer 2027 rain risk scenario, based on SENAMHI technical report 09-2026",
+                        "url":  "https://sigrid.cenepred.gob.pe/sigridv3/storage/biblioteca/22390_estudio-de-escenario-de-riesgo-por-lluvias-para-el-verano-2027-basado-en-el-informe-tecnico-n0-09-2026senamhi-dma-spc.pdf",
+                        "categories":  [
+                                           "rain",
+                                           "water",
+                                           "landslides"
+                                       ],
+                        "sourceKind":  "official_future_risk_scenario",
+                        "geographicScope":  "Department aggregates include Lima and Junin; district/road intersection not resolved.",
+                        "verifiedAt":  "2026-10-17T23:52:29Z",
+                        "publicationDate":  null,
+                        "accessStatus":  "Official CENEPRED report PDF extracted with Tavily.",
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true
+                                               },
+                        "observedFacts":  [
+                                              "For summer 2027, the report tabulates 363 mass-movement critical zones in Lima and 75 in Junin.",
+                                              "It tabulates 302 flood critical points in Lima and 128 in Junin, within national totals of 2,244.",
+                                              "The ANA critical-point layer data span January 2025-August 2026."
+                                          ],
+                        "limitations":  [
+                                            "This is a future seasonal risk scenario, not an active warning or observed event.",
+                                            "Department totals are not PE-22 intersections; geometry archives were not retrieved."
+                                        ],
+                        "automation":  "Retain department/district-level scenario data as background only and use published geometry before localizing risk.",
+                        "currentObservedIncidentEstablished":  false,
+                        "researchFile":  "environment-map-evidence-2026-10-17_christian.json",
+                        "publicationMonth":  "2026-08",
+                        "validity":  {
+                                         "start":  "2027-01-01",
+                                         "end":  "2027-03-31"
+                                     }
+                    },
+                    {
+                        "id":  "ingemmet-pucruchacra-san-mateo-report-2026-lead",
+                        "provider":  "INGEMMET",
+                        "title":  "2026 geological-hazard evaluation report: Cerro Pucruchacra, San Mateo",
+                        "url":  "https://repositorio.ingemmet.gob.pe/handle/20.500.12544/5479",
+                        "categories":  [
+                                           "landslides"
+                                       ],
+                        "sourceKind":  "official_report_metadata_lead",
+                        "geographicScope":  "Cerro Pucruchacra, San Mateo, Huarochiri, Lima; Carretera Central area.",
+                        "verifiedAt":  "2026-10-17T23:52:29Z",
+                        "publicationDate":  null,
+                        "accessStatus":  "Official repository result discovered; PDF extraction failed.",
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  false
+                                               },
+                        "observedFacts":  [
+                                              "Tavily found the official repository record for a 2026 geological-hazard evaluation report."
+                                          ],
+                        "limitations":  [
+                                            "The PDF body could not be extracted; no report finding, event date, polygon, or current instability is asserted.",
+                                            "Keep outside mapped current-hazard features pending direct content verification."
+                                        ],
+                        "automation":  "Revisit the official repository and inspect the full report before extracting coordinates or conclusions.",
+                        "currentObservedIncidentEstablished":  false,
+                        "researchFile":  "environment-map-evidence-2026-10-17_christian.json",
+                        "publicationMonth":  "2026-09"
+                    },
+                    {
+                        "id":  "indeci-monitoring-bulletin-290-2026",
+                        "provider":  "INDECI / COEN, summarizing SENAMHI and CENEPRED",
+                        "title":  "Monitoring of hazards and outlooks, bulletin 290 (17 October 2026, 15:00 Lima)",
+                        "url":  "https://portal.indeci.gob.pe/wp-content/uploads/2026/10/BOLET%C3%8DN-INFORMATIVO-MONITOREO-DE-PELIGROS-Y-PERSPECTIVAS-N%C2%B0290-del-17-10-2026.pdf",
+                        "categories":  [
+                                           "rain",
+                                           "water",
+                                           "frost",
+                                           "landslides"
+                                       ],
+                        "sourceKind":  "official_daily_hazard_monitoring_bulletin",
+                        "geographicScope":  "National bulletin; includes a measured rainfall observation at Ingenio, Concepción, Junín, and forecast-warning summaries affecting Lima and Junín.",
+                        "verifiedAt":  "2026-10-18T00:05:30Z",
+                        "publicationDate":  "2026-10-17",
+                        "accessStatus":  "Official INDECI PDF extracted successfully with Tavily.",
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true,
+                                                   "requestId":  "37337ec1-1e2a-4def-bbc4-c6736eafb796"
+                                               },
+                        "observedFacts":  [
+                                              "For 16 October 07:00 to 17 October 07:00, the bulletin reports 12.0 mm at Ingenio station, Concepción province, Junín, classified as a rainy day.",
+                                              "It summarizes SENAMHI warning 422 for 18–19 October, including Lima and Junín; the notice forecasts central-Andes precipitation and conditions for hail, high-altitude snow, electrical discharges and strong gusts.",
+                                              "The bulletin also contains nationwide water-storage, temperature and risk-scenario summaries; these are not all local road observations."
+                                          ],
+                        "limitations":  [
+                                            "The rainfall value is a station measurement, not rainfall on a road segment; station coordinates are rounded in the available atlas.",
+                                            "Warning 422 is a forecast and its advertised geometry ZIPs could not be extracted; province coverage alone does not establish PE-22 overlap.",
+                                            "The daily bulletin contains multiple hazards and dates; each table must retain its own observation window and notice validity."
+                                        ],
+                        "automation":  "Archive the bulletin PDF by publication time; parse observation tables separately from warning tables, retain station/time/classification, and follow published GIS links only after validating the downloaded geometries.",
+                        "currentObservedIncidentEstablished":  false,
+                        "researchFile":  "environment-map-evidence-2026-10-17_christian.json"
+                    },
+                    {
+                        "id":  "indeci-surco-forest-fire-crop-damage-2026",
+                        "provider":  "INDECI / COEN, citing Lima regional and Surco district risk offices",
+                        "title":  "Complementary report 14162: forest fire and agricultural damage in Ayas, Surco, Huarochirí",
+                        "url":  "https://portal.indeci.gob.pe/wp-content/uploads/2026/10/REPORTE-COMPLEMENTARIO-N.%C2%BA-14162-14OCT2026-INCENDIO-FORESTAL-EN-EL-DISTRITO-DE-SURCO-LIMA-5.pdf",
+                        "categories":  [
+                                           "agriculture"
+                                       ],
+                        "sourceKind":  "official_closed_emergency_report",
+                        "geographicScope":  "Ayas annex, Surco district, Huarochirí province, Lima; exact point and affected-field polygon were not provided.",
+                        "verifiedAt":  "2026-10-18T00:05:30Z",
+                        "publicationDate":  "2026-10-14",
+                        "eventDate":  "2026-09-30T12:49:00-05:00",
+                        "accessStatus":  "All six pages of the official COEN PDF extracted with Tavily.",
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true,
+                                                   "requestId":  "59fa5ffa-5dcc-45ac-af35-9df4d8307d8c"
+                                               },
+                        "observedFacts":  [
+                                              "INDECI reports a forest fire at Ayas, Surco, beginning 30 September 2026 at 12:49; the report says it was extinguished and closed.",
+                                              "The damage table, updated 2 October 10:55, records 45 hectares of agricultural crops affected and 25 hectares of natural cover destroyed.",
+                                              "The report lists palta, chirimoya, alfalfa, membrillo, tuna and eucalyptus among affected crops/vegetation; it reports no deaths or injuries."
+                                          ],
+                        "limitations":  [
+                                            "This is a completed historical fire, not a current fire alert or a verified road closure.",
+                                            "Damage acreage is district-office reporting while EDAN was being updated; retain the stated update time.",
+                                            "Ayas is named as an annex, but exact incident coordinates and field boundaries are absent; do not geocode to a district centroid."
+                                        ],
+                        "automation":  "Ingest report revisions as versions; preserve occurrence date, updated damage date, crop area, closure status and locality separately; keep geometry null until an official point or field boundary is supplied.",
+                        "currentObservedIncidentEstablished":  false,
+                        "researchFile":  "environment-map-evidence-2026-10-17_christian.json"
+                    },
+                    {
+                        "id":  "cenepred-summer-2027-risk-scenario-update",
+                        "provider":  "CENEPRED / SIGRID",
+                        "title":  "Summer 2027 rain risk scenario (official update published 7 October 2026)",
+                        "url":  "https://www.gob.pe/institucion/cenepred/noticias/1454178-cenepred-presenta-el-estudio-de-escenarios-de-riesgo-por-lluvias-para-el-verano-2027",
+                        "studyPageUrl":  "https://sigrid.cenepred.gob.pe/sigridv3/documento/22888",
+                        "categories":  [
+                                           "landslides",
+                                           "rain",
+                                           "water",
+                                           "agriculture"
+                                       ],
+                        "sourceKind":  "seasonal_risk_scenario_and_exposure_summary",
+                        "geographicScope":  "National Peru; January-March 2027 scenario. No PE-22 intersection computed.",
+                        "verifiedAt":  "2026-10-18T00:34:26Z",
+                        "publicationDate":  "2026-10-07",
+                        "validity":  {
+                                         "start":  "2027-01-01",
+                                         "end":  "2027-03-31"
+                                     },
+                        "availableFormats":  [
+                                                 "HTML",
+                                                 "SIGRID study page",
+                                                 "linked study archives"
+                                             ],
+                        "accessStatus":  "Official press release and study metadata extracted; regional archive geometry was not downloaded.",
+                        "observedFacts":  [
+                                              "The release identifies 702 districts at very high risk from mass movements and 8,695,261 inhabitants across those districts.",
+                                              "In areas of greater susceptibility to mass movements, the release reports 3,333,277 residents, 63,290 km of road network and 3,610,747 ha of agricultural area.",
+                                              "The separate flood scenario reports 3,571,687 residents and 7,673 km of road network in areas of greater susceptibility."
+                                          ],
+                        "limitations":  [
+                                            "National scenario and exposure totals are not current incidents or PE-22 counts.",
+                                            "Exact corridor exposure requires inspection of the linked official spatial artifacts."
+                                        ],
+                        "automation":  "Archive each scenario version and only publish corridor intersections after validating official district or hazard geometry.",
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true,
+                                                   "requestId":  "c02e822c-9f43-48d7-a9e4-4e84b5720a5c"
+                                               },
+                        "currentObservedIncidentEstablished":  false,
+                        "researchFile":  "environment-map-evidence-2026-10-17_christian.json"
+                    },
+                    {
+                        "id":  "cenepred-water-deficit-risk-2026-27-september",
+                        "provider":  "CENEPRED / SIGRID",
+                        "title":  "Water-deficit risk scenario for the 2026-2027 rainy period, September update",
+                        "url":  "https://sigrid.cenepred.gob.pe/sigridv3/storage/biblioteca/22787_estudio-de-escenario-de-riesgo-por-deficit-hidrico-para-el-periodo-de-lluvias-2026-2027-actualizacion-setiembre.pdf",
+                        "categories":  [
+                                           "water",
+                                           "agriculture"
+                                       ],
+                        "sourceKind":  "seasonal_water_deficit_risk_scenario",
+                        "geographicScope":  "National; department-level very-high-risk district counts include Junin and Pasco. No corridor geometry extracted.",
+                        "verifiedAt":  "2026-10-18T00:34:26Z",
+                        "publicationMonth":  "2026-09",
+                        "validity":  null,
+                        "availableFormats":  [
+                                                 "PDF"
+                                             ],
+                        "accessStatus":  "Official CENEPRED PDF extracted with Tavily.",
+                        "observedFacts":  [
+                                              "The report identifies 397 districts nationally at very high water-deficit risk, including 18 in Junin and 10 in Pasco.",
+                                              "Across all very-high-risk districts, it reports 2,466,388 ha of agricultural land and 8,024,224 ha of pasture."
+                                          ],
+                        "limitations":  [
+                                            "This is seasonal risk, not an observed water shortage or current irrigation restriction.",
+                                            "Department-level counts do not identify a PE-22 intersection."
+                                        ],
+                        "automation":  "Refresh on official reissue, retain the season/version and require a verified spatial layer before mapping local exposure.",
+                        "extractionEvidence":  {
+                                                   "method":  "tavily_extract",
+                                                   "success":  true,
+                                                   "requestId":  "d2671b5c-4749-4385-97fe-1c1933b307ef"
+                                               },
+                        "currentObservedIncidentEstablished":  false,
+                        "researchFile":  "environment-map-evidence-2026-10-17_christian.json"
+                    },
+                    {
+                        "id":  "ingemmet-critical-zones-under-weather-notice-geojson",
+                        "provider":  "INGEMMET · SENAMHI",
+                        "title":  "Official critical-zone points linked to weather notices",
+                        "url":  "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_PERU_ALERTA/MapServer/0/query?where=1%3D1\u0026outFields=*\u0026returnGeometry=true\u0026outSR=4326\u0026f=geojson",
+                        "categories":  [
+                                           "landslides",
+                                           "rain"
+                                       ],
+                        "sourceKind":  "official_geospatial_feature_service",
+                        "geographicScope":  "Peru; the retrieved layer contains 303 critical zones in six northern departments linked to SENAMHI notice 421.",
+                        "verifiedAt":  "2026-10-18T02:28:30Z",
+                        "accessStatus":  "303 GeoJSON point features extracted successfully through Tavily from the official ArcGIS service.",
+                        "observedFacts":  [
+                                              "Each point publishes an OBJECTID, hazard, locality, exposed elements, notice number and INGEMMET zone level.",
+                                              "All 303 retrieved points are associated with notice 421; the source classifies 160 as Nivel 2 and 143 as Nivel 3."
+                                          ],
+                        "limitations":  [
+                                            "Critical zones under a forecast are not confirmed landslides, damaged assets or road closures.",
+                                            "INGEMMET's NIVEL classification is separate from SENAMHI's warning level; the point-level source value is preserved in the map record.",
+                                            "The layer has no incident-occurrence date; published forecast validity comes from the referenced SENAMHI notice.",
+                                            "Native CLI requests to these domains failed DNS in this environment. This is a documented capture, not an automatically refreshed feed."
+                                        ],
+                        "automation":  "Query official GeoJSON and validate the notice association and its validity before replacing the capture. Preserve previous captures and reject missing geometry or unmatched notices."
+                    },
+                    {
+                        "id":  "senamhi-warning-wfs-verified-daily-polygons",
+                        "provider":  "SENAMHI",
+                        "title":  "Official daily weather-warning polygons (WFS)",
+                        "url":  "https://idesep.senamhi.gob.pe/geoserver/g_aviso/ows?service=WFS\u0026version=1.0.0\u0026request=GetFeature\u0026typeName=g_aviso:view_aviso\u0026maxFeatures=50\u0026viewparams=qry:422_1_2026\u0026outputFormat=application/json",
+                        "categories":  [
+                                           "water",
+                                           "frost",
+                                           "rain",
+                                           "agriculture"
+                                       ],
+                        "sourceKind":  "official_geospatial_feature_service",
+                        "geographicScope":  "Peru; verified daily risk polygons from notices 415, 420, 421 and 422.",
+                        "verifiedAt":  "2026-10-18T02:28:30Z",
+                        "accessStatus":  "Eight official WFS responses extracted through Tavily; notice IDs, map IDs, issue dates and daily validity verified in feature properties.",
+                        "observedFacts":  [
+                                              "The retained 13 risk features form 11 daily warning-area records when equal notice/map/level features are grouped without changing their polygons.",
+                                              "Only Nivel 2 and higher are mapped; Nivel 1 national background polygons are excluded.",
+                                              "Warning 422 day one begins at 19:00 UTC (14:00 Lima) on 18 October 2026."
+                                          ],
+                        "limitations":  [
+                                            "Warning geometry is forecast coverage, not an observed event or proof of a road/mining-site impact.",
+                                            "A daily map can have a shorter validity than its parent notice.",
+                                            "No centroid, district pin or invented geometry replaces an official polygon."
+                                        ],
+                        "automation":  "Fetch published daily WFS maps, check IDs against requested notice/map/year, validate closed WGS84 rings and source dates, retain risk levels only and evaluate expiry from each map\u0027s published validity."
+                    }
+                ]
+}

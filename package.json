@@ -1,0 +1,49 @@
+{
+  "name": "peruroad-climate",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint --max-warnings=0",
+    "typecheck": "next typegen && tsc --noEmit",
+    "test": "vitest run",
+    "data:build": "tsx scripts/build-static-layers.ts",
+    "data:rain-grid": "tsx scripts/build-national-rain-grid.ts && prettier --write src/integrations/local-data/national-rain-grid.json",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "predev": "node scripts/copy-maplibre-worker.mjs",
+    "prebuild": "node scripts/copy-maplibre-worker.mjs",
+    "data:snapshot": "tsx scripts/snapshot-sutran-alerts.ts",
+    "db:seed-demo": "node --env-file-if-exists=.env.local --import tsx scripts/seed-demo.ts",
+    "test:db": "node --env-file-if-exists=.env.local --import tsx node_modules/vitest/vitest.mjs run --config vitest.database.config.mts",
+    "zavu:send-test": "node --env-file-if-exists=.env.local --import tsx scripts/zavu-send-test.ts",
+    "zavu:call-incident": "node --env-file-if-exists=.env.local --import tsx scripts/zavu-call-incident.ts",
+    "route-watch:simulate": "node --env-file-if-exists=.env.local --import tsx scripts/route-watch-simulate.ts"
+  },
+  "dependencies": {
+    "@peruroad/road-data": "file:packages/road-data",
+    "@supabase/supabase-js": "^2.118.0",
+    "maplibre-gl": "6.14.0",
+    "next": "16.4.2",
+    "pdf-lib": "1.17.1",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^24",
+    "@types/pg": "^8.23.1",
+    "@types/pngjs": "^6.0.5",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.4.2",
+    "pngjs": "^7.0.0",
+    "prettier": "3.9.10",
+    "tsx": "4.23.15",
+    "typescript": "^5",
+    "vitest": "^5.0.5"
+  }
+}

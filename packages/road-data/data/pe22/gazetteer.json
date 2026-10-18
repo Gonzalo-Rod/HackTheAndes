@@ -1,0 +1,3860 @@
+{
+  "schemaVersion": 1,
+  "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+  "source": {
+    "schemaVersion": 1,
+    "provider": "mtc-ign",
+    "retrievedAt": "2026-10-17T21:45:09.373Z",
+    "sourceUrls": [
+      "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/5/query?where=ruta+%3D+%27PE-22%27&outFields=OBJECTID%2Cnombre%2Cruta%2Cinicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000",
+      "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/6/query?where=codRuta+%3D+%27PE-22%27&outFields=OBJECTID_1%2CnumPoste%2CcodRuta%2CkmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000",
+      "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+    ],
+    "landmarks": [
+      {
+        "sourceId": "5:26",
+        "kind": "toll",
+        "name": "Peaje CORCONA",
+        "aliases": [
+          "CORCONA"
+        ],
+        "position": [
+          -76.58874799999995,
+          -11.91068755599997
+        ],
+        "reportedRoadCode": "PE-22",
+        "reportedKm": 48.5,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/5/query?where=ruta+%3D+%27PE-22%27&outFields=OBJECTID%2Cnombre%2Cruta%2Cinicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000"
+      },
+      {
+        "sourceId": "6:2",
+        "kind": "sos",
+        "name": "Poste SOS 01",
+        "aliases": [
+          "SOS 01"
+        ],
+        "position": [
+          -76.62187830799996,
+          -11.919871766999961
+        ],
+        "reportedRoadCode": "PE-22",
+        "reportedKm": 43.29785363,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/6/query?where=codRuta+%3D+%27PE-22%27&outFields=OBJECTID_1%2CnumPoste%2CcodRuta%2CkmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000"
+      },
+      {
+        "sourceId": "6:3",
+        "kind": "sos",
+        "name": "Poste SOS 02",
+        "aliases": [
+          "SOS 02"
+        ],
+        "position": [
+          -76.53916247299998,
+          -11.90934931299995
+        ],
+        "reportedRoadCode": "PE-22",
+        "reportedKm": 53.7181985,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/6/query?where=codRuta+%3D+%27PE-22%27&outFields=OBJECTID_1%2CnumPoste%2CcodRuta%2CkmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000"
+      },
+      {
+        "sourceId": "6:4",
+        "kind": "sos",
+        "name": "Poste SOS 03",
+        "aliases": [
+          "SOS 03"
+        ],
+        "position": [
+          -76.46050759299999,
+          -11.88621965699997
+        ],
+        "reportedRoadCode": "PE-22",
+        "reportedKm": 64.03062463,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/6/query?where=codRuta+%3D+%27PE-22%27&outFields=OBJECTID_1%2CnumPoste%2CcodRuta%2CkmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000"
+      },
+      {
+        "sourceId": "6:5",
+        "kind": "sos",
+        "name": "Poste SOS 04",
+        "aliases": [
+          "SOS 04"
+        ],
+        "position": [
+          -76.39808438199998,
+          -11.851534779999952
+        ],
+        "reportedRoadCode": "PE-22",
+        "reportedKm": 73.44581271,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/6/query?where=codRuta+%3D+%27PE-22%27&outFields=OBJECTID_1%2CnumPoste%2CcodRuta%2CkmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000"
+      },
+      {
+        "sourceId": "6:6",
+        "kind": "sos",
+        "name": "Poste SOS 05",
+        "aliases": [
+          "SOS 05"
+        ],
+        "position": [
+          -76.31459555799995,
+          -11.788468020999971
+        ],
+        "reportedRoadCode": "PE-22",
+        "reportedKm": 88.13426961,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/6/query?where=codRuta+%3D+%27PE-22%27&outFields=OBJECTID_1%2CnumPoste%2CcodRuta%2CkmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000"
+      },
+      {
+        "sourceId": "6:7",
+        "kind": "sos",
+        "name": "Poste SOS 06",
+        "aliases": [
+          "SOS 06"
+        ],
+        "position": [
+          -76.30678840599995,
+          -11.77482921199993
+        ],
+        "reportedRoadCode": "PE-22",
+        "reportedKm": 91.74009028,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/6/query?where=codRuta+%3D+%27PE-22%27&outFields=OBJECTID_1%2CnumPoste%2CcodRuta%2CkmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000"
+      },
+      {
+        "sourceId": "6:8",
+        "kind": "sos",
+        "name": "Poste SOS 07",
+        "aliases": [
+          "SOS 07"
+        ],
+        "position": [
+          -76.27034098499996,
+          -11.712554487999967
+        ],
+        "reportedRoadCode": "PE-22",
+        "reportedKm": 104.77910405,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/6/query?where=codRuta+%3D+%27PE-22%27&outFields=OBJECTID_1%2CnumPoste%2CcodRuta%2CkmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000"
+      },
+      {
+        "sourceId": "6:9",
+        "kind": "sos",
+        "name": "Poste SOS 08",
+        "aliases": [
+          "SOS 08"
+        ],
+        "position": [
+          -76.24729959799998,
+          -11.662255224999967
+        ],
+        "reportedRoadCode": "PE-22",
+        "reportedKm": 113.94848752,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/6/query?where=codRuta+%3D+%27PE-22%27&outFields=OBJECTID_1%2CnumPoste%2CcodRuta%2CkmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000"
+      },
+      {
+        "sourceId": "6:10",
+        "kind": "sos",
+        "name": "Poste SOS 09",
+        "aliases": [
+          "SOS 09"
+        ],
+        "position": [
+          -76.23377747899997,
+          -11.633115301999965
+        ],
+        "reportedRoadCode": "PE-22",
+        "reportedKm": 118.26732463,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/6/query?where=codRuta+%3D+%27PE-22%27&outFields=OBJECTID_1%2CnumPoste%2CcodRuta%2CkmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000"
+      },
+      {
+        "sourceId": "6:11",
+        "kind": "sos",
+        "name": "Poste SOS 10",
+        "aliases": [
+          "SOS 10"
+        ],
+        "position": [
+          -76.20789403999999,
+          -11.61376962199995
+        ],
+        "reportedRoadCode": "PE-22",
+        "reportedKm": 124.50784002,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/6/query?where=codRuta+%3D+%27PE-22%27&outFields=OBJECTID_1%2CnumPoste%2CcodRuta%2CkmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000"
+      },
+      {
+        "sourceId": "6:12",
+        "kind": "sos",
+        "name": "Poste SOS 11",
+        "aliases": [
+          "SOS 11"
+        ],
+        "position": [
+          -76.19614664299996,
+          -11.605256844999928
+        ],
+        "reportedRoadCode": "PE-22",
+        "reportedKm": 129.68232463,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/6/query?where=codRuta+%3D+%27PE-22%27&outFields=OBJECTID_1%2CnumPoste%2CcodRuta%2CkmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000"
+      },
+      {
+        "sourceId": "6:13",
+        "kind": "sos",
+        "name": "Poste SOS 12",
+        "aliases": [
+          "SOS 12"
+        ],
+        "position": [
+          -76.17489799799995,
+          -11.599730952999948
+        ],
+        "reportedRoadCode": "PE-22",
+        "reportedKm": 133.97886468,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/6/query?where=codRuta+%3D+%27PE-22%27&outFields=OBJECTID_1%2CnumPoste%2CcodRuta%2CkmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000"
+      },
+      {
+        "sourceId": "6:14",
+        "kind": "sos",
+        "name": "Poste SOS 14",
+        "aliases": [
+          "SOS 14"
+        ],
+        "position": [
+          -76.10593094899997,
+          -11.60029828699993
+        ],
+        "reportedRoadCode": "PE-22",
+        "reportedKm": 143.39319292,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/6/query?where=codRuta+%3D+%27PE-22%27&outFields=OBJECTID_1%2CnumPoste%2CcodRuta%2CkmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000"
+      },
+      {
+        "sourceId": "6:15",
+        "kind": "sos",
+        "name": "Poste SOS 15",
+        "aliases": [
+          "SOS 15"
+        ],
+        "position": [
+          -76.02831409899994,
+          -11.61243512599998
+        ],
+        "reportedRoadCode": "PE-22",
+        "reportedKm": 153.26970261,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/6/query?where=codRuta+%3D+%27PE-22%27&outFields=OBJECTID_1%2CnumPoste%2CcodRuta%2CkmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000"
+      },
+      {
+        "sourceId": "7:2",
+        "kind": "bridge",
+        "name": "PEATONAL",
+        "aliases": [
+          "Puente PEATONAL"
+        ],
+        "position": [
+          -76.92659719999995,
+          -12.032036199999936
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 6.0999999,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:54",
+        "kind": "bridge",
+        "name": "S/N",
+        "aliases": [
+          "Puente S/N"
+        ],
+        "position": [
+          -76.79141135299994,
+          -11.66915742499998
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 64.63999938,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:57",
+        "kind": "bridge",
+        "name": "CHINCHAN",
+        "aliases": [
+          "Puente CHINCHAN"
+        ],
+        "position": [
+          -76.23461041199994,
+          -11.62368123899995
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 119.23000335,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:63",
+        "kind": "bridge",
+        "name": "TAMBORAQUE II",
+        "aliases": [
+          "Puente TAMBORAQUE II"
+        ],
+        "position": [
+          -76.30479630899998,
+          -11.773523782999973
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 89.44000244,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:64",
+        "kind": "bridge",
+        "name": "CHICLA I",
+        "aliases": [
+          "Puente CHICLA I"
+        ],
+        "position": [
+          -76.27011476799998,
+          -11.711274125999978
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 104.76999664,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:104",
+        "kind": "bridge",
+        "name": "ATARJEA",
+        "aliases": [
+          "Puente ATARJEA"
+        ],
+        "position": [
+          -76.98873299999997,
+          -12.036747999999932
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 2.68000006,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:105",
+        "kind": "bridge",
+        "name": "SERENSA",
+        "aliases": [
+          "Puente SERENSA"
+        ],
+        "position": [
+          -76.98874545499996,
+          -12.036651090999953
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 3.01999998,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:106",
+        "kind": "bridge",
+        "name": "PEATONAL",
+        "aliases": [
+          "Puente PEATONAL"
+        ],
+        "position": [
+          -76.98948142899997,
+          -12.034660285999962
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 3.25,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:107",
+        "kind": "bridge",
+        "name": "RAMIRO PRIALE",
+        "aliases": [
+          "Puente RAMIRO PRIALE"
+        ],
+        "position": [
+          -76.99100632499994,
+          -12.032674074999932
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 3.53999996,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:108",
+        "kind": "bridge",
+        "name": "PEATONAL",
+        "aliases": [
+          "Puente PEATONAL"
+        ],
+        "position": [
+          -76.99391917599996,
+          -12.03011029399994
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 3.96000003,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:109",
+        "kind": "bridge",
+        "name": "NUEVO",
+        "aliases": [
+          "Puente NUEVO"
+        ],
+        "position": [
+          -76.99993799999999,
+          -12.029725999999926
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 4.63000011,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:110",
+        "kind": "bridge",
+        "name": "PEATONAL",
+        "aliases": [
+          "Puente PEATONAL"
+        ],
+        "position": [
+          -77.00690278599996,
+          -12.032666570999936
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 5.48000001,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:124",
+        "kind": "bridge",
+        "name": "PEATONAL",
+        "aliases": [
+          "Puente PEATONAL"
+        ],
+        "position": [
+          -76.97542046699994,
+          -12.053346799999929
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 0.61000001,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:125",
+        "kind": "bridge",
+        "name": "PEATONAL",
+        "aliases": [
+          "Puente PEATONAL"
+        ],
+        "position": [
+          -76.97737099999995,
+          -12.050445999999965
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 1,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:126",
+        "kind": "bridge",
+        "name": "PEATONAL",
+        "aliases": [
+          "Puente PEATONAL"
+        ],
+        "position": [
+          -76.98068152899998,
+          -12.047522646999937
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 1.48000001,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:127",
+        "kind": "bridge",
+        "name": "PEATONAL",
+        "aliases": [
+          "Puente PEATONAL"
+        ],
+        "position": [
+          -76.98256778799998,
+          -12.045867906999945
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 1.75999999,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:128",
+        "kind": "bridge",
+        "name": "PEATONAL",
+        "aliases": [
+          "Puente PEATONAL"
+        ],
+        "position": [
+          -76.98495837499996,
+          -12.043762624999943
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 2.10999989,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:129",
+        "kind": "bridge",
+        "name": "PEATONAL",
+        "aliases": [
+          "Puente PEATONAL"
+        ],
+        "position": [
+          -76.98689759999996,
+          -12.041682199999968
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 2.42000007,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:144",
+        "kind": "bridge",
+        "name": "MATUCANA",
+        "aliases": [
+          "Puente MATUCANA"
+        ],
+        "position": [
+          -76.38932133299994,
+          -11.847696459999952
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 74.29000091,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:163",
+        "kind": "bridge",
+        "name": "LA CASCADA",
+        "aliases": [
+          "Puente LA CASCADA"
+        ],
+        "position": [
+          -76.49729092499996,
+          -11.892231127999935
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 59.11999893,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:205",
+        "kind": "bridge",
+        "name": "PEATONAL",
+        "aliases": [
+          "Puente PEATONAL"
+        ],
+        "position": [
+          -76.92844672199999,
+          -12.034195443999977
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 5.7800002,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:206",
+        "kind": "bridge",
+        "name": "S/N",
+        "aliases": [
+          "Puente S/N"
+        ],
+        "position": [
+          -76.73001430799997,
+          -11.954256768999926
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 30.01000022,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:220",
+        "kind": "bridge",
+        "name": "TABLACHACA",
+        "aliases": [
+          "Puente TABLACHACA"
+        ],
+        "position": [
+          -76.25166268899994,
+          -11.666212240999926
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 111.5,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:223",
+        "kind": "bridge",
+        "name": "RIO BLANCO",
+        "aliases": [
+          "Puente RIO BLANCO"
+        ],
+        "position": [
+          -76.26171799999997,
+          -11.733369161999974
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 101.22000122,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:247",
+        "kind": "bridge",
+        "name": "LA CABAÑA",
+        "aliases": [
+          "Puente LA CABAÑA"
+        ],
+        "position": [
+          -76.79644454699996,
+          -11.673861952999971
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 63.31999969,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:253",
+        "kind": "bridge",
+        "name": "ADAHUARO",
+        "aliases": [
+          "Puente ADAHUARO"
+        ],
+        "position": [
+          -76.40670876999997,
+          -11.854163193999966
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 72.13999938,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:254",
+        "kind": "bridge",
+        "name": "TAMBORAQUE I",
+        "aliases": [
+          "Puente TAMBORAQUE I"
+        ],
+        "position": [
+          -76.30793286199997,
+          -11.781772011999976
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 88.69000244,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:311",
+        "kind": "bridge",
+        "name": "S/N",
+        "aliases": [
+          "Puente S/N"
+        ],
+        "position": [
+          -76.73207599999995,
+          -11.95617599999997
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 29.69000053,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:315",
+        "kind": "bridge",
+        "name": "S/N",
+        "aliases": [
+          "Puente S/N"
+        ],
+        "position": [
+          -75.90594133299999,
+          -11.52183574999998
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 0.38999998,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:329",
+        "kind": "bridge",
+        "name": "SURCO",
+        "aliases": [
+          "Puente SURCO"
+        ],
+        "position": [
+          -76.44729182899994,
+          -11.885579935999942
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 65.98999786,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:330",
+        "kind": "bridge",
+        "name": "LLICAN",
+        "aliases": [
+          "Puente LLICAN"
+        ],
+        "position": [
+          -76.37256432099997,
+          -11.831262859999981
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 77.02999877,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:373",
+        "kind": "bridge",
+        "name": "SANTA ANITA",
+        "aliases": [
+          "Puente SANTA ANITA"
+        ],
+        "position": [
+          -76.97348489499996,
+          -12.058512766999968
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 0,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:379",
+        "kind": "bridge",
+        "name": "ESPERANZA",
+        "aliases": [
+          "Puente ESPERANZA"
+        ],
+        "position": [
+          -76.50598709399998,
+          -11.90253193999996
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 57.52000045,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:398",
+        "kind": "bridge",
+        "name": "MARCAVALLE",
+        "aliases": [
+          "Puente MARCAVALLE"
+        ],
+        "position": [
+          -75.92718174099997,
+          -11.540996589999963
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 170.77000427,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:425",
+        "kind": "bridge",
+        "name": "PEATONAL",
+        "aliases": [
+          "Puente PEATONAL"
+        ],
+        "position": [
+          -76.93174499999998,
+          -12.038059999999973
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 5.21999979,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:432",
+        "kind": "bridge",
+        "name": "BELLAVISTA II",
+        "aliases": [
+          "Puente BELLAVISTA II"
+        ],
+        "position": [
+          -76.26597130099998,
+          -11.692466706999937
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 107.40000152,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:436",
+        "kind": "bridge",
+        "name": "HUALLATUPE",
+        "aliases": [
+          "Puente HUALLATUPE"
+        ],
+        "position": [
+          -76.34572494899999,
+          -11.810896636999928
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 81.30000305,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:437",
+        "kind": "bridge",
+        "name": "ANCHI II",
+        "aliases": [
+          "Puente ANCHI II"
+        ],
+        "position": [
+          -76.26614399999994,
+          -11.732862999999952
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 99.73999786,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:471",
+        "kind": "bridge",
+        "name": "EDUARDO DE HABICH",
+        "aliases": [
+          "Puente EDUARDO DE HABICH"
+        ],
+        "position": [
+          -76.42461911699996,
+          -11.865118305999943
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 69.61000061,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:491",
+        "kind": "bridge",
+        "name": "CRUCE A DESNIVEL SUPERIOR (PUENTE SOBRE",
+        "aliases": [
+          "Puente CRUCE A DESNIVEL SUPERIOR (PUENTE SOBRE"
+        ],
+        "position": [
+          -76.53890399999995,
+          -11.90927899999997
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 54.02999877,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:539",
+        "kind": "bridge",
+        "name": "S/N",
+        "aliases": [
+          "Puente S/N"
+        ],
+        "position": [
+          -76.96818057099995,
+          -12.056291285999976
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 0.62,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:540",
+        "kind": "bridge",
+        "name": "LOS ANGELES",
+        "aliases": [
+          "Puente LOS ANGELES"
+        ],
+        "position": [
+          -76.74551222899998,
+          -11.967703236999967
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 27.29000091,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:551",
+        "kind": "bridge",
+        "name": "CHAPERITO",
+        "aliases": [
+          "Puente CHAPERITO"
+        ],
+        "position": [
+          -76.64940584399994,
+          -11.491931846999933
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 87.90000152,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:554",
+        "kind": "bridge",
+        "name": "BELLAVISTA I",
+        "aliases": [
+          "Puente BELLAVISTA I"
+        ],
+        "position": [
+          -76.26621385499999,
+          -11.69283975899998
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 107.27999877,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:555",
+        "kind": "bridge",
+        "name": "YAULI - CUT OFF",
+        "aliases": [
+          "Puente YAULI - CUT OFF"
+        ],
+        "position": [
+          -75.99986959499995,
+          -11.624273401999972
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 156.83999633,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:558",
+        "kind": "bridge",
+        "name": "INFIERNILLO",
+        "aliases": [
+          "Puente INFIERNILLO"
+        ],
+        "position": [
+          -76.26808086499994,
+          -11.731660172999966
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 99.13999938,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:586",
+        "kind": "bridge",
+        "name": "PEATONAL",
+        "aliases": [
+          "Puente PEATONAL"
+        ],
+        "position": [
+          -76.91927494399994,
+          -12.025781110999958
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 7.19000005,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:587",
+        "kind": "bridge",
+        "name": "RICARDO PALMA",
+        "aliases": [
+          "Puente RICARDO PALMA"
+        ],
+        "position": [
+          -76.66251837699997,
+          -11.922878221999952
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 38.31000137,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:607",
+        "kind": "bridge",
+        "name": "PACHACHACA",
+        "aliases": [
+          "Puente PACHACHACA"
+        ],
+        "position": [
+          -76.02609856199996,
+          -11.612762816999975
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 153.44999694,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:636",
+        "kind": "bridge",
+        "name": "MONTEVERDE",
+        "aliases": [
+          "Puente MONTEVERDE"
+        ],
+        "position": [
+          -76.65237800999995,
+          -11.494282623999936
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 93.37999725,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:638",
+        "kind": "bridge",
+        "name": "CHICLA II",
+        "aliases": [
+          "Puente CHICLA II"
+        ],
+        "position": [
+          -76.26752741299998,
+          -11.707187703999978
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 105.51000213,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:643",
+        "kind": "bridge",
+        "name": "HUARIPACHI",
+        "aliases": [
+          "Puente HUARIPACHI"
+        ],
+        "position": [
+          -76.37938334799998,
+          -11.840197738999962
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 75.73999786,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:644",
+        "kind": "bridge",
+        "name": "TAMBORAQUE III",
+        "aliases": [
+          "Puente TAMBORAQUE III"
+        ],
+        "position": [
+          -76.30479180299994,
+          -11.773513390999938
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 90.41999816,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:696",
+        "kind": "bridge",
+        "name": "S/N",
+        "aliases": [
+          "Puente S/N"
+        ],
+        "position": [
+          -76.67201056199997,
+          -11.920804437999948
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 37.79000091,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:697",
+        "kind": "bridge",
+        "name": "VERRUGAS",
+        "aliases": [
+          "Puente VERRUGAS"
+        ],
+        "position": [
+          -76.48838152299999,
+          -11.88775005499997
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 60.31999969,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:856",
+        "kind": "bridge",
+        "name": "S/N",
+        "aliases": [
+          "Puente S/N"
+        ],
+        "position": [
+          -75.89509691599994,
+          -11.530632318999949
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 2.47000002,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:930",
+        "kind": "bridge",
+        "name": "CHACAHUARO",
+        "aliases": [
+          "Puente CHACAHUARO"
+        ],
+        "position": [
+          -76.36164192299998,
+          -11.820655461999934
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 79.51000213,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:931",
+        "kind": "bridge",
+        "name": "TAMBO",
+        "aliases": [
+          "Puente TAMBO"
+        ],
+        "position": [
+          -75.95868759999996,
+          -11.571388199999944
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 165.6000061,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:972",
+        "kind": "bridge",
+        "name": "S/N",
+        "aliases": [
+          "Puente S/N"
+        ],
+        "position": [
+          -76.93708354499995,
+          -12.043559726999945
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 4.3499999,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:978",
+        "kind": "bridge",
+        "name": "S/N",
+        "aliases": [
+          "Puente S/N"
+        ],
+        "position": [
+          -75.89505458799994,
+          -11.526333764999947
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 1.99,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:1034",
+        "kind": "bridge",
+        "name": "S/N",
+        "aliases": [
+          "Puente S/N"
+        ],
+        "position": [
+          -76.19735249999997,
+          -11.603280999999981
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 128.36000061,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:1057",
+        "kind": "bridge",
+        "name": "RAMOS",
+        "aliases": [
+          "Puente RAMOS"
+        ],
+        "position": [
+          -76.73234204699997,
+          -11.576319255999977
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 78.25,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:1058",
+        "kind": "bridge",
+        "name": "COCACHACRA",
+        "aliases": [
+          "Puente COCACHACRA"
+        ],
+        "position": [
+          -76.56008674999998,
+          -11.91882974999993
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 51.40000152,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:1086",
+        "kind": "bridge",
+        "name": "S/N",
+        "aliases": [
+          "Puente S/N"
+        ],
+        "position": [
+          -75.89764099999996,
+          -11.521789999999953
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 1.38999998,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:1121",
+        "kind": "bridge",
+        "name": "S/N",
+        "aliases": [
+          "Puente S/N"
+        ],
+        "position": [
+          -76.72994069199996,
+          -11.954188230999932
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 30.02000045,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:1122",
+        "kind": "bridge",
+        "name": "S/N",
+        "aliases": [
+          "Puente S/N"
+        ],
+        "position": [
+          -76.26421099999999,
+          -11.731810999999936
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 101.56999969,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:1144",
+        "kind": "bridge",
+        "name": "APAN",
+        "aliases": [
+          "Puente APAN"
+        ],
+        "position": [
+          -76.76798748999994,
+          -11.609018692999939
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 72.22000122,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:1184",
+        "kind": "bridge",
+        "name": "S/N",
+        "aliases": [
+          "Puente S/N"
+        ],
+        "position": [
+          -76.30409076899997,
+          -11.764323537999928
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 92.95999908,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:1210",
+        "kind": "bridge",
+        "name": "S/N",
+        "aliases": [
+          "Puente S/N"
+        ],
+        "position": [
+          -76.73204349999997,
+          -11.956145999999933
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 29.70000076,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:1213",
+        "kind": "bridge",
+        "name": "S/N",
+        "aliases": [
+          "Puente S/N"
+        ],
+        "position": [
+          -75.88218979999994,
+          -11.543960099999936
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 5.03999996,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:1275",
+        "kind": "bridge",
+        "name": "S/N",
+        "aliases": [
+          "Puente S/N"
+        ],
+        "position": [
+          -76.82431466699995,
+          -11.991853166999931
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 18.5,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:1276",
+        "kind": "bridge",
+        "name": "S/N",
+        "aliases": [
+          "Puente S/N"
+        ],
+        "position": [
+          -76.33624560099997,
+          -11.791913878999935
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 84.69000244,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:1389",
+        "kind": "bridge",
+        "name": "CARLOS GRAÑA",
+        "aliases": [
+          "Puente CARLOS GRAÑA"
+        ],
+        "position": [
+          -76.97001641899999,
+          -12.026683309999953
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 0,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:1390",
+        "kind": "bridge",
+        "name": "HUACHIPA",
+        "aliases": [
+          "Puente HUACHIPA"
+        ],
+        "position": [
+          -76.90056545399995,
+          -12.014635926999972
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 24.64999961,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:1566",
+        "kind": "bridge",
+        "name": "SANTA ROSA DE QUIVES",
+        "aliases": [
+          "Puente SANTA ROSA DE QUIVES"
+        ],
+        "position": [
+          -76.78916487099997,
+          -11.665965962999962
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 63.49000167,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:1604",
+        "kind": "bridge",
+        "name": "CHACRA ALTA",
+        "aliases": [
+          "Puente CHACRA ALTA"
+        ],
+        "position": [
+          -76.70520657499998,
+          -12.031626295999956
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 0,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:1620",
+        "kind": "bridge",
+        "name": "COLLANA",
+        "aliases": [
+          "Puente COLLANA"
+        ],
+        "position": [
+          -76.41222370799994,
+          -11.855777737999972
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 0,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:1873",
+        "kind": "bridge",
+        "name": "PD SACO",
+        "aliases": [
+          "Puente PD SACO"
+        ],
+        "position": [
+          -75.95076799999998,
+          -11.562193999999977
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 167,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:1964",
+        "kind": "bridge",
+        "name": "JORGE BASADRE",
+        "aliases": [
+          "Puente JORGE BASADRE"
+        ],
+        "position": [
+          -75.92957599999994,
+          -11.512827999999956
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 3.88000011,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:1965",
+        "kind": "bridge",
+        "name": "LA OROYA",
+        "aliases": [
+          "Puente LA OROYA"
+        ],
+        "position": [
+          -75.90570915399996,
+          -11.521506638999938
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 0.5,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:2149",
+        "kind": "bridge",
+        "name": "MARIANO SANTOS",
+        "aliases": [
+          "Puente MARIANO SANTOS"
+        ],
+        "position": [
+          -77.00750899999997,
+          -12.033028999999942
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 4.5,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:2150",
+        "kind": "bridge",
+        "name": "FERROCARRIL",
+        "aliases": [
+          "Puente FERROCARRIL"
+        ],
+        "position": [
+          -76.98749617699997,
+          -12.04097074799995
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 2.98000001,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:2151",
+        "kind": "bridge",
+        "name": "VICENTELO",
+        "aliases": [
+          "Puente VICENTELO"
+        ],
+        "position": [
+          -76.98244463299994,
+          -12.045661465999956
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 2.67000007,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:2308",
+        "kind": "bridge",
+        "name": "POMATICLIA",
+        "aliases": [
+          "Puente POMATICLIA"
+        ],
+        "position": [
+          -76.68830133799997,
+          -11.927419978999978
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 34.95000076,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:2315",
+        "kind": "bridge",
+        "name": "MATUCANA 1",
+        "aliases": [
+          "Puente MATUCANA 1"
+        ],
+        "position": [
+          -76.40805199999994,
+          -11.854524999999967
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 72.69000244,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:2316",
+        "kind": "bridge",
+        "name": "YOUNG BAZO",
+        "aliases": [
+          "Puente YOUNG BAZO"
+        ],
+        "position": [
+          -76.26266607699995,
+          -11.73319960799995
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 100.51000213,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:2317",
+        "kind": "bridge",
+        "name": "ANCHE I",
+        "aliases": [
+          "Puente ANCHE I"
+        ],
+        "position": [
+          -76.26789999999994,
+          -11.730700999999954
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 102.30000305,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:2318",
+        "kind": "bridge",
+        "name": "PD RIO BLANCO",
+        "aliases": [
+          "Puente PD RIO BLANCO"
+        ],
+        "position": [
+          -76.26586796899994,
+          -11.695549123999967
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 106,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:2319",
+        "kind": "bridge",
+        "name": "PASO A DESNIVEL",
+        "aliases": [
+          "Puente PASO A DESNIVEL"
+        ],
+        "position": [
+          -76.20646799999997,
+          -11.612345999999945
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 125,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:2475",
+        "kind": "bridge",
+        "name": "S/N KM 103.20",
+        "aliases": [
+          "Puente S/N KM 103.20"
+        ],
+        "position": [
+          -76.26962599199999,
+          -11.71565546499994
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 103.19999694,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:2476",
+        "kind": "bridge",
+        "name": "BLANCO",
+        "aliases": [
+          "Puente BLANCO"
+        ],
+        "position": [
+          -76.26069700199997,
+          -11.734367231999954
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 100.48000335,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:2477",
+        "kind": "bridge",
+        "name": "INFIERNILLO",
+        "aliases": [
+          "Puente INFIERNILLO"
+        ],
+        "position": [
+          -76.26878921299993,
+          -11.732527782999966
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 98.91000366,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:2478",
+        "kind": "bridge",
+        "name": "S/N KM 68.60",
+        "aliases": [
+          "Puente S/N KM 68.60"
+        ],
+        "position": [
+          -76.43401336599999,
+          -11.87862110499998
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 68.59999847,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:2479",
+        "kind": "bridge",
+        "name": "S/N KM 30.5",
+        "aliases": [
+          "Puente S/N KM 30.5"
+        ],
+        "position": [
+          -76.72880299999997,
+          -11.953137999999967
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 30.79999923,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:2480",
+        "kind": "bridge",
+        "name": "S/N KM 30.70",
+        "aliases": [
+          "Puente S/N KM 30.70"
+        ],
+        "position": [
+          -76.72952699999996,
+          -11.953802999999937
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 30.70000076,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:2570",
+        "kind": "bridge",
+        "name": "CAQUETA",
+        "aliases": [
+          "Puente CAQUETA"
+        ],
+        "position": [
+          -76.98598899999996,
+          -11.80297799999994
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 29.92000007,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:2571",
+        "kind": "bridge",
+        "name": "CAPA ROSA",
+        "aliases": [
+          "Puente CAPA ROSA"
+        ],
+        "position": [
+          -76.88132799999994,
+          -11.689861999999948
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 52.04999923,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:2572",
+        "kind": "bridge",
+        "name": "PUCARA",
+        "aliases": [
+          "Puente PUCARA"
+        ],
+        "position": [
+          -76.83235899999994,
+          -11.696017999999981
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 58,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:2573",
+        "kind": "bridge",
+        "name": "VEROC",
+        "aliases": [
+          "Puente VEROC"
+        ],
+        "position": [
+          -76.70986799999997,
+          -11.540855999999962
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 90,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:2751",
+        "kind": "bridge",
+        "name": "QUEBRADA SECA",
+        "aliases": [
+          "Puente QUEBRADA SECA"
+        ],
+        "position": [
+          -76.41732799999994,
+          -11.85927399999997
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 0,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      },
+      {
+        "sourceId": "7:3061",
+        "kind": "bridge",
+        "name": "",
+        "aliases": [
+          "Puente"
+        ],
+        "position": [
+          -76.95249284399995,
+          -12.02044948699995
+        ],
+        "reportedRoadCode": null,
+        "reportedKm": 4.57999992,
+        "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects"
+      }
+    ]
+  },
+  "entries": [
+    {
+      "sourceId": "5:26",
+      "kind": "toll",
+      "name": "Peaje CORCONA",
+      "aliases": [
+        "CORCONA"
+      ],
+      "position": [
+        -76.58874799999995,
+        -11.91068755599997
+      ],
+      "reportedRoadCode": "PE-22",
+      "reportedKm": 48.5,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/5/query?where=ruta+%3D+%27PE-22%27&outFields=OBJECTID%2Cnombre%2Cruta%2Cinicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00048",
+        "snappedPosition": [
+          -76.58871850985479,
+          -11.910640499058
+        ],
+        "distanceFromOriginKm": 48.447472195526295,
+        "distanceFromRoadM": 6.137908647526196
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "6:10",
+      "kind": "sos",
+      "name": "Poste SOS 09",
+      "aliases": [
+        "SOS 09"
+      ],
+      "position": [
+        -76.23377747899997,
+        -11.633115301999965
+      ],
+      "reportedRoadCode": "PE-22",
+      "reportedKm": 118.26732463,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/6/query?where=codRuta+%3D+%27PE-22%27&outFields=OBJECTID_1%2CnumPoste%2CcodRuta%2CkmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00118",
+        "snappedPosition": [
+          -76.23367072680354,
+          -11.633082623748761
+        ],
+        "distanceFromOriginKm": 118.62311004938915,
+        "distanceFromRoadM": 12.18108201573107
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "6:11",
+      "kind": "sos",
+      "name": "Poste SOS 10",
+      "aliases": [
+        "SOS 10"
+      ],
+      "position": [
+        -76.20789403999999,
+        -11.61376962199995
+      ],
+      "reportedRoadCode": "PE-22",
+      "reportedKm": 124.50784002,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/6/query?where=codRuta+%3D+%27PE-22%27&outFields=OBJECTID_1%2CnumPoste%2CcodRuta%2CkmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00124",
+        "snappedPosition": [
+          -76.207887178785,
+          -11.61376724974584
+        ],
+        "distanceFromOriginKm": 124.87030594924283,
+        "distanceFromRoadM": 0.7925019187636577
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "6:12",
+      "kind": "sos",
+      "name": "Poste SOS 11",
+      "aliases": [
+        "SOS 11"
+      ],
+      "position": [
+        -76.19614664299996,
+        -11.605256844999928
+      ],
+      "reportedRoadCode": "PE-22",
+      "reportedKm": 129.68232463,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/6/query?where=codRuta+%3D+%27PE-22%27&outFields=OBJECTID_1%2CnumPoste%2CcodRuta%2CkmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00129",
+        "snappedPosition": [
+          -76.19609391366286,
+          -11.605145743619964
+        ],
+        "distanceFromOriginKm": 129.95469386073006,
+        "distanceFromRoadM": 13.623726691034536
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "6:13",
+      "kind": "sos",
+      "name": "Poste SOS 12",
+      "aliases": [
+        "SOS 12"
+      ],
+      "position": [
+        -76.17489799799995,
+        -11.599730952999948
+      ],
+      "reportedRoadCode": "PE-22",
+      "reportedKm": 133.97886468,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/6/query?where=codRuta+%3D+%27PE-22%27&outFields=OBJECTID_1%2CnumPoste%2CcodRuta%2CkmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00134",
+        "snappedPosition": [
+          -76.17491244206835,
+          -11.599824348275481
+        ],
+        "distanceFromOriginKm": 134.1815125103697,
+        "distanceFromRoadM": 10.503594330159173
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "6:14",
+      "kind": "sos",
+      "name": "Poste SOS 14",
+      "aliases": [
+        "SOS 14"
+      ],
+      "position": [
+        -76.10593094899997,
+        -11.60029828699993
+      ],
+      "reportedRoadCode": "PE-22",
+      "reportedKm": 143.39319292,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/6/query?where=codRuta+%3D+%27PE-22%27&outFields=OBJECTID_1%2CnumPoste%2CcodRuta%2CkmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00143",
+        "snappedPosition": [
+          -76.10592456090187,
+          -11.600317230898579
+        ],
+        "distanceFromOriginKm": 143.5310995455632,
+        "distanceFromRoadM": 2.2184158475556965
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "6:15",
+      "kind": "sos",
+      "name": "Poste SOS 15",
+      "aliases": [
+        "SOS 15"
+      ],
+      "position": [
+        -76.02831409899994,
+        -11.61243512599998
+      ],
+      "reportedRoadCode": "PE-22",
+      "reportedKm": 153.26970261,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/6/query?where=codRuta+%3D+%27PE-22%27&outFields=OBJECTID_1%2CnumPoste%2CcodRuta%2CkmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00153",
+        "snappedPosition": [
+          -76.02838371496546,
+          -11.612538912266144
+        ],
+        "distanceFromOriginKm": 153.45402327922213,
+        "distanceFromRoadM": 13.808622532893802
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "6:2",
+      "kind": "sos",
+      "name": "Poste SOS 01",
+      "aliases": [
+        "SOS 01"
+      ],
+      "position": [
+        -76.62187830799996,
+        -11.919871766999961
+      ],
+      "reportedRoadCode": "PE-22",
+      "reportedKm": 43.29785363,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/6/query?where=codRuta+%3D+%27PE-22%27&outFields=OBJECTID_1%2CnumPoste%2CcodRuta%2CkmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00044",
+        "snappedPosition": [
+          -76.62186061400088,
+          -11.919907167681645
+        ],
+        "distanceFromOriginKm": 44.39934074930987,
+        "distanceFromRoadM": 4.381890224618816
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "6:3",
+      "kind": "sos",
+      "name": "Poste SOS 02",
+      "aliases": [
+        "SOS 02"
+      ],
+      "position": [
+        -76.53916247299998,
+        -11.90934931299995
+      ],
+      "reportedRoadCode": "PE-22",
+      "reportedKm": 53.7181985,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/6/query?where=codRuta+%3D+%27PE-22%27&outFields=OBJECTID_1%2CnumPoste%2CcodRuta%2CkmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00054",
+        "snappedPosition": [
+          -76.53912623263017,
+          -11.909407331628639
+        ],
+        "distanceFromOriginKm": 54.56645242842019,
+        "distanceFromRoadM": 7.560933843594677
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "6:4",
+      "kind": "sos",
+      "name": "Poste SOS 03",
+      "aliases": [
+        "SOS 03"
+      ],
+      "position": [
+        -76.46050759299999,
+        -11.88621965699997
+      ],
+      "reportedRoadCode": "PE-22",
+      "reportedKm": 64.03062463,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/6/query?where=codRuta+%3D+%27PE-22%27&outFields=OBJECTID_1%2CnumPoste%2CcodRuta%2CkmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00064",
+        "snappedPosition": [
+          -76.46051675706931,
+          -11.886377873669456
+        ],
+        "distanceFromOriginKm": 64.9998002568357,
+        "distanceFromRoadM": 17.621151381552565
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "6:5",
+      "kind": "sos",
+      "name": "Poste SOS 04",
+      "aliases": [
+        "SOS 04"
+      ],
+      "position": [
+        -76.39808438199998,
+        -11.851534779999952
+      ],
+      "reportedRoadCode": "PE-22",
+      "reportedKm": 73.44581271,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/6/query?where=codRuta+%3D+%27PE-22%27&outFields=OBJECTID_1%2CnumPoste%2CcodRuta%2CkmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00074",
+        "snappedPosition": [
+          -76.39810100059395,
+          -11.851465332852111
+        ],
+        "distanceFromOriginKm": 74.33939380467272,
+        "distanceFromRoadM": 7.931128956154556
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "6:6",
+      "kind": "sos",
+      "name": "Poste SOS 05",
+      "aliases": [
+        "SOS 05"
+      ],
+      "position": [
+        -76.31459555799995,
+        -11.788468020999971
+      ],
+      "reportedRoadCode": "PE-22",
+      "reportedKm": 88.13426961,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/6/query?where=codRuta+%3D+%27PE-22%27&outFields=OBJECTID_1%2CnumPoste%2CcodRuta%2CkmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00089",
+        "snappedPosition": [
+          -76.31458574985925,
+          -11.788525859431626
+        ],
+        "distanceFromOriginKm": 89.18286527742202,
+        "distanceFromRoadM": 6.5193596757846715
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "6:7",
+      "kind": "sos",
+      "name": "Poste SOS 06",
+      "aliases": [
+        "SOS 06"
+      ],
+      "position": [
+        -76.30678840599995,
+        -11.77482921199993
+      ],
+      "reportedRoadCode": "PE-22",
+      "reportedKm": 91.74009028,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/6/query?where=codRuta+%3D+%27PE-22%27&outFields=OBJECTID_1%2CnumPoste%2CcodRuta%2CkmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00092",
+        "snappedPosition": [
+          -76.3068535129695,
+          -11.774823167429819
+        ],
+        "distanceFromOriginKm": 92.82778013145996,
+        "distanceFromRoadM": 7.1190329933212535
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "6:8",
+      "kind": "sos",
+      "name": "Poste SOS 07",
+      "aliases": [
+        "SOS 07"
+      ],
+      "position": [
+        -76.27034098499996,
+        -11.712554487999967
+      ],
+      "reportedRoadCode": "PE-22",
+      "reportedKm": 104.77910405,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/6/query?where=codRuta+%3D+%27PE-22%27&outFields=OBJECTID_1%2CnumPoste%2CcodRuta%2CkmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00105",
+        "snappedPosition": [
+          -76.27013352200397,
+          -11.71245706151809
+        ],
+        "distanceFromOriginKm": 105.28854598322336,
+        "distanceFromRoadM": 25.05201318895245
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "6:9",
+      "kind": "sos",
+      "name": "Poste SOS 08",
+      "aliases": [
+        "SOS 08"
+      ],
+      "position": [
+        -76.24729959799998,
+        -11.662255224999967
+      ],
+      "reportedRoadCode": "PE-22",
+      "reportedKm": 113.94848752,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/6/query?where=codRuta+%3D+%27PE-22%27&outFields=OBJECTID_1%2CnumPoste%2CcodRuta%2CkmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00114",
+        "snappedPosition": [
+          -76.2472791907148,
+          -11.662178113065327
+        ],
+        "distanceFromOriginKm": 114.32351057655082,
+        "distanceFromRoadM": 8.857782790968406
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:104",
+      "kind": "bridge",
+      "name": "ATARJEA",
+      "aliases": [
+        "Puente ATARJEA"
+      ],
+      "position": [
+        -76.98873299999997,
+        -12.036747999999932
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 2.68000006,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00000",
+        "snappedPosition": [
+          -76.989085,
+          -12.035575
+        ],
+        "distanceFromOriginKm": 0,
+        "distanceFromRoadM": 135.93320527038776
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:105",
+      "kind": "bridge",
+      "name": "SERENSA",
+      "aliases": [
+        "Puente SERENSA"
+      ],
+      "position": [
+        -76.98874545499996,
+        -12.036651090999953
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 3.01999998,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00000",
+        "snappedPosition": [
+          -76.989085,
+          -12.035575
+        ],
+        "distanceFromOriginKm": 0,
+        "distanceFromRoadM": 125.22409318300778
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:1058",
+      "kind": "bridge",
+      "name": "COCACHACRA",
+      "aliases": [
+        "Puente COCACHACRA"
+      ],
+      "position": [
+        -76.56008674999998,
+        -11.91882974999993
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 51.40000152,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00052",
+        "snappedPosition": [
+          -76.56008680784656,
+          -11.918806607566834
+        ],
+        "distanceFromOriginKm": 52.01133461738031,
+        "distanceFromRoadM": 2.5733324009204193
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:107",
+      "kind": "bridge",
+      "name": "RAMIRO PRIALE",
+      "aliases": [
+        "Puente RAMIRO PRIALE"
+      ],
+      "position": [
+        -76.99100632499994,
+        -12.032674074999932
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 3.53999996,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00000",
+        "snappedPosition": [
+          -76.98969338729366,
+          -12.033094948205639
+        ],
+        "distanceFromOriginKm": 0.29022070872764677,
+        "distanceFromRoadM": 150.2583090138268
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:1389",
+      "kind": "bridge",
+      "name": "CARLOS GRAÑA",
+      "aliases": [
+        "Puente CARLOS GRAÑA"
+      ],
+      "position": [
+        -76.97001641899999,
+        -12.026683309999953
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 0,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00002",
+        "snappedPosition": [
+          -76.97001787416905,
+          -12.026679366894433
+        ],
+        "distanceFromOriginKm": 2.5717878512012295,
+        "distanceFromRoadM": 0.4661403618951957
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:1390",
+      "kind": "bridge",
+      "name": "HUACHIPA",
+      "aliases": [
+        "Puente HUACHIPA"
+      ],
+      "position": [
+        -76.90056545399995,
+        -12.014635926999972
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 24.64999961,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00010",
+        "snappedPosition": [
+          -76.90056395001712,
+          -12.014634530960752
+        ],
+        "distanceFromOriginKm": 10.449869733060398,
+        "distanceFromRoadM": 0.22550614956889375
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:144",
+      "kind": "bridge",
+      "name": "MATUCANA",
+      "aliases": [
+        "Puente MATUCANA"
+      ],
+      "position": [
+        -76.38932133299994,
+        -11.847696459999952
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 74.29000091,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00075",
+        "snappedPosition": [
+          -76.38932178664699,
+          -11.847696099180729
+        ],
+        "distanceFromOriginKm": 75.41910406891085,
+        "distanceFromRoadM": 0.06361596247561085
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:1620",
+      "kind": "bridge",
+      "name": "COLLANA",
+      "aliases": [
+        "Puente COLLANA"
+      ],
+      "position": [
+        -76.41222370799994,
+        -11.855777737999972
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 0,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00072",
+        "snappedPosition": [
+          -76.41219462497072,
+          -11.855810971213076
+        ],
+        "distanceFromOriginKm": 72.62080215007265,
+        "distanceFromRoadM": 4.865426358016619
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:163",
+      "kind": "bridge",
+      "name": "LA CASCADA",
+      "aliases": [
+        "Puente LA CASCADA"
+      ],
+      "position": [
+        -76.49729092499996,
+        -11.892231127999935
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 59.11999893,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00060",
+        "snappedPosition": [
+          -76.49729011616448,
+          -11.892231325692137
+        ],
+        "distanceFromOriginKm": 60.383123039259395,
+        "distanceFromRoadM": 0.09071198302348858
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:1873",
+      "kind": "bridge",
+      "name": "PD SACO",
+      "aliases": [
+        "Puente PD SACO"
+      ],
+      "position": [
+        -75.95076799999998,
+        -11.562193999999977
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 167,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00167",
+        "snappedPosition": [
+          -75.95079368899843,
+          -11.562169732281633
+        ],
+        "distanceFromOriginKm": 167.29333662692756,
+        "distanceFromRoadM": 3.887593474251664
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:1965",
+      "kind": "bridge",
+      "name": "LA OROYA",
+      "aliases": [
+        "Puente LA OROYA"
+      ],
+      "position": [
+        -75.90570915399996,
+        -11.521506638999938
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 0.5,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00173",
+        "snappedPosition": [
+          -75.909265,
+          -11.522615
+        ],
+        "distanceFromOriginKm": 173.87272270170894,
+        "distanceFromRoadM": 406.55498857470485
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:220",
+      "kind": "bridge",
+      "name": "TABLACHACA",
+      "aliases": [
+        "Puente TABLACHACA"
+      ],
+      "position": [
+        -76.25166268899994,
+        -11.666212240999926
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 111.5,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00112",
+        "snappedPosition": [
+          -76.25167149488178,
+          -11.666227322829545
+        ],
+        "distanceFromOriginKm": 112.00444822801514,
+        "distanceFromRoadM": 1.9318348296734391
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:223",
+      "kind": "bridge",
+      "name": "RIO BLANCO",
+      "aliases": [
+        "Puente RIO BLANCO"
+      ],
+      "position": [
+        -76.26171799999997,
+        -11.733369161999974
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 101.22000122,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00102",
+        "snappedPosition": [
+          -76.26172926254095,
+          -11.733417452795289
+        ],
+        "distanceFromOriginKm": 102.54900328048265,
+        "distanceFromRoadM": 5.507918006725418
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:2308",
+      "kind": "bridge",
+      "name": "POMATICLIA",
+      "aliases": [
+        "Puente POMATICLIA"
+      ],
+      "position": [
+        -76.68830133799997,
+        -11.927419978999978
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 34.95000076,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00036",
+        "snappedPosition": [
+          -76.68831564635916,
+          -11.927395903689662
+        ],
+        "distanceFromOriginKm": 36.63114618563022,
+        "distanceFromRoadM": 3.096748105669225
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:2315",
+      "kind": "bridge",
+      "name": "MATUCANA 1",
+      "aliases": [
+        "Puente MATUCANA 1"
+      ],
+      "position": [
+        -76.40805199999994,
+        -11.854524999999967
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 72.69000244,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00073",
+        "snappedPosition": [
+          -76.40805862779906,
+          -11.854511315599549
+        ],
+        "distanceFromOriginKm": 73.10674382171908,
+        "distanceFromRoadM": 1.6839237288681255
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:2316",
+      "kind": "bridge",
+      "name": "YOUNG BAZO",
+      "aliases": [
+        "Puente YOUNG BAZO"
+      ],
+      "position": [
+        -76.26266607699995,
+        -11.73319960799995
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 100.51000213,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00102",
+        "snappedPosition": [
+          -76.26266793712982,
+          -11.733207583627086
+        ],
+        "distanceFromOriginKm": 102.6538289127946,
+        "distanceFromRoadM": 0.9096792381646007
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:2317",
+      "kind": "bridge",
+      "name": "ANCHE I",
+      "aliases": [
+        "Puente ANCHE I"
+      ],
+      "position": [
+        -76.26789999999994,
+        -11.730700999999954
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 102.30000305,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00100",
+        "snappedPosition": [
+          -76.26793270464975,
+          -11.730708086314792
+        ],
+        "distanceFromOriginKm": 100.39495397935887,
+        "distanceFromRoadM": 3.6467875081415664
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:2318",
+      "kind": "bridge",
+      "name": "PD RIO BLANCO",
+      "aliases": [
+        "Puente PD RIO BLANCO"
+      ],
+      "position": [
+        -76.26586796899994,
+        -11.695549123999967
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 106,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00107",
+        "snappedPosition": [
+          -76.26588365127651,
+          -11.695548339346589
+        ],
+        "distanceFromOriginKm": 107.58604346326743,
+        "distanceFromRoadM": 1.7098159374076976
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:2319",
+      "kind": "bridge",
+      "name": "PASO A DESNIVEL",
+      "aliases": [
+        "Puente PASO A DESNIVEL"
+      ],
+      "position": [
+        -76.20646799999997,
+        -11.612345999999945
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 125,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00125",
+        "snappedPosition": [
+          -76.20647737701468,
+          -11.612343503745898
+        ],
+        "distanceFromOriginKm": 125.94791456788444,
+        "distanceFromRoadM": 1.058382507078858
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:2475",
+      "kind": "bridge",
+      "name": "S/N KM 103.20",
+      "aliases": [
+        "Puente S/N KM 103.20"
+      ],
+      "position": [
+        -76.26962599199999,
+        -11.71565546499994
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 103.19999694,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00104",
+        "snappedPosition": [
+          -76.26961383643857,
+          -11.715652338235047
+        ],
+        "distanceFromOriginKm": 104.90884042037233,
+        "distanceFromRoadM": 1.3683868113225925
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:2476",
+      "kind": "bridge",
+      "name": "BLANCO",
+      "aliases": [
+        "Puente BLANCO"
+      ],
+      "position": [
+        -76.26069700199997,
+        -11.734367231999954
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 100.48000335,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00101",
+        "snappedPosition": [
+          -76.26069124867624,
+          -11.734452760990694
+        ],
+        "distanceFromOriginKm": 101.47032543388437,
+        "distanceFromRoadM": 9.531007602546856
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:2477",
+      "kind": "bridge",
+      "name": "INFIERNILLO",
+      "aliases": [
+        "Puente INFIERNILLO"
+      ],
+      "position": [
+        -76.26878921299993,
+        -11.732527782999966
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 98.91000366,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00100",
+        "snappedPosition": [
+          -76.26929079713744,
+          -11.732353779658174
+        ],
+        "distanceFromOriginKm": 100.02228481342263,
+        "distanceFromRoadM": 57.934797068335925
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:2478",
+      "kind": "bridge",
+      "name": "S/N KM 68.60",
+      "aliases": [
+        "Puente S/N KM 68.60"
+      ],
+      "position": [
+        -76.43401336599999,
+        -11.87862110499998
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 68.59999847,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00068",
+        "snappedPosition": [
+          -76.43399599514575,
+          -11.878632592859624
+        ],
+        "distanceFromOriginKm": 68.88801028109356,
+        "distanceFromRoadM": 2.281349565843141
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:2479",
+      "kind": "bridge",
+      "name": "S/N KM 30.5",
+      "aliases": [
+        "Puente S/N KM 30.5"
+      ],
+      "position": [
+        -76.72880299999997,
+        -11.953137999999967
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 30.79999923,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00031",
+        "snappedPosition": [
+          -76.72882191422856,
+          -11.953114170310972
+        ],
+        "distanceFromOriginKm": 31.16075024468088,
+        "distanceFromRoadM": 3.354806380245395
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:2480",
+      "kind": "bridge",
+      "name": "S/N KM 30.70",
+      "aliases": [
+        "Puente S/N KM 30.70"
+      ],
+      "position": [
+        -76.72952699999996,
+        -11.953802999999937
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 30.70000076,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00031",
+        "snappedPosition": [
+          -76.72956406365992,
+          -11.953764887526143
+        ],
+        "distanceFromOriginKm": 31.05222313121616,
+        "distanceFromRoadM": 5.849477916536996
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:253",
+      "kind": "bridge",
+      "name": "ADAHUARO",
+      "aliases": [
+        "Puente ADAHUARO"
+      ],
+      "position": [
+        -76.40670876999997,
+        -11.854163193999966
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 72.13999938,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00073",
+        "snappedPosition": [
+          -76.40670876157786,
+          -11.854162010693774
+        ],
+        "distanceFromOriginKm": 73.26248245831694,
+        "distanceFromRoadM": 0.13158101908024902
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:254",
+      "kind": "bridge",
+      "name": "TAMBORAQUE I",
+      "aliases": [
+        "Puente TAMBORAQUE I"
+      ],
+      "position": [
+        -76.30793286199997,
+        -11.781772011999976
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 88.69000244,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00090",
+        "snappedPosition": [
+          -76.30791690748981,
+          -11.781779844872826
+        ],
+        "distanceFromOriginKm": 90.5974620388564,
+        "distanceFromRoadM": 1.9428549020870767
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:2751",
+      "kind": "bridge",
+      "name": "QUEBRADA SECA",
+      "aliases": [
+        "Puente QUEBRADA SECA"
+      ],
+      "position": [
+        -76.41732799999994,
+        -11.85927399999997
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 0,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00071",
+        "snappedPosition": [
+          -76.41732784969716,
+          -11.859274324884977
+        ],
+        "distanceFromOriginKm": 71.8809362146675,
+        "distanceFromRoadM": 0.03965583446452438
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:329",
+      "kind": "bridge",
+      "name": "SURCO",
+      "aliases": [
+        "Puente SURCO"
+      ],
+      "position": [
+        -76.44729182899994,
+        -11.885579935999942
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 65.98999786,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00067",
+        "snappedPosition": [
+          -76.44727783935467,
+          -11.885579352777665
+        ],
+        "distanceFromOriginKm": 67.18189476170802,
+        "distanceFromRoadM": 1.5236102291000704
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:330",
+      "kind": "bridge",
+      "name": "LLICAN",
+      "aliases": [
+        "Puente LLICAN"
+      ],
+      "position": [
+        -76.37256432099997,
+        -11.831262859999981
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 77.02999877,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00078",
+        "snappedPosition": [
+          -76.37255991013794,
+          -11.8312683449152
+        ],
+        "distanceFromOriginKm": 78.1340413708371,
+        "distanceFromRoadM": 0.7761554568598755
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:379",
+      "kind": "bridge",
+      "name": "ESPERANZA",
+      "aliases": [
+        "Puente ESPERANZA"
+      ],
+      "position": [
+        -76.50598709399998,
+        -11.90253193999996
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 57.52000045,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00058",
+        "snappedPosition": [
+          -76.50600297906065,
+          -11.90250586545607
+        ],
+        "distanceFromOriginKm": 58.7852019756711,
+        "distanceFromRoadM": 3.375431346491323
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:398",
+      "kind": "bridge",
+      "name": "MARCAVALLE",
+      "aliases": [
+        "Puente MARCAVALLE"
+      ],
+      "position": [
+        -75.92718174099997,
+        -11.540996589999963
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 170.77000427,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00170",
+        "snappedPosition": [
+          -75.92716476221487,
+          -11.541025616257748
+        ],
+        "distanceFromOriginKm": 170.99154090519016,
+        "distanceFromRoadM": 3.7200756178120815
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:432",
+      "kind": "bridge",
+      "name": "BELLAVISTA II",
+      "aliases": [
+        "Puente BELLAVISTA II"
+      ],
+      "position": [
+        -76.26597130099998,
+        -11.692466706999937
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 107.40000152,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00108",
+        "snappedPosition": [
+          -76.26599154359958,
+          -11.692473020674964
+        ],
+        "distanceFromOriginKm": 108.01398364372602,
+        "distanceFromRoadM": 2.3132750491810254
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:436",
+      "kind": "bridge",
+      "name": "HUALLATUPE",
+      "aliases": [
+        "Puente HUALLATUPE"
+      ],
+      "position": [
+        -76.34572494899999,
+        -11.810896636999928
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 81.30000305,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00082",
+        "snappedPosition": [
+          -76.34576551474616,
+          -11.810919516758968
+        ],
+        "distanceFromOriginKm": 82.34091391321118,
+        "distanceFromRoadM": 5.095746439159751
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:437",
+      "kind": "bridge",
+      "name": "ANCHI II",
+      "aliases": [
+        "Puente ANCHI II"
+      ],
+      "position": [
+        -76.26614399999994,
+        -11.732862999999952
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 99.73999786,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00100",
+        "snappedPosition": [
+          -76.26614496317448,
+          -11.732846561480468
+        ],
+        "distanceFromOriginKm": 100.82219588672524,
+        "distanceFromRoadM": 1.8308879168159091
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:471",
+      "kind": "bridge",
+      "name": "EDUARDO DE HABICH",
+      "aliases": [
+        "Puente EDUARDO DE HABICH"
+      ],
+      "position": [
+        -76.42461911699996,
+        -11.865118305999943
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 69.61000061,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00070",
+        "snappedPosition": [
+          -76.42460662697839,
+          -11.865125917706871
+        ],
+        "distanceFromOriginKm": 70.82177974810666,
+        "distanceFromRoadM": 1.6011466732029616
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:491",
+      "kind": "bridge",
+      "name": "CRUCE A DESNIVEL SUPERIOR (PUENTE SOBRE",
+      "aliases": [
+        "Puente CRUCE A DESNIVEL SUPERIOR (PUENTE SOBRE"
+      ],
+      "position": [
+        -76.53890399999995,
+        -11.90927899999997
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 54.02999877,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00054",
+        "snappedPosition": [
+          -76.53890607864332,
+          -11.909275672223531
+        ],
+        "distanceFromOriginKm": 54.59452515178514,
+        "distanceFromRoadM": 0.43367296607704464
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:540",
+      "kind": "bridge",
+      "name": "LOS ANGELES",
+      "aliases": [
+        "Puente LOS ANGELES"
+      ],
+      "position": [
+        -76.74551222899998,
+        -11.967703236999967
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 27.29000091,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00028",
+        "snappedPosition": [
+          -76.74551247256534,
+          -11.967703097693928
+        ],
+        "distanceFromOriginKm": 28.716402296091474,
+        "distanceFromRoadM": 0.03069053095536642
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:554",
+      "kind": "bridge",
+      "name": "BELLAVISTA I",
+      "aliases": [
+        "Puente BELLAVISTA I"
+      ],
+      "position": [
+        -76.26621385499999,
+        -11.69283975899998
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 107.27999877,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00107",
+        "snappedPosition": [
+          -76.26616115685134,
+          -11.692820967453098
+        ],
+        "distanceFromOriginKm": 107.89663754625953,
+        "distanceFromRoadM": 6.106780227330222
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:555",
+      "kind": "bridge",
+      "name": "YAULI - CUT OFF",
+      "aliases": [
+        "Puente YAULI - CUT OFF"
+      ],
+      "position": [
+        -75.99986959499995,
+        -11.624273401999972
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 156.83999633,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00157",
+        "snappedPosition": [
+          -75.99984504919999,
+          -11.624253393028505
+        ],
+        "distanceFromOriginKm": 157.065338692335,
+        "distanceFromRoadM": 3.4781037155417502
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:558",
+      "kind": "bridge",
+      "name": "INFIERNILLO",
+      "aliases": [
+        "Puente INFIERNILLO"
+      ],
+      "position": [
+        -76.26808086499994,
+        -11.731660172999966
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 99.13999938,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00100",
+        "snappedPosition": [
+          -76.26797735399764,
+          -11.731697030415372
+        ],
+        "distanceFromOriginKm": 100.50688405631303,
+        "distanceFromRoadM": 11.991568833699171
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:57",
+      "kind": "bridge",
+      "name": "CHINCHAN",
+      "aliases": [
+        "Puente CHINCHAN"
+      ],
+      "position": [
+        -76.23461041199994,
+        -11.62368123899995
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 119.23000335,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00119",
+        "snappedPosition": [
+          -76.23455768035267,
+          -11.623687419803215
+        ],
+        "distanceFromOriginKm": 119.69607701903355,
+        "distanceFromRoadM": 5.784227095521945
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:587",
+      "kind": "bridge",
+      "name": "RICARDO PALMA",
+      "aliases": [
+        "Puente RICARDO PALMA"
+      ],
+      "position": [
+        -76.66251837699997,
+        -11.922878221999952
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 38.31000137,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00039",
+        "snappedPosition": [
+          -76.66251813036415,
+          -11.922877903393148
+        ],
+        "distanceFromOriginKm": 39.70725179523009,
+        "distanceFromRoadM": 0.04444233023401645
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:607",
+      "kind": "bridge",
+      "name": "PACHACHACA",
+      "aliases": [
+        "Puente PACHACHACA"
+      ],
+      "position": [
+        -76.02609856199996,
+        -11.612762816999975
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 153.44999694,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00153",
+        "snappedPosition": [
+          -76.0260908858567,
+          -11.612777856274487
+        ],
+        "distanceFromOriginKm": 153.72635913886484,
+        "distanceFromRoadM": 1.8696498829125532
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:63",
+      "kind": "bridge",
+      "name": "TAMBORAQUE II",
+      "aliases": [
+        "Puente TAMBORAQUE II"
+      ],
+      "position": [
+        -76.30479630899998,
+        -11.773523782999973
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 89.44000244,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00091",
+        "snappedPosition": [
+          -76.3047911963899,
+          -11.77352478078645
+        ],
+        "distanceFromOriginKm": 91.58591231268325,
+        "distanceFromRoadM": 0.5674883379199022
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:638",
+      "kind": "bridge",
+      "name": "CHICLA II",
+      "aliases": [
+        "Puente CHICLA II"
+      ],
+      "position": [
+        -76.26752741299998,
+        -11.707187703999978
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 105.51000213,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00106",
+        "snappedPosition": [
+          -76.26750564187977,
+          -11.707190543772366
+        ],
+        "distanceFromOriginKm": 106.14931203185168,
+        "distanceFromRoadM": 2.391420648833393
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:64",
+      "kind": "bridge",
+      "name": "CHICLA I",
+      "aliases": [
+        "Puente CHICLA I"
+      ],
+      "position": [
+        -76.27011476799998,
+        -11.711274125999978
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 104.76999664,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00105",
+        "snappedPosition": [
+          -76.27003171797415,
+          -11.711300957885909
+        ],
+        "distanceFromOriginKm": 105.42608443024857,
+        "distanceFromRoadM": 9.522014093756534
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:643",
+      "kind": "bridge",
+      "name": "HUARIPACHI",
+      "aliases": [
+        "Puente HUARIPACHI"
+      ],
+      "position": [
+        -76.37938334799998,
+        -11.840197738999962
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 75.73999786,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00076",
+        "snappedPosition": [
+          -76.37936988695468,
+          -11.840203429560264
+        ],
+        "distanceFromOriginKm": 76.85511510289966,
+        "distanceFromRoadM": 1.5957703200013504
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:644",
+      "kind": "bridge",
+      "name": "TAMBORAQUE III",
+      "aliases": [
+        "Puente TAMBORAQUE III"
+      ],
+      "position": [
+        -76.30479180299994,
+        -11.773513390999938
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 90.41999816,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00091",
+        "snappedPosition": [
+          -76.3047889888155,
+          -11.773513940221381
+        ],
+        "distanceFromOriginKm": 91.58714145013481,
+        "distanceFromRoadM": 0.31236821946281546
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:697",
+      "kind": "bridge",
+      "name": "VERRUGAS",
+      "aliases": [
+        "Puente VERRUGAS"
+      ],
+      "position": [
+        -76.48838152299999,
+        -11.88775005499997
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 60.31999969,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00061",
+        "snappedPosition": [
+          -76.48838183319238,
+          -11.887773115883071
+        ],
+        "distanceFromOriginKm": 61.55573794769826,
+        "distanceFromRoadM": 2.5644788688866713
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:930",
+      "kind": "bridge",
+      "name": "CHACAHUARO",
+      "aliases": [
+        "Puente CHACAHUARO"
+      ],
+      "position": [
+        -76.36164192299998,
+        -11.820655461999934
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 79.51000213,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00079",
+        "snappedPosition": [
+          -76.3616251162301,
+          -11.820658900507693
+        ],
+        "distanceFromOriginKm": 79.87069782503642,
+        "distanceFromRoadM": 1.8687312934326312
+      },
+      "officialKm": null,
+      "verified": false
+    },
+    {
+      "sourceId": "7:931",
+      "kind": "bridge",
+      "name": "TAMBO",
+      "aliases": [
+        "Puente TAMBO"
+      ],
+      "position": [
+        -75.95868759999996,
+        -11.571388199999944
+      ],
+      "reportedRoadCode": null,
+      "reportedKm": 165.6000061,
+      "sourceUrl": "https://www.idep.gob.pe/geoportal/rest/services/INSTITUCIONALES/MTC/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CNombrePuen%2CKmInicio&outSR=4326&f=geojson&returnGeometry=true&resultRecordCount=1000&geometry=-77.01%2C-12.06%2C-75.88%2C-11.49&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects",
+      "location": {
+        "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+        "segmentId": "PE-22:7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90:00165",
+        "snappedPosition": [
+          -75.95868819547579,
+          -11.57138839788982
+        ],
+        "distanceFromOriginKm": 165.88694940104443,
+        "distanceFromRoadM": 0.06849874858444786
+      },
+      "officialKm": null,
+      "verified": false
+    }
+  ],
+  "excluded": [
+    {
+      "sourceId": "7:1034",
+      "reason": "unnamed"
+    },
+    {
+      "sourceId": "7:1057",
+      "reason": "outside_corridor"
+    },
+    {
+      "sourceId": "7:106",
+      "reason": "unnamed"
+    },
+    {
+      "sourceId": "7:108",
+      "reason": "unnamed"
+    },
+    {
+      "sourceId": "7:1086",
+      "reason": "unnamed"
+    },
+    {
+      "sourceId": "7:109",
+      "reason": "outside_corridor"
+    },
+    {
+      "sourceId": "7:110",
+      "reason": "unnamed"
+    },
+    {
+      "sourceId": "7:1121",
+      "reason": "unnamed"
+    },
+    {
+      "sourceId": "7:1122",
+      "reason": "unnamed"
+    },
+    {
+      "sourceId": "7:1144",
+      "reason": "outside_corridor"
+    },
+    {
+      "sourceId": "7:1184",
+      "reason": "unnamed"
+    },
+    {
+      "sourceId": "7:1210",
+      "reason": "unnamed"
+    },
+    {
+      "sourceId": "7:1213",
+      "reason": "unnamed"
+    },
+    {
+      "sourceId": "7:124",
+      "reason": "unnamed"
+    },
+    {
+      "sourceId": "7:125",
+      "reason": "unnamed"
+    },
+    {
+      "sourceId": "7:126",
+      "reason": "unnamed"
+    },
+    {
+      "sourceId": "7:127",
+      "reason": "unnamed"
+    },
+    {
+      "sourceId": "7:1275",
+      "reason": "unnamed"
+    },
+    {
+      "sourceId": "7:1276",
+      "reason": "unnamed"
+    },
+    {
+      "sourceId": "7:128",
+      "reason": "unnamed"
+    },
+    {
+      "sourceId": "7:129",
+      "reason": "unnamed"
+    },
+    {
+      "sourceId": "7:1566",
+      "reason": "outside_corridor"
+    },
+    {
+      "sourceId": "7:1604",
+      "reason": "outside_corridor"
+    },
+    {
+      "sourceId": "7:1964",
+      "reason": "outside_corridor"
+    },
+    {
+      "sourceId": "7:2",
+      "reason": "unnamed"
+    },
+    {
+      "sourceId": "7:205",
+      "reason": "unnamed"
+    },
+    {
+      "sourceId": "7:206",
+      "reason": "unnamed"
+    },
+    {
+      "sourceId": "7:2149",
+      "reason": "outside_corridor"
+    },
+    {
+      "sourceId": "7:2150",
+      "reason": "outside_corridor"
+    },
+    {
+      "sourceId": "7:2151",
+      "reason": "outside_corridor"
+    },
+    {
+      "sourceId": "7:247",
+      "reason": "outside_corridor"
+    },
+    {
+      "sourceId": "7:2570",
+      "reason": "outside_corridor"
+    },
+    {
+      "sourceId": "7:2571",
+      "reason": "outside_corridor"
+    },
+    {
+      "sourceId": "7:2572",
+      "reason": "outside_corridor"
+    },
+    {
+      "sourceId": "7:2573",
+      "reason": "outside_corridor"
+    },
+    {
+      "sourceId": "7:3061",
+      "reason": "unnamed"
+    },
+    {
+      "sourceId": "7:311",
+      "reason": "unnamed"
+    },
+    {
+      "sourceId": "7:315",
+      "reason": "unnamed"
+    },
+    {
+      "sourceId": "7:373",
+      "reason": "outside_corridor"
+    },
+    {
+      "sourceId": "7:425",
+      "reason": "unnamed"
+    },
+    {
+      "sourceId": "7:539",
+      "reason": "unnamed"
+    },
+    {
+      "sourceId": "7:54",
+      "reason": "unnamed"
+    },
+    {
+      "sourceId": "7:551",
+      "reason": "outside_corridor"
+    },
+    {
+      "sourceId": "7:586",
+      "reason": "unnamed"
+    },
+    {
+      "sourceId": "7:636",
+      "reason": "outside_corridor"
+    },
+    {
+      "sourceId": "7:696",
+      "reason": "unnamed"
+    },
+    {
+      "sourceId": "7:856",
+      "reason": "unnamed"
+    },
+    {
+      "sourceId": "7:972",
+      "reason": "unnamed"
+    },
+    {
+      "sourceId": "7:978",
+      "reason": "unnamed"
+    }
+  ],
+  "kilometerEvidence": {
+    "state": "unverified",
+    "anchors": [
+      {
+        "sourceId": "5:26",
+        "reportedKm": 48.5,
+        "distanceFromOriginKm": 48.447472195526295,
+        "offsetKm": 0.052527804473704975
+      },
+      {
+        "sourceId": "6:10",
+        "reportedKm": 118.26732463,
+        "distanceFromOriginKm": 118.62311004938915,
+        "offsetKm": -0.3557854193891501
+      },
+      {
+        "sourceId": "6:11",
+        "reportedKm": 124.50784002,
+        "distanceFromOriginKm": 124.87030594924283,
+        "offsetKm": -0.3624659292428305
+      },
+      {
+        "sourceId": "6:12",
+        "reportedKm": 129.68232463,
+        "distanceFromOriginKm": 129.95469386073006,
+        "offsetKm": -0.2723692307300496
+      },
+      {
+        "sourceId": "6:13",
+        "reportedKm": 133.97886468,
+        "distanceFromOriginKm": 134.1815125103697,
+        "offsetKm": -0.20264783036972744
+      },
+      {
+        "sourceId": "6:14",
+        "reportedKm": 143.39319292,
+        "distanceFromOriginKm": 143.5310995455632,
+        "offsetKm": -0.137906625563204
+      },
+      {
+        "sourceId": "6:15",
+        "reportedKm": 153.26970261,
+        "distanceFromOriginKm": 153.45402327922213,
+        "offsetKm": -0.18432066922213153
+      },
+      {
+        "sourceId": "6:2",
+        "reportedKm": 43.29785363,
+        "distanceFromOriginKm": 44.39934074930987,
+        "offsetKm": -1.1014871193098728
+      },
+      {
+        "sourceId": "6:3",
+        "reportedKm": 53.7181985,
+        "distanceFromOriginKm": 54.56645242842019,
+        "offsetKm": -0.848253928420192
+      },
+      {
+        "sourceId": "6:4",
+        "reportedKm": 64.03062463,
+        "distanceFromOriginKm": 64.9998002568357,
+        "offsetKm": -0.9691756268356926
+      },
+      {
+        "sourceId": "6:5",
+        "reportedKm": 73.44581271,
+        "distanceFromOriginKm": 74.33939380467272,
+        "offsetKm": -0.8935810946727258
+      },
+      {
+        "sourceId": "6:6",
+        "reportedKm": 88.13426961,
+        "distanceFromOriginKm": 89.18286527742202,
+        "offsetKm": -1.0485956674220205
+      },
+      {
+        "sourceId": "6:7",
+        "reportedKm": 91.74009028,
+        "distanceFromOriginKm": 92.82778013145996,
+        "offsetKm": -1.087689851459956
+      },
+      {
+        "sourceId": "6:8",
+        "reportedKm": 104.77910405,
+        "distanceFromOriginKm": 105.28854598322336,
+        "offsetKm": -0.5094419332233571
+      },
+      {
+        "sourceId": "6:9",
+        "reportedKm": 113.94848752,
+        "distanceFromOriginKm": 114.32351057655082,
+        "offsetKm": -0.37502305655081614
+      }
+    ]
+  }
+}

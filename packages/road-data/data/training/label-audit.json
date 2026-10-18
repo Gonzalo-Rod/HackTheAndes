@@ -1,0 +1,168 @@
+{
+  "schemaVersion": 1,
+  "target": "rainfall_related_road_disruption_onset",
+  "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+  "reviewedAt": "2026-10-17T19:11:21-05:00",
+  "counts": {
+    "candidates": 8,
+    "positiveEvents": 6,
+    "unknownEvents": 2,
+    "mappedPositiveEvents": 5,
+    "positiveEpisodes": 4,
+    "mappedPositiveEpisodes": 3,
+    "excludedTrafficCrashes": 2
+  },
+  "records": [
+    {
+      "eventId": "provias:19631",
+      "decision": "unknown",
+      "episodeId": "pe22-2024-01-30",
+      "date": "2024-01-30",
+      "linkedCatchments": [
+        "hydrobasins-v1c-sa12-6120526890"
+      ],
+      "supportedHorizonsHours": [
+        24,
+        72
+      ],
+      "spatialBasis": "approximate_road_segment_association",
+      "unresolved": [
+        "Rainfall causation unverified.",
+        "Date-only onset; no catchment link."
+      ]
+    },
+    {
+      "eventId": "provias:19753",
+      "decision": "positive_event",
+      "episodeId": "pe22-2024-02-21-22",
+      "date": "2024-02-21",
+      "linkedCatchments": [
+        "hydrobasins-v1c-sa12-6120531630"
+      ],
+      "supportedHorizonsHours": [
+        24,
+        72
+      ],
+      "spatialBasis": "approximate_road_segment_association",
+      "unresolved": [
+        "Date-only onset.",
+        "Catchment association is derived from coarse road-segment links."
+      ]
+    },
+    {
+      "eventId": "provias:19754",
+      "decision": "positive_event",
+      "episodeId": "pe22-2024-02-21-22",
+      "date": "2024-02-22",
+      "linkedCatchments": [
+        "hydrobasins-v1c-sa12-6121171790"
+      ],
+      "supportedHorizonsHours": [
+        24,
+        72
+      ],
+      "spatialBasis": "approximate_road_segment_association",
+      "unresolved": [
+        "Date-only onset.",
+        "Source point is approximately 272 m from the road axis.",
+        "Catchment association is derived from coarse road-segment links."
+      ]
+    },
+    {
+      "eventId": "provias:19830",
+      "decision": "positive_event",
+      "episodeId": "pe22-2024-03-02",
+      "date": "2024-03-02",
+      "linkedCatchments": [
+        "hydrobasins-v1c-sa12-6120528440"
+      ],
+      "supportedHorizonsHours": [
+        24,
+        72
+      ],
+      "spatialBasis": "approximate_road_segment_association",
+      "unresolved": [
+        "Date-only onset.",
+        "No linked catchment for the matched road segment."
+      ]
+    },
+    {
+      "eventId": "provias:19833",
+      "decision": "positive_event",
+      "episodeId": "pe22-2024-03-02",
+      "date": "2024-03-02",
+      "linkedCatchments": [
+        "hydrobasins-v1c-sa12-6120531630"
+      ],
+      "supportedHorizonsHours": [
+        24,
+        72
+      ],
+      "spatialBasis": "approximate_road_segment_association",
+      "unresolved": [
+        "Date-only onset.",
+        "No linked catchment for the matched road segment."
+      ]
+    },
+    {
+      "eventId": "provias:19985",
+      "decision": "positive_event",
+      "episodeId": "pe22-2024-03-24",
+      "date": "2024-03-24",
+      "linkedCatchments": [
+        "hydrobasins-v1c-sa12-6120526890"
+      ],
+      "supportedHorizonsHours": [
+        24,
+        72
+      ],
+      "spatialBasis": "approximate_road_segment_association",
+      "unresolved": [
+        "Initial NORMAL status conflicts with the impact narrative; the positive decision uses explicit impact evidence.",
+        "Date-only onset.",
+        "No linked catchment for the matched road segment."
+      ]
+    },
+    {
+      "eventId": "provias:20934",
+      "decision": "unknown",
+      "episodeId": "pe22-2025-02-05",
+      "date": "2025-02-05",
+      "linkedCatchments": [
+        "hydrobasins-v1c-sa12-6120534280"
+      ],
+      "supportedHorizonsHours": [
+        24,
+        72
+      ],
+      "spatialBasis": "approximate_road_segment_association",
+      "unresolved": [
+        "Mixed/unspecified cause.",
+        "Initial NORMAL status does not establish a verified negative.",
+        "No linked catchment for the matched road segment."
+      ]
+    },
+    {
+      "eventId": "coen:sinpad-224418",
+      "decision": "positive_event",
+      "episodeId": "pe22-2025-02-22",
+      "date": "2025-02-22",
+      "linkedCatchments": [],
+      "supportedHorizonsHours": [
+        24,
+        72
+      ],
+      "spatialBasis": "unmapped",
+      "unresolved": [
+        "Conflicting occurrence hours, retained as an interval.",
+        "Official chainage has not been independently geocoded."
+      ]
+    }
+  ],
+  "limitations": [
+    "Road-segment associations use the documented 500 m projection rule and coarse catchment links; they do not verify the causal watershed.",
+    "A supported horizon contains the uncertainty interval; it does not identify an exact event hour.",
+    "Positive event evidence alone does not establish training readiness."
+  ],
+  "verifiedNonEventWindows": 0
+}

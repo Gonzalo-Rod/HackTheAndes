@@ -1,0 +1,230 @@
+{
+  "name": "PeruRoad — SUTRAN ingestion (10 minutes)",
+  "nodes": [
+    {
+      "id": "b7d4407a-0f3c-49ea-a544-aff38ec62385",
+      "name": "Every 10 minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "position": [0, 100],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 10
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "c58189e9-8bd1-4dbe-b9cd-8fa0bc66b039",
+      "name": "Archive SUTRAN through backend",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [320, 200],
+      "parameters": {
+        "method": "POST",
+        "url": "https://peruroad-api-git-feat-data-model-gozlie.vercel.app/api/jobs/sutran",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ requestId: \"n8n-sutran-\" + $execution.id }) }}",
+        "options": {
+          "timeout": 130000,
+          "allowUnauthorizedCerts": false,
+          "redirect": {
+            "redirect": {
+              "followRedirects": false
+            }
+          },
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": false,
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "executeOnce": true,
+      "onError": "stopWorkflow",
+      "retryOnFail": false,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "lQd0aYS0zCckQKI7",
+          "name": "PeruRoad ingestion job"
+        }
+      }
+    },
+    {
+      "id": "6415854e-8717-48e1-a4ea-4d03668974cc",
+      "name": "Backend confirmed completion",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [640, 200],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.statusCode }}",
+              "rightValue": 200,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            },
+            {
+              "leftValue": "={{ $json.body?.status ?? \"invalid\" }}",
+              "rightValue": "complete",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "a871cb5a-f3ed-43d1-9bcc-404c08cda46b",
+      "name": "Fail unconfirmed ingestion",
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [960, 320],
+      "parameters": {
+        "errorType": "errorMessage",
+        "errorMessage": "SUTRAN ingestion was not confirmed. Inspect the backend audit using this execution ID; the next scheduled run can retry pending source records."
+      }
+    },
+    {
+      "id": "71866978-254c-4bc1-bdf6-296d333235a9",
+      "name": "Manual verification",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [0, 320],
+      "parameters": {}
+    },
+    {
+      "id": "36f61e75-9d92-4581-9ea0-6163da5a183d",
+      "name": "Sticky Note d39f560a",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [0, -320],
+      "parameters": {
+        "content": "## SUTRAN archive — every 10 minutes\nCalls the deployed HTTPS /api/jobs/sutran endpoint using the saved PeruRoad ingestion job Header Auth credential. Keep job secrets only in the credential store and database credentials only in the backend.\n\nOnly HTTP 200 with status complete succeeds. Partial results and HTTP failures stop the workflow visibly; there are no automatic POST retries. Each execution has its own backend audit ID.\n\nLive manual executions 4 and 5 were verified against Supabase on October 17, 2026. Timezone: America/Lima; HTTP timeout: 130 seconds; workflow timeout: 150 seconds. Verify automatic executions after publishing. Weather/risk and alert evaluation remain separate pending work.",
+        "color": 5,
+        "width": 1200,
+        "height": 300
+      }
+    },
+    {
+      "id": "source-change-route-alerts",
+      "name": "Queue newly detected route alerts",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4,
+      "position": [960, 80],
+      "executeOnce": true,
+      "retryOnFail": false,
+      "onError": "stopWorkflow",
+      "parameters": {
+        "mode": "once",
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "uUJ6gjv8kXsK5KdR"
+        },
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Every 10 minutes": {
+      "main": [
+        [
+          {
+            "node": "Archive SUTRAN through backend",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Archive SUTRAN through backend": {
+      "main": [
+        [
+          {
+            "node": "Backend confirmed completion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Backend confirmed completion": {
+      "main": [
+        [
+          {
+            "node": "Queue newly detected route alerts",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fail unconfirmed ingestion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Manual verification": {
+      "main": [
+        [
+          {
+            "node": "Archive SUTRAN through backend",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true,
+    "timezone": "America/Lima",
+    "saveExecutionProgress": false,
+    "saveManualExecutions": true,
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "executionTimeout": 150
+  },
+  "active": false,
+  "nodeGroups": [
+    {
+      "id": "6eb80504-dc2f-4c3c-ac3b-43bf0f4530c2",
+      "name": "SUTRAN archive",
+      "nodeNames": [
+        "Archive SUTRAN through backend",
+        "Backend confirmed completion",
+        "Fail unconfirmed ingestion",
+        "Queue newly detected route alerts"
+      ],
+      "description": "Calls the authenticated backend and marks any unconfirmed ingestion as failed."
+    }
+  ]
+}

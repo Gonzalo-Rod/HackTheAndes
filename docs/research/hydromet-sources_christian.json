@@ -1,0 +1,530 @@
+{
+  "schemaVersion": 1,
+  "verifiedAt": "2026-10-18T00:07:46Z",
+  "scope": "Water, rain and frost evidence for PeruRoad Climate: PE-22 Lima–Huarochiri–Yauli and Mantaro/Junin.",
+  "sources": [
+    {
+      "id": "senamhi-weather-422-2026",
+      "provider": "SENAMHI",
+      "title": "Weather notice 422: precipitation in the central and southern Andes",
+      "url": "https://www.senamhi.gob.pe/?p=aviso-meteorologico-vigente&a=2026&b=29287&c=00&d=SENA",
+      "categories": [
+        "rain"
+      ],
+      "sourceKind": "forecast_notice",
+      "geographicScope": "Central/southern Andes. Explicit potentially affected provinces include Huarochiri, Yauli, Huancayo, Concepcion, Jauja and Chupaca; exact road overlap remains uncomputed.",
+      "verifiedAt": "2026-10-17T23:27:07Z",
+      "publicationDate": "2026-10-16",
+      "validity": {
+        "start": "2026-10-18T14:00:00-05:00",
+        "end": "2026-10-19T23:59:00-05:00"
+      },
+      "availableFormats": [
+        "HTML notice with multiple numbered panels",
+        "Advertised WFS SHAPE-ZIP links for each forecast day; binary files not retrieved"
+      ],
+      "accessStatus": "Notice body extracted successfully; forecast validity starts after retrieval time.",
+      "observedFacts": [
+        "The exact notice 422 panel has a yellow severity level and an issue date of October 16, 2026.",
+        "It forecasts precipitation, including snow, hail, sleet and rain, for October 18–19; central-Andes rainfall forecast is 8–11 mm/day on October 18 and 9–13 mm/day for central/southern Andes on October 19.",
+        "The affected-area lists explicitly include Huarochiri, Yauli and Huancayo. Hail is forecast above 2,800 m and significant snowfall above 3,800 m."
+      ],
+      "limitations": [
+        "A forecast is not evidence that rain, snow, a landslide or a closure has occurred.",
+        "Province-level inclusion does not establish that every PE-22 segment lies inside the warning polygon.",
+        "The same response includes notices 415–423; parsing the first issue date would attach the wrong date to notice 422.",
+        "Catalogue links with -prueba returned the generic institutional page; the non-prueba notice route supplied the actual numbered content."
+      ],
+      "automation": "Discover links in the official national notice catalogue, extract and isolate the exact notice-number panel, validate issue/start/end, archive the content and follow only actual advertised polygon links. Mark as forecast; compute polygon intersection before segment attribution.",
+      "linkedDownloadEndpoints": [
+        "https://idesep.senamhi.gob.pe/geoserver/g_aviso/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=g_aviso:view_aviso&format_options=filename:shp_aviso_422_1_2026.zip&maxFeatures=50&viewparams=qry:422_1_2026&outputFormat=SHAPE-ZIP",
+        "https://idesep.senamhi.gob.pe/geoserver/g_aviso/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=g_aviso:view_aviso&format_options=filename:shp_aviso_422_2_2026.zip&maxFeatures=50&viewparams=qry:422_2_2026&outputFormat=SHAPE-ZIP"
+      ],
+      "extractionEvidence": {
+        "method": "tavily_extract",
+        "success": true,
+        "requestId": "c3ea46ee-af5f-4604-81af-43a98c69a54b",
+        "note": "Isolated the text between the headings for notice 422 and notice 423; dates and affected provinces were read from that panel."
+      }
+    },
+    {
+      "id": "senamhi-frost-398-2026",
+      "provider": "SENAMHI",
+      "title": "Historical weather notice 398: night-temperature decrease in the central and southern Andes",
+      "url": "https://www.senamhi.gob.pe/?p=aviso-meteorologico-detalle&a=2026&b=29187&c=00&d=SENA",
+      "categories": [
+        "frost"
+      ],
+      "sourceKind": "historical_forecast_notice",
+      "geographicScope": "Explicitly includes Junin and the provinces Huancayo, Concepcion, Jauja, Junin, Tarma, Yauli and Chupaca among other areas.",
+      "verifiedAt": "2026-10-17T23:27:07Z",
+      "publicationDate": "2026-10-03",
+      "validity": {
+        "start": "2026-10-05T00:00:00-05:00",
+        "end": "2026-10-07T23:59:00-05:00"
+      },
+      "availableFormats": [
+        "HTML notice with numbered panels",
+        "Advertised daily WFS SHAPE-ZIP links; binary files not retrieved"
+      ],
+      "accessStatus": "Extracted successfully; validity expired before this research.",
+      "observedFacts": [
+        "The exact notice 398 panel has a red overall severity and was issued on October 3, 2026, for October 5–7.",
+        "Its October 5 text forecasts central-Andes minimum temperatures between 0 and -6 C above 3,500 m.",
+        "The first daily affected-area list explicitly names Junin and relevant Mantaro/Yauli provinces."
+      ],
+      "limitations": [
+        "This is an expired forecast, not a current frost alert or a measured frost occurrence.",
+        "Overall red severity cannot be assigned to every listed province without the daily polygons.",
+        "A separate notice 410 title also mentions the central Andes, but its extracted province lists do not include Lima or Junin; do not infer local coverage from broad titles."
+      ],
+      "automation": "Archive as historical forecast evidence with its original validity. A local frost alert requires a still-valid notice polygon or a timestamped station minimum observation; never reactivate this expired notice.",
+      "linkedDownloadEndpoints": [
+        "https://idesep.senamhi.gob.pe/geoserver/g_aviso/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=g_aviso:view_aviso&format_options=filename:shp_aviso_398_1_2026.zip&maxFeatures=50&viewparams=qry:398_1_2026&outputFormat=SHAPE-ZIP",
+        "https://idesep.senamhi.gob.pe/geoserver/g_aviso/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=g_aviso:view_aviso&format_options=filename:shp_aviso_398_2_2026.zip&maxFeatures=50&viewparams=qry:398_2_2026&outputFormat=SHAPE-ZIP",
+        "https://idesep.senamhi.gob.pe/geoserver/g_aviso/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=g_aviso:view_aviso&format_options=filename:shp_aviso_398_3_2026.zip&maxFeatures=50&viewparams=qry:398_3_2026&outputFormat=SHAPE-ZIP"
+      ],
+      "extractionEvidence": {
+        "method": "tavily_extract",
+        "success": true,
+        "requestId": "19ea803f-9447-4a22-940a-7553273782b1",
+        "note": "Parsed the exact notice 398 panel after the current notice panels, including the first daily affected-area list."
+      }
+    },
+    {
+      "id": "senamhi-hydromet-observation-guide",
+      "provider": "SENAMHI / gob.pe",
+      "title": "Official guide to Peru hydrometeorological observations",
+      "url": "https://www.gob.pe/9313-conocer-los-datos-hidrometeorologicos-del-peru",
+      "categories": [
+        "water",
+        "rain",
+        "frost"
+      ],
+      "sourceKind": "official_service_documentation",
+      "geographicScope": "Peru nationwide station network. Station availability and time coverage must be checked for each PE-22/Mantaro location.",
+      "verifiedAt": "2026-10-17T23:27:07Z",
+      "publicationDate": null,
+      "validity": null,
+      "availableFormats": [
+        "HTML service documentation",
+        "Linked interactive station portal; no machine-readable payload obtained"
+      ],
+      "accessStatus": "Official guide extracted; linked station portal extracted only its station-type labels.",
+      "observedFacts": [
+        "The guide describes observations of maximum/minimum air temperature, precipitation, humidity and river levels.",
+        "Conventional-station values are displayed daily; automatic-station temperature, precipitation and water-level variables are described as hourly.",
+        "It separates conventional/automatic stations and real-time/delayed transmission. Real-time conventional stations transmit at 07:00, 13:00 and 19:00."
+      ],
+      "limitations": [
+        "The guide's displayed last-change date is July 30, 2020; it documents service behavior rather than proving a current station feed.",
+        "No actual Chosica, Matucana or Huancayo observation values or dates were extracted.",
+        "River level and discharge are different variables; do not convert without the station rating curve."
+      ],
+      "automation": "Use the linked official station portal to discover actual station metadata and payloads. Validate station identifier, coordinates, variable, unit, observation time and missing-value flags before ingestion; display unavailable until a payload is obtained.",
+      "serviceUrl": "https://www.senamhi.gob.pe/servicios/?p=estaciones",
+      "lastChangeDate": "2020-07-30",
+      "extractionEvidence": {
+        "method": "tavily_extract",
+        "success": true,
+        "requestId": "19ea803f-9447-4a22-940a-7553273782b1",
+        "note": "Service guide body read; related station-page extraction request c3ea46ee-af5f-4604-81af-43a98c69a54b exposed only portal labels."
+      }
+    },
+    {
+      "id": "senamhi-station-historical-download",
+      "provider": "SENAMHI / gob.pe",
+      "title": "Official meteorological station-data download instructions",
+      "url": "https://www.gob.pe/9312-conocer-los-datos-hidrometeorologicos-del-peru-descargar-los-datos-meteorologicos",
+      "categories": [
+        "rain",
+        "frost"
+      ],
+      "sourceKind": "authenticated_historical_download_documentation",
+      "geographicScope": "Meteorological stations nationwide; exact local station coverage not obtained.",
+      "verifiedAt": "2026-10-17T23:27:07Z",
+      "publicationDate": null,
+      "validity": null,
+      "availableFormats": [
+        "HTML service documentation",
+        "Documented comma-separated TXT station download; actual data file not downloaded"
+      ],
+      "accessStatus": "Instructions extracted. Download requires a registered user and the password sent by SENAMHI.",
+      "observedFacts": [
+        "The official instructions document daily station files in TXT with comma-separated columns for year, month, day, precipitation type, and maximum/minimum temperature.",
+        "Registration and the emailed SENAMHI password are required before download."
+      ],
+      "limitations": [
+        "This is a documented download format, not an authenticated data extraction.",
+        "No account was created and no credentials or personal information were submitted.",
+        "No public API endpoint or current measurement payload was found."
+      ],
+      "automation": "Use an authorized existing account for a supervised historical download and ingest the resulting TXT with explicit date/unit/missing-value validation. Do not build an unattended scraper that assumes an anonymous CSV endpoint.",
+      "serviceUrl": "https://www.senamhi.gob.pe/servicios/?p=descarga-datos-meteorologicos",
+      "extractionEvidence": {
+        "method": "tavily_extract",
+        "success": true,
+        "requestId": "f2610b98-6183-4984-8d67-946972a7cf4b",
+        "note": "Read the official format and registration requirements; the linked portal itself previously extracted only the page heading."
+      }
+    },
+    {
+      "id": "senamhi-accumulated-rain-guide",
+      "provider": "SENAMHI / gob.pe",
+      "title": "Official accumulated-rainfall monitoring service",
+      "url": "https://www.gob.pe/9314-consultar-los-datos-de-lluvia-acumulada-a-nivel-nacional",
+      "categories": [
+        "rain",
+        "water"
+      ],
+      "sourceKind": "official_observation_service_documentation",
+      "geographicScope": "SENAMHI station network nationwide; local station availability still to be checked.",
+      "verifiedAt": "2026-10-17T23:27:07Z",
+      "publicationDate": null,
+      "validity": null,
+      "availableFormats": [
+        "HTML service documentation",
+        "Linked interactive accumulated-rainfall station charts; no export/API format obtained"
+      ],
+      "accessStatus": "Official guide extracted successfully; chart data were not retrieved.",
+      "observedFacts": [
+        "The service is documented as comparing the current year's daily accumulated rainfall with historical averages and historical accumulated ranges.",
+        "The guide says the information updates automatically each day and the user selects a station."
+      ],
+      "limitations": [
+        "The displayed last-change date is March 13, 2023; it is not an observation timestamp.",
+        "A cumulative annual curve does not directly provide a recent 24-hour catchment rainfall amount.",
+        "No present station rainfall value or downloadable series was extracted."
+      ],
+      "automation": "Inspect only the linked official portal for an actual station series. Store dates and accumulation definition; derive short-window rainfall only from compatible consecutive values with valid timestamps and reset handling.",
+      "serviceUrl": "https://www.senamhi.gob.pe/servicios/?p=lluvia-acumulada",
+      "lastChangeDate": "2023-03-13",
+      "extractionEvidence": {
+        "method": "tavily_extract",
+        "success": true,
+        "requestId": "19ea803f-9447-4a22-940a-7553273782b1",
+        "note": "Read guide body and actual service link."
+      }
+    },
+    {
+      "id": "senamhi-chirilu-monitoring",
+      "provider": "SENAMHI",
+      "title": "CHIRILU hydrological monitoring and forecasts",
+      "url": "https://www.senamhi.gob.pe?p=monitoreo-chirilu",
+      "categories": [
+        "water",
+        "rain"
+      ],
+      "sourceKind": "official_observation_and_forecast_portal",
+      "geographicScope": "Chillon, Rimac and Lurin basins; Chosica is explicitly identified as the Rimac control station in Lurigancho, Lima.",
+      "verifiedAt": "2026-10-17T23:27:07Z",
+      "publicationDate": null,
+      "validity": null,
+      "availableFormats": [
+        "HTML landing page",
+        "Linked rainfall bulletin PDF",
+        "Displayed forecast images and river-camera sections; no underlying numeric feed obtained"
+      ],
+      "accessStatus": "Landing page extracted successfully; discharge table remained at a loading placeholder.",
+      "observedFacts": [
+        "The page identifies Chosica as a principal Rimac hydrological control point.",
+        "The table headings distinguish today's value, historical anomaly, day-to-day trend and red threshold.",
+        "The page describes short-term flow forecasts using calibrated RS MINERVE models with ETA-SENAMHI/GFS rainfall inputs, and links a rainfall bulletin."
+      ],
+      "limitations": [
+        "No live flow, river-level, anomaly or station observation time was present in the extraction; the table was still loading.",
+        "Observed flow, model forecast and camera footage require separate provenance and timestamps.",
+        "The linked PDF's age must be read inside the bulletin; the portal phrase 'last 10 days' does not establish its freshness."
+      ],
+      "automation": "Archive the official landing page and follow its actual bulletin link. Keep numeric observations unavailable until a timestamped station payload is obtained; ingest model forecasts separately from observations.",
+      "linkedBulletinUrl": "https://www.senamhi.gob.pe/load/file/02269SENA-112.pdf",
+      "extractionEvidence": {
+        "method": "tavily_extract",
+        "success": true,
+        "requestId": "059f23d4-805c-4282-ac21-31b7ee2dda0c",
+        "note": "Read station descriptions, table headings, loading state, model description and exact bulletin URL."
+      }
+    },
+    {
+      "id": "ana-snirh-service",
+      "provider": "Autoridad Nacional del Agua / gob.pe",
+      "title": "Official access to the National Water Resources Information System",
+      "url": "https://www.gob.pe/86460-acceder-al-sistema-nacional-de-informacion-de-recursos-hidricos",
+      "categories": [
+        "water"
+      ],
+      "sourceKind": "official_service_documentation",
+      "geographicScope": "Peru nationwide. Rimac/Mantaro stations and downloadable series not verified.",
+      "verifiedAt": "2026-10-17T23:27:07Z",
+      "publicationDate": null,
+      "validity": null,
+      "availableFormats": [
+        "HTML service documentation",
+        "Link to SNIRH portal; underlying portal extraction failed"
+      ],
+      "accessStatus": "Official service guide extracted; actual SNIRH portal could not be fetched by Tavily.",
+      "observedFacts": [
+        "ANA's official service page links to the SNIRH portal.",
+        "The documentation identifies water observatory, water-data/statistical analysis and national water-plan monitoring as services inside the platform."
+      ],
+      "limitations": [
+        "A service description is not a current river measurement.",
+        "Tavily failed to retrieve the linked portal; no API, station list, download format or live Rimac/Mantaro payload was verified.",
+        "CHIRILU observatory subpages also failed extraction; their search snippets were retained only as discovery leads."
+      ],
+      "automation": "Use the verified official service URL as the discovery entry. Before building a collector, identify an actual accessible data endpoint or authorized download and validate metadata; expose source unavailable while the portal cannot be read.",
+      "serviceUrl": "https://snirh.ana.gob.pe/snirhPortal/",
+      "portalExtractionEvidence": {
+        "method": "tavily_extract",
+        "success": false,
+        "requestId": "08e26d52-0979-408e-ab97-09f106b86441",
+        "error": "Failed to fetch url"
+      },
+      "extractionEvidence": {
+        "method": "tavily_extract",
+        "success": true,
+        "requestId": "f2610b98-6183-4984-8d67-946972a7cf4b",
+        "note": "Official service page read; exact SNIRH link followed in a separate failed Tavily extraction."
+      }
+    },
+    {
+      "id": "ana-river-monitoring-2026-07-31",
+      "provider": "Autoridad Nacional del Agua / gob.pe",
+      "title": "ANA describes its river-flow monitoring, ONRH and ANDREA tools",
+      "url": "https://www.gob.pe/institucion/ana/noticias/1424775-ana-herramientas-digitales-permiten-el-monitoreo-permanente-de-los-caudales-en-rios",
+      "categories": [
+        "water"
+      ],
+      "sourceKind": "official_provider_capability_report",
+      "geographicScope": "Peru nationwide; article does not supply current Rimac or Mantaro measurements.",
+      "verifiedAt": "2026-10-17T23:27:07Z",
+      "publicationDate": "2026-07-31",
+      "validity": null,
+      "availableFormats": [
+        "HTML dated official article"
+      ],
+      "accessStatus": "Official article body extracted successfully.",
+      "observedFacts": [
+        "The article is dated July 31, 2026 at 15:16 local time.",
+        "ANA states that ONRH disseminates levels/flows using its automatic hydrological network and interoperability with SENAMHI.",
+        "It describes ANDREA as a tool for hydrological-series analysis, inconsistency detection and data completion."
+      ],
+      "limitations": [
+        "These are provider statements about system capabilities, not independently verified feed availability.",
+        "The article contains no current local observation table or documented machine-readable endpoint.",
+        "Planned interventions mentioned in the article are not evidence of road events."
+      ],
+      "automation": "Use as provenance for selecting the official system, then require a timestamped observation or actual downloadable data product before producing numeric water alerts.",
+      "extractionEvidence": {
+        "method": "tavily_extract",
+        "success": true,
+        "requestId": "f2610b98-6183-4984-8d67-946972a7cf4b",
+        "note": "Read publication timestamp and tool descriptions inside the official article."
+      }
+    },
+    {
+      "id": "indeci-monitoring-bulletin-290-2026",
+      "provider": "INDECI / COEN, summarizing SENAMHI and CENEPRED",
+      "title": "Monitoring of hazards and outlooks, bulletin 290 (17 October 2026, 15:00 Lima)",
+      "url": "https://portal.indeci.gob.pe/wp-content/uploads/2026/10/BOLET%C3%8DN-INFORMATIVO-MONITOREO-DE-PELIGROS-Y-PERSPECTIVAS-N%C2%B0290-del-17-10-2026.pdf",
+      "categories": ["rain", "water", "frost", "landslides"],
+      "sourceKind": "official_daily_hazard_monitoring_bulletin",
+      "geographicScope": "National bulletin; includes measured station rainfall at Ingenio, Concepción, Junín and warning summaries affecting Lima and Junín.",
+      "verifiedAt": "2026-10-18T00:05:30Z",
+      "publicationDate": "2026-10-17",
+      "validity": null,
+      "availableFormats": ["Official PDF and HTML archive page"],
+      "accessStatus": "Official PDF extracted with Tavily; source is a daily report, not a live API.",
+      "observedFacts": [
+        "For 16 October 07:00 to 17 October 07:00, 12.0 mm was recorded at Ingenio station, Concepción province, Junín; the bulletin classifies it as a rainy day.",
+        "It summarizes SENAMHI notice 422 for 18–19 October, including provinces in Lima and Junín, with forecast rain, hail, high-altitude snow, electrical discharges and strong gusts.",
+        "It includes daily national weather monitoring and risk summaries; each table has its own time window and geography."
+      ],
+      "limitations": [
+        "The 12.0 mm value is a station observation, not rainfall on the road; the station-atlas coordinate is rounded to 0.1 degree.",
+        "Notice 422 is a forecast. The advertised shape ZIP links failed Tavily extraction and route intersection remains unverified.",
+        "The bulletin's other national summaries must not be presented as local PE-22 measurements."
+      ],
+      "automation": "Archive the daily PDF, parse each measurement and warning table separately, retain station/time/units and original validity, and verify published geometry before corridor attribution.",
+      "extractionEvidence": {"method": "tavily_extract", "success": true, "requestId": "37337ec1-1e2a-4def-bbc4-c6736eafb796"}
+    }
+  ],
+  "researchAccounting": {
+    "tavilySearch": {
+      "calls": 7,
+      "depth": "advanced",
+      "estimatedCredits": 14
+    },
+    "tavilyExtract": {
+      "calls": 7,
+      "depth": "advanced",
+      "attemptedUrls": 21,
+      "returnedContentUrls": 15,
+      "failedUrls": 6,
+      "estimatedCredits": 12
+    },
+    "estimatedTotalCredits": 76,
+    "additionalNoticeSweep": {"searchCalls": 15, "advancedSearchCalls": 13, "basicSearchCalls": 2, "extractCalls": 5, "attemptedUrls": 10, "estimatedCredits": 38, "actualBilledCredits": null, "ledgerFile": "tavily-followup-2026-10-17_christian.json"},
+    "finalCoverageAudit": {"searchCalls": 5, "advancedSearchCalls": 5, "extractCalls": 1, "attemptedUrls": 1, "estimatedCredits": 12, "actualBilledCredits": null, "ledgerFile": "tavily-followup-2026-10-17_christian.json"},
+    "accountingNote": "Estimate only; returned tool results did not report billed credits. The dedicated hydromet pass cost estimate is 26 credits; the later multi-topic notice sweep adds 38 and the final coverage audit adds 12. Two original returned pages were generic redirects and were rejected as evidence."
+  },
+  "queryLedger": [
+    {
+      "sequence": 1,
+      "tool": "tavily_search",
+      "depth": "advanced",
+      "query": "SENAMHI avisos meteorologicos lluvias descenso temperatura nocturna sierra Junin Lima octubre 2026",
+      "requestId": "f520e796-ffd9-444e-b05e-b05347ccadec"
+    },
+    {
+      "sequence": 2,
+      "tool": "tavily_search",
+      "depth": "advanced",
+      "query": "SENAMHI datos hidrologicos estaciones descarga Rimac Mantaro Chosica hidrologia avisos",
+      "requestId": "03f8c2bc-cc8a-43db-af69-b095e4df0ecd"
+    },
+    {
+      "sequence": 3,
+      "tool": "tavily_search",
+      "depth": "advanced",
+      "query": "ANA SNIRH observatorio agua datos hidrologicos Rimac Mantaro informacion recursos hidricos",
+      "requestId": "089f5d50-8b53-4dca-bdf6-c338fd5815a7"
+    },
+    {
+      "sequence": 4,
+      "tool": "tavily_search",
+      "depth": "advanced",
+      "query": "site.senamhi.gob.pe descarga datos hidrometeorológicos estaciones CHOSICA HUANCAYO datos estaciones",
+      "requestId": "1f2f237d-003b-4387-9118-1580d1a0e53f"
+    },
+    {
+      "sequence": 5,
+      "tool": "tavily_search",
+      "depth": "advanced",
+      "query": "ANA SNIRH Observatorio Nacional Recursos Hídricos caudales hidrometeorologico descarga datos snirh.ana.gob.pe",
+      "requestId": "9a5476d8-3296-4616-ad6c-938b0fe44af3"
+    },
+    {
+      "sequence": 6,
+      "tool": "tavily_search",
+      "depth": "advanced",
+      "query": "site.senamhi.gob.pe heladas Junin Huancayo octubre 2026 temperatura minima monitoreo",
+      "requestId": "75b6e780-68d7-4658-8020-6a2e9b59c3df"
+    },
+    {
+      "sequence": 7,
+      "tool": "tavily_search",
+      "depth": "advanced",
+      "query": "Observatorio Nacional Recursos Hidricos ANA acceder SNIRH agua servicio",
+      "requestId": "464c10e3-1099-42a3-955e-787a27d2dc13"
+    }
+  ],
+  "extractionLedger": [
+    {
+      "sequence": 1,
+      "tool": "tavily_extract",
+      "depth": "advanced",
+      "requestId": "39a9bd17-cd04-4c90-9c47-d3a15a1ce6dd",
+      "returnedUrls": [
+        "https://www.senamhi.gob.pe/main.php?dp=lima&p=aviso-meteorologico",
+        "https://www.senamhi.gob.pe?p=monitoreo-hidrologico",
+        "https://www.senamhi.gob.pe?p=avisos-meteorologicos"
+      ],
+      "failedUrls": []
+    },
+    {
+      "sequence": 2,
+      "tool": "tavily_extract",
+      "depth": "advanced",
+      "requestId": "059f23d4-805c-4282-ac21-31b7ee2dda0c",
+      "returnedUrls": [
+        "https://www.senamhi.gob.pe?p=monitoreo-chirilu",
+        "https://www.senamhi.gob.pe/?p=aviso-meteorologico-detalle-prueba&a=2026&b=29256&c=00&d=SENA",
+        "https://www.senamhi.gob.pe/?p=aviso-meteorologico-vigente-prueba&a=2026&b=29287&c=00&d=SENA"
+      ],
+      "failedUrls": [
+        {
+          "url": "https://observatoriochirilu.ana.gob.pe/caracterizaci%C3%B3n-de-cuencas/hidrografia",
+          "error": "Failed to fetch url"
+        },
+        {
+          "url": "https://www.senamhi.gob.pe/site/descarga-datos",
+          "error": "Failed to fetch url"
+        }
+      ]
+    },
+    {
+      "sequence": 3,
+      "tool": "tavily_extract",
+      "depth": "advanced",
+      "requestId": "c3ea46ee-af5f-4604-81af-43a98c69a54b",
+      "returnedUrls": [
+        "https://www.senamhi.gob.pe/servicios/?p=estaciones",
+        "https://www.senamhi.gob.pe/?p=aviso-meteorologico-vigente&a=2026&b=29287&c=00&d=SENA"
+      ],
+      "failedUrls": [
+        {
+          "url": "https://observatoriochirilu.ana.gob.pe/caracterizaci%C3%B3n-de-cuencas/hidrografia",
+          "error": "Failed to fetch url"
+        },
+        {
+          "url": "https://www.senamhi.gob.pe/servicios/?p=descarga-datos",
+          "error": "Error fetching content"
+        }
+      ]
+    },
+    {
+      "sequence": 4,
+      "tool": "tavily_extract",
+      "depth": "advanced",
+      "requestId": "6eb4bbfb-4e9c-41ab-9f94-5bdb3eb198e5",
+      "returnedUrls": [
+        "https://www.senamhi.gob.pe/servicios/?p=descarga-datos-meteorologicos"
+      ],
+      "failedUrls": [
+        {
+          "url": "https://observatoriochirilu.ana.gob.pe/sobre-el-observatorio/ambito-geografico",
+          "error": "Failed to fetch url"
+        }
+      ]
+    },
+    {
+      "sequence": 5,
+      "tool": "tavily_extract",
+      "depth": "advanced",
+      "requestId": "19ea803f-9447-4a22-940a-7553273782b1",
+      "returnedUrls": [
+        "https://www.gob.pe/9313-conocer-los-datos-hidrometeorologicos-del-peru",
+        "https://www.gob.pe/9314-consultar-los-datos-de-lluvia-acumulada-a-nivel-nacional",
+        "https://www.senamhi.gob.pe/?p=aviso-meteorologico-detalle&a=2026&b=29187&c=00&d=SENA"
+      ],
+      "failedUrls": []
+    },
+    {
+      "sequence": 6,
+      "tool": "tavily_extract",
+      "depth": "advanced",
+      "requestId": "f2610b98-6183-4984-8d67-946972a7cf4b",
+      "returnedUrls": [
+        "https://www.gob.pe/86460-acceder-al-sistema-nacional-de-informacion-de-recursos-hidricos",
+        "https://www.gob.pe/9312-conocer-los-datos-hidrometeorologicos-del-peru-descargar-los-datos-meteorologicos",
+        "https://www.gob.pe/institucion/ana/noticias/1424775-ana-herramientas-digitales-permiten-el-monitoreo-permanente-de-los-caudales-en-rios"
+      ],
+      "failedUrls": []
+    },
+    {
+      "sequence": 7,
+      "tool": "tavily_extract",
+      "depth": "advanced",
+      "requestId": "08e26d52-0979-408e-ab97-09f106b86441",
+      "returnedUrls": [],
+      "failedUrls": [
+        {
+          "url": "https://snirh.ana.gob.pe/snirhPortal/",
+          "error": "Failed to fetch url"
+        }
+      ]
+    }
+  ]
+}
+

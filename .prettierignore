@@ -1,0 +1,12 @@
+.next/
+node_modules/
+coverage/
+public/data/
+scripts/.cache/
+package-lock.json
+docs/
+getting-started/
+AGENTS.md
+apps/
+packages/
+workflows/
