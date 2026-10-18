@@ -1,6 +1,9 @@
-import { beforeAll, beforeEach, afterEach, expect, it, vi } from "vitest";
+import { beforeAll, beforeEach, afterEach, describe, expect, it, vi } from "vitest";
 import { createExposureView, readBundledExposure } from "@peruroad/road-data/exposure";
 import type { RoadContextResponse } from "@peruroad/road-data/context/contracts";
+import type { ForecastRoad } from "@/contracts/forecast-roads";
+import type { AlertsResponse } from "@/contracts/road-alerts";
+import type { RoadPosition } from "@/db/road-locator";
 import { createRoadInformation } from "./road-information";
 let record: Awaited<ReturnType<typeof readBundledExposure>>;
 beforeAll(async () => {
@@ -112,7 +115,9 @@ it("uses only the matched segment, forecast window, rainfall and uncertainty", a
   if (!segment) throw new Error("Fixture must contain assessed coverage");
   context.mockResolvedValue(located(segment.segmentId));
   const reply = await service.exposure({ latitude: -11.8, longitude: -76.5 }, "req");
-  expect(reply).toContain(`tramo ${segment.segmentId}`);
+  expect(reply).toContain(
+    `km ${segment.distanceFromOriginStartKm.toFixed(0)}-${segment.distanceFromOriginEndKm.toFixed(0)} del mapa de PE-22`,
+  );
   expect(reply).toContain("Confirma");
   expect(reply).toContain("mm");
   expect(reply).toContain("INGEMMET");
@@ -143,4 +148,123 @@ it("fails visibly on data outages without disclosing database errors", async () 
   expect(status).toContain("No podemos consultar");
   expect(forecast).toContain("No podemos consultar");
   expect(status + forecast).not.toContain("secret");
+});
+
+describe("national sources shared with the dashboard", () => {
+  const OTHER_REVISION = "b".repeat(64);
+  const roads: ForecastRoad[] = [
+    { roadCode: "PE-22", name: "Carretera Central", geometryRevision: "", measuredLengthKm: 174, pilot: true },
+    { roadCode: "PE-08B", name: "CARRETERA CAJAMARCA ", geometryRevision: OTHER_REVISION, measuredLengthKm: 549, pilot: false },
+  ];
+  const alertsResponse: AlertsResponse = {
+    alerts: [],
+    meta: {
+      source: "SUTRAN",
+      endpoint: "alerts",
+      fetchedAt: "2026-10-18T15:00:00.000Z",
+      servedAt: "2026-10-18T15:00:00.000Z",
+      latestActionAt: null,
+      stale: false,
+      fallback: "none",
+      staleReason: null,
+      skippedCount: 0,
+    },
+  };
+  function viewFor(road: ForecastRoad | undefined) {
+    const assessment = {
+      ...record.assessment,
+      geometryRevision: road && !road.pilot ? road.geometryRevision : record.assessment.geometryRevision,
+    };
+    return createExposureView(assessment, Date.parse(record.assessment.assessedAt), "database", 24);
+  }
+  function nationalSetup() {
+    const base = setup();
+    const registered = roads.map((road) => (road.pilot ? { ...road, geometryRevision: record.assessment.geometryRevision } : road));
+    const national = {
+      alerts: vi.fn(async (): Promise<AlertsResponse | null> => alertsResponse),
+      roads: vi.fn(async () => registered),
+      locate: vi.fn(async (): Promise<RoadPosition | null> => null),
+    };
+    const exposure = vi.fn(async (road?: ForecastRoad) => viewFor(road));
+    const service = createRoadInformation({
+      context: base.context,
+      exposure,
+      geometryRevision: record.assessment.geometryRevision,
+      publicUrl,
+      national,
+    });
+    return { ...base, national, exposure, service };
+  }
+
+  it("answers ESTADO from the live national feed instead of the pilot database", async () => {
+    const { service, national, context } = nationalSetup();
+    const reply = await service.status("req", "pe 8b");
+    expect(reply).toContain("Sin alertas vigentes de SUTRAN en PE-8B");
+    expect(national.alerts).toHaveBeenCalledOnce();
+    expect(context).not.toHaveBeenCalled();
+  });
+
+  it("explains an unrecognized ESTADO argument and still gives the national summary", async () => {
+    const { service } = nationalSetup();
+    const reply = await service.status("req", "Chosica");
+    expect(reply).toContain('No reconozco "Chosica"');
+    expect(reply).toContain("Sin alertas vigentes en el país");
+  });
+
+  it("shows the unavailable state when the national feed has no data at all", async () => {
+    const { service, national } = nationalSetup();
+    national.alerts.mockResolvedValue(null);
+    expect(await service.status("req")).toContain("No podemos consultar");
+  });
+
+  it("reads a registered road by code, with zero-padding differences", async () => {
+    const { service, exposure } = nationalSetup();
+    const reply = await service.exposure({ place: "PE-8B" }, "req");
+    expect(reply).toContain("Exposición climática estimada PE-08B");
+    expect(reply).toContain("carretera=PE-08B");
+    expect(exposure).toHaveBeenCalledWith(expect.objectContaining({ roadCode: "PE-08B" }));
+  });
+
+  it("names the covered roads when a road has no estimate yet", async () => {
+    const { service } = nationalSetup();
+    const reply = await service.exposure({ place: "PE-1N" }, "req");
+    expect(reply).toContain("PE-1N aún no tiene estimación");
+    expect(reply).toContain("PE-22, PE-08B");
+  });
+
+  it("compares every registered road and lists unreadable ones as unavailable, not low risk", async () => {
+    const { service, exposure } = nationalSetup();
+    exposure.mockImplementation(async (road?: ForecastRoad) => {
+      if (road?.roadCode === "PE-08B") throw new Error("database down");
+      return viewFor(road);
+    });
+    const reply = await service.exposure(null, "req");
+    expect(reply).toContain("en 2 carreteras con estimación");
+    expect(reply).toContain("• PE-22:");
+    expect(reply).toContain("Sin evaluación vigente: PE-08B. No implica riesgo bajo.");
+  });
+
+  it("matches a pin off PE-22 to another registered road", async () => {
+    const { service, context, national } = nationalSetup();
+    context.mockResolvedValue(located("ignored", "outside_corridor"));
+    const segment = record.assessment.segments.find((item) => item.windows.next24h.state === "assessed");
+    if (!segment) throw new Error("Fixture must contain assessed coverage");
+    national.locate.mockResolvedValue({
+      roadCode: "PE-08B",
+      geometryRevision: OTHER_REVISION,
+      segmentId: segment.segmentId,
+      distanceFromOriginKm: segment.distanceFromOriginStartKm,
+      distanceFromRoadM: 40,
+    });
+    const reply = await service.exposure({ latitude: -7.1, longitude: -78.5 }, "req");
+    expect(national.locate).toHaveBeenCalledWith({ latitude: -7.1, longitude: -78.5 }, [OTHER_REVISION]);
+    expect(reply).toContain("del mapa de PE-08B");
+  });
+
+  it("rejects a pin far from every registered road and lists them", async () => {
+    const { service, context } = nationalSetup();
+    context.mockResolvedValue(located("ignored", "outside_corridor"));
+    const reply = await service.exposure({ latitude: -12, longitude: -70 }, "req");
+    expect(reply).toContain("más de 500 m de las carreteras con estimación (PE-22, PE-08B)");
+  });
 });

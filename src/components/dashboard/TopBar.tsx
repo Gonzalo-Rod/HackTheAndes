@@ -1,6 +1,7 @@
 "use client";
 
 import { Icon, LogoMark } from "@/components/icons";
+import { WhatsAppLink } from "@/components/platform/WhatsAppLink";
 import type { AlertsMeta } from "@/contracts/road-alerts";
 import { formatDateTime, formatRelative, formatTime, formatToday } from "@/lib/format";
 
@@ -104,6 +105,7 @@ export function TopBar(props: TopBarProps) {
       </div>
       <div className="pr-topbar__spacer" />
       <span className="pr-topbar__date pr-hide-md">{now ? formatToday(now) : " "}</span>
+      <WhatsAppLink command="AYUDA" label="Alertas por WhatsApp" className="pr-btn pr-btn--ghost pr-hide-md" />
       <a className="pr-btn pr-btn--ghost" href="/impacto">
         Impacto
       </a>

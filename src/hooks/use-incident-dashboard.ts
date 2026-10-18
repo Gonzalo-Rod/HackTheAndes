@@ -29,13 +29,15 @@ import {
 } from "@/domain/road-alerts/timeline";
 import { rainAtKm, rainSegments } from "@/domain/weather/rain";
 import { countByRoad } from "@/domain/road-alerts/staleness";
+import { DASHBOARD_PARAMS, readDashboardRoad } from "@/domain/messaging/dashboard-links";
 import { useAlertDetail } from "./use-alert-detail";
 import { useTimelinePlayback } from "./use-timeline-playback";
 const PE22 = "PE-22";
 const EMPTY_SET: ReadonlySet<string> = new Set();
 /** Padding around a region's reported incidents when focusing the map. */
 const REGION_FIT_PADDING_DEG = 0.6;
-const readDeepLink = () => (typeof window === "undefined" ? null : new URLSearchParams(window.location.search).get("alerta"));
+const readDeepLink = () => (typeof window === "undefined" ? null : new URLSearchParams(window.location.search).get(DASHBOARD_PARAMS.alert));
+
 export function useIncidentDashboard({
   allAlerts,
   corridor,
@@ -51,6 +53,14 @@ export function useIncidentDashboard({
 }) {
   const [scope, setScope] = useState<Scope>("pais");
   const [filters, setFilters] = useState<AlertFilters>(EMPTY_FILTERS);
+  // A WhatsApp `?carretera=` link opens the list searched by that road, visible and clearable in the
+  // filter bar. Applied after mount (like `?vista=`) so server and client render the same markup.
+  useEffect(() => {
+    const road = readDashboardRoad(window.location.search);
+    if (!road) return;
+    const timer = window.setTimeout(() => setFilters((current) => ({ ...current, query: road })), 0);
+    return () => window.clearTimeout(timer);
+  }, []);
   const [selectedId, setSelectedId] = useState<string | null>(readDeepLink);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [range, setRange] = useState<TimelineRange>("30d");

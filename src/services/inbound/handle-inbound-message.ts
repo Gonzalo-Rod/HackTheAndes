@@ -18,7 +18,8 @@ export const REPLIES = {
   unsubscribe: "Este canal todavía no tiene suscripciones automáticas activas. No se activará una suscripción con este mensaje.",
   empty: "Envía una consulta de texto o un pin de WhatsApp. Escribe AYUDA para ver las opciones.",
   unsupported: "Por ahora atiendo consultas de texto y ubicaciones de WhatsApp. Escribe AYUDA.",
-  parserUnavailable: "No pude interpretar la consulta. Usa ESTADO o EXPOSICION, o comparte un pin sobre PE-22.",
+  parserUnavailable:
+    "No pude interpretar la consulta. Usa ESTADO, ESTADO PE-22, EXPOSICION o EXPOSICION PE-32, o comparte un pin sobre la vía.",
 } as const;
 export interface InboundDependencies {
   messaging: MessagingProvider;
@@ -32,7 +33,7 @@ export interface InboundDependencies {
 async function intentReply(intent: MessageIntent, information: RoadInformation, requestId: string): Promise<string> {
   switch (intent.kind) {
     case "status":
-      return information.status(requestId);
+      return information.status(requestId, intent.place);
     case "exposure":
       return information.exposure(intent.place ? { place: intent.place } : null, requestId);
     case "report":

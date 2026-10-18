@@ -187,3 +187,18 @@ export async function fetchRoadHistory() {
     "emergencias históricas",
   );
 }
+
+/** Null when the server has no bot number configured (503); other failures still throw. */
+export async function fetchWhatsAppContact() {
+  const { WhatsAppContactSchema } = await import("@/contracts/platform");
+  try {
+    return parseOrThrow(
+      WhatsAppContactSchema,
+      await getJson("/api/whatsapp", { provider: PROVIDER, operation: "dashboard.whatsapp", retries: 1 }),
+      "contacto de WhatsApp",
+    );
+  } catch (error) {
+    if (error instanceof UpstreamError && error.status === 503) return null;
+    throw error;
+  }
+}

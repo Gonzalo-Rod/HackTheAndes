@@ -14,8 +14,10 @@ voice notes cannot authorize publication, subscriptions or weekly PDFs.
 | Command | What it does |
 | --- | --- |
 | `AYUDA` | Show the available features and commands. Aliases: `HELP`, `HOLA`, `INICIO`. |
-| `ESTADO` | Show the latest available official SUTRAN PE-22 alerts, source time and data availability. Alias: `STATUS`. |
-| `EXPOSICION` | Show estimated climate exposure over the next 24 hours. Alias: `CLIMA`. |
+| `ESTADO` | Nationwide summary of current SUTRAN alerts (the same live feed as the dashboard): counts, the five most severe, and the roads with most alerts. Alias: `STATUS`. |
+| `ESTADO <road>` | Current SUTRAN alerts on one road, e.g. `ESTADO PE-22`, with a map link filtered to that road (or straight to the alert when there is only one). |
+| `EXPOSICION` | Compare estimated climate exposure over the next 24 hours across every road with an estimate, most exposed first. Alias: `CLIMA`. |
+| `EXPOSICION <road>` | Estimated exposure for one registered road, e.g. `EXPOSICION PE-32`; uncovered roads list the covered ones. |
 | `EXPOSICION <place>` | Check estimated exposure near a recognized PE-22 place. `CLIMA <place>` also works. |
 | `REPORTE <description>` | Start a community report. Alias: `REPORTAR <description>`. |
 | `CONFIRMAR <code>` | Publish the current report after reviewing its proposed location. The report remains unconfirmed by an authority. |
@@ -43,20 +45,27 @@ Send any of these messages independently:
 
 ```text
 ESTADO
+ESTADO PE-22
 EXPOSICION
+EXPOSICION PE-32
 EXPOSICION Chosica
 CLIMA La Oroya
 ```
 
-`ESTADO` returns a corridor-wide official-alert summary; it does not list every
-community report or apply the subscribed route filter. `EXPOSICION` combines
+`ESTADO` reads the same live national SUTRAN feed as the dashboard (with its
+cache and bundled-snapshot fallback, labeled as saved data). A road code narrows
+it to that road; zero padding is ignored (`PE-8B` = `PE-08B`). Free text after
+`ESTADO` that is not a road code goes to the natural-language parser. It does not
+list community reports or apply the subscribed route filter. `EXPOSICION` combines
 forecast rainfall and mapped terrain susceptibility. Possible-huaico messages
 are estimates, not confirmed events or validated occurrence probabilities.
 
 A native **static WhatsApp location pin** checks exposure near that point when
-no report or route draft is active. During a report or route conversation, the
-pin completes that draft instead. Place recognition uses a limited catalog; a
-pin more than 500 m from the available road axis is rejected.
+no report or route draft is active. The pin is matched to PE-22 first and then
+to the nearest other road with an estimate; a pin more than 500 m from all of
+them is rejected with the list of covered roads. During a report or route
+conversation, the pin completes that draft instead. Place names use the PE-22
+catalog only; elsewhere, send a pin or the road code.
 
 Natural-language questions are also supported when the interpretation service is
 available. Explicit commands are the most predictable way to select a feature.

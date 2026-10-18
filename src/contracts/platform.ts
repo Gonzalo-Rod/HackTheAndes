@@ -72,3 +72,7 @@ export const WeeklyReportDataSchema = z
     generatedAt: z.iso.datetime(),
   })
   .strict();
+
+/** GET /api/whatsapp: the bot's public number for dashboard "chat" links (digits with country code). */
+export const WhatsAppContactSchema = z.object({ number: z.string().regex(/^\d{8,15}$/) }).strict();
+export type WhatsAppContact = z.infer<typeof WhatsAppContactSchema>;

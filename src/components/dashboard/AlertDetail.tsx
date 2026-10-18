@@ -13,6 +13,8 @@ import { alertOrigin } from "@/domain/road-alerts/origin";
 import type { AlertRoadHistory } from "@/domain/road-history/nearby";
 
 import { RoadHistorySection } from "./RoadHistorySection";
+import { WhatsAppLink } from "@/components/platform/WhatsAppLink";
+import { parseRoadCode } from "@/domain/messaging/dashboard-links";
 
 export interface CorridorContext {
   km: number;
@@ -285,6 +287,13 @@ export function AlertDetail({ alert, detail, corridorContext, roadHistory, now, 
             Ver en SUTRAN
             <Icon name="external" size={12} />
           </a>
+        )}
+        {parseRoadCode(alert.roadCode) && (
+          <WhatsAppLink
+            command={`ESTADO ${alert.roadCode}`}
+            label="Consultar por WhatsApp"
+            title={`Abre WhatsApp con ESTADO ${alert.roadCode}`}
+          />
         )}
       </footer>
     </article>

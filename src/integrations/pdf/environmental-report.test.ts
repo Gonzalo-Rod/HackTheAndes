@@ -19,3 +19,16 @@ it("keeps previously stored report JSON renderable without road rainfall details
   expect(pdf.getSubject()).toContain(report.outlook.assessmentId);
   expect(pdf.getSubject()).toContain(report.range.geometryRevision);
 });
+
+it("condenses a full-length route into charts and a short block table", async () => {
+  const report = syntheticWeeklyReport();
+  report.outlook.rainfallStretches = Array.from({ length: 174 }, (_, km) => ({
+    startKm: km,
+    endKm: km + 1,
+    rainMmPeriod: km > 150 ? null : km % 9,
+    rainMmNext72h: km < 8 ? null : (km * 7) % 25,
+  }));
+  const pdf = await PDFDocument.load(await renderEnvironmentalPdf(report));
+  // 18 ten-kilometer rows instead of one row per distinct value keeps the report to three pages.
+  expect(pdf.getPageCount()).toBeLessThanOrEqual(3);
+});

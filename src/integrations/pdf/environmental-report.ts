@@ -1,12 +1,17 @@
-import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
+import { PDFDocument, StandardFonts } from "pdf-lib";
 import { environmentalReportSchema, type EnvironmentalReport } from "@peruroad/road-data/reports";
+import { exposureShares, RAIN_BLOCK_KM, rainBlocks, rainChart, wettestBlocks } from "@/domain/reports/report-visuals";
+import { drawExposureBar, drawKpiCards, drawRainChart, EXPOSURE_COLORS, PALETTE, pdfText, type Canvas } from "./report-charts";
 const WIDTH = 595.28,
   HEIGHT = 841.89,
-  MARGIN = 42;
-const ink = rgb(0.09, 0.16, 0.22),
-  muted = rgb(0.31, 0.38, 0.42),
-  teal = rgb(0.02, 0.38, 0.37),
-  pale = rgb(0.91, 0.96, 0.95);
+  MARGIN = 42,
+  CONTENT_WIDTH = WIDTH - 2 * MARGIN;
+const { ink, muted, primary: teal, surface: pale } = PALETTE;
+const OUTLOOK_STATE = {
+  ready: { label: "Pronóstico vigente", color: PALETTE.primary, background: PALETTE.primarySoft },
+  stale: { label: "Pronóstico desactualizado", color: PALETTE.warning, background: PALETTE.warningSoft },
+  unavailable: { label: "Pronóstico no disponible", color: PALETTE.warning, background: PALETTE.warningSoft },
+} as const;
 export function formatReportDate(value: string) {
   return new Intl.DateTimeFormat("es-PE", {
     timeZone: "America/Lima",
@@ -17,6 +22,9 @@ export function formatReportDate(value: string) {
     minute: "2-digit",
     hourCycle: "h23",
   }).format(new Date(value));
+}
+function formatShortDate(value: string) {
+  return new Intl.DateTimeFormat("es-PE", { timeZone: "America/Lima", day: "numeric", month: "long" }).format(new Date(value));
 }
 /** Pure Node PDF generation avoids a browser/Python dependency in Vercel functions. */
 export async function renderEnvironmentalPdf(raw: EnvironmentalReport): Promise<Uint8Array> {
@@ -39,37 +47,33 @@ export async function renderEnvironmentalPdf(raw: EnvironmentalReport): Promise<
     bold = await pdf.embedFont(StandardFonts.HelveticaBold);
   let page = pdf.addPage([WIDTH, HEIGHT]),
     y = HEIGHT - MARGIN;
-  const clean = (s: string) =>
-    s
-      .replace(/[–—−]/g, "-")
-      .replace(/→/g, " a ")
-      .replace(/\u00a0/g, " ")
-      .replace(/[^\u0020-\u007e\u00a1-\u00ff]/g, "");
+  const canvas = (): Canvas => ({ page, regular, bold });
   function newPage() {
     page = pdf.addPage([WIDTH, HEIGHT]);
     y = HEIGHT - MARGIN;
     page.drawText("PERUROAD CLIMATE - Informe ambiental", { x: MARGIN, y, size: 9, font: bold, color: teal });
     y -= 24;
   }
-  function paragraph(text: string, size = 10, color = ink, isBold = false) {
+  function paragraph(text: string, size = 10, color = ink, isBold = false, indent = 0) {
     const font = isBold ? bold : regular,
-      words = clean(text).split(/\s+/);
+      words = pdfText(text).split(/\s+/),
+      width = CONTENT_WIDTH - indent;
     let line = "";
     const draw = () => {
       if (y < 65) newPage();
-      page.drawText(line, { x: MARGIN, y, size, font, color });
+      page.drawText(line, { x: MARGIN + indent, y, size, font, color });
       y -= size * 1.45;
     };
     for (const original of words) {
       // Long source URLs wrap even when they contain no whitespace.
-      const parts = font.widthOfTextAtSize(original, size) > WIDTH - 2 * MARGIN ? (original.match(/.{1,60}/g) ?? []) : [original];
+      const parts = font.widthOfTextAtSize(original, size) > width ? (original.match(/.{1,60}/g) ?? []) : [original];
       for (const [partIndex, word] of parts.entries()) {
         if (partIndex > 0 && line) {
           draw();
           line = "";
         }
         const next = line ? `${line} ${word}` : word;
-        if (font.widthOfTextAtSize(next, size) > WIDTH - 2 * MARGIN && line) {
+        if (font.widthOfTextAtSize(next, size) > width && line) {
           draw();
           line = word;
         } else line = next;
@@ -83,39 +87,124 @@ export async function renderEnvironmentalPdf(raw: EnvironmentalReport): Promise<
     y -= 10;
     paragraph(text, 12, teal, true);
   }
-  page.drawRectangle({ x: 0, y: HEIGHT - 115, width: WIDTH, height: 115, color: teal });
-  page.drawText("PERUROAD CLIMATE", { x: MARGIN, y: HEIGHT - 43, size: 12, font: bold, color: rgb(1, 1, 1) });
-  page.drawText(`${report.isDemo ? "DEMO - " : ""}Informe ambiental semanal`, {
-    x: MARGIN,
-    y: HEIGHT - 73,
-    size: 21,
-    font: bold,
-    color: rgb(1, 1, 1),
-  });
-  page.drawText("Lluvia, territorio y preparación - PE-22", {
-    x: MARGIN,
-    y: HEIGHT - 96,
-    size: 10,
-    font: regular,
-    color: rgb(0.85, 0.97, 0.96),
-  });
-  y = HEIGHT - 140;
-  paragraph(report.range.label, 13, ink, true);
-  paragraph(
-    `Km aproximados del eje mapeado: ${report.range.startKm.toFixed(1)} a ${report.range.endKm.toFixed(1)}. No son hitos oficiales.`,
-    9,
-    muted,
-  );
-  paragraph(`Periodo del informe: ${formatReportDate(report.period.start)} - ${formatReportDate(report.period.end)} (Perú).`, 9, muted);
-  paragraph(`Generado: ${formatReportDate(report.generatedAt)} (Perú).`, 9, muted);
-  page.drawRectangle({ x: MARGIN - 8, y: y - 40, width: WIDTH - 2 * MARGIN + 16, height: 42, color: pale });
-  y -= 13;
-  paragraph("ATENCIÓN POR LLUVIA Y TERRENO. Riesgo estimado; no confirma un huaico ni una vía segura.", 9, teal, true);
-  y -= 10;
-  heading("Resumen");
+  function bullet(text: string, size = 10) {
+    if (y < 80) newPage();
+    page.drawCircle({ x: MARGIN + 4, y: y + size * 0.32, size: 2.4, color: teal });
+    paragraph(text, size, ink, false, 14);
+  }
+  function sectionTitle(title: string, subtitle: string) {
+    page.drawText(pdfText(title), { x: MARGIN, y, size: 13, font: bold, color: teal });
+    y -= 15;
+    page.drawText(pdfText(subtitle), { x: MARGIN, y, size: 8.5, font: regular, color: muted });
+    y -= 16;
+  }
+  /** Page 1 answers "how is my route this week?" with figures; text detail follows on later pages. */
+  function drawCover() {
+    page.drawRectangle({ x: 0, y: HEIGHT - 128, width: WIDTH, height: 128, color: teal });
+    page.drawText("PERUROAD CLIMATE", { x: MARGIN, y: HEIGHT - 40, size: 10, font: bold, color: PALETTE.primarySoft });
+    page.drawText(pdfText(`${report.isDemo ? "DEMO - " : ""}Informe ambiental semanal`), {
+      x: MARGIN,
+      y: HEIGHT - 68,
+      size: 22,
+      font: bold,
+      color: PALETTE.white,
+    });
+    page.drawText(pdfText(report.range.label.slice(0, 80)), { x: MARGIN, y: HEIGHT - 91, size: 11, font: bold, color: PALETTE.white });
+    page.drawText(
+      pdfText(
+        `Km ${report.range.startKm.toFixed(1)} a ${report.range.endKm.toFixed(1)} (aprox., no hitos oficiales)  |  ${formatShortDate(report.period.start)} - ${formatShortDate(report.period.end)}  |  Generado ${formatReportDate(report.generatedAt)}`,
+      ),
+      { x: MARGIN, y: HEIGHT - 110, size: 8.5, font: regular, color: PALETTE.primarySoft },
+    );
+    y = HEIGHT - 150;
+    const state = OUTLOOK_STATE[report.outlook.state];
+    const pill = pdfText(`${state.label}  |  consultado ${formatReportDate(report.outlook.capturedAt)}`);
+    page.drawRectangle({ x: MARGIN, y: y - 6, width: bold.widthOfTextAtSize(pill, 8.5) + 16, height: 19, color: state.background });
+    page.drawText(pill, { x: MARGIN + 8, y, size: 8.5, font: bold, color: state.color });
+    y -= 30;
+
+    const { kilometers, rainfallStretches } = report.outlook;
+    const elevatedKm = kilometers.priority + kilometers.high_attention;
+    y -= drawKpiCards(
+      canvas(),
+      [
+        {
+          value: String(report.observations.officialEnvironmentalAlerts),
+          label: "Alertas SUTRAN",
+          note: "ambientales en el periodo",
+          accent: teal,
+        },
+        {
+          value: String(report.observations.communityEnvironmentalIncidents),
+          label: "Avisos comunidad",
+          note: "sin confirmar",
+          accent: PALETTE.warning,
+        },
+        { value: elevatedKm.toFixed(1), label: "Km con atención", note: "prioritaria o alta, 3 días", accent: EXPOSURE_COLORS.priority },
+        { value: kilometers.unknown.toFixed(1), label: "Km sin datos", note: "no significa sin peligro", accent: PALETTE.muted },
+      ],
+      MARGIN,
+      y,
+      CONTENT_WIDTH,
+    );
+    y -= 26;
+
+    sectionTitle(
+      "Dónde prestar atención en los próximos 3 días",
+      `Lluvia prevista sobre terreno susceptible. ${formatReportDate(report.outlook.validFrom)} - ${formatReportDate(report.outlook.validUntil)} (Perú).`,
+    );
+    y -= drawExposureBar(canvas(), exposureShares(kilometers), MARGIN, y, CONTENT_WIDTH);
+    y -= 22;
+
+    sectionTitle(
+      "Lluvia a lo largo de tu tramo",
+      "Lluvia estimada en las zonas que drenan hacia cada tramo. No es agua sobre la vía ni confirma un huaico.",
+    );
+    const chart = rainChart(report);
+    if (!chart) {
+      paragraph(
+        rainfallStretches
+          ? "No tenemos zonas vinculadas a este tramo para estimar su lluvia."
+          : "Este informe anterior no incluye lluvia por km. Envía PDF al bot para pedir uno nuevo.",
+        9,
+        muted,
+      );
+    } else {
+      y -= drawRainChart(canvas(), chart, MARGIN, y, CONTENT_WIDTH, 175);
+      y -= 8;
+      const wettest = wettestBlocks(report);
+      paragraph(
+        wettest.length
+          ? `Más lluvia prevista: ${wettest.map((item) => `km ${item.startKm.toFixed(0)}-${item.endKm.toFixed(0)} (${item.rainMmNext72h.toFixed(1)} mm)`).join(", ")}.`
+          : "Sin lluvia prevista en los tramos con datos para los próximos 3 días.",
+        9,
+        ink,
+        true,
+      );
+    }
+
+    page.drawRectangle({ x: MARGIN - 8, y: 58, width: CONTENT_WIDTH + 16, height: 34, color: pale });
+    page.drawText(pdfText("Estimación por lluvia y terreno. No confirma un huaico ni certifica una vía segura."), {
+      x: MARGIN,
+      y: 78,
+      size: 9,
+      font: bold,
+      color: teal,
+    });
+    page.drawText(pdfText("Consulta las alertas oficiales de SUTRAN antes de viajar. Detalle y fuentes en las páginas siguientes."), {
+      x: MARGIN,
+      y: 65,
+      size: 8,
+      font: regular,
+      color: muted,
+    });
+    newPage();
+  }
+  drawCover();
+  heading("Resumen", 0);
   for (const id of report.summaryIds) {
     const fact = report.facts.find((f) => f.id === id);
-    if (fact) paragraph(`- ${fact.text}`);
+    if (fact) bullet(fact.text);
   }
   heading("Qué incluyen los avisos");
   paragraph(
@@ -126,96 +215,61 @@ export async function renderEnvironmentalPdf(raw: EnvironmentalReport): Promise<
     "Contamos los avisos que recibimos durante el periodo. No conocemos todos los eventos ocurridos; un aviso de la comunidad puede referirse al mismo evento que una alerta de SUTRAN.",
     9,
   );
-  heading("Dónde prestar más atención");
+  heading("Detalle: lluvia estimada cada 10 km", 255);
   paragraph(
-    `Pronóstico consultado: ${formatReportDate(report.outlook.capturedAt)}. Al preparar el informe estaba: ${report.outlook.state === "ready" ? "vigente" : report.outlook.state === "stale" ? "desactualizado" : "no disponible"}.`,
-    9,
-  );
-  paragraph(
-    `Ventana del pronóstico: ${formatReportDate(report.outlook.validFrom)} - ${formatReportDate(report.outlook.validUntil)} (Perú).`,
-    9,
-  );
-  const labels = {
-    routine: "Sin señal elevada en esta evaluación",
-    watch: "Atención",
-    priority: "Atención prioritaria",
-    high_attention: "Atención alta",
-    unknown: "Sin datos suficientes o actualizados",
-  };
-  for (const key of Object.keys(labels) as (keyof typeof labels)[])
-    paragraph(`${labels[key]}: ${report.outlook.kilometers[key].toFixed(2)} km`, 9);
-  heading("Lluvia estimada por tramo", 255);
-  paragraph(
-    "Es la lluvia estimada en zonas que pueden aportar agua a estos tramos. No es la altura del agua en la carretera ni confirma que habrá un huaico.",
-    9,
-  );
-  paragraph(
-    "Los mm indican cantidad de lluvia. 'Sin datos' indica información incompleta o vencida, no ausencia de lluvia. Las comas separan tramos distintos.",
-    9,
-    muted,
-  );
-  paragraph(
-    `Pronóstico de 3 días: ${formatReportDate(report.outlook.validFrom)} - ${formatReportDate(report.outlook.validUntil)} (Perú).`,
+    `Mayor lluvia estimada en las zonas que drenan hacia cada bloque de hasta ${RAIN_BLOCK_KM} km. 'Sin datos' indica información incompleta o vencida, no ausencia de lluvia.`,
     9,
     muted,
   );
   const stretches = report.outlook.rainfallStretches;
+  const chart = rainChart(report);
   if (!stretches) paragraph("Este informe anterior no incluye lluvia por km. Envía PDF al bot para pedir uno nuevo.", 9);
-  else if (!stretches.length) paragraph("No tenemos zonas vinculadas a este tramo para estimar su lluvia.", 9);
+  else if (!chart) paragraph("No tenemos zonas vinculadas a este tramo para estimar su lluvia.", 9);
   else {
+    const columns = { range: MARGIN, period: 175, next: 345 },
+      barWidthMax = 110,
+      rowHeight = 18;
     function rainfallHeader() {
-      page.drawRectangle({ x: MARGIN - 5, y: y - 7, width: WIDTH - 2 * MARGIN + 10, height: 23, color: pale });
-      for (const [text, x] of [
-        ["Tramo aprox.", MARGIN],
-        ["Periodo del informe (mm)", 280],
-        ["3 días siguientes (mm)", 417],
+      page.drawRectangle({ x: MARGIN - 5, y: y - 7, width: CONTENT_WIDTH + 10, height: 22, color: pale });
+      for (const [label, x] of [
+        ["Tramo aprox.", columns.range],
+        ["Periodo del informe (mm)", columns.period],
+        ["Próximos 3 días (mm)", columns.next],
       ] as const)
-        page.drawText(text, { x, y, size: 9, font: bold, color: teal });
-      y -= 25;
+        page.drawText(pdfText(label), { x, y, size: 9, font: bold, color: teal });
+      y -= 24;
     }
-    // Equal rainfall can share a table row; separated kilometer ranges stay explicit.
-    const rows = new Map<string, { ranges: string[]; rainMmPeriod: number | null; rainMmNext72h: number | null }>();
-    for (const stretch of stretches) {
-      const key = JSON.stringify([stretch.rainMmPeriod, stretch.rainMmNext72h]);
-      const row = rows.get(key) ?? { ranges: [], rainMmPeriod: stretch.rainMmPeriod, rainMmNext72h: stretch.rainMmNext72h };
-      row.ranges.push(`${stretch.startKm.toFixed(1)} a ${stretch.endKm.toFixed(1)}`);
-      rows.set(key, row);
+    function rainCell(mm: number | null, x: number, color: typeof ink) {
+      if (mm === null) {
+        page.drawText("Sin datos", { x, y, size: 9, font: regular, color: muted });
+        return;
+      }
+      const width = chart ? Math.max(1, (mm / chart.maxMm) * barWidthMax) : 0;
+      page.drawRectangle({ x, y: y - 2, width, height: 9, color });
+      page.drawText(mm.toFixed(1), { x: x + width + 5, y, size: 9, font: regular, color: ink });
     }
     rainfallHeader();
-    for (const row of rows.values()) {
-      const lines = ["Km"];
-      for (const range of row.ranges) {
-        const last = lines.length - 1;
-        const next = `${lines[last]}${lines[last] === "Km" ? " " : ", "}${range}`;
-        if (regular.widthOfTextAtSize(next, 9) > 205) {
-          lines[last] += ",";
-          lines.push(range);
-        } else lines[last] = next;
+    for (const block of rainBlocks(stretches)) {
+      if (y - rowHeight < 65) {
+        newPage();
+        paragraph("Detalle de lluvia (continuación)", 11, teal, true);
+        rainfallHeader();
       }
-      // Bounded chunks keep long lists on the page, repeating their rainfall values.
-      const maxLinesPerRow = 12;
-      for (let offset = 0; offset < lines.length; offset += maxLinesPerRow) {
-        const chunk = lines.slice(offset, offset + maxLinesPerRow);
-        const rowHeight = Math.max(20, chunk.length * 14 + 6);
-        if (y - rowHeight < 65) {
-          newPage();
-          paragraph("Lluvia estimada por tramo (continuación)", 11, teal, true);
-          rainfallHeader();
-        }
-        for (const [index, line] of chunk.entries())
-          page.drawText(line, { x: MARGIN, y: y - index * 14, size: 9, font: regular, color: ink });
-        for (const [text, x] of [
-          [row.rainMmPeriod === null ? "Sin datos" : row.rainMmPeriod.toFixed(1), 280],
-          [row.rainMmNext72h === null ? "Sin datos" : row.rainMmNext72h.toFixed(1), 417],
-        ] as const)
-          page.drawText(text, { x, y, size: 9, font: regular, color: ink });
-        y -= rowHeight;
-      }
-      page.drawLine({ start: { x: MARGIN, y: y + 5 }, end: { x: WIDTH - MARGIN, y: y + 5 }, color: pale, thickness: 0.5 });
+      page.drawText(pdfText(`Km ${block.startKm.toFixed(0)} - ${block.endKm.toFixed(0)}${block.partial ? " *" : ""}`), {
+        x: columns.range,
+        y,
+        size: 9,
+        font: regular,
+        color: ink,
+      });
+      rainCell(block.rainMmPeriod, columns.period, PALETTE.rainPast);
+      rainCell(block.rainMmNext72h, columns.next, PALETTE.rainNext);
+      page.drawLine({ start: { x: MARGIN, y: y - 6 }, end: { x: WIDTH - MARGIN, y: y - 6 }, color: PALETTE.line, thickness: 0.4 });
+      y -= rowHeight;
     }
     y -= 5;
     paragraph(
-      "Solo se muestran tramos con zonas vinculadas. Si hay varias, se usa la mayor lluvia estimada; no se suman sus valores. Los km no son hitos oficiales.",
+      "* Parte del bloque no tiene datos; su valor puede quedarse corto. Solo se muestran tramos con zonas vinculadas; si hay varias, se usa la mayor lluvia estimada, sin sumar. Los km no son hitos oficiales.",
       8,
       muted,
     );

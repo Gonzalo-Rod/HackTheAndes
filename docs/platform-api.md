@@ -34,6 +34,7 @@ in `src/contracts/platform.ts` and `src/contracts/road-alerts.ts`.
 | `GET /api/history/road-events` | Public | Nationwide Provías emergencies (Jan–Apr 2024 and 2025), display-only and labeled incomplete; not training labels or current alerts. See [national road events](data/national-road-events.md). |
 | `GET /api/history/weather?dataset=...` | Public | Allowlisted archived forecasts, retrospective references and Yaku reconstruction. See [model inputs](data/model-inputs.md). |
 | `GET /api/corridor` | Public | D's corridor contract adapted to C's segments. Town positions remain approximate OSM references; an explicitly dated bundled fallback survives DB outages. |
+| `GET /api/whatsapp` | Public | The bot's public WhatsApp number (`WHATSAPP_BOT_NUMBER`, digits only) for the dashboard's "Consultar por WhatsApp" links; `503 whatsapp_unavailable` when unset, and the buttons stay hidden. |
 | `GET /api/realtime` | Public | Supabase URL and **publishable** key only. The subscription reads `incident_updates`, a singleton change signal. |
 | `GET /api/stats` | Public | Product counts, exclusions and observation time. `/impacto` renders these and the waitlist. |
 | `POST /api/waitlist` | Public, durable quota | Consented company contact; AES-256-GCM phone storage, HMAC matching, transactional request-ID deduplication. |
@@ -144,3 +145,13 @@ signed webhook, durable delivery leases, Zavu replies and a structured OpenAI
 intent parser backed by C's source services. Text reports now publish after explicit location/code confirmation. Voice processing, subscriptions and conditional alerts are implemented; photos remain excluded. The participant confirmed receiving both `ESTADO`
 and `EXPOSICION` replies from the shared deployment on October 17, 2026; this is a
 query-delivery check, not external-user traction or report/alert verification.
+
+## Dashboard deep links
+
+WhatsApp replies link into the dashboard with query parameters built by
+`src/domain/messaging/dashboard-links.ts`: `?alerta=<SUTRAN id>` opens that alert,
+`?carretera=PE-32` searches the alert list by road and preselects that road's
+forecast (zero padding is ignored, so `PE-8B` opens `PE-08B`), and
+`?vista=pronostico` opens the forecast tab. The dashboard's WhatsApp buttons open
+the bot with a prefilled command (`AYUDA`, `ESTADO <road>`, `EXPOSICION <road>`)
+that the user still sends.

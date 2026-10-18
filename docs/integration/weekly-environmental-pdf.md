@@ -40,13 +40,27 @@ It retains weather time, rule version, assessment ID, geometry revision, sources
 and unknown kilometers. Stale/unusable assessments have no actionable categories
 or fresh forecast totals. A stored PDF never silently refreshes.
 
+**Layout (October 18 redesign).** Page 1 answers "how is my stretch this week?"
+with figures instead of text: a header with the stretch and dates, a forecast
+freshness badge, four indicator cards (official environmental SUTRAN alerts,
+unconfirmed community reports, kilometers with priority/high attention, kilometers
+without data), a stacked bar of kilometers per exposure category, and a rainfall
+chart along the stretch (blue columns for the next three days, a dark step line for
+the report period, a gray band where either value is missing, never drawn as zero
+rain) with the three wettest blocks named below it. Summary, sources and limits
+follow on page 2. Chart math is pure and tested in `src/domain/reports/report-visuals.ts`;
+drawing lives in `src/integrations/pdf/report-charts.ts`. Colors follow the dashboard
+(slate-blue primary, the map's violet attention scale).
+
 The driver-facing rainfall table uses approximate road-kilometer ranges instead
 of HydroBASINS identifiers, with separate **report-period** and **following-three-day**
-columns in millimeters. It uses the maximum across all linked drainage areas for
-each period, matching the exposure policy; missing values in any required area
-remain unavailable. Only contiguous stretches with equal displayed rainfall are
-combined, preserving gaps and the selected stretch boundaries. These rainfall
-figures are not water depth on the road or confirmed huaico predictions.
+columns in millimeters and an inline bar per value. It uses the maximum across all
+linked drainage areas for each period, matching the exposure policy. Contiguous
+stretches are grouped into blocks of at most 10 km, keeping the block maximum
+(never a sum); gaps without linked stretches split blocks, and a block marked `*`
+has some stretches without data, so its value may be understated. A full PE-22
+report fits in three pages instead of seven. These rainfall figures are not water
+depth on the road or confirmed huaico predictions.
 
 The optional `outlook.rainfallStretches` field extends the existing v1 JSON
 contract without invalidating stored reports. New PDFs show plain Spanish,

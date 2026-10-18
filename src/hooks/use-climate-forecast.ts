@@ -1,11 +1,12 @@
 "use client";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { ExposureLayer } from "@/contracts/exposure";
 import type { ForecastRoad } from "@/contracts/forecast-roads";
 import type { SegmentCollection } from "@/contracts/platform";
 import { fetchExposure, fetchForecastRoads, fetchSegments } from "@/integrations/dashboard-api/client";
 import { chooseForecastWindow, projectForecastEvents, type ForecastProjection } from "@/domain/exposure/forecast-events";
 import { projectForecastMap } from "@/domain/exposure/forecast-map";
+import { readDashboardRoad, sameRoadCode } from "@/domain/messaging/dashboard-links";
 import { mergeForecastMaps, mergeForecastProjections, type NationalForecastProjection } from "@/domain/exposure/forecast-national";
 /** Refresh more often than hourly ingestion so a new assessment becomes visible without reloading. */
 const REFRESH_INTERVAL_MS = 5 * 60_000;
@@ -75,6 +76,22 @@ export function useClimateForecast(nowMs: number | null) {
       window.clearInterval(timer);
     };
   }, [reload]);
+
+  // A WhatsApp `?carretera=` link preselects that road once the registry list arrives, using the
+  // registry spelling (PE-08B) even when the link was typed as PE-8B.
+  const deepLinkApplied = useRef(false);
+  useEffect(() => {
+    if (deepLinkApplied.current) return;
+    const road = readDashboardRoad(window.location.search);
+    const match = road ? roads.find((item) => sameRoadCode(item.roadCode, road)) : undefined;
+    if (!match) return;
+    // Applied once, so a later list refresh never overrides the user's own road choice.
+    const timer = window.setTimeout(() => {
+      deepLinkApplied.current = true;
+      setRoadFilter(match.roadCode);
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, [roads]);
 
   const perRoad = useMemo(
     () =>
