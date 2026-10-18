@@ -82,3 +82,23 @@ describe("createZavuClient().sendText", () => {
     expect((JSON.parse(String(init.body)) as { text: string }).text).toHaveLength(4_096);
   });
 });
+
+it("retries bounded request timeouts with the same send key, then reports unavailable", async () => {
+  vi.useFakeTimers();
+  try {
+    const fetchImpl = vi.fn<typeof fetch>(
+      async (_url, init) =>
+        new Promise((_resolve, reject) => {
+          init?.signal?.addEventListener("abort", () => reject(new Error("aborted")));
+        }),
+    );
+    const pending = clientWith(fetchImpl).sendText(message);
+    await vi.runAllTimersAsync();
+    expect(await pending).toEqual({ ok: false, error: "unavailable" });
+    expect(fetchImpl).toHaveBeenCalledTimes(3);
+    const keys = fetchImpl.mock.calls.map(([, init]) => (JSON.parse(String(init?.body)) as { idempotencyKey: string }).idempotencyKey);
+    expect(new Set(keys)).toEqual(new Set([message.idempotencyKey]));
+  } finally {
+    vi.useRealTimers();
+  }
+});
