@@ -5,7 +5,7 @@ material changes, retain estimated possible-huaico alerts, and use no quiet hour
 This supersedes the former 30-minute evaluation/delivery cooldown. Public community
 reports now qualify without a confidence threshold, always labeled **SIN CONFIRMAR**;
 the score is not evidence of verification. Team/DEMO isolation remains in force.
-Photos, video, voice replies and calls are outside this implementation.
+Photos, video and voice replies are outside this implementation; urgent calls exist only for company route watches ([route watch](route-watch.md)).
 
 ## Driver flow
 
@@ -13,13 +13,16 @@ Photos, video, voice replies and calls are outside this implementation.
    query/report router; publication still requires the typed `CONFIRMAR <code>`.
 2. Buy access with `SUSCRIBIR`, accept `ACTIVAR <code>`, and complete Qatom
    checkout (configured DEMO passes remain free). This alone does not start alerts.
-   With a valid pass, send `RUTA` (or `RUTA PRUEBA` for DEMO) and provide the **origin**, then the
-   **destination**. Each endpoint can be a static WhatsApp pin within 500 m of the
-   captured PE-22 axis, a uniquely resolved catalog landmark, or `KM 50.5` using
-   approximate **map distance**, never an official road marker. Unknown places ask
+   With a valid pass, send `RUTA` (or `RUTA PRUEBA` for DEMO) and then the **road code**
+   (`PE-32`), or both at once (`RUTA PE-32`); the bot lists the registered roads. Then
+   provide the **origin** and the **destination** on that road. Each endpoint can be
+   `KM 50.5` using approximate **map distance** (never an official road marker), a
+   static WhatsApp pin within 500 m of that road's captured axis, or, on PE-22 only, a
+   uniquely resolved catalog landmark. A pin sent before the road code selects the
+   nearest registered road. The road cannot change after the origin is set. Unknown places ask
    for a pin; no fallback silently expands the route. Coordinates are snapped once,
    not tracked continuously, and raw pins are not stored in the route proposal.
-   Forward/reverse travel uses the same interval on the single captured road axis;
+   Forward/reverse travel uses the same interval on the selected road's captured axis;
    this does not calculate alternative roads, departure recommendations or an ETA.
    SUSCRIBIR purchases access only; old named-range arguments direct drivers to RUTA.
 3. Review the proposed range and delivery terms, then type `RUTA ACTIVAR <code>`.
@@ -43,8 +46,10 @@ see [payment setup and verification](qatom-alert-passes.md). `SUSCRIBIR`
 requests payment after typed consent; `RUTA` requires an existing pass and never
 starts a checkout. `PAGAR` provides the checkout link
 and `PAGO` checks status. No automatic renewal is created. One active
-PE-22 alert range per identity is supported; confirming another range replaces
-it within the existing pass.
+route per identity is supported, on any registered road; confirming another range
+or road replaces it within the existing pass. This needs migration
+`20261018100000_national_route_subscriptions.sql`; apply it **before** deploying this code,
+because route activation upserts on the new one-route-per-phone index.
 
 ## Alert eligibility and noise control
 
@@ -67,8 +72,12 @@ of additional ranges); their full delivered baseline is checkpointed. Unsent
 reported-event overflow stays eligible for the next evaluation. Retries reuse the
 same provider key and recheck current source eligibility and consent.
 
-- **SUTRAN:** a fresh complete source poll, a mapped location inside the captured
-  corridor, and an explicit changed condition. Initial normal status is a baseline;
+- **SUTRAN:** on PE-22, a fresh complete poll of the database archive; on other
+  roads, the dashboard's live national feed fetched less than 30 minutes earlier
+  (cached or snapshot data never alerts). The alert must lie within 500 m of the
+  route's road and inside the selected range, with an explicit changed condition.
+  Official alerts off PE-22 are picked up by the five-minute recovery job, since
+  only the PE-22 poll triggers evaluation directly. Initial normal status is a baseline;
   a later explicit return to normal is attributed to SUTRAN and does not certify a
   safe road. Disappearing or stale records never establish clearance.
 - **Estimated climate exposure:** a fresh database assessment, supported segment,
@@ -77,7 +86,7 @@ same provider key and recheck current source eligibility and consent.
   driver notice gives approximate kilometer ranges and the forecast end time in Peru time,
   with a short estimated/not-confirmed warning. `EXPOSICION` supplies rainfall, source
   times, susceptibility and experimental association details. It is not a probability.
-- **Community:** active public reports are eligible as **unconfirmed reports**,
+- **Community:** (PE-22 only, where reports are accepted) active public reports are eligible as **unconfirmed reports**,
   even at the initial 0.2 score. The full confidence/clearing model remains pending;
   alerts never upgrade that score to verified evidence. Non-test team incidents
   remain excluded, and explicit DEMO incidents only reach test subscriptions.
@@ -98,8 +107,9 @@ notices use approximate kilometer ranges instead of requiring a named landmark;
 separate ranges stay separate, so unsupported gaps are never presented as assessed.
 These are distances from the mapped route's origin, labeled **km aprox. del mapa
 (no oficiales)**. Official road-kilometer calibration remains unavailable.
-Road-condition and community notices can still use nearby catalog landmarks from
-the same geometry revision, within 2 km along the segment and explicitly approximate.
+Each notice's header and follow-up commands name the route's road
+(`PeruRoad · PE-32`, `ESTADO PE-32`). Road-condition and community notices on PE-22
+can still use nearby catalog landmarks from the same geometry revision, within 2 km along the segment and explicitly approximate.
 Never invent a town or translate an uncalibrated distance into a highway marker.
 Forecast validity uses `America/Lima`, without raw UTC timestamps or internal
 category names. The up-to-three-update bundle stays within 650 characters;

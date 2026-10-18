@@ -11,6 +11,14 @@ const LEASE_MS = 120_000,
   DELIVERY_LIFETIME_MS = 72 * 3_600_000;
 export function createWeeklyPdfRepository(pool: Pool, encryption: { key: string; version: string }) {
   return {
+    /** Road of the phone's active route, or null without one. */
+    async activeRoadCode(phoneKey: string) {
+      const r = await pool.query(
+        'select road_code as "roadCode" from public.subscriptions where phone_key=$1 and opted_out_at is null and route_active limit 1',
+        [phoneKey],
+      );
+      return r.rowCount ? z.object({ roadCode: z.string() }).parse(r.rows[0]).roadCode : null;
+    },
     async targets(revision: string, phoneKey: string | null = null, demoOnly = false) {
       const r = await pool.query(
         `${TARGET_SQL} and s.geometry_revision=$1 and ($2::text is null or s.phone_key=$2) and (not $3::boolean or s.is_test) order by (select max(d.created_at) from private.weekly_pdf_deliveries d where d.subscription_id=s.id) nulls first,s.id limit 500`,

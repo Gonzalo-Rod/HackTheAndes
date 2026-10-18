@@ -1,7 +1,9 @@
 # PeruRoad Climate
 
-Climate exposure, preparedness and live PE-22 road conditions for drivers,
-dispatchers and response teams. This
+Climate exposure, preparedness and live road conditions on Peru's national roads
+for drivers, transport monitors and response teams, with the Carretera Central
+(PE-22) as the in-depth pilot. The [Team Plan's "Current state"](docs/team-plan.md)
+summarizes what covers all of Peru and what stays on the pilot. This
 integration branch combines Role D's map snapshot (`400bb8d`) with A's application
 backend and C's independent data package. Follow [the Team Plan](docs/team-plan.md)
 and [repository instructions](AGENTS.md) before changing shared contracts.
@@ -108,8 +110,12 @@ See the [complete WhatsApp command guide](docs/integration/whatsapp-commands.md)
 for queries, reports, route alerts, payment, weekly PDFs and demonstration flows.
 
 B's Zavu snapshot is integrated on `feat/data-model`. The signed webhook answers
-road-status and estimated-exposure queries using the existing validated data
-services; a narrow OpenAI intent parser supports natural-language questions.
+national road-status and estimated-exposure queries (`ESTADO PE-22`,
+`EXPOSICION PE-32`, pins) using the same live services as the dashboard, with
+replies that link back to it; a narrow OpenAI intent parser supports
+natural-language questions. Route alerts (`RUTA PE-32`) work on every road with a
+climate estimate; reports and weekly PDFs stay on PE-22. Set the optional
+`WHATSAPP_BOT_NUMBER` to show the dashboard's "Consultar por WhatsApp" buttons.
 See [setup, supported behavior and cutover checks](docs/integration/zavu-messaging.md).
 Text reports now follow an [explicit location/confirmation flow](docs/integration/whatsapp-reports.md)
 before appearing as unconfirmed community markers. Voice transcription, explicit origin/destination route subscriptions, source-triggered

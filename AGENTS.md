@@ -25,33 +25,35 @@ Weekly reports now use separately authorized driver PDF attachments; see
 subscribers automatically or replace PDF delivery with a public report link.
 **Latest alert update:** source changes trigger route-filtered WhatsApp alerts;
 include active public community reports as explicitly unconfirmed, without treating
-the placeholder confidence score as verification. `RUTA` selects origin/destination
-on the captured PE-22 axis; static pins are not continuous phone tracking. Keep
+the placeholder confidence score as verification. `RUTA` selects a registered road
+(`RUTA PE-32`, or the code after `RUTA`), then origin/destination on that road's
+captured axis; static pins are not continuous phone tracking. Keep
 estimated possible-huaico alerts, duplicate suppression, five-minute recovery,
 typed activation and STOP/BAJA cancellation. Do not reintroduce the 30-minute
 delivery cooldown; see `docs/integration/driver-notifications.md`.
 **Separate purchase and route consent:** SUSCRIBIR purchases seven-day access;
-it does not start alerts. RUTA selects origin/destination with an existing valid
-pass, confirmed by RUTA ACTIVAR. Route changes and STOP preserve the remaining
+it does not start alerts. RUTA selects the road and origin/destination with an
+existing valid pass, confirmed by RUTA ACTIVAR; a phone keeps one active route. Route changes and STOP preserve the remaining
 pass time and never create another charge or extend expiry. STOP disables route
 notifications and PDFs; route replacement still requires fresh weekly consent.
 **October 18 payment authorization (price updated by the participant):** implement
 a one-time 0.50 USD-TDN Qatom pass for seven elapsed days from the original
 WhatsApp request, using OpenAI
 Responses with Qatom MCP guest checkout, verified fulfilment and server-enforced
-expiry. See `docs/integration/qatom-alert-passes.md`; this supersedes the earlier
-payment exclusion only for weekly WhatsApp alerts. Yape remains excluded.
+expiry. See `docs/integration/qatom-alert-passes.md`; this is the only payment in
+scope. Yape and the other commercial plans remain excluded.
 **Latest scope update (2026-10-18):** the incident dashboard covers all of Peru:
 national SUTRAN alerts lead, community reports carry an explicit "No confirmado" source
 filter, and nationwide Provías emergencies give display-only history (see
 `docs/data/national-road-events.md`). Climate exposure covers every road listed in the
 reviewed registry `packages/road-data/data/roads/registry.json` (prepared with `road:prepare`,
-loaded with `road:import`; see `docs/data/multi-road-forecast.md`). WhatsApp routes, route watch,
-the gazetteer and database ingestion remain on the PE-22 pilot corridor; WhatsApp `ESTADO` and
-`EXPOSICION` queries (road codes and pins) cover the national feed and every registered road,
-linking into the dashboard with `?carretera=`/`?alerta=`. Company monitors can register continuous
-route watches or truck trips that trigger urgent calls; see
-`docs/integration/route-watch.md`.
+loaded with `road:import`; see `docs/data/multi-road-forecast.md`). WhatsApp `ESTADO` and
+`EXPOSICION` queries (road codes and pins) and `RUTA` route alerts cover every registered road;
+off PE-22, route alerts take official alerts from the live national SUTRAN feed. WhatsApp reports,
+the gazetteer, the SUTRAN database archive, weekly PDFs and company route watch remain on the
+PE-22 pilot. Replies link into the dashboard with `?carretera=`/`?alerta=`. Company monitors can
+register continuous route watches or truck trips that trigger urgent calls; see
+`docs/integration/route-watch.md`. `docs/team-plan.md` "Current state" summarizes this coverage.
 Do not treat proposed
 integrations, metrics, or predictions as verified results. Before writing code,
 read the engineering principles and quality rules below.

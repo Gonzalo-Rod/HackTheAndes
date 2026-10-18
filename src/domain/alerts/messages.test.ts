@@ -28,7 +28,7 @@ describe("plain Spanish driver alerts", () => {
     expect(body.match(/Lluvia prevista/g)).toHaveLength(1);
     expect(body).toContain("Hasta 18/10, 21:00 (hora Perú)");
     expect(body).toContain("estimación, no un evento confirmado");
-    expect(body).toContain("EXPOSICION: detalles. BAJA: cancelar.");
+    expect(body).toContain("EXPOSICION PE-22: detalles. BAJA: cancelar.");
     expect(body).not.toMatch(/priority|high_attention|susceptibilidad|INGEMMET|\.\d+Z|mm\/24|Technical evidence/);
     expect(body.length).toBeLessThan(450);
   });
@@ -107,4 +107,11 @@ it("attributes a new official alert with unknown traffic status without claiming
   expect(text).toContain("SUTRAN");
   expect(text).toContain("desconocido");
   expect(text).not.toContain("vía cerrada");
+});
+
+it("names the route's road in the header and the follow-up commands", () => {
+  const body = formatAlertBundle([], false, "PE-32");
+  expect(body).toContain("PeruRoad · PE-32");
+  expect(body).toContain("ESTADO PE-32");
+  expect(body).toContain("EXPOSICION PE-32");
 });

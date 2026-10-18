@@ -6,6 +6,11 @@ export const subscriptionRangeSchema = z
     endKm: z.number().positive(),
     label: z.string().min(1).max(300),
     geometryRevision: z.string().regex(/^[a-f0-9]{64}$/),
+    /** Absent on ranges stored before national routes; those are PE-22. */
+    roadCode: z
+      .string()
+      .regex(/^PE-\d{1,3}[A-ZÑ]{0,3}$/u)
+      .optional(),
   })
   .refine((v) => v.endKm > v.startKm);
 export type SubscriptionRange = z.infer<typeof subscriptionRangeSchema>;

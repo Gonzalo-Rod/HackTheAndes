@@ -7,6 +7,9 @@ import { senderKey } from "@/services/subscriptions/subscription-flow";
 import { weeklyPeriod } from "@peruroad/road-data/reports";
 import type { WeeklyDispatcher } from "./deliver";
 import { logger } from "@/lib/logger";
+import { sameRoadCode } from "@/domain/messaging/dashboard-links";
+
+const PILOT_ROAD_CODE = "PE-22";
 export function createWeeklyCommands(deps: {
   preferences: SubscriptionRepository;
   repository: WeeklyPdfRepository;
@@ -25,6 +28,10 @@ export function createWeeklyCommands(deps: {
         now = deps.now();
       const eventKey = createHash("sha256").update(`weekly-command:${message.messageId}`).digest("hex");
       try {
+        // Report counts come from the SUTRAN archive, which only covers PE-22; other roads would show false zeros.
+        const roadCode = await deps.repository.activeRoadCode(key);
+        if (roadCode && !sameRoadCode(roadCode, PILOT_ROAD_CODE) && text !== "SEMANAL BAJA")
+          return `El PDF semanal está disponible por ahora solo para rutas en ${PILOT_ROAD_CODE}. Tus alertas de ${roadCode} siguen activas; ESTADO ${roadCode} y EXPOSICION ${roadCode} muestran la situación actual.`;
         if (text === "PDF") {
           const [target] = await deps.repository.targets(deps.revision, key);
           if (!target)

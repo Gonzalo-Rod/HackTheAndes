@@ -12,6 +12,7 @@ const record = {
 };
 function setup(windowOpen = true) {
   const repository: AlertDeliveryRepository = {
+    activeRevisions: vi.fn(async () => []),
     subscriptions: vi.fn(async () => ["synthetic-sub"]),
     claim: vi.fn(async () => record),
     destination: vi.fn(async () => ({ to: "US.synthetic", windowOpen })),

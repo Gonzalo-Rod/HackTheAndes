@@ -24,7 +24,7 @@ export function alertReadme(request: Request) {
   const item = catalog.items[0];
   const text = `# ${catalog.seller}
 
-> WhatsApp environmental and road alerts for the selected PE-22 stretch. One payment of ${item.price} ${item.currency}; the pass expires 168 elapsed hours after the original WhatsApp request. No recurring billing. Reporting and on-demand status/exposure queries remain free.
+> WhatsApp environmental and road alerts for the selected stretch of a registered national road (PE-22 and the other roads with a climate estimate). One payment of ${item.price} ${item.currency}; the pass expires 168 elapsed hours after the original WhatsApp request. No recurring billing. Reporting and on-demand status/exposure queries remain free.
 
 Generated from qatom/catalog.json for this response. The catalog is the listing source of truth.
 

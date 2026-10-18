@@ -184,7 +184,7 @@ so the interface must not imply second-by-second weather observations.
 Keep the 3D road map, susceptibility/advisory layers, rainfall windows, route
 profiles, incident panels and history. Separate official conditions, estimated
 exposure, unverified reports and retrospective reconstruction. A segment with no
-usable assessment stays unknown. Driver routes filter these messages to the captured PE-22 interval; they do not
+usable assessment stays unknown. Driver routes filter these messages to the selected interval of the chosen road's captured axis; they do not
 choose alternative roads or provide departure recommendations. Departure planning
 remains deferred; source expiry cannot establish reopening or closure duration.
 
@@ -201,8 +201,11 @@ research, with their existing blockers and frozen policy. No background periods
 have been relabeled as verified negatives. Weather-focused ML would need its own
 target, baseline and evaluation design; it is not a dependency for this pivot.
 
-Completed: **assessment rules/contracts and offline tests → storage and read API**.
-B's transport snapshot is now connected to source-grounded WhatsApp queries; see
-[the integration guide](../integration/zavu-messaging.md). Driver-alert delivery and hourly refresh are covered by the [notification integration](../integration/driver-notifications.md). The next checkpoint includes **dashboard wiring**, followed by
-alert evaluation and consenting-driver end-to-end verification. This continues the
-participant's step-by-step workflow. Payments, Qatom and Yape remain outside scope.
+Completed: **assessment rules/contracts and offline tests → storage and read API →
+WhatsApp queries ([integration guide](../integration/zavu-messaging.md)) → driver alerts and
+hourly refresh ([notification integration](../integration/driver-notifications.md)) → dashboard
+forecast view ([dashboard forecast](../integration/dashboard-forecast.md)) → registered national
+roads ([multi-road forecast](multi-road-forecast.md))**. Remaining: rule and association review
+off PE-22, and consenting-driver end-to-end verification outside the team. The only payment in
+scope is the Qatom seven-day route-alert pass ([Qatom passes](../integration/qatom-alert-passes.md));
+Yape remains excluded.

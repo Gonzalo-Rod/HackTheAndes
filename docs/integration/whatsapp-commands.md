@@ -22,7 +22,8 @@ voice notes cannot authorize publication, subscriptions or weekly PDFs.
 | `REPORTE <description>` | Start a community report. Alias: `REPORTAR <description>`. |
 | `CONFIRMAR <code>` | Publish the current report after reviewing its proposed location. The report remains unconfirmed by an authority. |
 | `CANCELAR` | Discard a report draft, or the route being entered if route selection is active. Alias: `CANCEL`. This does not stop an active subscription. |
-| `RUTA` | Choose or change the alert origin/destination using an existing valid pass, without another payment. |
+| `RUTA` | Choose or change the route using an existing valid pass, without another payment: the bot asks for the road code, then origin and destination. |
+| `RUTA <road>` | Same, choosing the road at once, e.g. `RUTA PE-32`. Any road with a climate estimate is accepted; the bot lists them. |
 | `RUTA ACTIVAR <code>` | Confirm the proposed route using your current pass; no new charge or expiry extension. |
 | `RUTA CANCELAR` | Discard a route proposal, including its pending activation proposal; preserve the current active subscription. |
 | `SUSCRIBIR 7 DIAS` | Purchase seven-day access. This does not activate alerts or select a route. |
@@ -111,13 +112,17 @@ Send these messages in order, waiting for the bot's question after each step:
 
 ```text
 RUTA
+PE-32
 KM 100
 KM 110
 ```
 
-The first endpoint is the origin; the second is the destination. At either step,
-you can instead share a static location pin or enter a recognized place such as
-`Chosica`. Optional labels such as `ORIGEN: KM 100` and `DESTINO: KM 110` are
+`RUTA PE-32` combines the first two messages. The road code chooses which road the
+following steps refer to; `KM` without a road asks for it first. The first endpoint
+is the origin; the second is the destination. At either step, you can instead share
+a static location pin within 500 m of that road (a pin sent before the road code
+selects the nearest registered road), or, on PE-22 only, a recognized place such as
+`Chosica`. The road cannot change after the origin; send `RUTA PE-xx` to start over. Optional labels such as `ORIGEN: KM 100` and `DESTINO: KM 110` are
 accepted. Decimal distances such as `KM 100.5` are accepted within map coverage.
 
 Review the proposed range, then type its exact **`RUTA ACTIVAR <code>`**. This
@@ -130,7 +135,8 @@ redirects you to the two separate steps above. Use `RUTA` for endpoint selection
 without removing paid time; it does not issue a refund. Send `RUTA` again to
 resume notifications within the same valid pass.
 
-The selected range follows the available **PE-22 axis**. Map kilometers are
+The selected range follows the chosen road's captured axis; a phone has one active
+route, so a new road replaces the previous one. Map kilometers are
 approximate measured distances, not official road kilometer markers. The bot
 does not track the phone continuously, calculate alternative roads or estimate
 arrival times. Use `RUTA` again to propose a different stretch, review its range,
@@ -141,8 +147,10 @@ weekly PDFs again.
 
 An eligible active subscription receives relevant new or changed information
 inside its selected stretch: official SUTRAN updates, community reports clearly
-labeled **SIN CONFIRMAR**, and estimated possible-huaico conditions. These source
-types remain distinct.
+labeled **SIN CONFIRMAR** (PE-22 only, where reports are accepted), and estimated
+possible-huaico conditions. These source types remain distinct. Off PE-22, official
+updates come from the live national feed and are checked by the five-minute recovery
+job; the message header names the road (`PeruRoad · PE-32`).
 
 There is no fixed 30-minute digest and no quiet-hours restriction. Unchanged
 information is deduplicated. Reports can trigger delivery after publication;
@@ -155,7 +163,9 @@ Alerts end when the pass expires or you send `STOP` / `BAJA`.
 
 ## Receive the weekly PDF
 
-With a valid pass and a confirmed active route:
+With a valid pass and a confirmed active route **on PE-22** (the PDF's official-alert
+counts come from the PE-22 archive; on other roads `SEMANAL` and `PDF` explain this
+instead of sending false zeros):
 
 1. Send `SEMANAL` and review its separate consent message.
 2. Type the exact `SEMANAL ACTIVAR <code>` it supplies.
@@ -165,8 +175,9 @@ The automatic schedule is **Monday at 07:00, Peru time**. Outside the conversati
 window, delivery requires an approved notice template; reply `PDF` to receive the
 attachment when prompted. Unavailable delivery remains pending.
 
-The report includes the reporting period, available environmental records and a
-captured weather/exposure outlook. Missing data is explicit. A saved PDF does not
+The report opens with indicator cards, a bar of kilometers per exposure level and a
+rainfall chart along the route, followed by the reporting period, available
+environmental records and a 10-km rainfall table. Missing data is explicit. A saved PDF does not
 update itself. Requests are limited to three per 15 minutes.
 
 `SEMANAL BAJA` stops only PDFs. `BAJA` / `STOP` stops PDFs and short alerts.
@@ -214,10 +225,12 @@ specific flow and use its latest reply.
 
 ## Implementation and verification checkpoint
 
-The separate purchase/route flow requires migration
-`20261018090000_separate_alert_pass_and_route.sql` and the matching application
-release. Earlier phone checks below exercised the previous combined flow; they
-are not live verification of this change.
+The separate purchase/route flow uses migration
+`20261018090000_separate_alert_pass_and_route.sql` (applied). National routes need
+`20261018100000_national_route_subscriptions.sql`, not yet applied; it must be applied
+before this release deploys, or route activation fails on every road. National queries, road
+selection and off-pilot alerts are covered by tests and a local run against live
+data, not yet by a phone check.
 
 As of October 18, 2026, participant checks have confirmed query replies, test
 report publication/map markers, voice-note reports, route alerts and PDF attachment

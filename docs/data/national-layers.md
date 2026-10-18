@@ -28,12 +28,14 @@ October 18 terrain capture, so terrain slopes for the two new PE-22 catchments a
 
 ## Still limited to the PE-22 pilot
 
-Climate exposure is no longer pilot-only: any national road prepared with `road:prepare` and listed
-in the registry gets forecasts (see [multi-road forecast](multi-road-forecast.md)). These tools depend on a measured road axis with kilometer segments, a gazetteer and catchments,
-and one geometry revision configured per deployment (`ROAD_DATA_GEOMETRY_REVISION`):
+Climate exposure, WhatsApp queries (`ESTADO`, `EXPOSICION`, pins) and `RUTA` route alerts work
+on every road in the registry (see [multi-road forecast](multi-road-forecast.md) and
+[WhatsApp commands](../integration/whatsapp-commands.md)). These tools still depend on PE-22's
+gazetteer, database archive or report pipeline:
 
 | Tool | Why it is PE-22 only | What expansion needs |
 | --- | --- | --- |
-| WhatsApp subscriptions, `RUTA`, alerts, weekly PDF | Origin/destination are km on the PE-22 axis; pins must be within 500 m of it | Multi-road geometry and gazetteer, plus a road code on subscriptions and alert matching. |
+| WhatsApp reports and place names | Reports snap to the PE-22 axis and its gazetteer; `incidents.road_code` is PE-22 | Gazetteers per road and a road code on reports and incidents. |
+| Weekly PDF | Its official-alert counts come from the PE-22 database archive; elsewhere they would be false zeros, so `SEMANAL`/`PDF` explain the limit | A national archive (below). |
 | Route-watch calls | Same km reference; incidents come from the PE-22 database archive | A national variant could use SUTRAN's official road code and chainage from the live feed; not built. |
-| SUTRAN database archive | Kept to PE-22 so national history backfill cannot make polls partial and silence PE-22 alerts | A separate national ingestion job and freshness check. |
+| SUTRAN database archive | Kept to PE-22 so national history backfill cannot make polls partial and silence PE-22 alerts | A separate national ingestion job and freshness check. Off PE-22, route alerts read the live feed instead. |

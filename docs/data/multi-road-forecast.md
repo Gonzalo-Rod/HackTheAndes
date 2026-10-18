@@ -39,10 +39,10 @@ the per-road limit: their forecast responses are 9.2 MB and 7.2 MB. Serving them
 of at most ~800 km, each with its own geometry revision; their prepared files are kept in the ignored
 `data/.cache/roads-unserved/` folder. PE-16A was prepared first but ranks below the roads above. PE-1N, PE-3S, PE-5S and PE-1S are also too long for one corridor.
 
-WhatsApp routes, route watch, the gazetteer, weekly PDFs and SUTRAN database ingestion remain
-pilot-only (see [national layers](national-layers.md)). WhatsApp *queries* are national:
-`EXPOSICION <road>`, the all-road `EXPOSICION` overview and pins near any registered road
-read these assessments (see [WhatsApp commands](../integration/whatsapp-commands.md)).
+WhatsApp queries and routes use these assessments: `EXPOSICION <road>`, the all-road
+`EXPOSICION` overview, pins near any registered road, and `RUTA PE-xx` route alerts (see
+[WhatsApp commands](../integration/whatsapp-commands.md)). Reports, the gazetteer, weekly PDFs,
+route watch and the SUTRAN database archive remain pilot-only (see [national layers](national-layers.md)).
 
 ## Adding a road
 

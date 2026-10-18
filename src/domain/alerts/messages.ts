@@ -44,9 +44,9 @@ export function officialAlertText(status: "normal" | "restringido" | "interrumpi
 export function communityAlertText(type: string, location: string, isTest: boolean): string {
   return `${isTest ? "DEMO · " : ""}Reporte SIN CONFIRMAR: ${shortText(type.replaceAll("_", " "), 35)}, ${location}.`;
 }
-export function formatAlertBundle(selected: AlertCandidate[], isTest: boolean): string {
+export function formatAlertBundle(selected: AlertCandidate[], isTest: boolean, roadCode = "PE-22"): string {
   const exposure = selected.filter((c) => c.kind === "exposure");
-  const lines = [`${isTest ? "DEMO · " : ""}PeruRoad · PE-22`];
+  const lines = [`${isTest ? "DEMO · " : ""}PeruRoad · ${roadCode}`];
   for (const candidate of selected.filter((c) => c.kind !== "exposure")) lines.push(shortText(candidate.text, 145));
   if (exposure.length) {
     const distance = (km: number) => Number(km.toFixed(1)).toString();
@@ -60,7 +60,7 @@ export function formatAlertBundle(selected: AlertCandidate[], isTest: boolean): 
     if (until) lines.push(`Hasta ${peruTime(until)} (hora Perú).`);
     lines.push("Lluvia prevista en zonas propensas a huaicos o derrumbes. Es una estimación, no un evento confirmado.");
   }
-  lines.push("Antes de salir, consulta ESTADO. EXPOSICION: detalles. BAJA: cancelar.");
+  lines.push(`Antes de salir, consulta ESTADO ${roadCode}. EXPOSICION ${roadCode}: detalles. BAJA: cancelar.`);
   // Bound individual lines before joining so attribution, uncertainty and opt-out are never cut off.
   return lines.join("\n");
 }

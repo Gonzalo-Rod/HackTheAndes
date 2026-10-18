@@ -49,7 +49,7 @@ export async function actRoute(
     if (action.draft.isTest && !pass.isTest)
       return "RUTA PRUEBA requiere un pase DEMO de un número de prueba configurado. Usa RUTA para tu pase actual.";
     await saveDraft(db, encryption, key, action.draft);
-    return ROUTE_ORIGIN_PROMPT;
+    return action.prompt ?? ROUTE_ORIGIN_PROMPT;
   }
   const { draft } = await readRouteState(db, encryption, key, "", now);
   if (action.kind === "routeActivate") {
@@ -73,10 +73,15 @@ export async function actRoute(
   }
   if (!draft || draft.id !== action.draftId) return "La propuesta de ruta cambió o expiró. Escribe RUTA para comenzar de nuevo.";
   if (draft.proposal) return routeProposal(draft.proposal.range, draft.proposal.code);
+  if (action.kind === "routeRoad") {
+    if (draft.origin) return "Ya elegiste un origen. Envía el destino o escribe RUTA para empezar de nuevo con otra carretera.";
+    await saveDraft(db, encryption, key, { ...draft, road: action.road });
+    return action.prompt;
+  }
   if (action.kind === "routeOrigin") {
     if (draft.origin) return "Ya elegiste un origen. Envía el destino o escribe RUTA para reiniciar.";
-    await saveDraft(db, encryption, key, { ...draft, origin: action.endpoint });
-    return routeDestinationPrompt(action.endpoint.label);
+    await saveDraft(db, encryption, key, { ...draft, road: action.road ?? draft.road ?? null, origin: action.endpoint });
+    return action.prompt ?? routeDestinationPrompt(action.endpoint.label);
   }
   if (!draft.origin || JSON.stringify(draft.origin) !== JSON.stringify(action.origin))
     return "El origen cambió. Escribe RUTA para revisar la propuesta.";

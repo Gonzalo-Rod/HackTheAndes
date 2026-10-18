@@ -3,7 +3,7 @@ import type { RoadContextRequest, RoadContextResponse } from "@peruroad/road-dat
 import type { SubscriptionRouter, SubscriptionRange } from "@/contracts/notifications";
 import type { SubscriptionRepository, SubscriptionAction } from "@/db/subscriptions";
 import { keyedDigest, phoneKey } from "@/integrations/security/contacts";
-import { createRouteFlow } from "./route-flow";
+import { createRouteFlow, type RouteRoads } from "./route-flow";
 import { logger } from "@/lib/logger";
 import type { AlertPassPayments } from "@/contracts/alert-passes";
 export function senderKey(from: string, pepper: string) {
@@ -19,6 +19,7 @@ export function createSubscriptionFlow(deps: {
   now: () => number;
   newId?: () => string;
   payments?: AlertPassPayments;
+  national?: RouteRoads;
 }): SubscriptionRouter {
   const route = createRouteFlow(deps);
   return {
@@ -76,7 +77,7 @@ export function createSubscriptionFlow(deps: {
           return "SUSCRIBIR compra el pase de 7 días. Para elegir origen y destino, usa RUTA después de activar tu pase; no pagarás otra vez por cambiar el tramo.";
         try {
           const bounds = await deps.repository.bounds(deps.revision);
-          range = { ...bounds, geometryRevision: deps.revision, label: "PE-22 · acceso por 7 días; ruta por elegir" };
+          range = { ...bounds, geometryRevision: deps.revision, label: "Acceso por 7 días; carretera y ruta por elegir" };
         } catch (error) {
           logger.warn({
             requestId,

@@ -10,6 +10,8 @@ import { createSubscriptionFlow, senderKey } from "@/services/subscriptions/subs
 import { keyedDigest } from "@/integrations/security/contacts";
 import { loadGeometryRevision, loadOpenAiConfiguration, loadPlatformConfiguration, loadZavuConfiguration } from "@/config/env";
 import { database } from "@/db/pool";
+import { locateOnRoads } from "@/db/road-locator";
+import { loadForecastRoads } from "@/services/platform/forecast-roads";
 import { createPostgresWebhookProcessor } from "@/db/webhook-processor";
 import { createOpenAiIntentParser } from "@/integrations/openai/intent-parser";
 import { createZavuClient } from "@/integrations/zavu/client";
@@ -48,6 +50,10 @@ export function createZavuWebhook() {
       testKeys: platform.TEST_PHONE_KEYS,
       now: Date.now,
       payments: alertPassPayments(),
+      national: {
+        roads: loadForecastRoads,
+        locate: (position, revisions) => locateOnRoads(database(), revisions, position),
+      },
     }),
     voice: intentConfig
       ? createVoiceInput({

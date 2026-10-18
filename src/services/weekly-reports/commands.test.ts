@@ -8,6 +8,7 @@ const report = syntheticWeeklyReport(),
   id = "12345678-1234-4234-8234-123456789abc";
 const repository = {
   targets: vi.fn(),
+  activeRoadCode: vi.fn(async (): Promise<string | null> => "PE-22"),
   latestPending: vi.fn(),
   claim: vi.fn(),
   save: vi.fn(),
@@ -65,4 +66,11 @@ it("limits document generation and never claims success for pending delivery", a
   expect(dispatch).not.toHaveBeenCalled();
   dispatch.mockResolvedValue("pending");
   expect(await commands.handle(message("PDF"), "r")).toContain("no confirmamos");
+});
+
+it("explains that weekly PDFs cover PE-22 routes only instead of reporting false zeros", async () => {
+  repository.activeRoadCode.mockResolvedValueOnce("PE-32");
+  const reply = await commands.handle({ ...message("PDF") }, "r");
+  expect(reply).toContain("solo para rutas en PE-22");
+  expect(reply).toContain("ESTADO PE-32");
 });

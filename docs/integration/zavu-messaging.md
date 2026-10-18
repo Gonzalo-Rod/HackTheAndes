@@ -8,15 +8,18 @@ intent parser and source-grounded query handlers.
 
 ## Supported behavior
 
-- `ESTADO`: SUTRAN PE-22 records from the latest complete ingestion poll, with
-  source time, stale/unavailable states and the no-clearance notice.
-- `EXPOSICION` or `CLIMA`: the estimated 24-hour exposure summary, including
-  assessed/unknown coverage, actual weather age and experimental-policy limits.
-- `EXPOSICION <place>` or a native WhatsApp pin: resolve C's road context and
-  show the matched segment's estimated exposure, rainfall window and terrain
-  susceptibility, or request a clearer pin. Town names are not a complete
-  gazetteer. Pins over 500 m from the captured road are rejected. Approximate
-  matches are labeled and must be confirmed before future report/subscription use.
+- `ESTADO`: the dashboard's live national SUTRAN feed (with its cache and dated
+  snapshot fallback, labeled as saved data): a national summary, or one road with
+  `ESTADO PE-22`. Always carries the no-clearance notice.
+- `EXPOSICION` or `CLIMA`: estimated 24-hour exposure compared across every
+  registered road; `EXPOSICION PE-32` shows one road with assessed/unknown
+  coverage, actual weather age and experimental-policy limits.
+- `EXPOSICION <place>` or a native WhatsApp pin: resolve C's road context on PE-22
+  (pins off PE-22 match the nearest registered road within 500 m) and show the
+  matched segment's estimated exposure, rainfall window and terrain susceptibility,
+  or request a clearer pin. Town names are not a complete gazetteer and cover PE-22
+  only. Approximate matches are labeled and must be confirmed before report or
+  subscription use. Replies link into the dashboard (`?carretera=`, `?alerta=`).
 - Natural-language questions: the OpenAI adapter classifies intent and extracts
   a literal place reference. It never produces a road status, risk probability,
   coordinates or advisory. Deterministic services compose the answer from validated

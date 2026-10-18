@@ -9,6 +9,7 @@ const target = { id, range: report.range, consentAt: new Date(now), isTest: true
 const delivery = { id, leaseId: id, period: report.period, expiresAt: new Date(now + 72 * 3_600_000), notifiedAt: null, report: null };
 const repository = {
   targets: vi.fn(),
+  activeRoadCode: vi.fn(),
   latestPending: vi.fn(),
   claim: vi.fn(),
   save: vi.fn(),

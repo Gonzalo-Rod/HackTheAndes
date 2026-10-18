@@ -59,6 +59,7 @@ export function createSubscriptionRepository(pool: Pool, encryption: { key: stri
           action.kind === "routeStart" ||
           action.kind === "routeActivate" ||
           action.kind === "routeCancel" ||
+          action.kind === "routeRoad" ||
           action.kind === "routeOrigin" ||
           action.kind === "routeDestination"
         ) {

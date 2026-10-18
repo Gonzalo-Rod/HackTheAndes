@@ -18,14 +18,18 @@ export async function collectAlertCandidates(
     context: (i: RoadContextRequest, r: string) => Promise<RoadContextResponse>;
     exposure: () => Promise<ExposureLayer>;
     revision: string;
+    /** Replaces the pilot's database poll for roads whose SUTRAN alerts are not archived. */
+    official?: () => Promise<AlertCandidate[]>;
   },
   nowMs: number,
   requestId: string,
 ) {
   const candidates: AlertCandidate[] = [];
   const landmarks = await readAlertLandmarks(deps.pool, deps.revision);
-  const official = roadContextResponseSchema.parse(await deps.context({ kind: "official_alerts" }, requestId));
+  if (deps.official) candidates.push(...(await deps.official()));
+  const official = deps.official ? null : roadContextResponseSchema.parse(await deps.context({ kind: "official_alerts" }, requestId));
   if (
+    official &&
     official.kind === "official_alerts" &&
     official.state === "ready" &&
     official.asOf &&

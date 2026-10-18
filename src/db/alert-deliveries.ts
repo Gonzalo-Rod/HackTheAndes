@@ -11,6 +11,7 @@ const subscriptionSchema = z.object({
   startKm: z.number(),
   endKm: z.number(),
   label: z.string(),
+  roadCode: z.string(),
   isTest: z.boolean(),
   consentAt: z.date(),
   lastAlertAt: z.date().nullable(),
@@ -26,6 +27,16 @@ const deliverySchema = z.object({
 });
 export function createAlertDeliveryRepository(pool: Pool, encryption: { key: string; version: string }) {
   return {
+    /** Geometry revisions with at least one active route, so alerts are only collected for roads someone follows. */
+    async activeRevisions() {
+      const r = await pool.query(
+        "select distinct geometry_revision as revision from public.subscriptions where opted_out_at is null and route_active and geometry_revision is not null and alert_expires_at>now() and (alert_payment_id is not null or is_test)",
+      );
+      return z
+        .array(z.object({ revision: z.string().regex(/^[a-f0-9]{64}$/) }))
+        .parse(r.rows)
+        .map((row) => row.revision);
+    },
     async subscriptions(revision: string) {
       const r = await pool.query(
         "select id from public.subscriptions where opted_out_at is null and route_active and geometry_revision=$1 and alert_expires_at>now() and (alert_payment_id is not null or is_test) order by last_alert_at nulls first,id limit 1000",
@@ -40,7 +51,7 @@ export function createAlertDeliveryRepository(pool: Pool, encryption: { key: str
       const candidates = z.array(alertCandidateSchema).max(5000).parse(rawCandidates);
       return transaction(pool, async (client) => {
         const result = await client.query(
-          `select id,km_start::float8 as "startKm",km_end::float8 as "endKm",range_label as label,is_test as "isTest",consent_at as "consentAt",last_alert_at as "lastAlertAt",last_inbound_at as "lastInboundAt" from public.subscriptions where id=$1 and opted_out_at is null and route_active and alert_expires_at>$2 and (alert_payment_id is not null or is_test) for update`,
+          `select id,km_start::float8 as "startKm",km_end::float8 as "endKm",range_label as label,road_code as "roadCode",is_test as "isTest",consent_at as "consentAt",last_alert_at as "lastAlertAt",last_inbound_at as "lastInboundAt" from public.subscriptions where id=$1 and opted_out_at is null and route_active and alert_expires_at>$2 and (alert_payment_id is not null or is_test) for update`,
           [subscriptionId, new Date(nowMs)],
         );
         if (!result.rowCount) return null;
@@ -83,7 +94,7 @@ export function createAlertDeliveryRepository(pool: Pool, encryption: { key: str
             [
               subscriptionId,
               sub.consentAt,
-              formatAlertBundle(plan.selected, sub.isTest),
+              formatAlertBundle(plan.selected, sub.isTest, sub.roadCode),
               JSON.stringify(plan.checkpoint),
               new Date(Math.min(...plan.selected.map((c) => Date.parse(c.expiresAt)))),
               JSON.stringify(Object.fromEntries(plan.selected.map((c) => [c.key, c.fingerprint]))),

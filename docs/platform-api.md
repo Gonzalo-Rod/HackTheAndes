@@ -1,6 +1,6 @@
 # Platform API and integration handoff
 
-A's non-payment application lives in the root Next.js project after the authorized
+A's application lives in the root Next.js project after the authorized
 integration of D's `400bb8d` snapshot. C remains in `packages/road-data`; the older
 `apps/api` deployment and active n8n SUTRAN schedule are independent.
 
@@ -117,8 +117,10 @@ A's risk/dispatch boundaries and report access control are ready for C's outputs
 catchment weather, spatial overlays and historical candidates now have validated
 read APIs and dated outage fallbacks. Hourly weather/exposure automation is implemented; ML training and dispatch are deferred. Weekly driver-PDF generation uses a separate protected outbox; see the [ML checkpoint](data/ml-readiness.md).
 The participant requested a checkpoint before ML selection/training. Main remains
-unmerged until teammate review and passing CI. Payments, Qatom and payment
-administration are explicitly excluded.
+unmerged until teammate review and passing CI. The only payment is the Qatom
+seven-day route-alert pass (`POST /api/qatom/alert-pass`, `GET /api/subscriptions/plan`;
+see [Qatom passes](integration/qatom-alert-passes.md)); payment administration and Yape
+are excluded.
 
 `npm audit` currently reports a development-only `braces` advisory through
 `eslint-config-next` (`GHSA-vfj7-8cjw-p6xm`), with no patched `braces` release in the

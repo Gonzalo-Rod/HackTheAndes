@@ -1,80 +1,82 @@
 # Hack the Andes — Team Plan
 
-**October 18 participant authorization:** implement weekly WhatsApp alert access
-for a single 0.50 USD-TDN payment through Qatom (participant-updated price), with
-OpenAI Responses calling Qatom MCP. The pass ends 168 elapsed hours after the original request and does
-not renew. This supersedes earlier payment exclusions below only for this feature;
-Yape and other commercial plans remain excluded. The implementation, rollout,
-configuration and launch-verification boundaries are documented in
-[Qatom alert passes](integration/qatom-alert-passes.md).
-
-**Separate access and route selection:** `SUSCRIBIR` purchases seven-day access,
-without starting alerts. With that pass, `RUTA` selects origin and destination;
-`RUTA ACTIVAR <code>` confirms notifications for the selected stretch. Route
-changes do not charge again or move expiry. STOP/BAJA stops notifications and
-weekly PDFs while preserving remaining pass time; drivers can use RUTA to resume.
-This supersedes older combined purchase/route descriptions below. See the
-[command guide](integration/whatsapp-commands.md).
-
 **Track:** Clima y Territorio
 **Project name:** *PeruRoad Climate*
-**One line:** A climate-exposure and preparedness dashboard for the Rímac–Carretera Central corridor that combines forecast rainfall, official terrain susceptibility and advisories with live road conditions and WhatsApp field reports, helping response teams prioritize attention and drivers receive relevant route alerts.
+**One line:** A climate-exposure and preparedness platform for Peru's national roads that combines forecast rainfall, official terrain susceptibility and advisories with live SUTRAN road conditions and WhatsApp field reports, piloted in depth on the Rímac–Carretera Central (PE-22), helping response teams prioritize attention and drivers receive alerts for the route they travel.
 
-**Participant-approved pivot, October 17, 2026:** retain the 3D map, live road conditions, WhatsApp reporting and driver alerts. The core output becomes transparent **estimated climate exposure and attention priority**; disruption-model training is deferred research. [The implementation brief](data/climate-exposure.md) defines source, freshness, alert and uncertainty boundaries. This is the current direction wherever older risk/prediction terminology remains. Planned behavior is not a claim of implementation. Payments, Qatom and Yape remain outside the participant-authorized implementation scope; commercial sections below are future context.
+## Current state (October 18, 2026)
 
-**Participant-approved focus update, October 17, 2026:** environmental monitoring
-and preparedness are the delivery priority: **where forecast rainfall overlaps
-susceptible terrain, during which windows, and who needs to be informed**. Departure
-planning (F9), its API engine, WhatsApp questions and dashboard planner/chart are
-**deferred beyond the hackathon delivery scope**. Existing unavailable responses
-remain honest compatibility boundaries; no implementation or removal is required
-for those endpoints. This update supersedes older dispatch/departure promises,
-including those retained in commercial background sections.
+This section is authoritative. Where older text below differs, this section and the
+linked integration documents describe the implemented product; the rest of the
+plan is kept as design context and is not a claim of implementation.
 
-### Implementation checkpoint and remaining priorities
+**Direction.** The participant-approved pivot (October 17) makes transparent
+**estimated climate exposure and attention priority** the core output, retaining
+the 3D map, live road conditions, WhatsApp reporting and driver alerts.
+Environmental monitoring and preparedness take priority: *where forecast rainfall
+overlaps susceptible terrain, during which windows, and who needs to be informed*.
+Disruption-model training is deferred research, and departure planning (F9) is
+deferred beyond hackathon delivery. See [climate exposure](data/climate-exposure.md).
 
-The main environmental workflow is implemented on the
+**Coverage.** Scope grew from one corridor to a national view with a deep pilot:
+
+| Capability | Coverage |
+|---|---|
+| Incident dashboard: SUTRAN alerts, community reports ("No confirmado"), Provías emergency history | All of Peru ([national road events](data/national-road-events.md)) |
+| Climate exposure ("Posibles huaicos") | Every road in the reviewed registry: PE-22 plus nine national roads ([multi-road forecast](data/multi-road-forecast.md)) |
+| WhatsApp `ESTADO` / `EXPOSICION` queries and pins | National SUTRAN feed and every registered road |
+| WhatsApp route alerts (`RUTA PE-xx`) | Any registered road; one active route per phone |
+| WhatsApp community reports, place-name catalog, SUTRAN database archive | PE-22 pilot |
+| Weekly environmental PDF | Routes on PE-22 (its counts come from the PE-22 archive) |
+| Company route watch and urgent calls (`/empresa`) | PE-22 pilot ([route watch](integration/route-watch.md)) |
+
+**Access and payment.** Reporting, queries and the public dashboard are free.
+Route alerts need a seven-day pass: a one-time USD 0.50 Qatom payment (OpenAI
+Responses calling Qatom MCP), valid 168 elapsed hours from the request, without
+renewal; configured test phones can use a free DEMO pass. `SUSCRIBIR` buys the
+pass without starting alerts; `RUTA` chooses the road, origin and destination, and
+`RUTA ACTIVAR <code>` confirms them without another charge. STOP/BAJA stops
+notifications and keeps the remaining pass time. Yape and the other commercial
+plans in section 3 remain excluded. See [Qatom passes](integration/qatom-alert-passes.md)
+and the [command guide](integration/whatsapp-commands.md).
+
+**Implemented and verified.** On the
 [shared Preview](https://peruroad-climate-git-feat-data-model-gozlie.vercel.app/?vista=pronostico)
-in `feat/data-model`: SUTRAN ingestion/history, rainfall and terrain inputs,
-versioned exposure assessments, dated dashboard windows, WhatsApp text/audio
-reports with explicit confirmation, subscriptions, conditional route alerts
-without quiet hours, and hourly climate refresh. The participant verified DEMO
-report publication, subscription activation, alert receipt and voice reporting.
-These are participant demonstrations, not independent user traction or validated
-huaico forecasting. `main` is unchanged and still requires teammate review.
+(`feat/data-model`): SUTRAN ingestion and history, rainfall and terrain inputs,
+versioned exposure assessments with dated windows, WhatsApp text/audio reports with
+explicit confirmation, route subscriptions and source-triggered alerts without
+quiet hours, hourly climate refresh, weekly PDFs with charts, Qatom checkout, and
+company route watch with calls. The participant verified DEMO report publication,
+subscription activation, alert receipt, voice reporting, PDF delivery and checkout-link
+delivery. These are participant demonstrations, not independent user traction or
+validated huaico forecasting. Real payment settlement, delivery outside the 24-hour
+window, and national WhatsApp routes on a phone are not yet verified. `main` is
+unchanged and still requires teammate review.
 
-The central product flow exists; completion now means strengthening its evidence
-and reliability, not adding a transport planner. Remaining work, in order:
+**Remaining priorities, in order:**
 
 1. **B — Trustworthy environmental reports:** reviewed corroboration/confidence,
    community/SUTRAN matching and clearing, two-minute mixed-input grouping, and
-   extraction checks on real anonymized messages. Initial community dedupe and a
-   conservative unconfirmed score already exist. The participant now permits clearly
-   labeled unconfirmed public alerts; the placeholder score must never imply verification.
+   extraction checks on real anonymized messages. Unconfirmed public reports are
+   relayed with a clear label; the placeholder score never implies verification.
 2. **B — Reliable notifications:** verify approved-template delivery outside the
-   24-hour conversation window and record scheduled-run/failure evidence. DEMO
-   delivery is verified; out-of-window delivery is not. SMS is not an automatic
-   fallback and requires separate consent and implementation.
+   24-hour window and record scheduled-run/failure evidence. SMS is not an
+   automatic fallback and needs separate consent and implementation.
 3. **C — Environmental assessment validation:** review rainfall/terrain and
-   catchment associations, source freshness, rule boundaries and alert changes;
-   document resolution and coverage. Currently 38 of 174 segments have supported
-   catchment links and 136 remain unknown. Improve coverage only with defensible
-   spatial evidence; full coverage and predictive accuracy are not assumed.
-4. **C with D — Environmental indicators and explanations:** complete missing
-   aggregates for exposed kilometers by attention category and forecast window,
-   assessed/unknown coverage, rainfall by catchment, and environmental reports by
-   type/source. Preserve current road restrictions as separate context. Existing
-   rainfall/exposure APIs are reused; no departure matrix is required.
+   catchment associations, source freshness, rule boundaries and alert changes. All
+   174 PE-22 segments now have catchment links (river crossings plus containing
+   basins); the v2 rules were tuned on PE-22, so other roads remain estimates
+   pending per-region review against historical emergencies.
+4. **C with D — Environmental indicators and explanations:** aggregates for exposed
+   kilometers by attention category and window, assessed/unknown coverage,
+   rainfall by catchment and environmental reports by type/source.
 5. **All roles — Delivery readiness:** synchronize handoff documentation, verify
-   clean-database reproduction and a fresh-session/phone-width walkthrough,
-   gather evidence from a consenting user outside the team, and finish review,
-   pitch and submission. Existing tests and participant checks are evidence, not
-   substitutes for these remaining checks.
+   clean-database reproduction and a fresh-session/phone-width walkthrough, gather
+   evidence from a consenting user outside the team, and finish review, pitch and
+   submission.
 
-Weekly report generation/delivery (F6) was selected for implementation after the core workflow; the driver-PDF scope and verification boundaries are in section F6. Photos,
-payments/Qatom/Yape remain excluded; calls and voice replies remain optional;
-disruption-classifier training remains deferred research. The rubric and 30-hour
-schedule stay unchanged; their remaining milestones follow these priorities.
+Photos are excluded; voice replies are optional; disruption-classifier training
+is deferred research. The rubric and 30-hour schedule below are unchanged.
 
 ---
 
@@ -82,12 +84,12 @@ schedule stay unchanged; their remaining milestones follow these priorities.
 
 ### Objectives
 
-1. **Integrate** official data that today lives on separate platforms (SENAMHI, ENFEN, MTC, CENEPRED, INGEMMET, SUTRAN, ANA) and community reports into one 3D dashboard of the corridor.
-2. **Estimate** rainfall-related climate exposure for mapped catchments and linked road segments using forecast rain, INGEMMET susceptibility and valid SENAMHI advisories; show **live source-reported conditions** alongside **24–72 h estimated exposure** and explicit unknown coverage.
+1. **Integrate** official data that today lives on separate platforms (SENAMHI, ENFEN, MTC, CENEPRED, INGEMMET, SUTRAN, ANA, Provías) and community reports into one 3D dashboard of Peru's national roads, with PE-22 as the in-depth pilot.
+2. **Estimate** rainfall-related climate exposure for mapped catchments and linked road segments of every registered road using forecast rain, INGEMMET susceptibility and valid SENAMHI advisories; show **live source-reported conditions** alongside **24–72 h estimated exposure** and explicit unknown coverage.
 3. **Collect and verify** environmental field reports through WhatsApp (text, voice note and location); photos are excluded.
-4. **Notify** consenting drivers about confirmed route conditions, applicable official advisories and estimated climate exposure for their subscribed stretch; retain phone calls as the existing optional trip-watch feature.
+4. **Notify** consenting drivers about official route conditions, clearly labeled unconfirmed community reports and estimated climate exposure for the road and stretch they selected; company monitors can add urgent calls through route watch (F4).
 5. **Support environmental preparedness:** identify supported stretches where forecast rainfall overlaps susceptible terrain, show dated attention windows and unknown coverage, and deliver relevant notices to consenting subscribers.
-6. **Explore sustainability:** keep reporting and subscribed environmental notices accessible; collect organizational needs through the waitlist. Commercial plans below are hypotheses, with payments excluded from this delivery.
+6. **Explore sustainability:** keep reporting, queries and the public dashboard free; sell a low-price seven-day route-alert pass through Qatom; collect organizational needs through the waitlist. The other commercial plans below remain hypotheses.
 7. **Evaluate** exposure rules, input coverage/freshness and alert delivery honestly. Keep historical reconstruction and deferred ML experiments separate from operational claims (section 4).
 8. **Test with real users** during the event and document what we learned.
 
@@ -136,7 +138,7 @@ Using AI is not evidence by itself; every design decision is explained in the re
 
 - **A channel people already have** (WhatsApp and phone calls), not a new app.
 - **The AI does a narrow job** (transcription, extraction and explanations), wrapped in our own deterministic logic with a verification step.
-- **One corridor done deeply** (PE-22) rather than all of Peru done shallowly.
+- **Deep pilot, honest national layer.** PE-22 carries the full workflow (reports, gazetteer, SUTRAN archive, weekly PDFs, company calls); other roads get live conditions, climate estimates, queries and route alerts, each labeled with its coverage and limits.
 - **Observed, forecast and estimated information are always distinguished.** Potential scenarios are never shown as confirmed damage.
 - **Every chart answers a decision question** (e.g. "where does forecast rain overlap susceptible terrain?", "which supported stretch needs attention during this window?"). A visualization that does not support a decision is cut.
 - **People who report never pay.** The WhatsApp channel stays free; organizations that use the aggregated data pay.
@@ -149,11 +151,11 @@ Every rainy season, huaicos and rockfalls cut the **Carretera Central** (Lima–
 
 Official institutions publish meteorological, geological and road data, but on different platforms, which makes joint analysis difficult. SUTRAN's interactive alert map ([alertasviales.sutran.gob.pe](https://alertasviales.sutran.gob.pe/), v2.0) shows **confirmed** incidents with road status, an El Niño mode and a timeline of alerts. It does not forecast which segments may be affected next from rainfall over their upstream catchments, it does not take reports from people on the road, and it does not push warnings to a driver's phone. It is a data source for us, not a replacement.
 
-**Primary user: people who drive the corridor.** Interprovincial bus and colectivo drivers, truckers and travelers. They both report and consume information, and they already share road status in WhatsApp groups; we give that habit structure.
+**Primary user: people who drive exposed national roads, starting with the Carretera Central.** Interprovincial bus and colectivo drivers, truckers and travelers. They both report and consume information, and they already share road status in WhatsApp groups; we give that habit structure.
 
 **Secondary users:**
 - **Residents of quebradas** (Chosica and others), who need early warning.
-- **Operations staff at logistics and bus companies** (dispatchers), who decide when trucks and buses leave and need to warn drivers already on the road.
+- **Transport monitors at logistics, mining and bus companies**, who need to warn drivers already on the road; they register route watches and urgent calls on `/empresa` (departure decisions remain deferred).
 - **Decision-makers** (municipalities, regional emergency centers / COER, MTC, Provías), who need to know which segments require attention and how many kilometers and population centers are exposed.
 
 **Track fit:** Climate and Territory: rainfall exposure, debris flows, slope failures and preparedness are the core environmental problem. Road conditions and driver alerts connect that problem to concrete impacts and actions; traffic crashes remain separately identified context.
@@ -162,8 +164,15 @@ Official institutions publish meteorological, geological and road data, but on d
 
 ### Geographic scope
 
-| Stage | Area | Reason |
+| Stage | Area | Status |
 |---|---|---|
+| **Pilot, full workflow** | **Carretera Central (PE-22)**, Lima–Chosica–Matucana–La Oroya | Implemented: reports, gazetteer, SUTRAN archive, weekly PDFs, company route watch |
+| **National layer** | All SUTRAN alerts and Provías history in Peru; climate exposure and WhatsApp route alerts on PE-22 plus nine registered roads (PE-32, PE-12A, PE-3ND, PE-18, PE-5NA, PE-08B, PE-5NC, PE-14C, PE-30A) | Implemented within free-tier limits; PE-3N and PE-5N need sub-corridors |
+| **Later** | North coast flood exposure (Piura and Tumbes), more roads, reports and PDFs off the pilot | Same pipeline; needs per-region rule review, gazetteers and archives |
+
+The opening view shows Peru in 3D with national alerts; the PE-22 scope button focuses the pilot.
+
+---|---|---|
 | **Hackathon prototype** | **Carretera Central (PE-22)**, Lima–Chosica–Matucana–La Oroya (and onward to Huancayo for trips) | High exposure to huaicos; reachable from Lima, so we can test with real drivers during the event |
 | **Second priority** | North coast: Piura and Tumbes | Highest flood exposure during El Niño |
 | **Later** | Rest of the national road network, e.g. Lima–Arequipa trips | Same pipeline, more layers and road geometry |
@@ -177,9 +186,9 @@ The opening view shows Peru in 3D; analysis and live features focus on PE-22.
 ### Product surfaces and plans
 
 **Commercial background only:** the paid packaging below preserves earlier ideas;
-it does not add payment, departure-planning, call or voice-reply requirements to
-the approved delivery scope. Current priorities are the environmental workflow
-and the implementation checkpoint above.
+only the Qatom seven-day route-alert pass (USD 0.50, see "Current state") is
+implemented. Prices, other plans, departure planning and voice replies below are
+not delivery requirements.
 
 Access is sold **by time, not by message**: a driver pays for the days they will be on the road, and a company pays for a period of dashboard access or predictions.
 
@@ -198,7 +207,7 @@ Access is sold **by time, not by message**: a driver pays for the days they will
 ### Priority tiers
 
 - **P0, core (must work at the core checkpoint):** F1, F3, F5a, F8 and the climate-exposure assessment (section 4).
-- **P1, delivery readiness (must work at the feature freeze):** environmental report confidence/clearing, reliable F3 delivery, exposure/coverage validation, environmental indicators and explanations in F5b, F2, and F10 traction/waitlist. F9 is deferred; F7 commercial payment flows remain excluded.
+- **P1, delivery readiness (must work at the feature freeze):** environmental report confidence/clearing, reliable F3 delivery, exposure/coverage validation, environmental indicators and explanations in F5b, F2, and F10 traction/waitlist. F9 is deferred; of F7, only the Qatom seven-day route-alert pass is implemented.
 - **Last optional task before the freeze:** F6 weekly report. It is built only after validation and P1 work are complete, and it is cut if time runs out.
 - **P2, only after all of the above:** F4 call alerts, then the items under "Second priority". The Zavu voice check (section 6) still runs at the start so the decision on F4 can be made at the core checkpoint.
 
@@ -231,17 +240,17 @@ People near an incident send it to our Zavu WhatsApp number.
 
 ### F3. Subscribe and WhatsApp alerts (P0)
 
-- *"Avísame de la Central"* or *"Avísame Chosica–La Oroya"* creates a subscription for a km range; the bot confirms the range. Explicit opt-in; *"BAJA"* opts out at any time.
-- **Current delivery scope:** subscriptions and conditional alerts are implemented; a consenting participant verified a DEMO alert. Participant update: include unconfirmed public reports with a clear label; confidence/clearing remains separate unfinished work. Delivery outside the 24-hour conversation window remains unverified. Paid packaging remains future commercial context under the existing payments exclusion.
+- `SUSCRIBIR` buys the seven-day pass; `RUTA PE-32` (or `RUTA`, then the road code) selects the road, then origin and destination by approximate map kilometers or static pins (catalog places on PE-22), and `RUTA ACTIVAR <code>` confirms. Explicit opt-in; *"BAJA"* opts out at any time.
+- **Current delivery scope:** subscriptions and conditional alerts are implemented; a consenting participant verified a DEMO alert. Participant update: include unconfirmed public reports with a clear label; confidence/clearing remains separate unfinished work. Delivery outside the 24-hour conversation window remains unverified. Route alerts require the Qatom seven-day pass (or a DEMO pass on configured test phones).
 - **Triggers:**
   - a newly detected SUTRAN notice or active public community report in the selected range; community reports stay explicitly **unconfirmed**, including initial reports;
   - an incident in the range is cleared;
   - a fresh, complete climate-exposure assessment for a linked segment in the subscribed range crosses a documented attention threshold, labeled **estimated climate exposure**;
   - a new, valid and temporally eligible SENAMHI advisory covers the range, attributed to SENAMHI and separate from our assessment.
-- **Route and delivery update:** `RUTA` collects origin/destination by static pins, catalog places or approximate map kilometers, follows the available PE-22 axis, and requires typed activation. Only events intersecting that range qualify until `STOP`/`BAJA`; no continuous GPS, alternate-road navigation, ETA or F9 departure engine is implied. Evaluate after committed community publication, complete SUTRAN polling and hourly climate refresh; retain a five-minute recovery job, with no 30-minute delivery cooldown or quiet hours. Fingerprints suppress repeats; reported events take priority over a bounded climate notice, and stale/incomplete inputs suppress new climate escalation.
+- **Route and delivery update:** `RUTA` collects the road and then origin/destination on that road's captured axis, and requires typed activation. Routes off PE-22 take official alerts from the live national SUTRAN feed and climate notices from that road's assessment; community reports remain PE-22 only. Only events intersecting that range qualify until `STOP`/`BAJA`; no continuous GPS, alternate-road navigation, ETA or F9 departure engine is implied. Evaluate after committed community publication, complete SUTRAN polling and hourly climate refresh; retain a five-minute recovery job, with no 30-minute delivery cooldown or quiet hours. Fingerprints suppress repeats; reported events take priority over a bounded climate notice, and stale/incomplete inputs suppress new climate escalation.
 - **Outside the 24-hour window:** an approved WhatsApp utility template, e.g. *"Alerta PeruRoad: {tipo} en {tramo}, {estado}. Responde ESTADO para más detalles."* Pending/unapproved templates leave delivery pending; SMS requires separate consent and implementation.
 
-### F4. Trip watch and call alerts (P2; Route Pass and Company Predictions)
+### F4. Trip watch and call alerts (implemented for companies on PE-22; see [route watch](integration/route-watch.md))
 
 A driver on the road cannot read WhatsApp; a short call reaches them. This uses Zavu Voice Agents: the same agent configuration answers calls, and we place a call with one API request (`POST /v1/calls`).
 
@@ -263,7 +272,7 @@ A driver on the road cannot read WhatsApp; a short call reaches them. This uses 
 **F5a. Public view (P0)**
 
 **Participant update:** add `possible_huaico` forecast items labeled *Posible huaico · estimación*, with dated six-hour windows, approximate mapped kilometer ranges and rainfall/susceptibility reasons. Keep them distinct from observed incidents, road status, the historical event timeline and impact counts. See the [dashboard integration](integration/dashboard-forecast.md).
-- Opening fly-in from Peru to PE-22 on 3D terrain with hillshade.
+- Opening view of Peru in 3D terrain with hillshade and national alerts; a scope button flies to the PE-22 pilot.
 - **Layers (toggle):**
   - incidents: icon by type, color by confidence, official (SUTRAN, with its road status interrumpido / restringido / normal) vs community, *"no confirmado"* label;
   - estimated climate exposure on linked 1-km segments (24 h), with unknown/unavailable coverage visible;
@@ -318,7 +327,10 @@ of organization report links. See [weekly PDF integration](integration/weekly-en
   supports server-only storage, job authorization and bounded file access. D's
   organization report page is future work, not required for this driver-PDF flow.
 
-### F7. Passes and payment (excluded; commercial background only)
+### F7. Passes and payment (only the Qatom seven-day route-alert pass is implemented; the rest is commercial background)
+
+Implemented: `SUSCRIBIR` → typed `ACTIVAR <code>` → Qatom checkout, verified fulfilment and server-enforced expiry; see [Qatom passes](integration/qatom-alert-passes.md). The 1-/4-day passes, reminders, company purchases, Yape fallback, admin page and paid agent API below are not implemented.
+
 
 - **Route Pass by WhatsApp:**
   - the driver writes *"PASE 4"* (or picks 1, 4 or 7 days from a WhatsApp list) and states the route, e.g. *"Lima–Huancayo"*;
@@ -335,7 +347,7 @@ of organization report links. See [weekly PDF integration](integration/weekly-en
 
 ### F8. Official data ingestion (P0, n8n)
 
-- **Every 10 minutes:** SUTRAN public alerts (`api.sigea.sutran.gob.pe/public/alerts`), filtered to `viaCodigo = PE-22` and to alerts in force (`vencida = false`, `aunNoVigente = false`), upserted as official incidents by their SUTRAN `id` / `codigo`. Changes are detected by `lastActionAt` and archived, because SUTRAN only returns current alerts, so history exists only if we keep it. Each alert's status history is read from `/public/alerts/{id}/historial`. Dates come as `DD/MM/YYYY` (`fechaEvento`, `vigenteDesde`, `vigenteHasta`) and ISO 8601 UTC (`lastActionAt`) and are parsed accordingly.
+- **Every 10 minutes:** SUTRAN public alerts (`api.sigea.sutran.gob.pe/public/alerts`), filtered to `viaCodigo = PE-22` for the archive (the dashboard and WhatsApp `ESTADO` read the live national feed directly) and to alerts in force (`vencida = false`, `aunNoVigente = false`), upserted as official incidents by their SUTRAN `id` / `codigo`. Changes are detected by `lastActionAt` and archived, because SUTRAN only returns current alerts, so history exists only if we keep it. Each alert's status history is read from `/public/alerts/{id}/historial`. Dates come as `DD/MM/YYYY` (`fechaEvento`, `vigenteDesde`, `vigenteHasta`) and ISO 8601 UTC (`lastActionAt`) and are parsed accordingly.
 - **Live official updates (optional):** the SUTRAN map receives updates over a WebSocket. The dashboard can subscribe to it from the browser to show official changes without waiting for the next poll; the server-side poll stays the source of record. The message format is only known from the map's frontend code and must be confirmed with a real event before we rely on it.
 - **Hourly:**
   - Open-Meteo forecast and recent precipitation for catchment sample points;
@@ -394,7 +406,7 @@ The dashboard, messages and calls always distinguish **observed** events (offici
 
 ### Out of scope
 
-Other corridors (including Lima–Arequipa), frost alerts, native mobile app, full user accounts and roles, card handling in our own code, live GPS tracking, national coverage.
+Frost alerts, native mobile app, full user accounts and roles, card handling in our own code, live GPS tracking, alternative-route navigation, roads not in the reviewed registry, and WhatsApp reports or weekly PDFs off PE-22.
 
 ---
 
@@ -410,9 +422,9 @@ community-report verification and valid official advisories remain distinct.
 
 Intersect mapped INGEMMET susceptibility with road geometry and catchment samples,
 then combine it with area-weighted forecast rainfall. Retain official classes and
-record unknown coverage. The existing HydroBASINS fallback has 11 coarse unions,
-68 mapped crossings and links on 38 of 174 segments; associations are approximate,
-and crossing sub-basins include downstream territory. See [catchment limitations](data/pe22-catchments.md).
+record unknown coverage. The HydroBASINS fallback links every PE-22 segment to river-crossing
+or containing basins (since October 18); associations are approximate, and crossing
+sub-basins include downstream territory. See [catchment limitations](data/pe22-catchments.md).
 
 One-kilometer display segments do not establish one-kilometer prediction accuracy.
 Current operational rainfall uses the roughly 25-km IFS 0.25-degree grid; slopes
@@ -628,7 +640,7 @@ Four technical roles; section 8c lists each member's tasks. Pitch, user outreach
 
 | Role | Owns |
 |---|---|
-| **A. Platform, payments and API** | Repo, deploy, schema, CI, security helpers, read APIs and Realtime, passes and payment (F7), paid-access gate, admin page, traction and waitlist backend (F10) (payments/Qatom excluded; F9 deferred) |
+| **A. Platform, payments and API** | Repo, deploy, schema, CI, security helpers, read APIs and Realtime, the Qatom route-alert pass (F7), paid-access gate, traction and waitlist backend (F10); F9 deferred |
 | **B. Messaging and voice agent** | Zavu webhook, templates and voice agent, OpenAI transcription, extraction, geocoding, dedupe, confidence, alert engine (F1–F3), weekly report delivery (F6), trips and calls (F4) |
 | **C. Data and model** | Data integration checks, SUTRAN ingestion and archive, segments, catchments, climate-exposure assessment, environmental indicators and coverage validation, reconstruction and exposure evaluation, n8n jobs (ingestion and weekly report) |
 | **D. Frontend and visualization** | Next.js UI, MapLibre 3D map, layers, heat map, timeline, indicators and charts, route profile, stretch selector, dated environmental exposure windows and coverage, `/impacto` and waitlist form (F10), purchase screens, report page (F6), export, live updates |
@@ -654,7 +666,7 @@ submission and final checks forward to finish at least 30 minutes before it.
 | **H8–10** | **Launch to real users** | Number shared in WhatsApp groups (drivers, family, friends who travel the Central); waitlist form live; usage recorded in the database from the first real user |
 | **H10–18 (night)** | Core (P0) | Extraction + dedupe + confidence; catchments delineated; climate-exposure assessment v1; subscriptions + alerts; SENAMHI ingestion; Yaku 2023 reconstruction data, 2024–2025 archived forecasts and event records loaded |
 | **H18** | **Core integration checkpoint** | The live reporting → dashboard → subscriber alert flow works from start to finish; go / no-go decision on F4 call alerts based on the Zavu voice check |
-| **H18–24** | Environmental delivery readiness (P1), then optional F6 | Confidence/clearing and report grouping; template delivery verification; exposure rules, spatial coverage/freshness and alert transitions; missing environmental indicators and explanations; `/impacto` (F10) and WhatsApp queries; **then, optionally, F6 weekly report**. F9 deferred and payments excluded; no new transport features |
+| **H18–24** | Environmental delivery readiness (P1), then optional F6 | Confidence/clearing and report grouping; template delivery verification; exposure rules, spatial coverage/freshness and alert transitions; missing environmental indicators and explanations; `/impacto` (F10) and WhatsApp queries; **then, optionally, F6 weekly report**. F9 deferred; only the Qatom route-alert pass among payments; no new transport features |
 | **H18–22 (in parallel)** | **Terminal visit** | One or two members go to the Central bus/colectivo terminals (e.g. Yerbateros): ~10 interviews, sign-ups, willingness-to-pay answers, photos/video |
 | **H22–29 (in parallel)** | Pitch preparation | Slides, real usage evidence, 5 or more timed rehearsals, and Q&A preparation completed |
 | **H24** | **Feature freeze** | Full MVP works end to end; no new features after this point |
@@ -690,7 +702,7 @@ This section covers technical work only. Pitch, user outreach and traction tasks
 
 | Member | Technical area | Owns |
 |---|---|---|
-| **A** | Platform, payments and API | Repo, deploy, database schema, CI, security helpers, read APIs and Realtime, passes and payment (F7), paid-access gate, admin page, traction and waitlist backend (F10) (payments/Qatom excluded; F9 deferred) |
+| **A** | Platform, payments and API | Repo, deploy, database schema, CI, security helpers, read APIs and Realtime, the Qatom route-alert pass (F7), paid-access gate, traction and waitlist backend (F10); F9 deferred |
 | **B** | Messaging and voice agent | Zavu (WhatsApp, SMS, email, calls), OpenAI transcription, report pipeline (F1), ask (F2), subscriptions and alert engine (F3), report delivery (F6), call alerts (F4) |
 | **C** | Data and model | SUTRAN and weather ingestion (F8), segments, gazetteer, catchments, hazard layers, climate-exposure assessment, environmental indicators and coverage validation, Yaku reconstruction, exposure evaluation, weekly report data (F6), n8n workflows |
 | **D** | Frontend and visualization | Public and paid dashboard (F5a, F5b), dated environmental exposure windows and coverage, `/impacto` page and waitlist form (F10), purchase and access-code screens, report page (F6) |
@@ -719,7 +731,7 @@ The times assume work starts on Saturday at 13:30 and end at the Sunday 09:00 de
 | **0. Setup and contracts** | Sat 13:30–15:00 | Repo, deploy, database, Zavu number, templates submitted, API contracts agreed, SUTRAN polling started | 15:00: everyone can deploy; contracts in the repo |
 | **1. Thin skeleton** | 15:00–19:00 | A WhatsApp message becomes a pin on the public map; SUTRAN incidents visible; waitlist form stores sign-ups | 19:00: the public URL is usable by real people |
 | **2. Core (P0)** | 19:00–01:00 | F1, F3, F5a, F8 and the climate-exposure assessment working on real data | Sun 01:00: **core checkpoint**; go / no-go on F4 |
-| **3. Environmental readiness (P1)** | 01:00–04:30 | Report confidence/clearing/grouping, template delivery check, spatial/exposure validation, F5b environmental indicators, F2 and F10; F9 deferred and F7 excluded | 04:30: remaining environmental reliability and evidence checks recorded, with limitations explicit |
+| **3. Environmental readiness (P1)** | 01:00–04:30 | Report confidence/clearing/grouping, template delivery check, spatial/exposure validation, F5b environmental indicators, F2 and F10; F9 deferred; F7 limited to the Qatom route-alert pass | 04:30: remaining environmental reliability and evidence checks recorded, with limitations explicit |
 | **4. Final evidence; optional F6** | 04:30–05:30 | Finish environmental demo/evidence first; generate/deliver F6 only if validation is complete and time remains | 05:30: **feature freeze**; unfinished optional work explicitly cut |
 | **5. Harden** | 05:30–07:00 | Error handling, edge cases, tests, demo data, setup instructions | 07:00: **code freeze** |
 | **6. Final validation** | 07:00–08:30 | Fresh-session check of every flow on the public URL; only fixes for blockers | 08:30: ready to submit (deadline 09:00) |
@@ -734,7 +746,7 @@ The times assume work starts on Saturday at 13:30 and end at the Sunday 09:00 de
 
 ### Member A: platform, payments and API
 
-Payment/Qatom/Yape tasks below remain excluded background; F9 is deferred.
+Of the payment tasks below, only the Qatom seven-day route-alert pass was built; Yape, the admin page, company purchases and the agent API remain background. F9 is deferred.
 
 | Phase | Task | Done when |
 |---|---|---|
@@ -759,14 +771,14 @@ reports, calls and voice replies are optional; no departure flow is required.
 
 | Phase | Task | Done when |
 |---|---|---|
-| 0 | Zavu number and signed webhook; alert utility template submitted; OpenAI transcription and LLM configured; voice calls/replies optional and payment templates excluded | Actual setup and participant audio test results recorded in `PROGRESS.md`; template delivery approval checked separately |
-| 1 | Message router: environmental report, status/exposure query, subscriptions, *BAJA* and fallback help; *PASE* excluded and departure questions deferred | Supported commands reach their handler without promising unavailable features |
+| 0 | Zavu number and signed webhook; alert utility template submitted; OpenAI transcription and LLM configured; voice calls/replies optional | Actual setup and participant audio test results recorded in `PROGRESS.md`; template delivery approval checked separately |
+| 1 | Message router: environmental report, status/exposure query, subscriptions, *BAJA* and fallback help; `SUSCRIBIR`/`ACTIVAR`/`PAGO` handle the Qatom pass; departure questions deferred | Supported commands reach their handler without promising unavailable features |
 | 1 | Webhook → store report (download media) → crude extraction → incident → acknowledgment reply | A real WhatsApp message shows on the public map |
 | 2 | OpenAI transcription and schema-validated extraction (implemented); complete 2-minute grouping and real-message validation; preserve pin/gazetteer confirmation and missing-input follow-up | Tests pass on 10–20 real anonymized messages; synthetic fixtures remain labeled |
 | 2 | Dedupe against community and SUTRAN incidents; confidence v1; clearing logic | Tests for dedupe and confidence pass |
 | 2 | Subscriptions and alert engine (F3): free closure alerts vs pass alerts, source-triggered route alerts with duplicate suppression, five-minute recovery and no quiet hours, approved-template fallback outside the 24 h window (SMS requires separate consent); send helper with retry | A subscriber receives an alert for a new incident |
 | 3 | Ask by WhatsApp (F2): short text replies with environmental exposure, source dates and map link; voice replies optional | Status/exposure questions receive source-grounded summaries |
-| Deferred / excluded | Departure questions (F9) are deferred; *PASE* payments are excluded | Neither flow is a delivery requirement; responses must not fabricate availability |
+| Deferred | Departure questions (F9) | Not a delivery requirement; responses must not fabricate availability |
 | 4 | Weekly PDF opt-in, cancellation and document delivery; approved reply-PDF notice outside the conversation window (F6) | One consenting driver receives the PDF attachment; approval and receipt recorded separately |
 | 4 | Call alerts (F4) only if the 01:00 decision was *go*: trip registration, call consent, trigger evaluation, `POST /v1/calls` with greeting, agent tool endpoints, transcript storage | One consenting phone received a call |
 | 5 | Verify Zavu, OpenAI transcription and LLM failure handling (timeouts, safe retries, Spanish fallbacks); confirm out-of-window utility-template delivery | Failures produce visible recovery states; record actual delivery evidence |
@@ -794,14 +806,14 @@ F9 is deferred and F6 is last and optional.
 ### Member D: frontend and visualization
 
 Focus remaining work on environmental explanations, indicators and device checks;
-purchase screens are excluded, F9 is deferred and F6 is optional.
+web purchase screens are not built (the pass is bought in WhatsApp), F9 is deferred and F6 is optional.
 
 | Phase | Task | Done when |
 |---|---|---|
 | 0 | UI shell and routing; MapLibre 3D terrain and fly-in from Peru to PE-22; mocks that follow the API contracts | Map renders on the public URL |
 | 1 | Live incidents layer (community and SUTRAN) and incident panel; waitlist form (F10) | A WhatsApp report appears live; the form stores sign-ups |
 | 2 | Estimated climate-exposure layer and panel; rainfall, catchments, susceptibility and valid SENAMHI advisories; live conditions, unknown coverage and *"no confirmado"* kept distinct | F5a complete on real data with source/age/uncertainty visible |
-| 3 | Environmental exposure windows, reasons, source freshness and assessed/unknown coverage; preserve demo access where required | Users can inspect when/where attention is elevated and why; F9 planner/chart deferred and purchase screens excluded |
+| 3 | Environmental exposure windows, reasons, source freshness and assessed/unknown coverage; preserve demo access where required | Users can inspect when/where attention is elevated and why; F9 planner/chart deferred; no web purchase screens |
 | 3 | Paid view: timeline with Yaku reconstruction mode, 24 h / 72 h toggle, stretch selector, indicator panel, route profile, rainfall-vs-risk chart, export | F5b works with the demo access code |
 | 3 | `/impacto` page reading `/api/stats` (F10) | Counts render and match the API |
 | Future | Organization report page/archive | Driver PDFs are delivered as attachments; a new report page is not required |
@@ -809,7 +821,7 @@ purchase screens are excluded, F9 is deferred and F6 is optional.
 
 ### If we fall behind
 
-At the 01:00 checkpoint, apply the existing optional-feature cut order: F4 calls → voice-note replies → response layer and export → F6 weekly report → rainfall-vs-exposure chart. Keep F1, F3 driver alerts, F5a, F8 live conditions, climate-exposure assessment/validation and `/impacto`. F9 departure support is already deferred and must not consume the remaining delivery time. Payments/Qatom/Yape remain excluded; classifier training is deferred research.
+At the 01:00 checkpoint, apply the existing optional-feature cut order: F4 calls → voice-note replies → response layer and export → F6 weekly report → rainfall-vs-exposure chart. Keep F1, F3 driver alerts, F5a, F8 live conditions, climate-exposure assessment/validation and `/impacto`. F9 departure support is already deferred and must not consume the remaining delivery time. Only the Qatom route-alert pass is in scope among payments; classifier training is deferred research.
 
 ---
 
@@ -859,8 +871,8 @@ excluding team members and test numbers.
 | 0:35–1:10 | **Environmental dashboard.** Show forecast rainfall overlapping susceptible terrain, a dated six-hour possible-huaico estimate, source freshness and assessed/unknown stretches. Current SUTRAN impacts remain separate context; historical reconstruction is optional and labeled |
 | 1:10–2:00 | **Live.** Send an explicitly labeled DEMO environmental voice report → review location → typed confirmation → unconfirmed DEMO marker. Show the consenting participant's recorded alert check, or run an eligible DEMO notification; keep the participant-approved unverified-report alert explicitly labeled and separate from verified evidence |
 | 2:00–2:25 | **How it works.** Forecast rain + official susceptibility + valid advisories; code computes exposure, the LLM explains verified inputs; show source freshness, coverage and evaluation limits |
-| 2:25–2:45 | **Preparedness and value.** Explain which supported stretches need attention during the selected forecast window, why, and how subscribed people receive concise notices. Show actual user evidence and limitations; departure planning is deferred and payments excluded |
-| 2:45–3:00 | **Users and next steps.** Real usage numbers, interview quotes, Piura/Tumbes and more corridors |
+| 2:25–2:45 | **Preparedness and value.** Explain which supported stretches need attention during the selected forecast window, why, and how subscribed people receive concise notices. Show actual user evidence and limitations; departure planning is deferred; the only payment is the USD 0.50 seven-day route-alert pass |
+| 2:45–3:00 | **Users and next steps.** Real usage numbers, interview quotes, national roads already covered, then Piura/Tumbes and reports off the pilot |
 
 **Anticipated questions:**
 - What about false reports? (confidence score, reputation, "no confirmado", matching SUTRAN incidents, confirmation from nearby users and calls)
@@ -915,7 +927,7 @@ excluding team members and test numbers.
 - [ ] Section 6 checks recorded with results and fallbacks used
 - [ ] Public 3D dashboard with heat map and live incidents works from the public URL; paid view (timeline, indicators, route profile, export) works with the demo access code
 - [ ] Dated environmental exposure windows explain rainfall/susceptibility reasons and assessed/unknown coverage; no departure planner or dispatch decision is required (F9 deferred)
-- [ ] Existing demo entitlements work where required; real pass sales, Qatom and Yape remain excluded from this implementation
+- [ ] Existing demo entitlements work where required; a real Qatom pass payment activates route alerts (Yape remains excluded)
 - [ ] `/impacto` shows real counts from outside the team; the company waitlist form stores sign-ups
 - [ ] A separately consenting driver receives a weekly environmental PDF attachment; n8n schedule/retries and any template-approval limitation are recorded
 - [ ] If F4 is delivered: a consenting phone on a registered trip received a call about a hazard ahead, and the call transcript is linked to the incident

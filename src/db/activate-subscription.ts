@@ -3,6 +3,9 @@ import { z } from "zod";
 import type { SubscriptionRange } from "@/contracts/notifications";
 import { encryptContact } from "@/integrations/security/contacts";
 
+/** Ranges stored before national routes carry no road code; they were all on the pilot. */
+const PILOT_ROAD_CODE = "PE-22";
+
 export async function activateSubscription(
   client: PoolClient,
   input: {
@@ -30,8 +33,8 @@ export async function activateSubscription(
   );
   const saved = await client.query(
     `insert into public.subscriptions(contact_ref,phone_key,road_code,km_start,km_end,distance_reference,channel,consent_at,is_team,is_test,geometry_revision,range_label,last_inbound_at,alert_expires_at,alert_payment_id,route_active)
-     values($1,$2,'PE-22',$3,$4,'geometry_distance','whatsapp',$5,$6,$7,$8,$9,$5,$10,$11,$12)
-     on conflict(phone_key,road_code) where opted_out_at is null do update set contact_ref=excluded.contact_ref,km_start=excluded.km_start,km_end=excluded.km_end,consent_at=excluded.consent_at,is_team=excluded.is_team,is_test=excluded.is_test,geometry_revision=excluded.geometry_revision,range_label=excluded.range_label,last_inbound_at=excluded.last_inbound_at,alert_expires_at=excluded.alert_expires_at,alert_payment_id=excluded.alert_payment_id,route_active=excluded.route_active returning id`,
+     values($1,$2,$13,$3,$4,'geometry_distance','whatsapp',$5,$6,$7,$8,$9,$5,$10,$11,$12)
+     on conflict(phone_key) where opted_out_at is null do update set contact_ref=excluded.contact_ref,road_code=excluded.road_code,km_start=excluded.km_start,km_end=excluded.km_end,consent_at=excluded.consent_at,is_team=excluded.is_team,is_test=excluded.is_test,geometry_revision=excluded.geometry_revision,range_label=excluded.range_label,last_inbound_at=excluded.last_inbound_at,alert_expires_at=excluded.alert_expires_at,alert_payment_id=excluded.alert_payment_id,route_active=excluded.route_active returning id`,
     [
       z.uuid().parse(savedContact.rows[0]?.id),
       input.key,
@@ -45,6 +48,7 @@ export async function activateSubscription(
       input.expiresAt,
       input.paymentId,
       input.routeActive ?? false,
+      input.range.roadCode ?? PILOT_ROAD_CODE,
     ],
   );
   const id = z.uuid().parse(saved.rows[0]?.id);

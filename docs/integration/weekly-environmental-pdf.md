@@ -40,6 +40,11 @@ It retains weather time, rule version, assessment ID, geometry revision, sources
 and unknown kilometers. Stale/unusable assessments have no actionable categories
 or fresh forecast totals. A stored PDF never silently refreshes.
 
+**Road coverage.** PDFs are available for routes on PE-22 only: the official-alert
+counts come from the PE-22 database archive, so a route on another road would show
+false zeros. For such routes `SEMANAL` and `PDF` reply with this limit and point to
+`ESTADO <road>` and `EXPOSICION <road>`; `SEMANAL BAJA` still works.
+
 **Layout (October 18 redesign).** Page 1 answers "how is my stretch this week?"
 with figures instead of text: a header with the stretch and dates, a forecast
 freshness badge, four indicator cards (official environmental SUTRAN alerts,

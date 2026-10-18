@@ -11,7 +11,12 @@ Project: [HackTheAndes](https://supabase.com/dashboard/project/cdqnintcqryfbfjjl
 region `us-west-2`. Existing project API keys were retrieved; no additional
 project, subscription, API key, or administrator-password reset was created.
 
-Sixteen migrations have been applied after rollback-only dry runs. They create
+Twenty-one migrations have been applied after rollback-only dry runs (through
+`20261018090000_separate_alert_pass_and_route`). `20261018100000_national_route_subscriptions`
+is pending: it lets route subscriptions use any registered road and makes a phone's
+active route unique; apply it **before** deploying the release that uses it, since that
+code upserts on the new index. It keeps the previous index, so the currently deployed
+release keeps working after it is applied. They create
 PostGIS and the application tables. Operational tables have RLS and no browser
 grants; `incident_updates` is the explicitly browser-readable revision signal. A scoped `peruroad_backend` login has application
 table permissions and its own RLS policies, without superuser, database/role
@@ -57,8 +62,8 @@ Official source facts remain separate from application `incidents`; matching,
 cause classification, confidence, clearing, and segment assignment require
 explicit domain rules with B. No lifecycle status or closure duration was
 invented during official ingestion. Catchments, sampled slopes, weather captures and official susceptibility/warnings
-now have validated import pipelines. Risk, payments and messaging processing
-remain separate pending implementations.
+now have validated import pipelines. Climate exposure, Qatom passes and
+messaging now have their own migrations and integration documents.
 
 Segments retain geometry revision IDs, measured-distance fields, source section
 references, and null official kilometers until calibrated. Terrain elevation is

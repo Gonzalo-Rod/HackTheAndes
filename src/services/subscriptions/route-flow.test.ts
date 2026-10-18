@@ -1,8 +1,9 @@
-import { expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import type { RoadContextRequest, RoadContextResponse } from "@peruroad/road-data/context/contracts";
 import type { RouteDraft } from "@/contracts/route-subscriptions";
 import { createSubscriptionFlow } from "./subscription-flow";
 import type { SubscriptionRepository } from "@/db/subscriptions";
+import type { RouteRoads } from "./route-flow";
 const revision = "a".repeat(64),
   now = Date.parse("2026-10-18T04:00:00Z");
 const newId = () => "abcdef12-0000-4000-8000-000000000000";
@@ -126,4 +127,116 @@ it("confirms a route through its own command without preparing another checkout"
   expect(s.repository.act).toHaveBeenLastCalledWith(expect.objectContaining({ action: { kind: "routeActivate", code: "ABCDEF12" } }));
   expect(s.repository.act).not.toHaveBeenCalledWith(expect.objectContaining({ action: expect.objectContaining({ kind: "activate" }) }));
   expect(s.payments.checkout).not.toHaveBeenCalled();
+});
+
+describe("national routes", () => {
+  const otherRevision = "b".repeat(64);
+  function nationalSetup() {
+    let draft: RouteDraft | null = null;
+    const repository: SubscriptionRepository = {
+      bounds: vi.fn(async (rev: string) => (rev === otherRevision ? { startKm: 0, endKm: 291.8 } : { startKm: 0, endKm: 174 })),
+      touch: vi.fn(async () => {}),
+      routeState: vi.fn(async () => ({ draft, reply: null })),
+      act: vi.fn(async ({ action }) => {
+        if (action.kind === "routeStart") draft = action.draft;
+        if (action.kind === "routeRoad" && draft) draft = { ...draft, road: action.road };
+        if (action.kind === "routeOrigin" && draft) draft = { ...draft, road: action.road ?? draft.road ?? null, origin: action.endpoint };
+        return "prompt" in action && action.prompt ? action.prompt : action.kind;
+      }),
+    };
+    const base = setup();
+    const roads = [
+      { roadCode: "PE-22", name: "Carretera Central", geometryRevision: revision, measuredLengthKm: 174, pilot: true },
+      { roadCode: "PE-32", name: "Carretera PE-32", geometryRevision: otherRevision, measuredLengthKm: 291.8, pilot: false },
+    ];
+    const locate = vi.fn<RouteRoads["locate"]>(async () => null);
+    const flow = createSubscriptionFlow({
+      repository,
+      context: base.context,
+      revision,
+      now: () => now,
+      newId,
+      pepper: "synthetic-pepper",
+      teamKeys: [],
+      testKeys: [],
+      national: { roads: async () => roads, locate },
+    });
+    return { repository, context: base.context, locate, flow, draft: () => draft };
+  }
+  const pin = (latitude: number, longitude: number) => ({
+    ...message(""),
+    messageId: `pin-${latitude}`,
+    messageType: "location",
+    content: { latitude, longitude },
+  });
+
+  it("asks for the road first, then the road code scopes the following km steps", async () => {
+    const s = nationalSetup();
+    expect(await s.flow.handle(message("RUTA"), "r")).toContain("¿Por qué carretera viajas?");
+    expect(await s.flow.handle(message("KM 10"), "r")).toContain("Primero elige la carretera");
+    expect(await s.flow.handle(message("PE-32"), "r")).toContain("Carretera PE-32");
+    expect(s.draft()?.road).toEqual({ roadCode: "PE-32", geometryRevision: otherRevision });
+    expect(await s.flow.handle(message("KM 250"), "r")).toContain("en PE-32");
+    await s.flow.handle(message("KM 20"), "r");
+    expect(s.repository.act).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        action: expect.objectContaining({
+          kind: "routeDestination",
+          range: expect.objectContaining({
+            startKm: 20,
+            endKm: 250,
+            geometryRevision: otherRevision,
+            roadCode: "PE-32",
+            label: expect.stringMatching(/^PE-32: /),
+          }),
+        }),
+      }),
+    );
+  });
+
+  it("accepts RUTA PE-32 in one message and checks km against that road", async () => {
+    const s = nationalSetup();
+    await s.flow.handle(message("RUTA PE-32"), "r");
+    expect(s.draft()?.road?.roadCode).toBe("PE-32");
+    expect(await s.flow.handle(message("KM 280"), "r")).toContain("Km 280.0 del mapa");
+    expect(await s.flow.handle(message("KM 300"), "r")).toContain("Solo cubrimos km aprox. 0.0–291.8 del mapa PE-32");
+  });
+
+  it("rejects roads without an estimate and lists the available ones", async () => {
+    const s = nationalSetup();
+    expect(await s.flow.handle(message("RUTA PE-1N"), "r")).toContain(
+      "PE-1N aún no está disponible para rutas. Carreteras disponibles: PE-22, PE-32",
+    );
+    expect(s.repository.act).not.toHaveBeenCalled();
+  });
+
+  it("detects the road from the first pin and keeps the destination on it", async () => {
+    const s = nationalSetup();
+    vi.mocked(s.context).mockResolvedValue({
+      ...(await s.context({ kind: "pin", latitude: 0, longitude: 0 }, "r")),
+      status: "outside_corridor",
+      location: null,
+    } as RoadContextResponse);
+    s.locate.mockResolvedValue({
+      roadCode: "PE-32",
+      geometryRevision: otherRevision,
+      segmentId: "s",
+      distanceFromOriginKm: 3,
+      distanceFromRoadM: 80,
+    });
+    await s.flow.handle(message("RUTA"), "r");
+    await s.flow.handle(pin(-15.874, -74.148), "r");
+    expect(s.locate).toHaveBeenLastCalledWith({ latitude: -15.874, longitude: -74.148 }, [otherRevision]);
+    expect(s.draft()?.road?.roadCode).toBe("PE-32");
+    expect(await s.flow.handle(message("Chosica"), "r")).toContain("catálogo de lugares cubre solo PE-22");
+    s.locate.mockResolvedValue(null);
+    expect(await s.flow.handle(pin(-12, -76), "r")).toContain("No pude ubicar ese pin sobre PE-32");
+  });
+
+  it("does not switch roads after the origin is set", async () => {
+    const s = nationalSetup();
+    await s.flow.handle(message("RUTA PE-32"), "r");
+    await s.flow.handle(message("KM 5"), "r");
+    expect(await s.flow.handle(message("PE-22"), "r")).toContain("Ya elegiste el origen en PE-32");
+  });
 });
