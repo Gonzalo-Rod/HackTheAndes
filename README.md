@@ -73,6 +73,11 @@ Run Next.js type generation and builds sequentially. Root tools exclude independ
 copies MapLibre's worker from the pinned dependency. Vercel builds C before
 installing the root application, using [vercel.json](vercel.json).
 
+The local data package can change without a version bump. `next.config.ts` marks
+its installed directory as unmanaged by Webpack's cache, so browser validators
+are rebuilt from the current files rather than a previous package version's
+cached output. Keep the data-package build and root install order above.
+
 ## Current integration
 
 See [A's API and B/D handoff](docs/platform-api.md) for endpoints, privacy,
