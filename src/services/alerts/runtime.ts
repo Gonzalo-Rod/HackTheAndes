@@ -8,7 +8,9 @@ import { createZavuClient } from "@/integrations/zavu/client";
 import { createZavuTemplateSender } from "@/integrations/zavu/templates";
 import { collectAlertCandidates } from "./collect-candidates";
 import { createAlertDispatcher } from "./deliver-alerts";
+import { expireAlertPasses } from "@/db/expire-alert-passes";
 export async function runAlertEvaluation(requestId: string = randomUUID()) {
+  await expireAlertPasses(database(), Date.now());
   const config = loadZavuConfiguration(),
     platform = loadPlatformConfiguration(),
     notification = loadNotificationConfiguration();

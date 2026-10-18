@@ -32,9 +32,14 @@ Photos, video, voice replies and calls are outside this implementation.
    the encrypted delivery reference. New consent can reactivate it. An already
    accepted in-flight provider message cannot be recalled.
 
-Only consenting subscribers receive proactive messages. Replies and subscriptions
-use existing messaging/privacy configuration; payments remain excluded. One active
-PE-22 subscription per identity is supported; a newly confirmed range replaces it.
+Only consenting subscribers with a current weekly pass receive proactive messages.
+The October 18 authorization adds a one-time USD 0.001 Qatom purchase for seven
+elapsed days from the original request, using OpenAI Responses and Qatom MCP;
+see [payment setup and verification](qatom-alert-passes.md). Existing `SUSCRIBIR`
+and `RUTA` flows now request payment after typed consent; `SUSCRIBIR 7 DIAS`
+explicitly requests the weekly corridor pass. `PAGAR` provides the checkout link
+and `PAGO` checks status. No automatic renewal is created. One active
+PE-22 subscription per identity is supported; a newly paid range replaces it.
 
 ## Alert eligibility and noise control
 

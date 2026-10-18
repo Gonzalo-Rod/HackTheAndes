@@ -22,6 +22,7 @@ import { createReportRepository } from "@/db/report-conversations";
 import { createRateLimiter } from "@/db/request-limits";
 import { createReportFlow } from "@/services/reports/report-flow";
 import { createOpenAiReportExtractor } from "@/integrations/openai/report-extractor";
+import { alertPassPayments } from "@/services/subscriptions/payment-runtime";
 
 export function createZavuWebhook() {
   const config = loadZavuConfiguration();
@@ -46,6 +47,7 @@ export function createZavuWebhook() {
       teamKeys: platform.TEAM_PHONE_KEYS,
       testKeys: platform.TEST_PHONE_KEYS,
       now: Date.now,
+      payments: alertPassPayments(),
     }),
     voice: intentConfig
       ? createVoiceInput({

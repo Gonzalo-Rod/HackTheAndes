@@ -26,7 +26,11 @@ export function createRouteFlow(deps: {
       .replace(/[\u0300-\u036f]/g, "")
       .toUpperCase();
     if (!["text", "location"].includes(message.messageType)) return null;
-    if (/^(CONFIRMAR|ACTIVAR|SEMANAL|PDF|ESTADO|STATUS|EXPOSICION|CLIMA|AYUDA|HELP|SUSCRIBIR|AVISAME|BAJA|STOP|HOLA)\b/.test(normalized))
+    if (
+      /^(CONFIRMAR|ACTIVAR|PAGAR|PAGO|SEMANAL|PDF|ESTADO|STATUS|EXPOSICION|CLIMA|AYUDA|HELP|SUSCRIBIR|AVISAME|BAJA|STOP|HOLA)\b/.test(
+        normalized,
+      )
+    )
       return null;
     const explicit = /^RUTA(?:\s|$)/.test(normalized);
     try {
@@ -42,7 +46,7 @@ export function createRouteFlow(deps: {
             id: (deps.newId ?? randomUUID)(),
             origin: null,
             isTest: sender.isTest || /\bPRUEBA\b/.test(normalized),
-            expiresAt: new Date(deps.now() + ROUTE_DRAFT_TTL_MS).toISOString(),
+            expiresAt: new Date(Math.min(deps.now(), message.providerTimestamp ?? deps.now()) + ROUTE_DRAFT_TTL_MS).toISOString(),
           },
         });
       }

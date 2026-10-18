@@ -56,3 +56,16 @@ it("accepts the exact typed activation code", async () => {
 });
 it("preserves report/query messages for their existing handlers", async () =>
   expect(await setup().flow.handle(message("REPORTE derrumbe"), "r")).toBeNull());
+it("recognizes the seven-day command without treating the duration as a place", async () => {
+  const s = setup();
+  await s.flow.handle(message("SUSCRIBIR 7 DIAS"), "r");
+  expect(s.context).not.toHaveBeenCalled();
+  expect(s.repository.act).toHaveBeenCalledWith(expect.objectContaining({ action: expect.objectContaining({ kind: "prepare" }) }));
+});
+it("anchors a request to the provider message time instead of delayed processing", async () => {
+  const s = setup();
+  await s.flow.handle({ ...message("SUSCRIBIR 7 DIAS"), providerTimestamp: now - 60_000 }, "r");
+  expect(s.repository.act).toHaveBeenCalledWith(
+    expect.objectContaining({ action: expect.objectContaining({ requestedAt: new Date(now - 60_000).toISOString() }) }),
+  );
+});

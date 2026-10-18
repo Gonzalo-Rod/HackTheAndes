@@ -1,0 +1,29 @@
+{
+  "seller": "PeruRoad Climate",
+  "items": [
+    {
+      "key": "whatsapp-alerts-7-days",
+      "name": "PeruRoad Climate: WhatsApp alerts for 7 days",
+      "price": "0.001",
+      "currency": "USD-TDN",
+      "method": "POST",
+      "path": "/api/qatom/alert-pass",
+      "descriptor": "PeruRoad 7-day alerts",
+      "private": false,
+      "featured": true,
+      "description": "One-time 0.001 USD-TDN payment for WhatsApp alerts on the PE-22 stretch the driver explicitly selected. The pass expires 168 hours after the original WhatsApp request, without renewal or another charge. Input request_id is the opaque request identifier created after typed ACTIVAR consent; no phone number is sent to Qatom. Alerts begin only after a verified settled sale. Covers SUTRAN changes, explicitly unconfirmed community reports and estimated climate exposure; no safety guarantee. STOP or BAJA cancels delivery. Read the free plan at /api/subscriptions/plan and /llms.txt for input and response conventions. Expired, cancelled or already-used requests do not grant access; contact the seller if payment settled without activation.",
+      "inputs": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Opaque weekly-alert request ID issued by the PeruRoad WhatsApp flow after explicit typed consent. The existing request pins the route, recipient, price and expiry; none are buyer inputs."
+          }
+        },
+        "required": ["request_id"],
+        "additionalProperties": false
+      }
+    }
+  ]
+}

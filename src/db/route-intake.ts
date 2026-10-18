@@ -51,7 +51,7 @@ export async function actRoute(db: PoolClient, encryption: Encryption, key: stri
     return "El origen cambió. Escribe RUTA para revisar la propuesta.";
   const range = subscriptionRangeSchema.parse(action.range);
   await db.query(
-    "insert into private.subscription_intake(phone_key,code,range,is_test,expires_at) values($1,$2,$3::jsonb,$4,$5) on conflict(phone_key) do update set code=excluded.code,range=excluded.range,is_test=excluded.is_test,expires_at=excluded.expires_at",
+    "insert into private.subscription_intake(phone_key,code,range,is_test,expires_at,requested_at) values($1,$2,$3::jsonb,$4,$5,$5::timestamptz-interval '30 minutes') on conflict(phone_key) do update set code=excluded.code,range=excluded.range,is_test=excluded.is_test,expires_at=excluded.expires_at,requested_at=excluded.requested_at",
     [key, action.code, JSON.stringify(range), draft.isTest, draft.expiresAt],
   );
   await db.query("delete from private.route_intake where phone_key=$1", [key]);

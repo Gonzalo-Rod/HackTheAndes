@@ -1,5 +1,13 @@
 # Hack the Andes — Team Plan
 
+**October 18 participant authorization:** implement weekly WhatsApp alert access
+for a single 0.001 USD-TDN payment through Qatom, with OpenAI Responses calling
+Qatom MCP. The pass ends 168 elapsed hours after the original request and does
+not renew. This supersedes earlier payment exclusions below only for this feature;
+Yape and other commercial plans remain excluded. The implementation, rollout,
+configuration and launch-verification boundaries are documented in
+[Qatom alert passes](integration/qatom-alert-passes.md).
+
 **Track:** Clima y Territorio
 **Project name:** *PeruRoad Climate*
 **One line:** A climate-exposure and preparedness dashboard for the Rímac–Carretera Central corridor that combines forecast rainfall, official terrain susceptibility and advisories with live road conditions and WhatsApp field reports, helping response teams prioritize attention and drivers receive relevant route alerts.

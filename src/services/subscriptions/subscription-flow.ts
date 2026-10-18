@@ -6,6 +6,7 @@ import type { SubscriptionRepository, SubscriptionAction } from "@/db/subscripti
 import { keyedDigest, phoneKey } from "@/integrations/security/contacts";
 import { createRouteFlow } from "./route-flow";
 import { logger } from "@/lib/logger";
+import type { AlertPassPayments } from "@/contracts/alert-passes";
 export function senderKey(from: string, pepper: string) {
   return phoneKey(from, pepper) ?? keyedDigest(from, pepper, "zavu-contact-v1");
 }
@@ -18,6 +19,7 @@ export function createSubscriptionFlow(deps: {
   testKeys: readonly string[];
   now: () => number;
   newId?: () => string;
+  payments?: AlertPassPayments;
 }): SubscriptionRouter {
   const route = createRouteFlow(deps);
   return {
@@ -47,6 +49,11 @@ export function createSubscriptionFlow(deps: {
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
         .toUpperCase();
+      if (["PAGAR", "PAGO"].includes(normalized))
+        return (
+          (await deps.payments?.checkout(key, requestId)) ??
+          "No hay una solicitud de pago pendiente. Escribe SUSCRIBIR 7 DIAS para elegir el tramo."
+        );
       const stop = ["BAJA", "STOP"].includes(normalized) || intent === "unsubscribe";
       const activate = /^ACTIVAR\s+([A-F0-9]{8})$/.exec(normalized);
       const subscribe = /^(SUSCRIBIR|AVISAME)(?:\s|$)/.test(normalized) || intent === "subscribe";
@@ -58,6 +65,7 @@ export function createSubscriptionFlow(deps: {
         const isTest = /\bPRUEBA\b/.test(normalized) || deps.testKeys.includes(key);
         const requested = text
           .replace(/^(SUSCRIBIR|AV[IÍ]SAME)\s*/i, "")
+          .replace(/^(?:7\s*D[IÍ]AS|UNA\s+SEMANA|POR\s+UNA\s+SEMANA)\s*/i, "")
           .replace(/\bPRUEBA\b/gi, "")
           .trim();
         let range: SubscriptionRange;
@@ -97,9 +105,17 @@ export function createSubscriptionFlow(deps: {
           });
           return "No pude verificar el tramo ahora. No se activó una nueva suscripción. Intenta más tarde.";
         }
-        action = { kind: "prepare", range, code: (deps.newId ?? randomUUID)().replaceAll("-", "").slice(0, 8).toUpperCase(), isTest };
+        action = {
+          kind: "prepare",
+          range,
+          code: (deps.newId ?? randomUUID)().replaceAll("-", "").slice(0, 8).toUpperCase(),
+          isTest,
+          requestedAt: new Date(Math.min(deps.now(), message.providerTimestamp ?? deps.now())).toISOString(),
+        };
       }
-      return act(action);
+      const reply = await act(action);
+      if (action.kind === "activate") return (await deps.payments?.checkout(key, requestId, eventKey)) ?? reply;
+      return reply;
     },
   };
 }

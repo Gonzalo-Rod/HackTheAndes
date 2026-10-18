@@ -7,8 +7,11 @@ import { actRoute, readRouteState } from "./route-intake";
 import type { RouteAction } from "@/contracts/route-subscriptions";
 import { subscriptionProposal } from "@/domain/subscriptions/messages";
 import { actWeeklyPreference, type WeeklyPreferenceAction } from "./weekly-preferences";
+import { prepareAlertPass } from "./alert-pass-intake";
+import { activateSubscription } from "./activate-subscription";
+import { alertPassWindow, passDeadline } from "@/domain/subscriptions/alert-pass";
 export type SubscriptionAction =
-  | { kind: "prepare"; range: SubscriptionRange; code: string; isTest: boolean }
+  | { kind: "prepare"; range: SubscriptionRange; code: string; isTest: boolean; requestedAt?: string }
   | { kind: "activate"; code: string }
   | { kind: "stop" }
   | RouteAction
@@ -61,6 +64,9 @@ export function createSubscriptionRepository(pool: Pool, encryption: { key: stri
         } else if (action.kind === "weeklyPrepare" || action.kind === "weeklyActivate" || action.kind === "weeklyStop") {
           reply = await actWeeklyPreference(client, input.key, action, input.now);
         } else if (action.kind === "stop") {
+          await client.query("update private.alert_pass_requests set status='cancelled' where phone_key=$1 and status='pending'", [
+            input.key,
+          ]);
           await client.query("delete from private.route_intake where phone_key=$1", [input.key]);
           await client.query("update public.subscriptions set opted_out_at=$2 where phone_key=$1 and opted_out_at is null", [
             input.key,
@@ -84,58 +90,41 @@ export function createSubscriptionRepository(pool: Pool, encryption: { key: stri
             "Alertas canceladas. También se canceló el PDF semanal. No recibirás nuevas notificaciones automáticas. Para volver, escribe SUSCRIBIR.";
         } else if (action.kind === "prepare") {
           const range = subscriptionRangeSchema.parse(action.range);
+          const requestedAt = z.iso.datetime().parse(action.requestedAt ?? input.now);
           await client.query("delete from private.route_intake where phone_key=$1", [input.key]);
           await client.query(
-            `insert into private.subscription_intake(phone_key,code,range,is_test,expires_at) values($1,$2,$3::jsonb,$4,$5::timestamptz+interval '30 minutes') on conflict(phone_key) do update set code=excluded.code,range=excluded.range,is_test=excluded.is_test,expires_at=excluded.expires_at`,
-            [input.key, action.code, JSON.stringify(range), action.isTest, input.now],
+            `insert into private.subscription_intake(phone_key,code,range,is_test,expires_at,requested_at) values($1,$2,$3::jsonb,$4,$5::timestamptz+interval '30 minutes',$5) on conflict(phone_key) do update set code=excluded.code,range=excluded.range,is_test=excluded.is_test,expires_at=excluded.expires_at,requested_at=excluded.requested_at`,
+            [input.key, action.code, JSON.stringify(range), action.isTest, requestedAt],
           );
           reply = subscriptionProposal(range, action.code, action.isTest);
         } else {
           const pending = await client.query(
-            'select code,range,is_test as "isTest",expires_at as "expiresAt" from private.subscription_intake where phone_key=$1',
+            'select code,range,is_test as "isTest",expires_at as "expiresAt",requested_at as "requestedAt" from private.subscription_intake where phone_key=$1',
             [input.key],
           );
           if (!pending.rowCount) reply = "No hay una suscripción pendiente. Escribe SUSCRIBIR para elegir el tramo.";
           else {
             const draft = z
-              .object({ code: z.string(), range: subscriptionRangeSchema, isTest: z.boolean(), expiresAt: z.date() })
+              .object({ code: z.string(), range: subscriptionRangeSchema, isTest: z.boolean(), expiresAt: z.date(), requestedAt: z.date() })
               .parse(pending.rows[0]);
             if (draft.code !== action.code || draft.expiresAt.getTime() <= Date.parse(input.now))
               reply = "El código no corresponde o expiró. Escribe SUSCRIBIR para volver a elegir el tramo.";
+            else if (!draft.isTest || !input.isTest) reply = await prepareAlertPass(client, input, draft, encryption);
             else {
-              const e = encryptContact(input.destination, encryption.key, encryption.version);
-              const contact = await client.query(
-                `insert into private.delivery_contacts(phone_key,ciphertext,iv,auth_tag,key_version) values($1,$2,$3,$4,$5) on conflict(phone_key) do update set ciphertext=excluded.ciphertext,iv=excluded.iv,auth_tag=excluded.auth_tag,key_version=excluded.key_version,disabled_at=null returning id`,
-                [input.key, e.ciphertext, e.iv, e.authTag, e.keyVersion],
+              const { expiresAt } = alertPassWindow(draft.requestedAt.toISOString());
+              await activateSubscription(
+                client,
+                {
+                  ...input,
+                  isTest: true,
+                  range: draft.range,
+                  expiresAt,
+                  paymentId: null,
+                },
+                encryption,
               );
-              const id = z.uuid().parse(contact.rows[0]?.id);
-              // Replacing consent invalidates queued notifications for the old route/consent.
-              await client.query(
-                "update private.alert_deliveries set status='cancelled',lease_id=null,lease_until=null where status='pending' and subscription_id in(select id from public.subscriptions where phone_key=$1)",
-                [input.key],
-              );
-              const saved = await client.query(
-                `insert into public.subscriptions(contact_ref,phone_key,road_code,km_start,km_end,distance_reference,channel,consent_at,is_team,is_test,geometry_revision,range_label,last_inbound_at) values($1,$2,'PE-22',$3,$4,'geometry_distance','whatsapp',$5,$6,$7,$8,$9,$5) on conflict(phone_key,road_code) where opted_out_at is null do update set contact_ref=excluded.contact_ref,km_start=excluded.km_start,km_end=excluded.km_end,consent_at=excluded.consent_at,is_team=excluded.is_team,is_test=excluded.is_test,geometry_revision=excluded.geometry_revision,range_label=excluded.range_label,last_inbound_at=excluded.last_inbound_at returning id`,
-                [
-                  id,
-                  input.key,
-                  draft.range.startKm,
-                  draft.range.endKm,
-                  input.now,
-                  input.isTeam,
-                  draft.isTest || input.isTest,
-                  draft.range.geometryRevision,
-                  draft.range.label,
-                ],
-              );
-              await client.query("delete from private.subscription_checkpoints where subscription_id=$1", [
-                z.uuid().parse(saved.rows[0]?.id),
-              ]);
-              await client.query("delete from private.weekly_pdf_preferences where subscription_id=$1", [
-                z.uuid().parse(saved.rows[0]?.id),
-              ]);
               await client.query("delete from private.subscription_intake where phone_key=$1", [input.key]);
-              reply = `${draft.isTest ? "DEMO · " : ""}Suscripción activa: ${draft.range.label}. Avisaremos cuando detectemos novedades en este tramo: reportes SIN CONFIRMAR, cambios SUTRAN y posibles huaicos estimados. Sin novedades no enviamos nada. STOP o BAJA cancela. Los PDF de esta ruta requieren autorizar SEMANAL por separado. No se enviarán fotos ni llamadas. Si WhatsApp no permite enviar, la entrega quedará pendiente; ESTADO y EXPOSICION siguen disponibles.`;
+              reply = `DEMO · Suscripción activa: ${draft.range.label}. Vence ${passDeadline(expiresAt)} (Perú), sin renovación. Avisaremos de reportes SIN CONFIRMAR, cambios SUTRAN y posibles huaicos estimados. STOP o BAJA cancela. Los PDF requieren autorizar SEMANAL por separado. Si WhatsApp no permite enviar, la entrega queda pendiente; ESTADO y EXPOSICION siguen disponibles.`;
             }
           }
         }

@@ -30,8 +30,11 @@ on the captured PE-22 axis; static pins are not continuous phone tracking. Keep
 estimated possible-huaico alerts, duplicate suppression, five-minute recovery,
 typed activation and STOP/BAJA cancellation. Do not reintroduce the 30-minute
 delivery cooldown; see `docs/integration/driver-notifications.md`.
-Payments, Qatom and Yape remain outside the participant-authorized implementation
-scope. Do not treat proposed
+**October 18 payment authorization:** implement a one-time 0.001 USD-TDN Qatom
+pass for seven elapsed days from the original WhatsApp request, using OpenAI
+Responses with Qatom MCP guest checkout, verified fulfilment and server-enforced
+expiry. See `docs/integration/qatom-alert-passes.md`; this supersedes the earlier
+payment exclusion only for weekly WhatsApp alerts. Yape remains excluded. Do not treat proposed
 integrations, metrics, or predictions as verified results. Before writing code,
 read the engineering principles and quality rules below.
 

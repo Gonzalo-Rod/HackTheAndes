@@ -49,7 +49,11 @@ export interface RequestOptions {
   logTarget?: string;
 }
 
-type HttpMethod = { method: "GET" } | { method: "POST"; body: unknown } | { method: "FORM"; body: FormData };
+type HttpMethod =
+  | { method: "GET" }
+  | { method: "POST"; body: unknown }
+  | { method: "FORM"; body: FormData }
+  | { method: "URLENCODED"; body: URLSearchParams };
 
 type Attempt<T> = { ok: true; value: T } | { ok: false; error: UpstreamError };
 
@@ -87,6 +91,14 @@ function buildInit(request: HttpMethod, options: RequestOptions, signal: AbortSi
   if (request.method === "GET") return { method: "GET", headers: options.headers, signal, cache: "no-store", redirect: options.redirect };
   if (request.method === "FORM")
     return { method: "POST", body: request.body, headers: options.headers, signal, redirect: options.redirect };
+  if (request.method === "URLENCODED")
+    return {
+      method: "POST",
+      body: request.body.toString(),
+      headers: { "Content-Type": "application/x-www-form-urlencoded", ...options.headers },
+      signal,
+      redirect: "error",
+    };
   return {
     method: "POST",
     headers: { "Content-Type": "application/json", ...options.headers },
@@ -213,6 +225,15 @@ export function postJson(url: string, body: unknown, options: RequestOptions & {
 /** Non-idempotent transcription uploads are never retried automatically. */
 export function postForm(url: string, body: FormData, options: RequestOptions): Promise<unknown> {
   return requestWithRetry(url, { method: "FORM", body }, { ...options, retries: 0 }, (r) => r.json() as Promise<unknown>);
+}
+/** OAuth client-credentials exchanges do not retry a POST implicitly. */
+export function postUrlEncoded(url: string, body: URLSearchParams, options: RequestOptions): Promise<unknown> {
+  return requestWithRetry(
+    url,
+    { method: "URLENCODED", body },
+    { ...options, retries: 0 },
+    (response) => response.json() as Promise<unknown>,
+  );
 }
 /** Stream with a hard byte limit; redirect following is disabled for stored media URLs. */
 export function getBoundedAudio(url: string, maxBytes: number, options: RequestOptions): Promise<{ bytes: Uint8Array; mimeType: string }> {

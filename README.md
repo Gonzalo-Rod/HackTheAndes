@@ -95,8 +95,12 @@ voice input, subscriptions, conditional alerts and hourly climate refresh now ha
 road. The logistic pipeline remains deferred research, blocked by the evidence gaps
 in the [training handoff](docs/data/logistic-pipeline.md). No real-data model has
 been trained or evaluated in this integration, and no real
-WhatsApp report or real user validation is claimed. Payments and Qatom are outside
-the participant-authorized implementation scope for this step.
+WhatsApp report or real user validation is claimed. The October 18 participant
+authorization adds a [Qatom weekly alert pass](docs/integration/qatom-alert-passes.md):
+`SUSCRIBIR 7 DIAS`, a one-time USD 0.001 checkout through OpenAI Responses and
+Qatom MCP, verified payment activation, and expiry 168 hours from the request
+without renewal. This implementation requires the migration, seller item and
+server-only configuration before live payments; no paid launch is claimed.
 
 ## WhatsApp integration
 

@@ -4,8 +4,8 @@ export type WeeklyPreferenceAction =
   { kind: "weeklyPrepare"; code: string } | { kind: "weeklyActivate"; code: string } | { kind: "weeklyStop" };
 export async function actWeeklyPreference(client: PoolClient, key: string, action: WeeklyPreferenceAction, now: string) {
   const rows = await client.query(
-    'select id,range_label as label,consent_at as "consentAt" from public.subscriptions where phone_key=$1 and opted_out_at is null for update',
-    [key],
+    'select id,range_label as label,consent_at as "consentAt" from public.subscriptions where phone_key=$1 and opted_out_at is null and alert_expires_at>$2 and (alert_payment_id is not null or is_test) for update',
+    [key, now],
   );
   if (!rows.rowCount)
     return "Primero elige tu tramo con SUSCRIBIR y confirma ACTIVAR. Después escribe SEMANAL para autorizar el PDF por separado.";

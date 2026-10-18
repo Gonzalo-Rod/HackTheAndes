@@ -138,3 +138,31 @@ export function loadWeeklyReportConfiguration() {
   if (!parsed.success) throw new Error("Invalid ZAVU_WEEKLY_REPORT_TEMPLATE_ID configuration");
   return { templateId: parsed.data.ZAVU_WEEKLY_REPORT_TEMPLATE_ID ?? null };
 }
+
+const QatomConfigurationSchema = z.object({
+  QATOM_MCP_URL: z.url().refine((value) => {
+    const url = new URL(value);
+    return (
+      url.protocol === "https:" &&
+      /^[a-z0-9-]+\.mcp\.m\.todaq\.net$/.test(url.hostname) &&
+      !url.username &&
+      !url.password &&
+      !url.port &&
+      !url.search &&
+      !url.hash &&
+      ["/", "/mcp"].includes(url.pathname)
+    );
+  }),
+  QATOM_CLIENT_ID: z.string().startsWith("agent_"),
+  QATOM_CLIENT_SECRET: z.string().min(1),
+  QATOM_CATALOG_ITEM_ID: z.coerce.number().int().positive(),
+  QATOM_USD_TDN_DQ: z.string().min(1),
+  QATOM_FULFILMENT_TOKEN: z.string().min(32),
+  OPENAI_QATOM_MODEL: z.string().min(1).default("gpt-4.1-mini-2025-04-14"),
+});
+export function loadQatomConfiguration() {
+  const parsed = QatomConfigurationSchema.safeParse({ ...process.env, OPENAI_QATOM_MODEL: process.env.OPENAI_QATOM_MODEL || undefined });
+  if (!parsed.success) throw new Error(`Invalid Qatom configuration: ${parsed.error.issues.map((i) => i.path.join(".")).join(", ")}`);
+  return parsed.data;
+}
+export type QatomConfiguration = ReturnType<typeof loadQatomConfiguration>;
