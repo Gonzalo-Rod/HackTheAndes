@@ -25,16 +25,20 @@ function event() {
   events.push(key);
   return key;
 }
-async function prepare() {
+async function prepare(isTest = false) {
   const key = randomBytes(32).toString("hex");
   keys.push(key);
-  const input = { key, now: new Date(now).toISOString(), destination: "US.synthetic-paid-pass", isTeam: true, isTest: false };
-  await subscriptions.act({ ...input, eventKey: event(), action: { kind: "prepare", code: "ABCDEF12", range, isTest: false } });
+  const input = { key, now: new Date(now).toISOString(), destination: "US.synthetic-paid-pass", isTeam: !isTest, isTest };
+  const proposal = await subscriptions.act({
+    ...input,
+    eventKey: event(),
+    action: { kind: "prepare", code: "ABCDEF12", range, isTest: false },
+  });
   const activationEvent = event();
   const reply = await subscriptions.act({ ...input, eventKey: activationEvent, action: { kind: "activate", code: "ABCDEF12" } });
   const r = await pool.query("select id from private.alert_pass_requests where phone_key=$1", [key]);
   const id = String(r.rows[0].id);
-  return { key, id, input, activationEvent, reply, expiresAt: now + 7 * 24 * 3_600_000 };
+  return { key, id, input, activationEvent, proposal, reply, expiresAt: now + 7 * 24 * 3_600_000 };
 }
 function purchase(transactionId = randomUUID()): SettledPurchase {
   return {
@@ -155,4 +159,31 @@ it("keeps the new payment ledger private", async () => {
     "select has_table_privilege('anon','private.alert_pass_requests','select') as anon,has_table_privilege('peruroad_backend','private.alert_pass_requests','select') as backend",
   );
   expect(r.rows[0]).toEqual({ anon: false, backend: true });
+});
+
+it("requires actual settlement for an explicit payment test and preserves test exclusion after activation", async () => {
+  const p = await prepare(true);
+  expect(p.proposal).toContain("PRUEBA DE PAGO REAL");
+  expect(p.reply).toContain("Aún no está activa");
+  expect((await pool.query("select id from public.subscriptions where phone_key=$1", [p.key])).rowCount).toBe(0);
+  const request = await pool.query("select is_test,is_team,status from private.alert_pass_requests where id=$1", [p.id]);
+  expect(request.rows[0]).toEqual({ is_test: true, is_team: false, status: "pending" });
+  const sale = purchase();
+  expect((await fulfil(p.id, sale.transaction_id, sale, now + 2)).status).toBe("active");
+  const active = await pool.query("select is_test,alert_payment_id from public.subscriptions where phone_key=$1", [p.key]);
+  expect(active.rows[0]).toEqual({ is_test: true, alert_payment_id: p.id });
+});
+it("retains free DEMO activation only when both sender and proposal are test-marked", async () => {
+  const key = randomBytes(32).toString("hex");
+  keys.push(key);
+  const input = { key, now: new Date(now).toISOString(), destination: "US.synthetic-free-demo", isTeam: false, isTest: true };
+  await subscriptions.act({ ...input, eventKey: event(), action: { kind: "prepare", code: "ABCDEF12", range, isTest: true } });
+  expect(await subscriptions.act({ ...input, eventKey: event(), action: { kind: "activate", code: "ABCDEF12" } })).toContain(
+    "DEMO · Suscripción activa",
+  );
+  expect((await pool.query("select id from private.alert_pass_requests where phone_key=$1", [key])).rowCount).toBe(0);
+  expect((await pool.query("select is_test,alert_payment_id from public.subscriptions where phone_key=$1", [key])).rows[0]).toEqual({
+    is_test: true,
+    alert_payment_id: null,
+  });
 });

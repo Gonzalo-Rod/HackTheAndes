@@ -1,9 +1,9 @@
 import { it, expect, vi } from "vitest";
-import { createSubscriptionFlow } from "./subscription-flow";
+import { createSubscriptionFlow, senderKey } from "./subscription-flow";
 import type { SubscriptionRepository } from "@/db/subscriptions";
 const revision = "a".repeat(64),
   now = Date.parse("2026-10-18T03:00:00Z");
-function setup() {
+function setup(testKeys: readonly string[] = []) {
   const repository: SubscriptionRepository = {
     routeState: vi.fn(async () => ({ reply: null, draft: null })),
     bounds: vi.fn(async () => ({ startKm: 0, endKm: 174 })),
@@ -22,7 +22,7 @@ function setup() {
       revision,
       pepper: "synthetic-pepper",
       teamKeys: [],
-      testKeys: [],
+      testKeys,
       now: () => now,
       newId: () => "abcdef12-0000-4000-8000-000000000000",
     }),
@@ -68,4 +68,32 @@ it("anchors a request to the provider message time instead of delayed processing
   expect(s.repository.act).toHaveBeenCalledWith(
     expect.objectContaining({ action: expect.objectContaining({ requestedAt: new Date(now - 60_000).toISOString() }) }),
   );
+});
+
+it("allows a configured DEMO sender to explicitly request a real checkout without changing its test identity", async () => {
+  const key = senderKey("US.synthetic", "synthetic-pepper");
+  const s = setup([key]);
+  await s.flow.handle(message("SUSCRIBIR PAGO PRUEBA"), "trace");
+  expect(s.context).not.toHaveBeenCalled();
+  expect(s.repository.act).toHaveBeenCalledWith(
+    expect.objectContaining({
+      isTest: true,
+      action: expect.objectContaining({ kind: "prepare", isTest: false }),
+    }),
+  );
+});
+it("keeps ordinary DEMO subscriptions free for configured test senders", async () => {
+  const s = setup([senderKey("US.synthetic", "synthetic-pepper")]);
+  await s.flow.handle(message("SUSCRIBIR PRUEBA"), "trace");
+  expect(s.repository.act).toHaveBeenCalledWith(
+    expect.objectContaining({
+      isTest: true,
+      action: expect.objectContaining({ kind: "prepare", isTest: true }),
+    }),
+  );
+});
+it("does not expose the payment-test command as a free-pass bypass for unknown senders", async () => {
+  const s = setup();
+  expect(await s.flow.handle(message("SUSCRIBIR PAGO PRUEBA"), "trace")).toContain("SUSCRIBIR 7 DIAS");
+  expect(s.repository.act).not.toHaveBeenCalled();
 });

@@ -62,8 +62,12 @@ export function createSubscriptionFlow(deps: {
       if (stop) action = { kind: "stop" };
       else if (activate) action = { kind: "activate", code: activate[1] ?? "" };
       else {
-        const isTest = /\bPRUEBA\b/.test(normalized) || deps.testKeys.includes(key);
-        const requested = text
+        const paymentTest = normalized === "SUSCRIBIR PAGO PRUEBA";
+        if (paymentTest && !deps.testKeys.includes(key))
+          return "La prueba de pago es solo para números de prueba configurados. Para contratar alertas, escribe SUSCRIBIR 7 DIAS.";
+        // The proposal selects paid versus free DEMO access; sender classification stays independent.
+        const isTest = !paymentTest && (/\bPRUEBA\b/.test(normalized) || deps.testKeys.includes(key));
+        const requested = (paymentTest ? "" : text)
           .replace(/^(SUSCRIBIR|AV[IÍ]SAME)\s*/i, "")
           .replace(/^(?:7\s*D[IÍ]AS|UNA\s+SEMANA|POR\s+UNA\s+SEMANA)\s*/i, "")
           .replace(/\bPRUEBA\b/gi, "")

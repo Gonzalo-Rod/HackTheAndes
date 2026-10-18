@@ -96,7 +96,7 @@ export function createSubscriptionRepository(pool: Pool, encryption: { key: stri
             `insert into private.subscription_intake(phone_key,code,range,is_test,expires_at,requested_at) values($1,$2,$3::jsonb,$4,$5::timestamptz+interval '30 minutes',$5) on conflict(phone_key) do update set code=excluded.code,range=excluded.range,is_test=excluded.is_test,expires_at=excluded.expires_at,requested_at=excluded.requested_at`,
             [input.key, action.code, JSON.stringify(range), action.isTest, requestedAt],
           );
-          reply = subscriptionProposal(range, action.code, action.isTest);
+          reply = subscriptionProposal(range, action.code, action.isTest, input.isTest && !action.isTest);
         } else {
           const pending = await client.query(
             'select code,range,is_test as "isTest",expires_at as "expiresAt",requested_at as "requestedAt" from private.subscription_intake where phone_key=$1',

@@ -39,6 +39,13 @@ Qatom collects payment; PeruRoad grants and expires alert access.
 
 `PRUEBA` is free only when the sender is explicitly present in `TEST_PHONE_KEYS`
 and requests a DEMO subscription. Typing PRUEBA alone cannot bypass payment.
+A configured test sender can explicitly use **`SUSCRIBIR PAGO PRUEBA`** to test a
+real USD 0.001 purchase. The proposal says **PRUEBA DE PAGO REAL**, requires typed
+ACTIVAR consent and verified settlement, and keeps both the request and resulting
+subscription test-marked for impact exclusion. Existing DEMO access is preserved
+until a paid replacement succeeds. `SUSCRIBIR PRUEBA` remains free for configured
+test senders; unconfigured senders cannot use the payment-test command.
+
 DEMO grants also expire. Reporting, ESTADO and EXPOSICION remain free. Weekly PDFs
 still require separate consent and are never automatically enrolled.
 
@@ -104,10 +111,10 @@ before applying this to the shared database. Never modify an applied migration.
 7. Read the item back, activate it only after endpoint/header configuration, then
    test a real paid purchase with the driver's explicit approval. Check the real
    ledger, expiry, WhatsApp delivery and STOP. Free coverage can be checked first.
-   A sender listed in `TEST_PHONE_KEYS` currently receives the DEMO flow even
-   without typing PRUEBA; use a consenting non-test sender to exercise checkout.
-   Team membership must remain in `TEAM_PHONE_KEYS` so this test does not count as
-   external-user traction. Record a launch report before claiming the service is
+   A configured test sender can exercise real checkout with SUSCRIBIR PAGO PRUEBA;
+   ordinary DEMO requests remain free. Payment tests retain their test flags and
+   never count as external-user traction. A consenting non-test sender can use
+   the standard SUSCRIBIR 7 DIAS flow. Record a launch report before claiming the service is
    live. Qatom account
    changes require the approval links returned by its MCP tools; never approve
    on the account holder's behalf.

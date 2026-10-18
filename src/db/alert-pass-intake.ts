@@ -11,6 +11,7 @@ export async function prepareAlertPass(
     destination: string;
     now: string;
     isTeam: boolean;
+    isTest: boolean;
   },
   draft: { range: SubscriptionRange; requestedAt: Date; isTest: boolean },
   encryption: { key: string; version: string },
@@ -34,7 +35,7 @@ export async function prepareAlertPass(
       window.expiresAt,
       input.now,
       input.isTeam,
-      draft.isTest,
+      input.isTest || draft.isTest,
     ],
   );
   await client.query("delete from private.subscription_intake where phone_key=$1", [input.key]);
