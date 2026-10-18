@@ -103,8 +103,8 @@ export function LayersPanel({ layers, is3d, meta, corridor, rain, rainError, now
   return (
     <ul className="pr-layers">
       <LayerRow
-        label="Alertas SUTRAN"
-        hint="Vigentes, oficiales"
+        label="Alertas viales"
+        hint="SUTRAN y reportes comunitarios no confirmados"
         freshness={alertsFreshness(meta, now)}
         swatch={<span className="sw sw--alerts" />}
         checked={layers.alerts}
