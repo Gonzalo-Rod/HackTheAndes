@@ -19,7 +19,8 @@
     "test:db": "node --env-file-if-exists=.env.local --import tsx node_modules/vitest/vitest.mjs run --config vitest.database.config.mts",
     "zavu:send-test": "node --env-file-if-exists=.env.local --import tsx scripts/zavu-send-test.ts",
     "zavu:call-incident": "node --env-file-if-exists=.env.local --import tsx scripts/zavu-call-incident.ts",
-    "route-watch:simulate": "node --env-file-if-exists=.env.local --import tsx scripts/route-watch-simulate.ts"
+    "route-watch:simulate": "node --env-file-if-exists=.env.local --import tsx scripts/route-watch-simulate.ts",
+    "data:collect": "tsx scripts/weekly-incident-report_christian.ts"
   },
   "dependencies": {
     "@peruroad/road-data": "file:packages/road-data",
@@ -29,6 +30,7 @@
     "pdf-lib": "1.17.1",
     "react": "19.3.0",
     "react-dom": "19.3.0",
+    "three": "^0.186.1",
     "zod": "4.6.7"
   },
   "devDependencies": {
@@ -37,6 +39,7 @@
     "@types/pngjs": "^6.0.5",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/three": "^0.186.0",
     "eslint": "^9",
     "eslint-config-next": "16.4.2",
     "pngjs": "^7.0.0",

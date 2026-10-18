@@ -28,6 +28,11 @@ type PassThrough = Pick<
   | "hazards"
   | "catchments"
   | "alerts"
+  | "evidence"
+  | "evidenceAreas"
+  | "selectedEvidenceId"
+  | "initialScope"
+  | "onSelectEvidence"
   | "hiddenIds"
   | "hoveredId"
   | "corridorAlerts"
@@ -53,6 +58,7 @@ interface MapAreaProps extends PassThrough {
   onModeChange: (mode: MapMode) => void;
   onOpenDetail: () => void;
   onTourKm: (km: number | null) => void;
+  onMapReady: () => void;
 }
 
 export function MapArea({
@@ -64,6 +70,11 @@ export function MapArea({
   corridor,
   now,
   alerts,
+  evidence,
+  evidenceAreas,
+  selectedEvidenceId,
+  initialScope,
+  onSelectEvidence,
   hiddenIds,
   hoveredId,
   corridorAlerts,
@@ -84,6 +95,7 @@ export function MapArea({
   onModeChange,
   onOpenDetail,
   onTourKm,
+  onMapReady,
 }: MapAreaProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const [mapReady, setMapReady] = useState(false);
@@ -107,6 +119,12 @@ export function MapArea({
       <MapView
         ref={mapRef}
         alerts={alerts}
+        evidence={evidence}
+        evidenceAreas={evidenceAreas}
+        evidenceNow={now ?? 0}
+        selectedEvidenceId={selectedEvidenceId}
+        initialScope={initialScope}
+        onSelectEvidence={onSelectEvidence}
         hiddenIds={hiddenIds}
         selectedId={selected?.id ?? null}
         hoveredId={hoveredId}
@@ -129,6 +147,7 @@ export function MapArea({
         onReady={() => {
           setMapReady(true);
           setMapError(null);
+          onMapReady();
         }}
         onError={setMapError}
         onBearingChange={(b) => setBearing(b)}

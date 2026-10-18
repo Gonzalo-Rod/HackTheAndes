@@ -9,11 +9,21 @@ export interface MapStateOverlayProps {
   dataError: string | null; // no data could be loaded at all
   staleMessage: string | null; // data on screen, but the latest refresh failed or is cached
   refreshing: boolean;
+  partialData?: boolean;
   onRetry: () => void;
 }
 
 /** Loading, error and stale-data states over the map. The map never appears blank without a reason. */
-export function MapStateOverlay({ loading, mapReady, mapError, dataError, staleMessage, refreshing, onRetry }: MapStateOverlayProps) {
+export function MapStateOverlay({
+  loading,
+  mapReady,
+  mapError,
+  dataError,
+  staleMessage,
+  refreshing,
+  partialData = false,
+  onRetry,
+}: MapStateOverlayProps) {
   if (mapError) {
     return (
       <div className="pr-overlay" role="alert">
@@ -28,7 +38,7 @@ export function MapStateOverlay({ loading, mapReady, mapError, dataError, staleM
       </div>
     );
   }
-  if (dataError) {
+  if (dataError && !partialData) {
     return (
       <div className="pr-overlay" role="alert">
         <div className="pr-overlay__card">
@@ -53,10 +63,10 @@ export function MapStateOverlay({ loading, mapReady, mapError, dataError, staleM
           {loading ? "Consultando alertas de SUTRAN…" : "Cargando el mapa…"}
         </div>
       )}
-      {staleMessage && (
+      {(staleMessage || (partialData && dataError)) && (
         <div className="pr-banner" role="status">
           <Icon name="clock" size={13} />
-          <span>{staleMessage}</span>
+          <span>{staleMessage ?? `SUTRAN no disponible. Las referencias ambientales mantienen su fecha original. ${dataError}`}</span>
           <button type="button" className="pr-btn pr-btn--link" onClick={onRetry} disabled={refreshing}>
             Reintentar
           </button>

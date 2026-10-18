@@ -28,6 +28,7 @@ export function MapControls({
   onZoom,
 }: MapControlsProps) {
   const [fullscreen, setFullscreen] = useState(false);
+  const [viewOpen, setViewOpen] = useState(false);
   useEffect(() => {
     const sync = () => setFullscreen(document.fullscreenElement !== null);
     document.addEventListener("fullscreenchange", sync);
@@ -55,42 +56,69 @@ export function MapControls({
       </button>
 
       <div className="pr-mapctl">
-        <div className="pr-mapctl__zoom">
-          <button type="button" className="pr-icon-btn" onClick={() => onZoom(1)} aria-label="Acercar" title="Acercar">
+        <div className="pr-mapctl__zoom" aria-label="Control de zoom">
+          <button type="button" className="pr-icon-btn" onClick={() => onZoom(1)} aria-label="Acercar" title="Acercar (+)">
             +
           </button>
-          <button type="button" className="pr-icon-btn" onClick={() => onZoom(-1)} aria-label="Alejar" title="Alejar">
+          <button type="button" className="pr-icon-btn" onClick={() => onZoom(-1)} aria-label="Alejar" title="Alejar (−)">
             −
           </button>
         </div>
-        <div className="pr-segmented pr-segmented--dark" role="group" aria-label="Vista del mapa">
-          <button type="button" className="pr-segmented__item" aria-pressed={mode === "2d"} onClick={() => onModeChange("2d")}>
-            2D
+
+        <div className="pr-mapctl__view-group">
+          <button
+            type="button"
+            className={`pr-btn pr-btn--map-view${viewOpen ? " is-active" : ""}`}
+            onClick={() => setViewOpen(!viewOpen)}
+            aria-expanded={viewOpen}
+            aria-label="Controles de vista del mapa"
+          >
+            <Icon name="layers" size={13} />
+            <span>Vista ({mode.toUpperCase()})</span>
+            <Icon name="chevronDown" size={12} />
           </button>
-          <button type="button" className="pr-segmented__item" aria-pressed={mode === "3d"} onClick={() => onModeChange("3d")}>
-            3D
-          </button>
+
+          {viewOpen && (
+            <div className="pr-mapctl__view-popover" role="dialog" aria-label="Opciones de vista del mapa">
+              <div className="pr-mapctl__popover-row">
+                <span className="pr-mapctl__popover-label">Dimensión:</span>
+                <div className="pr-segmented pr-segmented--dark" role="group" aria-label="Modo 2D o 3D">
+                  <button type="button" className="pr-segmented__item" aria-pressed={mode === "2d"} onClick={() => onModeChange("2d")}>
+                    2D
+                  </button>
+                  <button type="button" className="pr-segmented__item" aria-pressed={mode === "3d"} onClick={() => onModeChange("3d")}>
+                    3D
+                  </button>
+                </div>
+              </div>
+
+              {mode === "3d" && (
+                <div className="pr-mapctl__popover-row">
+                  <span className="pr-mapctl__popover-label">Relieve 3D:</span>
+                  <label className="pr-select pr-select--compact" title="Exageración vertical del terreno para evaluar pendientes">
+                    <span className="pr-sr-only">Exageración del relieve</span>
+                    <select value={exaggeration} onChange={(event) => onExaggerationChange(Number(event.target.value))}>
+                      {EXAGGERATION_OPTIONS.map((value) => (
+                        <option key={value} value={value}>
+                          {value}× relieve
+                        </option>
+                      ))}
+                    </select>
+                    <Icon name="chevronDown" size={12} />
+                  </label>
+                </div>
+              )}
+
+              <div className="pr-mapctl__popover-row">
+                <span className="pr-mapctl__popover-label">Pantalla:</span>
+                <button type="button" className="pr-btn pr-btn--ghost pr-btn--sm" onClick={toggleFullscreen}>
+                  <Icon name={fullscreen ? "minimize" : "maximize"} size={13} />
+                  <span>{fullscreen ? "Salir" : "Pantalla completa"}</span>
+                </button>
+              </div>
+            </div>
+          )}
         </div>
-        <label className="pr-select pr-select--compact" title="Exageración del relieve">
-          <span className="pr-sr-only">Exageración del relieve</span>
-          <select value={exaggeration} disabled={mode === "2d"} onChange={(event) => onExaggerationChange(Number(event.target.value))}>
-            {EXAGGERATION_OPTIONS.map((value) => (
-              <option key={value} value={value}>
-                {value}× relieve
-              </option>
-            ))}
-          </select>
-          <Icon name="chevronDown" size={12} />
-        </label>
-        <button
-          type="button"
-          className="pr-icon-btn"
-          onClick={toggleFullscreen}
-          aria-label={fullscreen ? "Salir de pantalla completa" : "Pantalla completa"}
-          title={fullscreen ? "Salir de pantalla completa" : "Pantalla completa"}
-        >
-          <Icon name={fullscreen ? "minimize" : "maximize"} size={15} />
-        </button>
       </div>
     </>
   );

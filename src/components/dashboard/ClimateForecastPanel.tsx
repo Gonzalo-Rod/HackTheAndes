@@ -5,14 +5,17 @@ import { Icon } from "@/components/icons";
 import type { ClimateForecastState } from "@/hooks/use-climate-forecast";
 import type { ForecastEvent } from "@/domain/exposure/forecast-events";
 import { formatForecastWindow } from "@/domain/exposure/forecast-events";
+import type { ForecastSupport } from "@/domain/exposure/forecast-support";
 
 interface Props {
   forecast: ClimateForecastState;
   visible: boolean;
   onToggle: () => void;
   onFocus: (event: ForecastEvent) => void;
+  support: ForecastSupport | null;
+  onOpenNotice: (recordId: string) => void;
 }
-export function ClimateForecastPanel({ forecast, visible, onToggle, onFocus }: Props) {
+export function ClimateForecastPanel({ forecast, visible, onToggle, onFocus, support, onOpenNotice }: Props) {
   const selectedRef = useRef<HTMLElement | null>(null);
   useEffect(() => {
     selectedRef.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
@@ -76,6 +79,7 @@ export function ClimateForecastPanel({ forecast, visible, onToggle, onFocus }: P
             <strong>{active.unknownSegments} sin evaluación</strong>.
           </p>
           <p className="pr-forecast__note">{projection.message}</p>
+          {support && <OfficialSupport support={support} onOpenNotice={onOpenNotice} />}
           {!active.events.length && (
             <p className="pr-forecast__empty">
               Sin señal elevada en los tramos evaluados para esta franja. No confirma vía libre ni ausencia de peligro.
@@ -149,6 +153,42 @@ export function ClimateForecastPanel({ forecast, visible, onToggle, onFocus }: P
             ))}
           </ul>
         </details>
+      )}
+    </section>
+  );
+}
+
+/** Official notices are decision support beside the estimate; they never replace or lower it. */
+function OfficialSupport({ support, onOpenNotice }: { support: ForecastSupport; onOpenNotice: (recordId: string) => void }) {
+  return (
+    <section className="pr-forecast__support" aria-label="Respaldo con avisos oficiales">
+      <h3>Respaldo oficial · misma franja</h3>
+      {support.state === "unavailable" && (
+        <p className="pr-forecast__warning">Fuentes oficiales no disponibles. La estimación se mantiene; no implica ausencia de aviso.</p>
+      )}
+      {support.state === "none" && (
+        <p className="pr-forecast__note">
+          Ningún pronóstico o aviso SENAMHI/INGEMMET verificado coincide con esta franja en el entorno PE-22. No confirma vía libre ni
+          reduce la atención estimada.
+        </p>
+      )}
+      {support.state === "corroborated" && (
+        <>
+          <p className="pr-forecast__note">
+            Pronósticos y avisos oficiales vigentes en el entorno PE-22 y Mantaro durante esta franja. Su área es de referencia, no un tramo
+            de la vía.
+          </p>
+          <ul>
+            {support.precipitationNotices.map((record) => (
+              <li key={record.id}>
+                <button type="button" className="pr-btn pr-btn--link" onClick={() => onOpenNotice(record.id)}>
+                  {record.provider} · {record.title}
+                </button>
+              </li>
+            ))}
+            {support.criticalZoneCount > 0 && <li>{support.criticalZoneCount} zonas críticas INGEMMET bajo aviso</li>}
+          </ul>
+        </>
       )}
     </section>
   );

@@ -48,6 +48,7 @@ const source = (map: MLMap, id: string) => map.getSource(id) as GeoJSONSource | 
 /** Adds the thematic sources and layers; static layers load by URL so parsing happens in the map worker. */
 export function addThematicLayers(map: MLMap, origin: string): void {
   map.addSource("regions", { type: "geojson", data: `${origin}/data/regiones.geojson` });
+  map.addSource("peru-boundary", { type: "geojson", data: `${origin}/data/peru-outline.geojson` });
   map.addSource("rivers", { type: "geojson", data: `${origin}/data/rios-quebradas.geojson` });
   map.addSource("network", { type: "geojson", data: `${origin}/data/red-vial-nacional.geojson`, tolerance: 0.5 });
   for (const id of ["corridor", "corridor-rain", "corridor-stretches", "corridor-km", "corridor-places", "profile-point"]) {
@@ -73,7 +74,59 @@ export function addThematicLayers(map: MLMap, origin: string): void {
     id: "regions-line",
     type: "line",
     source: "regions",
-    paint: { "line-color": PALETTE.boundary, "line-width": 0.8, "line-opacity": 0.55 },
+    paint: {
+      "line-color": PALETTE.boundary,
+      "line-width": 0.8,
+      // At national zoom the country perimeter should read as one shape; reveal
+      // department divisions only after a user zooms into regional detail.
+      "line-opacity": ["interpolate", ["linear"], ["zoom"], 3, 0, 7, 0, 8, 0.2, 10, 0.34, 12, 0.42],
+    },
+  });
+  const boundaryLayout = { "line-cap": "round", "line-join": "round" } as const;
+  map.addLayer({
+    id: "peru-boundary-casing",
+    type: "line",
+    source: "peru-boundary",
+    layout: boundaryLayout,
+    paint: {
+      "line-color": "#182a30",
+      "line-opacity": 0.88,
+      "line-width": ["interpolate", ["linear"], ["zoom"], 3, 3.2, 8, 4.2],
+    },
+  });
+  map.addLayer({
+    id: "peru-boundary-line",
+    type: "line",
+    source: "peru-boundary",
+    layout: boundaryLayout,
+    paint: {
+      "line-color": "#f6f0d7",
+      "line-opacity": 0.98,
+      "line-width": ["interpolate", ["linear"], ["zoom"], 3, 1.8, 8, 2.3],
+    },
+  });
+  // Riparian tree canopy corridor along rivers and quebradas
+  map.addLayer({
+    id: "rivers-canopy",
+    type: "line",
+    source: "rivers",
+    layout: { visibility: "none", "line-cap": "round", "line-join": "round" },
+    paint: {
+      "line-color": "#1f4f24",
+      "line-width": [
+        "interpolate",
+        ["linear"],
+        ["zoom"],
+        8,
+        ["match", ["get", "kind"], "quebrada", 2, 5],
+        12,
+        ["match", ["get", "kind"], "quebrada", 6, 14],
+        15,
+        ["match", ["get", "kind"], "quebrada", 12, 26],
+      ],
+      "line-opacity": 0.6,
+      "line-blur": 2,
+    },
   });
   map.addLayer({
     id: "rivers-line",
@@ -86,7 +139,7 @@ export function addThematicLayers(map: MLMap, origin: string): void {
         "interpolate",
         ["linear"],
         ["zoom"],
-        5,
+        8,
         ["match", ["get", "kind"], "quebrada", 0.5, 0.8],
         12,
         ["match", ["get", "kind"], "quebrada", 1.6, 2.6],
@@ -98,8 +151,8 @@ export function addThematicLayers(map: MLMap, origin: string): void {
     id: "network-line",
     type: "line",
     source: "network",
-    layout: { "line-cap": "round", "line-join": "round" },
-    paint: { "line-color": "#6b6255", "line-width": ["interpolate", ["linear"], ["zoom"], 4, 0.6, 8, 1.5, 12, 2.8], "line-opacity": 0.7 },
+    layout: { visibility: "none", "line-cap": "round", "line-join": "round" },
+    paint: { "line-color": "#6b6255", "line-width": ["interpolate", ["linear"], ["zoom"], 4, 0.45, 8, 1.1, 12, 2], "line-opacity": 0.42 },
   });
   addCorridorLayers(map);
   for (const layer of createLabelLayers()) map.addLayer(layer);
@@ -113,7 +166,10 @@ function addCorridorLayers(map: MLMap): void {
     type: "line",
     source: "corridor",
     layout: round,
-    paint: { "line-color": "#fffdf7", "line-width": ["interpolate", ["linear"], ["zoom"], 5, 3.5, 10, 7, 14, 13] },
+    paint: {
+      "line-color": "#1c1915",
+      "line-width": ["interpolate", ["linear"], ["zoom"], 5, 2.6, 10, 5, 14, 8.8],
+    },
   });
   // Rain ribbon: the corridor colored by 24 h rain, under the alert stretches and the road line.
   map.addLayer({
@@ -252,12 +308,20 @@ export function applyLayerState(map: MLMap, layers: LayerState): void {
   map.setPaintProperty(
     "network-line",
     "line-color",
-    layers.networkColorBy === "condition" ? conditionColor : layers.satellite ? "#fffdf7" : "#6b6255",
+    layers.networkColorBy === "condition" ? conditionColor : layers.satellite ? "#d9d4c8" : "#6b6255",
   );
   setCatchmentVisibility(map, layers.catchments);
   setHazardVisibility(map, layers.susceptibility, layers.officialWarnings);
+  map.setPaintProperty("network-line", "line-opacity", layers.networkOpacity);
   map.setLayoutProperty("rivers-line", "visibility", visibility(layers.rivers));
   map.setPaintProperty("rivers-line", "line-opacity", layers.riversOpacity);
+  if (map.getLayer("rivers-canopy")) {
+    map.setLayoutProperty("rivers-canopy", "visibility", visibility(layers.rivers));
+    map.setPaintProperty("rivers-canopy", "line-opacity", layers.satellite ? 0 : layers.riversOpacity * 0.65);
+  }
+  if (map.getLayer("building")) {
+    map.setPaintProperty("building", "fill-opacity", layers.satellite ? 0 : 0.45);
+  }
   map.setLayoutProperty("regions-line", "visibility", visibility(layers.regions));
   for (const id of CORRIDOR_LAYERS) map.setLayoutProperty(id, "visibility", visibility(layers.corridor));
   map.setLayoutProperty("corridor-rain", "visibility", visibility(layers.corridor && layers.rain));

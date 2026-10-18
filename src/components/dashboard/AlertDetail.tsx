@@ -89,11 +89,18 @@ function Evidence({ data }: { data: AlertDetailResponse }) {
   );
 }
 
-export function AlertDetail({ alert, detail, corridorContext, roadAlertCount, now, onRetryDetail, onCenter, onClose }: AlertDetailProps) {
+export function AlertDetail({ alert, detail, corridorContext, now, onRetryDetail, onCenter, onClose }: AlertDetailProps) {
   const status = STATUS_META[alert.roadStatus];
   const isCommunity = alert.id.startsWith("community:");
   return (
     <article className="pr-detail" aria-labelledby="detail-title">
+      <div className="pr-detail__nav">
+        <button type="button" className="pr-btn pr-btn--ghost pr-detail__back-btn" onClick={onClose}>
+          <Icon name="arrowLeft" size={13} />
+          <span>Volver a la lista de avisos</span>
+        </button>
+      </div>
+
       <header className="pr-detail__head" style={{ borderColor: status.color }}>
         <div className="pr-detail__badges">
           <span className="pr-badge" style={{ background: status.color, color: status.ink }}>
@@ -117,6 +124,16 @@ export function AlertDetail({ alert, detail, corridorContext, roadAlertCount, no
         </p>
       </header>
 
+      {/* Answer 1: What happened */}
+      {alert.currentSituation && (
+        <div className="pr-detail__situation-block">
+          <span className="pr-detail__subhead">Situación reportada:</span>
+          <blockquote className="pr-situation">{alert.currentSituation}</blockquote>
+        </div>
+      )}
+      {alert.description && alert.description !== alert.title && <p className="pr-detail__desc">{alert.description}</p>}
+
+      {/* Answer 2: Where */}
       <dl className="pr-figures">
         <div>
           <dt>Vía</dt>
@@ -128,40 +145,23 @@ export function AlertDetail({ alert, detail, corridorContext, roadAlertCount, no
         </div>
         <div>
           <dt>Sentido</dt>
-          <dd>{alert.direction || "—"}</dd>
-        </div>
-        <div>
-          <dt>{isCommunity ? "Fecha del reporte" : "Fecha del evento"}</dt>
-          <dd>{formatCalendarDate(alert.eventDate)}</dd>
+          <dd>{alert.direction || "Ambos sentidos"}</dd>
         </div>
         <div>
           <dt>Vigente hasta</dt>
           <dd>{formatCalendarDate(alert.validUntil)}</dd>
         </div>
-        <div>
-          <dt>{isCommunity ? "Último reporte" : "Última acción"}</dt>
-          <dd>{now ? formatRelative(alert.lastActionAt, now) : "—"}</dd>
-        </div>
       </dl>
 
-      {now && isStaleAlert(alert, now) && (
-        <div className="pr-stale-note" role="note">
-          <Icon name="restringido" size={14} />
-          <span>
-            Sin novedades de la fuente hace {Math.round(hoursSinceAction(alert, now) ?? 0)} h (umbral: {STALE_ALERT_AFTER_HOURS} h). La
-            alerta sigue vigente, pero el estado podría haber cambiado; confirma antes de viajar.
-          </span>
-        </div>
-      )}
-
-      {alert.currentSituation && <blockquote className="pr-situation">{alert.currentSituation}</blockquote>}
-      {alert.description && alert.description !== alert.title && <p className="pr-detail__desc">{alert.description}</p>}
+      <p className="pr-detail__inline-note">
+        <strong>Tramo afectado en mapa:</strong> Resaltado de ±1,2 km alrededor del incidente para advertencia operativa.
+      </p>
 
       {corridorContext && (
         <div className="pr-corridor-ctx">
           <Icon name="mountain" size={14} />
           <span>
-            En el eje PE-22: {formatKm(corridorContext.km)} (geometría MTC) · {formatElevation(corridorContext.elevationM)} ·{" "}
+            En el eje PE-22: {formatKm(corridorContext.km)} · {formatElevation(corridorContext.elevationM)} ·{" "}
             {Math.abs(corridorContext.deltaKm) < 1
               ? `en ${corridorContext.nearestPlace}`
               : `a ${Math.abs(corridorContext.deltaKm).toFixed(1)} km de ${corridorContext.nearestPlace}`}
@@ -169,35 +169,71 @@ export function AlertDetail({ alert, detail, corridorContext, roadAlertCount, no
         </div>
       )}
 
-      {roadAlertCount > 1 && alert.roadCode && (
-        <p className="pr-note">
-          {roadAlertCount} alertas vigentes en {alert.roadCode} en este momento.
-        </p>
+      {now && isStaleAlert(alert, now) && (
+        <div className="pr-stale-note" role="note">
+          <Icon name="restringido" size={14} />
+          <span>
+            Sin novedades de la fuente hace {Math.round(hoursSinceAction(alert, now) ?? 0)} h (umbral: {STALE_ALERT_AFTER_HOURS} h). La
+            alerta sigue vigente, pero el estado podría haber cambiado; confirma antes de movilizar unidades.
+          </span>
+        </div>
       )}
 
       {corridorContext?.rain && (
         <p className="pr-note">
           Lluvia cerca de este km: {classifyRain(rainPeakMm(corridorContext.rain)).label.toLowerCase()} (últimas 24 h{" "}
           {corridorContext.rain.pastMm.toLocaleString("es-PE")} mm · próximas 24 h {corridorContext.rain.nextMm.toLocaleString("es-PE")}{" "}
-          mm). Pronóstico de Open-Meteo, no es un aviso oficial.
+          mm). Pronóstico meteorológico de Open-Meteo.
         </p>
       )}
+
+      {/* Consolidated source card (Priority 2 Item 6) */}
+      <section className="pr-source-card" aria-label="Ficha de origen y verificación">
+        <h3 className="pr-source-card__title">
+          <Icon name="source" size={14} />
+          {isCommunity ? "Ficha de origen · reporte comunitario sin verificar" : "Ficha de origen y verificación oficial"}
+        </h3>
+        <dl className="pr-source-card__dl">
+          <div className="pr-source-card__row">
+            <dt>Entidad emisora:</dt>
+            <dd>{alert.source || (isCommunity ? "Reporte comunitario" : "SUTRAN (Superintendencia de Transporte Terrestre / MTC)")}</dd>
+          </div>
+          <div className="pr-source-card__row">
+            <dt>Emisión / Registro:</dt>
+            <dd>{formatDateTime(alert.eventDate)}</dd>
+          </div>
+          <div className="pr-source-card__row">
+            <dt>Periodo de validez:</dt>
+            <dd>
+              Desde {formatCalendarDate(alert.eventDate)} hasta {formatCalendarDate(alert.validUntil)}
+            </dd>
+          </div>
+          <div className="pr-source-card__row">
+            <dt>{isCommunity ? "Último reporte:" : "Última verificación:"}</dt>
+            <dd>
+              {now ? formatRelative(alert.lastActionAt, now) : "Reciente"}
+              <span className="pr-muted"> ({formatDateTime(alert.lastActionAt)})</span>
+            </dd>
+          </div>
+          {alert.administrator && (
+            <div className="pr-source-card__row">
+              <dt>Concesionaria:</dt>
+              <dd>{alert.administrator}</dd>
+            </div>
+          )}
+        </dl>
+      </section>
 
       <dl className="pr-kv">
         <Row label="Ubicación">{[alert.district, alert.province, alert.region].filter(Boolean).join(", ")}</Row>
         <Row label="Nombre de la vía">{alert.roadName || "—"}</Row>
-        <Row label="Administrador">{alert.administrator || "—"}</Row>
-        <Row label="Fuente">
-          {alert.source || "—"}
-          {alert.sourceUrl && (
-            <>
-              {" · "}
-              <a href={alert.sourceUrl} target="_blank" rel="noopener noreferrer">
-                ver fuente
-              </a>
-            </>
-          )}
-        </Row>
+        {alert.sourceUrl && (
+          <Row label="Fuente">
+            <a href={alert.sourceUrl} target="_blank" rel="noopener noreferrer">
+              ver fuente
+            </a>
+          </Row>
+        )}
         {isCommunity && <Row label="Reportantes independientes">{alert.reportCount}</Row>}
         {alert.pnpActions && <Row label="Acciones PNP">{alert.pnpActions}</Row>}
         {(alert.detainedPassengers > 0 || alert.detainedGoods > 0) && (

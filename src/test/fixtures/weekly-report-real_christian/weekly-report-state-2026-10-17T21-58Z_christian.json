@@ -1,0 +1,276 @@
+{
+  "version": 1,
+  "window": {
+    "startDate": "2026-10-12",
+    "endDate": "2026-10-18"
+  },
+  "updatedAt": "2026-10-17T21:58:00.538Z",
+  "runs": [
+    {
+      "at": "2026-10-17T21:48:12.916Z",
+      "sources": {
+        "sutran": {
+          "ok": true,
+          "kept": 3,
+          "note": null
+        },
+        "indeci": {
+          "ok": true,
+          "kept": 0,
+          "note": null
+        },
+        "googleNews": {
+          "ok": true,
+          "kept": 5,
+          "note": null
+        }
+      }
+    },
+    {
+      "at": "2026-10-17T21:58:00.538Z",
+      "sources": {
+        "sutran": {
+          "ok": true,
+          "kept": 3,
+          "note": null
+        },
+        "indeci": {
+          "ok": true,
+          "kept": 0,
+          "note": null
+        },
+        "googleNews": {
+          "ok": true,
+          "kept": 4,
+          "note": null
+        }
+      }
+    }
+  ],
+  "sutran": [
+    {
+      "alert": {
+        "id": "a2bb3a6a-bb15-4f88-bc1d-aa35f36952e0",
+        "code": "SIGEA-141026-01",
+        "cause": "accidentes",
+        "roadStatus": "normal",
+        "title": "Accidente KM 06",
+        "description": "Accidente de un vehiculode de carga pesada con posterior despiste y volcadura",
+        "currentSituation": "La Via se encuentra libre y transitable",
+        "lat": -11.55118439,
+        "lng": -75.88079333,
+        "region": "Junín",
+        "regionKey": "JUNIN",
+        "province": "Yauli",
+        "district": "La Oroya",
+        "roadCode": "PE-3S",
+        "roadName": "Carretera Longitudinal de la Sierra Sur",
+        "kmText": "KM 6",
+        "km": 6,
+        "kmEnd": null,
+        "direction": "Ambos sentidos",
+        "pnpActions": null,
+        "detainedPassengers": 0,
+        "detainedGoods": 0,
+        "eventDate": "2026-10-14",
+        "validFrom": "2026-10-14",
+        "validUntil": "2026-10-31",
+        "administrator": "Desarrollo Vial de los Andes S.A.C. (DEVIANDES)",
+        "source": "CONCESIONARIA DEVIANDES",
+        "sourceUrl": null,
+        "reportCount": 1,
+        "lastActionAt": "2026-10-15T01:54:10.273Z"
+      },
+      "history": [
+        {
+          "date": "2026-10-15T01:54:10.273Z",
+          "type": "cambio_estado_via",
+          "newStatus": "normal"
+        },
+        {
+          "date": "2026-10-14T22:42:14.409Z",
+          "type": "publicacion",
+          "newStatus": null
+        }
+      ],
+      "firstSeenAt": "2026-10-17T21:48:12.916Z",
+      "lastSeenAt": "2026-10-17T21:58:00.538Z",
+      "listedInLatestRun": true
+    },
+    {
+      "alert": {
+        "id": "3e20237e-1aca-4f6a-879f-95333e74b131",
+        "code": "SIGEA-171026-01",
+        "cause": "accidentes",
+        "roadStatus": "normal",
+        "title": "KM 51 - despiste y volcadura de una carreta de un tráiler",
+        "description": "Despiste y volcadura de una carreta de un tráiler",
+        "currentSituation": "Via normal",
+        "lat": -11.9182317,
+        "lng": -76.5575604,
+        "region": "Lima",
+        "regionKey": "LIMA",
+        "province": "Huarochiri",
+        "district": "Santa Cruz de Cocachacra",
+        "roadCode": "PE-22",
+        "roadName": "Carretera Central",
+        "kmText": "KM 51",
+        "km": 51,
+        "kmEnd": null,
+        "direction": "Norte → Sur",
+        "pnpActions": null,
+        "detainedPassengers": 0,
+        "detainedGoods": 0,
+        "eventDate": "2026-10-17",
+        "validFrom": "2026-10-17",
+        "validUntil": "2026-10-17",
+        "administrator": "Desarrollo Vial de los Andes S.A.C. (DEVIANDES)",
+        "source": "CONCESIONARIA DEVIANDES",
+        "sourceUrl": null,
+        "reportCount": 1,
+        "lastActionAt": "2026-10-17T19:36:45.498Z"
+      },
+      "history": [
+        {
+          "date": "2026-10-17T19:36:45.498Z",
+          "type": "cambio_estado_via",
+          "newStatus": "normal"
+        },
+        {
+          "date": "2026-10-17T15:21:32.269Z",
+          "type": "publicacion",
+          "newStatus": null
+        }
+      ],
+      "firstSeenAt": "2026-10-17T21:48:12.916Z",
+      "lastSeenAt": "2026-10-17T21:58:00.538Z",
+      "listedInLatestRun": true
+    },
+    {
+      "alert": {
+        "id": "c954d0b8-e9e3-4889-bb1b-46749a3fc60b",
+        "code": "SIGEA-171026-02",
+        "cause": "accidentes",
+        "roadStatus": "restringido",
+        "title": "Falla mecanica de un trailer KM 88",
+        "description": "Falla mecanica de un trailer - la vía se encuentra con el transito restringido.",
+        "currentSituation": "Via restringida",
+        "lat": -11.78803345,
+        "lng": -76.31516242,
+        "region": "Lima",
+        "regionKey": "LIMA",
+        "province": "Huarochiri",
+        "district": "San Mateo",
+        "roadCode": "PE-22",
+        "roadName": "Carretera Central",
+        "kmText": "KM 88",
+        "km": 88,
+        "kmEnd": null,
+        "direction": "Oeste → Este",
+        "pnpActions": null,
+        "detainedPassengers": 0,
+        "detainedGoods": 0,
+        "eventDate": "2026-10-17",
+        "validFrom": "2026-10-17",
+        "validUntil": "2026-10-31",
+        "administrator": "Desarrollo Vial de los Andes S.A.C. (DEVIANDES)",
+        "source": "CONCESIONARIA DEVIANDES",
+        "sourceUrl": null,
+        "reportCount": 1,
+        "lastActionAt": "2026-10-17T20:12:02.393Z"
+      },
+      "history": [
+        {
+          "date": "2026-10-17T20:12:02.393Z",
+          "type": "publicacion",
+          "newStatus": null
+        }
+      ],
+      "firstSeenAt": "2026-10-17T21:48:12.916Z",
+      "lastSeenAt": "2026-10-17T21:58:00.538Z",
+      "listedInLatestRun": true
+    }
+  ],
+  "indeci": [],
+  "news": [
+    {
+      "key": "CANAL DE HUAYCOLORO, DISENADO PARA HUAICOS, ES USADO COMO BASURERO EN LURIGANCHO CHOSICA|DIARIO AHORA",
+      "title": "Canal de Huaycoloro, diseñado para huaicos, es usado como basurero en Lurigancho-Chosica",
+      "outlet": "Diario Ahora",
+      "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE9pSzg0M01mNDhVMkV1Z2NKdGJDTlVjR3RwU3owcXRXLTgxS0owV3pxcER0YnhrRkZlYklpVGhpYmxNU1lxeGU4WUd2dy1XakpqcUw1V01sRmR6UWZZUzdQeG5icjZxWjRRMnNobFJoUV9hQXdSYXBfVjZTZTU2ZVE?oc=5",
+      "listedAt": "2026-10-13T00:58:04.000Z",
+      "placeTerms": [
+        "chosica"
+      ],
+      "incidentTerms": [
+        "huaicos"
+      ],
+      "queries": [
+        "(Chosica OR Matucana OR Ticlio OR \"La Oroya\" OR Huarochirí) (accidente OR huaico OR derrumbe OR bloqueo) when:7d"
+      ],
+      "firstSeenAt": "2026-10-17T21:48:12.916Z",
+      "lastSeenAt": "2026-10-17T21:58:00.538Z"
+    },
+    {
+      "key": "CHOQUE MULTIPLE EN LA CARRETERA CENTRAL DEJA VARIOS HERIDOS EN CONCEPCION|DIARIO AHORA",
+      "title": "Choque múltiple en la Carretera Central deja varios heridos en Concepción",
+      "outlet": "Diario Ahora",
+      "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxOXzdtdTRwcDU4MHQ2cGxIdDlCaEdhQXRQZ1dzZ2ZCMWhwLTU3WTM2ancxbFRtNEMzM1l1dDNXWElzS3c5Y2hJbm9sZUZHR3pGS1N0d3VTZEJuZ0owVGhydGpRblZ6ekw4Y0FRR0UtTEgzUDl1cjZMS3RHb3dobmRfSGl6UDg5cUdEWk1EeA?oc=5",
+      "listedAt": "2026-10-13T15:59:44.000Z",
+      "placeTerms": [
+        "carretera central",
+        "concepcion"
+      ],
+      "incidentTerms": [
+        "choque",
+        "heridos"
+      ],
+      "queries": [
+        "\"Carretera Central\" (Jauja OR Concepción OR Huancayo) when:7d",
+        "\"Carretera Central\" (accidente OR choque OR despiste OR volcadura) when:7d",
+        "\"Carretera Central\" when:7d"
+      ],
+      "firstSeenAt": "2026-10-17T21:48:12.916Z",
+      "lastSeenAt": "2026-10-17T21:58:00.538Z"
+    },
+    {
+      "key": "DOS OCUPANTES DE MOTOCICLETA MUEREN EN ACCIDENTE OCURRIDO EN LA CARRETERA CENTRAL|DIARIO AHORA",
+      "title": "Dos ocupantes de motocicleta mueren en accidente ocurrido en la Carretera Central",
+      "outlet": "Diario Ahora",
+      "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxOcTBrVjVIVENmc2NkS1JmVWRVdmRZMkRfVWx6WEZuUlVxaFdUSlZUc1h3QTZxWkc3VTBCb2ZISVhIYkxoaFNMY2xZVW9zY3JXUWNheldSWVlNU0JnTWhZeHQxX1VhbVZGSnVzblBlV09UTE9sTWlodjZwNUtZMUNXeG9EaV9yUVJqRzczeXVLaUFGenBMUUcwYjYxalRhb3Z2RFRUbnNvcUFnb25iTjNwcWJ3?oc=5",
+      "listedAt": "2026-10-16T04:33:58.000Z",
+      "placeTerms": [
+        "carretera central"
+      ],
+      "incidentTerms": [
+        "accidente",
+        "mueren"
+      ],
+      "queries": [
+        "\"Carretera Central\" (accidente OR choque OR despiste OR volcadura) when:7d",
+        "\"Carretera Central\" (bloqueo OR paro OR cierre OR restringido OR interrumpido) when:7d",
+        "\"Carretera Central\" when:7d"
+      ],
+      "firstSeenAt": "2026-10-17T21:48:12.916Z",
+      "lastSeenAt": "2026-10-17T21:58:00.538Z"
+    },
+    {
+      "key": "LA OROYA: DOS JOVENES RESULTAN HERIDOS TRAS CAER CON SU AUTO AL RIO MANTARO|DIARIO CORREO",
+      "title": "La Oroya: dos jóvenes resultan heridos tras caer con su auto al río Mantaro",
+      "outlet": "Diario Correo",
+      "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxNS09iMHotT2c1T2hYRnROMHFUZjVTdEdiMnZPbjRCZXlHc0Q3dHR1Z0gzLW10TURZZ1hSUUhyRHRDbmhHVmx5TGlLSUl5dVZOZlBsTFVMcFBFTk9WZF9hSXJ1YjRPY3RQdmphcnB6YkFqbGs3WEtOUVNKcGVBaG5DMTI3WHZpY1NLdm9pTVZubFhmX2kxYzZBZ0ozcTIyUmlSUUFBdkpjUUFacngtZzJOTFFVYzdCeUJUOGJ0aTBMbmhZRjFDMDNEU3EwNjM2eURjODJkOEN30gHWAUFVX3lxTE1LT2Iwei1PZzVPaFhGdE4wcVRmNVN0R2Iydk9uNEJleUdzRDd0dHVnSDMtbXRNRFlnWFJRSHJEdENuaEdWbHlMaUtJSXl1Vk5mUGxMVUxwUEVOT1ZkX2FJcnViNE9jdFB2amFycHpiQWpsazdYS05RU0pwZUFobkMxMjdYdmljU0t2b2lNVm5sWGZfaTFjNkFnSjNxMjJSaVJRQUF2SmNRQVpyeC1nMk5MUVVjN0J5QlQ4YnRpMExuaFlGMUMwM0RTcTA2MzZ5RGM4MmQ4Q3c?oc=5",
+      "listedAt": "2026-10-16T16:18:07.000Z",
+      "placeTerms": [
+        "la oroya"
+      ],
+      "incidentTerms": [
+        "heridos"
+      ],
+      "queries": [
+        "(Chosica OR Matucana OR Ticlio OR \"La Oroya\" OR Huarochirí) (accidente OR huaico OR derrumbe OR bloqueo) when:7d"
+      ],
+      "firstSeenAt": "2026-10-17T21:48:12.916Z",
+      "lastSeenAt": "2026-10-17T21:58:00.538Z"
+    }
+  ]
+}

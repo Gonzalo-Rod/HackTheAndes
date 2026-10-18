@@ -12,7 +12,7 @@ const STALE_AFTER_MS = 5 * 60_000;
 interface TopBarProps {
   communityStatus: string;
   scope: Scope;
-  counts: { pais: number; pe22: number };
+  counts: { pais: { roads: number; environment: number }; pe22: { roads: number; environment: number } };
   meta: AlertsMeta | null;
   loading: boolean;
   refreshing: boolean;
@@ -20,7 +20,7 @@ interface TopBarProps {
   now: number | null;
   onScopeChange: (scope: Scope) => void;
   onRefresh: () => void;
-  onOpenSources: () => void;
+  onOpenSources?: () => void;
 }
 
 function Freshness({
@@ -70,31 +70,38 @@ function Freshness({
 }
 
 export function TopBar(props: TopBarProps) {
-  const { scope, counts, now, onScopeChange, onOpenSources } = props;
+  const { scope, counts, now, onScopeChange } = props;
   return (
     <header className="pr-topbar">
       <div className="pr-brand">
         <LogoMark />
         <div className="pr-brand__text">
           <span className="pr-brand__name">PeruRoad Climate</span>
-          <span className="pr-brand__sub">Estado vial y territorio</span>
+          <span className="pr-brand__sub">Monitoreo vial y ambiental · Outamina</span>
         </div>
       </div>
       <div className="pr-topbar__sep" aria-hidden="true" />
-      <nav className="pr-segmented pr-scope" aria-label="Ámbito del mapa">
-        <button type="button" aria-pressed={scope === "pais"} className="pr-segmented__item" onClick={() => onScopeChange("pais")}>
-          <Icon name="globe" size={14} />
-          <span>Perú</span>
-          <span className="pr-count">{counts.pais}</span>
-        </button>
-        <button type="button" aria-pressed={scope === "pe22"} className="pr-segmented__item" onClick={() => onScopeChange("pe22")}>
-          <Icon name="route" size={14} />
-          <span>
-            Carretera Central <span className="pr-muted pr-hide-sm">PE-22</span>
-          </span>
-          <span className="pr-count">{counts.pe22}</span>
-        </button>
-      </nav>
+      <div className="pr-topbar__scope-wrapper">
+        <nav className="pr-segmented pr-scope" aria-label="Cobertura geográfica">
+          <button type="button" aria-pressed={scope === "pe22"} className="pr-segmented__item" onClick={() => onScopeChange("pe22")}>
+            <Icon name="route" size={14} />
+            <span>PE-22 y Mantaro</span>
+            <span className="pr-count" title={`${counts.pe22.roads} viales + ${counts.pe22.environment} ambientales`}>
+              {counts.pe22.roads + counts.pe22.environment}
+            </span>
+          </button>
+          <button type="button" aria-pressed={scope === "pais"} className="pr-segmented__item" onClick={() => onScopeChange("pais")}>
+            <Icon name="globe" size={14} />
+            <span>Todo el Perú</span>
+            <span className="pr-count" title={`${counts.pais.roads} viales + ${counts.pais.environment} ambientales`}>
+              {counts.pais.roads + counts.pais.environment}
+            </span>
+          </button>
+        </nav>
+        <span className="pr-scope__hint pr-hide-md">
+          {counts[scope].roads} viales + {counts[scope].environment} ambientales verificados
+        </span>
+      </div>
       <div className="pr-topbar__spacer" />
       <span className="pr-topbar__date pr-hide-md">{now ? formatToday(now) : " "}</span>
       <a className="pr-btn pr-btn--ghost" href="/impacto">
@@ -107,10 +114,6 @@ export function TopBar(props: TopBarProps) {
         {props.communityStatus}
       </span>
       <Freshness {...props} />
-      <button type="button" className="pr-btn pr-btn--ghost pr-hide-sm" onClick={onOpenSources}>
-        <Icon name="source" size={14} />
-        Fuentes
-      </button>
     </header>
   );
 }

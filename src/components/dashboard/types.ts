@@ -3,11 +3,12 @@
 export type MapMode = "2d" | "3d";
 export type NetworkColorBy = "neutral" | "condition";
 export type Scope = "pais" | "pe22";
-export type SidebarTab = "capas" | "detalle" | "fuentes" | "pronostico";
+export type SidebarTab = "alertas" | "ambiente" | "capas" | "detalle" | "pronostico";
 
 export interface LayerState {
   alerts: boolean;
   exposure: boolean;
+  environment: boolean;
   terrain: boolean;
   exaggeration: number;
   hillshade: boolean;
@@ -30,14 +31,15 @@ export interface LayerState {
 export const DEFAULT_LAYERS: LayerState = {
   alerts: true,
   exposure: true,
+  environment: true,
   terrain: true,
   exaggeration: 1.5,
   hillshade: true,
   hillshadeOpacity: 0.8,
-  satellite: false,
+  satellite: true,
   satelliteOpacity: 1,
-  network: true,
-  networkOpacity: 0.7,
+  network: false,
+  networkOpacity: 0.42,
   networkColorBy: "neutral",
   corridor: true,
   rain: true,

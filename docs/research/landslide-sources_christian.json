@@ -1,0 +1,414 @@
+{
+  "verifiedAt": "2026-10-17T23:24:52Z",
+  "scope": "Source discovery for PeruRoad Climate, with explicit PE-22/Mantaro relevance and exclusions.",
+  "sources": [
+    {
+      "id": "cenepred-ond-2026-rain-scenario",
+      "provider": "CENEPRED / SIGRID",
+      "title": "Estudio de escenario de riesgo por lluvias para el periodo octubre - diciembre 2026 (Con base en el Informe Técnico N° 12-2026/SENAMHI-DMA-SVC)",
+      "url": "https://sigrid.cenepred.gob.pe/sigridv3/documento/22910",
+      "categories": [
+        "landslides",
+        "rain",
+        "water"
+      ],
+      "sourceKind": "seasonal_risk_scenario",
+      "geographicScope": "National Peru; corridor-specific exposure must be obtained from the published tables or shapes.",
+      "verifiedAt": "2026-10-17T23:24:52Z",
+      "publicationDate": null,
+      "validity": {
+        "start": "2026-10-01",
+        "end": "2026-12-31"
+      },
+      "availableFormats": [
+        "HTML",
+        "ZIP / EXCEL",
+        "ZIP / MAPA",
+        "ZIP / SHAPE"
+      ],
+      "accessStatus": "Official document page successfully extracted; downloadable archives not fetched.",
+      "observedFacts": [
+        "A national scenario evaluates potential population exposure under October–December 2026 rain forecasts.",
+        "The official page publishes Excel, map and shape download links."
+      ],
+      "limitations": [
+        "Seasonal exposure is not an observed landslide, closure or a precise 24–72 hour corridor warning.",
+        "Publication gives the year only; archive contents and district-level records remain unverified."
+      ],
+      "automation": "Periodically inspect the official page, download only the current linked archives and spatially intersect verified shapes with the project corridor.",
+      "extractionEvidence": {
+        "method": "tavily_extract",
+        "success": true,
+        "requestId": "9d166df1-2ec4-4e5e-a3e6-8809d362ddb0",
+        "detail": "Official HTML yielded title, publication year, nationwide scope and all three ZIP URLs."
+      },
+      "publishedDownloads": [
+        {
+          "format": "HTML",
+          "url": "https://sigrid.cenepred.gob.pe/sigridv3/documento/22910",
+          "status": "extracted"
+        },
+        {
+          "format": "ZIP / EXCEL",
+          "url": "https://sigrid.cenepred.gob.pe/sigridv3/storage/escenario_trimestral/101_tabla.zip",
+          "status": "published_link_not_downloaded"
+        },
+        {
+          "format": "ZIP / MAPA",
+          "url": "https://sigrid.cenepred.gob.pe/sigridv3/storage/escenario_trimestral/101_mapas.zip",
+          "status": "published_link_not_downloaded"
+        },
+        {
+          "format": "ZIP / SHAPE",
+          "url": "https://sigrid.cenepred.gob.pe/sigridv3/storage/escenario_trimestral/101_shape.zip",
+          "status": "published_link_not_downloaded"
+        }
+      ],
+      "automationPlan": {
+        "priority": "high",
+        "method": "Periodically inspect the official page, download only the current linked archives and spatially intersect verified shapes with the project corridor.",
+        "cadence": "weekly_and_when_reissued",
+        "requiresHumanReview": true,
+        "readiness": "published_download_links_verified_contents_pending"
+      }
+    },
+    {
+      "id": "ingemmet-geocatmin-hazard-metadata",
+      "provider": "INGEMMET via official GEOIDEP metadata catalogue",
+      "title": "GEOCATMIN Peligros Geológicos, Zonas Criticas y Susceptibilidad a Movimientos en Masa, Cartografia de peligros",
+      "url": "https://catalogo.geoidep.gob.pe/metadatos/srv/api/records/c5580ab5-7277-4858-8d16-a982bd2cc23b",
+      "categories": [
+        "landslides",
+        "water"
+      ],
+      "sourceKind": "hazard_inventory_and_susceptibility_metadata",
+      "geographicScope": "National Peru; regional inventory and hazard polygons may support PE-22 and Mantaro spatial joins.",
+      "verifiedAt": "2026-10-17T23:24:52Z",
+      "publicationDate": "2025-01-30",
+      "validity": null,
+      "availableFormats": [
+        "HTML metadata",
+        "ESRI Shapefile ZIP",
+        "ESRI Shapefile ZIP"
+      ],
+      "accessStatus": "Official national metadata record extracted. Port-8443 archive links advertised but not tested.",
+      "observedFacts": [
+        "Metadata identifies ESRI Shapefile distribution and WGS 1984 coordinates.",
+        "Field hazard cartography is marked updated January 2025; photointerpreted cartography June 2024.",
+        "The provider explicitly separates susceptibility from event timing."
+      ],
+      "limitations": [
+        "Different layer families have different update dates.",
+        "Copyright is recorded; public access does not establish unrestricted redistribution.",
+        "Published metadata is not verification that every archive remains downloadable."
+      ],
+      "automation": "Cache downloaded official layers by content hash, inspect CRS/schema, retain source dates and clip locally to the corridor; never create incident records from susceptibility alone.",
+      "extractionEvidence": {
+        "method": "tavily_extract",
+        "success": true,
+        "requestId": "571c4873-d6b6-4b12-9f57-7cbcf2ad31a7",
+        "detail": "Official metadata includes current distribution filenames, WGS 1984, ESRI Shapefile and susceptibility limitations."
+      },
+      "publishedDownloads": [
+        {
+          "format": "HTML metadata",
+          "url": "https://catalogo.geoidep.gob.pe/metadatos/srv/api/records/c5580ab5-7277-4858-8d16-a982bd2cc23b",
+          "status": "extracted"
+        },
+        {
+          "format": "ESRI Shapefile ZIP",
+          "url": "https://metadatos.ingemmet.gob.pe:8443/geonetwork/srv/api/records/c5580ab5-7277-4858-8d16-a982bd2cc23b/attachments/CartografiaPeligros_30012025.zip",
+          "status": "published_link_not_downloaded"
+        },
+        {
+          "format": "ESRI Shapefile ZIP",
+          "url": "https://metadatos.ingemmet.gob.pe:8443/geonetwork/srv/api/records/c5580ab5-7277-4858-8d16-a982bd2cc23b/attachments/CartografiaPeligroFotointerpretado.zip",
+          "status": "published_link_not_downloaded"
+        }
+      ],
+      "automationPlan": {
+        "priority": "high",
+        "method": "Cache downloaded official layers by content hash, inspect CRS/schema, retain source dates and clip locally to the corridor; never create incident records from susceptibility alone.",
+        "cadence": "monthly",
+        "requiresHumanReview": true,
+        "readiness": "metadata_and_exact_distribution_urls_verified"
+      }
+    },
+    {
+      "id": "indeci-coen-emergency-archive",
+      "provider": "INDECI / COEN",
+      "title": "Reportes Preliminares / Complementarios / Emergencias",
+      "url": "https://portal.indeci.gob.pe/informe/reportes-preliminares-complementarios-emergencias",
+      "categories": [
+        "landslides",
+        "rain",
+        "water"
+      ],
+      "sourceKind": "official_occurrence_report_index",
+      "geographicScope": "National Peru; retain only explicitly matched corridor districts/provinces and event dates.",
+      "verifiedAt": "2026-10-17T23:24:52Z",
+      "publicationDate": null,
+      "validity": null,
+      "availableFormats": [
+        "HTML index"
+      ],
+      "accessStatus": "Official index extracted; report pages and PDF download links were visible.",
+      "observedFacts": [
+        "Index contains separately identified preliminary/complementary emergency reports and links to their official PDFs.",
+        "On this capture, the visible recent list included October 17, 2026 reports and short-term bulletins."
+      ],
+      "limitations": [
+        "A recent index page is not a complete historical incident inventory.",
+        "Changing complementary titles may retain an older URL slug; dedupe and version by document/report identity and content.",
+        "This extraction did not confirm a current PE-22 landslide."
+      ],
+      "automation": "Discover individual reports from the official index or existing collector, extract each linked official PDF, validate event date, publication date, geography and report number separately, and retain amendments.",
+      "extractionEvidence": {
+        "method": "tavily_extract",
+        "success": true,
+        "requestId": "9d166df1-2ec4-4e5e-a3e6-8809d362ddb0",
+        "detail": "HTML exposes individual emergency and bulletin URLs plus PDF download links."
+      },
+      "publishedDownloads": [
+        {
+          "format": "HTML index",
+          "url": "https://portal.indeci.gob.pe/informe/reportes-preliminares-complementarios-emergencias",
+          "status": "extracted"
+        }
+      ],
+      "automationPlan": {
+        "priority": "high",
+        "method": "Discover individual reports from the official index or existing collector, extract each linked official PDF, validate event date, publication date, geography and report number separately, and retain amendments.",
+        "cadence": "hourly_or_daily",
+        "requiresHumanReview": true,
+        "readiness": "official_index_verified"
+      }
+    },
+    {
+      "id": "indeci-quebradas-191-2026",
+      "provider": "INDECI / COEN, based on short-term warning N°290",
+      "title": "Boletín informativo de aviso de corto plazo ante posible activación de quebradas N°191-2026-INDECI/COEN",
+      "url": "https://portal.indeci.gob.pe/emergencias/boletin-informativo-de-aviso-de-corto-plazo-ante-posible-activacion-de-quebradas-n191-17-10-2026/",
+      "categories": [
+        "landslides",
+        "rain",
+        "water"
+      ],
+      "sourceKind": "short_term_hazard_forecast",
+      "geographicScope": "Extracted exposure table lists Amazonas / Condorcanqui. No PE-22, Lima or Junín exposure was established.",
+      "verifiedAt": "2026-10-17T23:24:52Z",
+      "publicationDate": "2026-10-17",
+      "validity": {
+        "start": "2026-10-17T18:00:00Z",
+        "end": "2026-10-18T18:00:00Z"
+      },
+      "availableFormats": [
+        "HTML",
+        "PDF"
+      ],
+      "accessStatus": "Official detail page and linked PDF both extracted.",
+      "observedFacts": [
+        "PDF validity is 13:00 October 17 to 13:00 October 18, 2026 in Peru.",
+        "The warning considers forecast rainfall, prior seven-day rainfall and mass-movement susceptibility.",
+        "Extracted exposed province is Condorcanqui, Amazonas."
+      ],
+      "limitations": [
+        "Exclude this bulletin from a PE-22 alert because extracted geography is outside the corridor.",
+        "A possibility warning is not confirmation of a huaico; mapped or image-only extent still requires visual/geospatial review."
+      ],
+      "automation": "Poll official hazard-monitoring listings, follow each real PDF link, extract issue/expiry times and explicit geography; reject outside-corridor or expired warnings.",
+      "extractionEvidence": {
+        "method": "tavily_extract",
+        "success": true,
+        "requestId": "97c5b890-4189-4739-8c02-7009eb650f3b",
+        "detail": "PDF yielded validity interval, methodology and Amazonas/Condorcanqui exposure; page request c11ff6f4-5f13-4c86-9119-f792f58eadca also succeeded."
+      },
+      "publishedDownloads": [
+        {
+          "format": "HTML",
+          "url": "https://portal.indeci.gob.pe/emergencias/boletin-informativo-de-aviso-de-corto-plazo-ante-posible-activacion-de-quebradas-n191-17-10-2026/",
+          "status": "extracted"
+        },
+        {
+          "format": "PDF",
+          "url": "https://portal.indeci.gob.pe/wp-content/uploads/2026/10/BOLET%C3%8DN-INFORMATIVO-DE-AVISO-DE-CORTO-PLAZO-ANTE-POSIBLE-ACTIVACI%C3%93N-DE-QUEBRADAS-N%C2%B0191-17-10-2026.pdf",
+          "status": "extracted"
+        }
+      ],
+      "automationPlan": {
+        "priority": "high",
+        "method": "Poll official hazard-monitoring listings, follow each real PDF link, extract issue/expiry times and explicit geography; reject outside-corridor or expired warnings.",
+        "cadence": "hourly",
+        "requiresHumanReview": true,
+        "readiness": "pdf_text_verified_geographic_exclusion_required"
+      }
+    },
+    {
+      "id": "ingemmet-payhua-matucana-historical",
+      "provider": "INGEMMET, official SIGRID mirror",
+      "title": "Movimientos en masa: deslizamientos y huaycos en la cuenca de la quebrada Payhua",
+      "url": "http://sigrid.cenepred.gob.pe/docs/PARA%20PUBLICAR/INGEMMET/Movimientos%20en%20masa,%20deslizamientos%20y%20huaycos%20Qda.%20Paihua.pdf",
+      "categories": [
+        "landslides",
+        "rain",
+        "water",
+        "agriculture"
+      ],
+      "sourceKind": "historical_site_hazard_study",
+      "geographicScope": "Payhua catchment opposite Matucana, Huarochirí, Lima; Rímac and Carretera Central.",
+      "verifiedAt": "2026-10-17T23:24:52Z",
+      "publicationDate": null,
+      "validity": null,
+      "availableFormats": [
+        "PDF"
+      ],
+      "accessStatus": "Full text extracted from the official SIGRID mirror.",
+      "observedFacts": [
+        "Study connects Payhua debris flows, slope instability, Rímac blockage and exposure of Matucana and the Central road.",
+        "It documents historical events and agricultural land exposure; the body discusses planned work in 2006."
+      ],
+      "limitations": [
+        "Historical technical context, not a 2026 active hazard or a current landslide footprint.",
+        "Exact publication date was not recoverable from extraction.",
+        "Numerical modeled volumes and old population figures should not become present-day measurements."
+      ],
+      "automation": "Archive once as historical explanatory evidence; manually digitize any relevant map with scale and document provenance before use.",
+      "extractionEvidence": {
+        "method": "tavily_extract",
+        "success": true,
+        "requestId": "97c5b890-4189-4739-8c02-7009eb650f3b",
+        "detail": "Full PDF text yielded title, Matucana/Payhua geography, historical chronology, cultivation exposure and dated study context."
+      },
+      "publishedDownloads": [
+        {
+          "format": "PDF",
+          "url": "http://sigrid.cenepred.gob.pe/docs/PARA%20PUBLICAR/INGEMMET/Movimientos%20en%20masa,%20deslizamientos%20y%20huaycos%20Qda.%20Paihua.pdf",
+          "status": "extracted"
+        }
+      ],
+      "automationPlan": {
+        "priority": "medium",
+        "method": "Archive once as historical explanatory evidence; manually digitize any relevant map with scale and document provenance before use.",
+        "cadence": "one_time_then_revision_check",
+        "requiresHumanReview": true,
+        "readiness": "historical_pdf_text_verified"
+      }
+    },
+    {
+      "id": "ingemmet-pucruchacra-san-mateo-historical",
+      "provider": "INGEMMET, official SIGRID mirror",
+      "title": "Deslizamiento de tierras en el cerro Pucruchacra (Distrito San Mateo de Huanchor, provincia Huarochirí, región Lima)",
+      "url": "http://sigrid.cenepred.gob.pe/docs/PARA%20PUBLICAR/INGEMMET/Informe%20tecnico%20deslizamiento%20de%20tierras%20Cerro%20Pucruchacra.pdf",
+      "categories": [
+        "landslides",
+        "water",
+        "agriculture"
+      ],
+      "sourceKind": "historical_site_hazard_study",
+      "geographicScope": "Cerro Pucruchacra / San Mateo de Huanchor; Central road km 93+000, Lima.",
+      "verifiedAt": "2026-10-17T23:24:52Z",
+      "publicationDate": null,
+      "validity": null,
+      "availableFormats": [
+        "PDF"
+      ],
+      "accessStatus": "Full text extracted from official SIGRID mirror; distinct direct-repository 2026 lead failed extraction.",
+      "observedFacts": [
+        "Historical report identifies a critical zone at Central road km 93+000 and discusses irrigation, groundwater and cultivation.",
+        "Fieldwork described in the text occurred in August 2011, with desk work completed in September 2011."
+      ],
+      "limitations": [
+        "Report introduction says August 16, 2011 while another passage refers to August 14; exact event day remains unresolved.",
+        "Do not treat the report as a current alert or as the separate 2026 repository report.",
+        "Publication date is unverified; dated fieldwork is not necessarily publication date."
+      ],
+      "automation": "Keep as historical context and a candidate site for later official monitoring; human review must resolve the event date before evaluation-set ingestion.",
+      "extractionEvidence": {
+        "method": "tavily_extract",
+        "success": true,
+        "requestId": "97c5b890-4189-4739-8c02-7009eb650f3b",
+        "detail": "Full PDF text yielded San Mateo location, km 93+000, 2011 fieldwork, groundwater/irrigation discussion and inconsistent event dates."
+      },
+      "publishedDownloads": [
+        {
+          "format": "PDF",
+          "url": "http://sigrid.cenepred.gob.pe/docs/PARA%20PUBLICAR/INGEMMET/Informe%20tecnico%20deslizamiento%20de%20tierras%20Cerro%20Pucruchacra.pdf",
+          "status": "extracted"
+        }
+      ],
+      "automationPlan": {
+        "priority": "medium",
+        "method": "Keep as historical context and a candidate site for later official monitoring; human review must resolve the event date before evaluation-set ingestion.",
+        "cadence": "one_time_then_revision_check",
+        "requiresHumanReview": true,
+        "readiness": "historical_pdf_verified_event_date_conflict"
+      }
+    }
+  ],
+  "queries": [
+    {
+      "query": "INGEMMET Chosica Huarochirí Matucana San Mateo movimientos en masa informe técnico repositorio",
+      "depth": "advanced"
+    },
+    {
+      "query": "site.sigrid.cenepred.gob.pe \"Huarochirí\" \"2026\" \"lluvias\"",
+      "depth": "advanced"
+    },
+    {
+      "query": "site.gob.pe indeci \"Matucana\" \"2026\" deslizamiento huaico",
+      "depth": "advanced"
+    },
+    {
+      "query": "site.sigrid.cenepred.gob.pe \"2026\" \"octubre\" \"lluvias\" \"movimientos\"",
+      "depth": "advanced"
+    },
+    {
+      "query": "GEOCATMIN INGEMMET movimientos en masa susceptibilidad consulta oficial",
+      "depth": "basic"
+    },
+    {
+      "query": "\"Pucruchacra\" \"2026\" INGEMMET",
+      "depth": "advanced"
+    },
+    {
+      "query": "site.sigrid.cenepred.gob.pe \"Matucana\" \"movimientos\" INGEMMET",
+      "depth": "advanced"
+    },
+    {
+      "query": "site.sigrid.cenepred.gob.pe \"Huancayo\" \"INGEMMET\" \"deslizamiento\"",
+      "depth": "advanced"
+    }
+  ],
+  "estimatedCredits": 25,
+  "creditLedger": {
+    "searchCalls": 8,
+    "advancedSearchCalls": 7,
+    "basicSearchCalls": 1,
+    "advancedExtractionCalls": 5,
+    "advancedExtractionUrlsRequested": 10,
+    "advancedExtractionUrlsSucceeded": 8,
+    "conservativeSearchCredits": 15,
+    "conservativeExtractCredits": 10,
+    "actualBilledCredits": "not returned by MCP; conservative reservation assumes 2 credits per advanced search, 1 per basic search and 2 per advanced-extract call, including failed calls"
+  },
+  "gaps": [
+    {
+      "url": "https://repositorio.ingemmet.gob.pe/bitstream/20.500.12544/5479/1/2026-OT017-Evaluacion_peligro_cerro_Pucruchacra_San_Mateo-Lima.pdf",
+      "status": "search_discovered_tavily_extract_failed",
+      "note": "2026 Pucruchacra lead; no report contents or present hazard claims verified."
+    },
+    {
+      "url": "https://repositorio.ingemmet.gob.pe/handle/20.500.12544/1024",
+      "status": "search_discovered_tavily_extract_failed",
+      "note": "2017 technical-report catalogue lead; not admitted as extracted evidence."
+    },
+    {
+      "url": "https://catalogo.geoidep.gob.pe/metadatos/srv/api/records/5d67c05b-d0cf-4c63-8f4d-719ef3f8b4d3",
+      "status": "extracted_but_legacy_metadata",
+      "note": "Legacy susceptibility record has incompatible publication/context/scale fields and geological WMS links; no live hazard API inferred."
+    },
+    "No current PE-22/Mantaro landslide occurrence was established in these searches. This is not proof of no hazard.",
+    "No recent local Mantaro technical report admitted: Junín query results were broad or outside the project corridor.",
+    "Download and inspect the current CENEPRED archives and INGEMMET shapefiles before enabling a machine ingestion adapter."
+  ]
+}

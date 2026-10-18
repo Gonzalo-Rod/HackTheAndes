@@ -33,57 +33,66 @@ export function FilterBar({ filters, facets, regions, resultCount, totalCount, a
         />
       </label>
 
-      <div className="pr-chipgroup" role="group" aria-label="Estado de la vía">
-        {statuses.map((status) => {
-          const meta = STATUS_META[status];
-          const pressed = filters.statuses.includes(status);
-          return (
+      <div className="pr-filter-group">
+        <span className="pr-filter-group__label">Estado:</span>
+        <div className="pr-chipgroup" role="group" aria-label="Estado de la vía">
+          {statuses.map((status) => {
+            const meta = STATUS_META[status];
+            const pressed = filters.statuses.includes(status);
+            return (
+              <button
+                key={status}
+                type="button"
+                className="pr-chip"
+                aria-pressed={pressed}
+                onClick={() => onChange({ ...filters, statuses: toggleValue(filters.statuses, status) })}
+              >
+                <span className="pr-status-glyph" style={{ background: meta.color, color: meta.ink }}>
+                  <Icon name={status} size={10} strokeWidth={2.6} />
+                </span>
+                <span className="pr-chip__text">{meta.label}</span>
+                <span className="pr-chip__count">{facets.statuses[status]}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="pr-filter-group">
+        <span className="pr-filter-group__label">Tipo:</span>
+        <div className="pr-chipgroup pr-chipgroup--causes" role="group" aria-label="Tipo de evento">
+          {causes.map((cause) => (
             <button
-              key={status}
+              key={cause}
               type="button"
-              className="pr-chip"
-              aria-pressed={pressed}
-              onClick={() => onChange({ ...filters, statuses: toggleValue(filters.statuses, status) })}
+              className="pr-chip pr-chip--named"
+              aria-pressed={filters.causes.includes(cause)}
+              onClick={() => onChange({ ...filters, causes: toggleValue(filters.causes, cause) })}
+              title={`${CAUSE_META[cause].label} (Filtra avisos vigentes, no capas del mapa)`}
             >
-              <span className="pr-status-glyph" style={{ background: meta.color, color: meta.ink }}>
-                <Icon name={status} size={10} strokeWidth={2.6} />
-              </span>
-              {meta.label}
-              <span className="pr-chip__count">{facets.statuses[status]}</span>
+              <Icon name={cause} size={13} />
+              <span className="pr-chip__name">{CAUSE_META[cause].short}</span>
+              <span className="pr-chip__count">{facets.causes[cause]}</span>
             </button>
-          );
-        })}
-      </div>
-
-      <div className="pr-chipgroup pr-chipgroup--causes" role="group" aria-label="Motivo">
-        {causes.map((cause) => (
-          <button
-            key={cause}
-            type="button"
-            className="pr-chip pr-chip--quiet"
-            aria-pressed={filters.causes.includes(cause)}
-            onClick={() => onChange({ ...filters, causes: toggleValue(filters.causes, cause) })}
-            title={CAUSE_META[cause].label}
-          >
-            <Icon name={cause} size={13} />
-            <span className="pr-chip__label">{CAUSE_META[cause].short}</span>
-            <span className="pr-chip__count">{facets.causes[cause]}</span>
-          </button>
-        ))}
-      </div>
-
-      <label className="pr-select">
-        <span className="pr-sr-only">Región</span>
-        <select value={filters.regionKey ?? ""} onChange={(event) => onChange({ ...filters, regionKey: event.target.value || null })}>
-          <option value="">Todas las regiones</option>
-          {regions.map((region) => (
-            <option key={region.key} value={region.key}>
-              {region.label} ({region.count})
-            </option>
           ))}
-        </select>
-        <Icon name="chevronDown" size={14} />
-      </label>
+        </div>
+      </div>
+
+      <div className="pr-filter-group pr-hide-sm">
+        <span className="pr-filter-group__label">Área:</span>
+        <label className="pr-select">
+          <span className="pr-sr-only">Región</span>
+          <select value={filters.regionKey ?? ""} onChange={(event) => onChange({ ...filters, regionKey: event.target.value || null })}>
+            <option value="">Todas las regiones</option>
+            {regions.map((region) => (
+              <option key={region.key} value={region.key}>
+                {region.label} ({region.count})
+              </option>
+            ))}
+          </select>
+          <Icon name="chevronDown" size={14} />
+        </label>
+      </div>
 
       <div className="pr-filterbar__end">
         <span className="pr-filterbar__count" aria-live="polite">

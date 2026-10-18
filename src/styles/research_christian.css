@@ -1,0 +1,509 @@
+/* Environmental evidence uses blue, distinct from road restriction colors. */
+.pr-research {
+  --evidence: #176e84;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+.pr-research__intro {
+  padding: 15px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.pr-research__eyebrow {
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 0.09em;
+  color: var(--evidence);
+}
+.pr-research__intro h2 {
+  margin: 6px 0 7px;
+  font-size: 19px;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+.pr-research__intro p {
+  color: var(--ink-2);
+  font-size: 12px;
+  line-height: 1.6;
+}
+.pr-research__coverage {
+  display: block;
+  margin-top: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--evidence);
+}
+.pr-research__guide {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  padding: 0 4px;
+  font-size: 11px;
+  color: var(--ink-3);
+  line-height: 1.5;
+}
+.pr-evidence-key {
+  display: inline-block;
+  flex: none;
+  min-width: 11px;
+  margin: 0 2px;
+  color: #f5e6b5;
+  font-size: 12px;
+  font-weight: 750;
+  line-height: 1;
+  text-align: center;
+  text-shadow: 0 1px 2px #17242a;
+}
+.pr-evidence-key--reference {
+  color: #bfe5ed;
+}
+.pr-evidence-key--critical {
+  color: #f5e6b5;
+}
+.pr-evidence-key--area {
+  width: 13px;
+  height: 8px;
+  border: 1px solid #71848a;
+  background: #71848a24;
+  vertical-align: middle;
+}
+.pr-evidence-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.pr-evidence-card {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  width: 100%;
+  padding: 13px;
+  text-align: left;
+  border: 1px solid var(--line);
+  border-left: 3px solid #82b4c0;
+  border-radius: var(--radius);
+  background: var(--surface);
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+.pr-evidence-card:hover {
+  border-color: #176e84;
+  box-shadow: var(--shadow-1);
+}
+.pr-evidence-card > strong {
+  font-size: 13px;
+  line-height: 1.4;
+}
+.pr-evidence__tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: var(--ink-3);
+}
+.pr-evidence__badge {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #e9edf0;
+  color: #455567;
+  font-size: 10px;
+  font-weight: 650;
+}
+.pr-evidence__badge--valid {
+  background: #e2eff6;
+  color: #145676;
+}
+.pr-evidence__badge--upcoming {
+  background: #e6e8f5;
+  color: #494c83;
+}
+.pr-evidence__badge--expired {
+  background: #eee9e5;
+  color: #74665a;
+}
+.pr-evidence__badge--context,
+.pr-evidence__badge--undated {
+  background: #f0eada;
+  color: #78623a;
+}
+.pr-evidence-card__summary,
+.pr-evidence__summary {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+.pr-evidence-card__period {
+  font-size: 10.5px;
+  color: var(--ink-3);
+}
+.pr-evidence-card__footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 5px;
+  color: #176e84;
+  font-size: 10px;
+}
+.pr-evidence-card__footer > span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.pr-research__more {
+  width: 100%;
+  justify-content: center;
+}
+.pr-research__capture,
+.pr-research__footnote,
+.pr-research__muted {
+  font-size: 10.5px;
+  color: var(--ink-3);
+  line-height: 1.6;
+  padding: 0 4px;
+}
+.pr-research__footnote {
+  padding-bottom: 8px;
+}
+.pr-research__warning {
+  padding: 12px;
+  border: 1px solid #ddc28b;
+  background: #fff8e8;
+  border-radius: var(--radius);
+  font-size: 12px;
+}
+.pr-research__warning p {
+  margin-bottom: 7px;
+}
+.pr-research__disclosure {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.pr-research__disclosure > summary {
+  padding: 12px;
+  font-size: 12px;
+  font-weight: 650;
+  cursor: pointer;
+}
+.pr-research__disclosure > :not(summary) {
+  margin: 0 12px 12px;
+}
+.pr-research__disclosure > p {
+  font-size: 11px;
+  color: var(--ink-3);
+}
+.pr-research__documents {
+  padding: 0;
+  list-style: none;
+}
+.pr-research__documents li {
+  border-top: 1px solid var(--line);
+}
+.pr-research__documents a {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 0;
+  font-size: 11px;
+  text-decoration: none;
+}
+.pr-research__documents a:hover {
+  color: #176e84;
+}
+.pr-research__documents a span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 9px;
+  color: var(--ink-3);
+}
+.pr-evidence-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  padding: 14px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.pr-evidence-detail > .pr-btn {
+  align-self: flex-start;
+  padding-left: 0;
+}
+.pr-evidence-detail h2 {
+  font-size: 19px;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+.pr-evidence-detail h3 {
+  font-size: 12px;
+  margin-bottom: 7px;
+}
+.pr-evidence__meta,
+.pr-evidence__facts dl {
+  margin: 0;
+}
+.pr-evidence__meta > div {
+  padding: 6px 0;
+  border-top: 1px solid var(--line);
+}
+.pr-evidence__meta dt {
+  color: var(--ink-3);
+  font-size: 10px;
+}
+.pr-evidence__meta dd {
+  margin: 2px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.pr-evidence__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.pr-evidence__facts dl > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--line);
+}
+.pr-evidence__facts dt {
+  color: var(--ink-3);
+  font-size: 11px;
+}
+.pr-evidence__facts dd {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+.pr-evidence__facts table {
+  width: 100%;
+  text-align: left;
+  font-size: 11px;
+  border-collapse: collapse;
+}
+.pr-evidence__facts td,
+.pr-evidence__facts th {
+  padding: 7px 4px;
+  border-bottom: 1px solid var(--line);
+}
+.pr-evidence__facts p {
+  margin-top: 7px;
+  font-size: 10px;
+  color: var(--ink-3);
+}
+.pr-evidence__caveats {
+  padding: 11px;
+  border-radius: var(--radius-sm);
+  background: #eef4f5;
+  color: #385d64;
+}
+.pr-evidence__caveats ul {
+  margin: 0;
+  padding-left: 16px;
+  font-size: 11px;
+  line-height: 1.6;
+}
+.pr-evidence__caveats li + li {
+  margin-top: 6px;
+}
+.pr-evidence__related button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 9px 0;
+  width: 100%;
+  border: 0;
+  border-top: 1px solid var(--line);
+  background: transparent;
+  color: #176e84;
+  text-align: left;
+  font-size: 11px;
+  cursor: pointer;
+}
+.pr-research-toolbar__count {
+  white-space: nowrap;
+  color: var(--ink-2);
+  font-size: 12px;
+}
+.pr-research-toolbar__hint {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--ink-3);
+}
+.pr-research-archive,
+.pr-research-sources {
+  font-size: 11px;
+  line-height: 1.6;
+}
+.pr-research-archive h3 {
+  font-size: 12px;
+}
+.pr-research-archive h4 {
+  margin: 14px 0 4px;
+  font-size: 11px;
+}
+.pr-research-archive p,
+.pr-research-sources p {
+  color: var(--ink-3);
+  margin-bottom: 8px;
+}
+.pr-research-archive ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.pr-research-archive li {
+  display: flex;
+  flex-direction: column;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--line);
+  gap: 3px;
+}
+.pr-research-archive li span {
+  color: var(--ink-3);
+  font-size: 10px;
+}
+.pr-research-archive__health {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.pr-research-archive__health span {
+  padding: 2px 5px;
+  border-radius: 3px;
+  background: var(--surface-3);
+}
+.pr-research-archive__health span[data-ok="false"] {
+  background: #f9ebcd;
+}
+.pr-research-source {
+  border-top: 1px solid var(--line);
+}
+.pr-research-source > summary {
+  cursor: pointer;
+  padding: 9px 0;
+  overflow-wrap: anywhere;
+}
+.pr-research-source > summary span {
+  display: block;
+  color: #176e84;
+  font-size: 10px;
+  font-weight: 650;
+}
+.pr-research-source > div {
+  padding-bottom: 8px;
+  overflow-wrap: anywhere;
+}
+.pr-research-source ul {
+  padding-left: 15px;
+}
+.pr-evidence-marker {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 31px;
+  height: 31px;
+  border: 2px solid #fff;
+  border-radius: 8px;
+  background: #176e84;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 1px 5px #0006;
+}
+.pr-evidence-marker.is-selected {
+  outline: 3px solid #176e84;
+  outline-offset: 3px;
+}
+.pr-evidence-marker.is-offscreen {
+  display: none;
+}
+.pr-evidence-marker__glyph {
+  display: grid;
+  place-items: center;
+}
+.pr-evidence-marker__count:not(:empty) {
+  position: absolute;
+  right: -6px;
+  top: -7px;
+  display: grid;
+  place-items: center;
+  min-width: 15px;
+  height: 15px;
+  padding: 0 3px;
+  background: #fff;
+  color: #176e84;
+  border-radius: 8px;
+  font-size: 9px;
+  font-weight: 750;
+}
+.pr-evidence-marker__label {
+  display: none;
+  position: absolute;
+  left: calc(100% + 7px);
+  padding: 4px 7px;
+  background: #103a46ed;
+  color: #fff;
+  border-radius: 4px;
+  font-size: 11px;
+  white-space: nowrap;
+}
+.pr-evidence-marker:hover .pr-evidence-marker__label,
+.pr-evidence-marker:focus-visible .pr-evidence-marker__label,
+.pr-evidence-marker.is-selected .pr-evidence-marker__label {
+  display: block;
+}
+.pr-legend__compact-bar {
+  flex-wrap: wrap;
+}
+.pr-tabs__item {
+  padding-right: 8px;
+  padding-left: 8px;
+  gap: 4px;
+  white-space: nowrap;
+}
+@media (max-width: 1280px) {
+  .pr-tabs__item {
+    font-size: 11px;
+    padding: 0 6px;
+  }
+  .pr-tabs__item > svg {
+    display: none;
+  }
+  .pr-research-toolbar__hint {
+    display: none;
+  }
+}
+@media (max-width: 900px) {
+  .pr-research-toolbar {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    gap: 7px;
+  }
+  .pr-research-toolbar .pr-select select {
+    max-width: 250px;
+  }
+  .pr-research-toolbar__count {
+    font-size: 11px;
+  }
+  .pr-research-toolbar .pr-btn {
+    font-size: 11px;
+  }
+  .pr-research {
+    max-width: 100%;
+  }
+  .pr-legend__compact-bar .pr-legend__item {
+    font-size: 9px;
+  }
+}

@@ -185,7 +185,8 @@ export function SourcesPanel({ meta, corridor, rain, hazards, catchmentWeather }
 
       <p className="pr-attrib">
         Mapa base: OpenFreeMap · © OpenMapTiles · © colaboradores de OpenStreetMap. Relieve: Mapzen Terrain Tiles en AWS Open Data.
-        Satélite: Sentinel-2 cloudless 2016 por EOX (CC BY 4.0). Lluvia: datos meteorológicos de Open-Meteo.com (CC BY 4.0).
+        Satélite: Esri World Imagery (alta resolución) · Maxar, Earthstar Geographics. Lluvia: datos meteorológicos de Open-Meteo.com (CC BY
+        4.0).
       </p>
     </div>
   );

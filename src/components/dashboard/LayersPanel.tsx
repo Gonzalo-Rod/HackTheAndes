@@ -6,7 +6,7 @@ import type { CorridorData } from "@/contracts/corridor";
 import type { AlertsMeta } from "@/contracts/road-alerts";
 import type { CorridorRainResponse } from "@/contracts/weather";
 import { RAIN_LEVELS } from "@/domain/weather/rain";
-import { formatRelative } from "@/lib/format";
+import { formatDateTime, formatRelative } from "@/lib/format";
 
 import type { LayerState } from "./types";
 
@@ -94,11 +94,24 @@ interface LayersPanelProps {
   corridor: CorridorData | null;
   rain: CorridorRainResponse | null;
   rainError: string | null;
+  environmentalCount: number;
+  environmentalRetrievedAt: string | null;
   now: number | null;
   onChange: (layers: LayerState) => void;
 }
 
-export function LayersPanel({ layers, is3d, meta, corridor, rain, rainError, now, onChange }: LayersPanelProps) {
+export function LayersPanel({
+  layers,
+  is3d,
+  meta,
+  corridor,
+  rain,
+  rainError,
+  environmentalCount,
+  environmentalRetrievedAt,
+  now,
+  onChange,
+}: LayersPanelProps) {
   const set = (patch: Partial<LayerState>) => onChange({ ...layers, ...patch });
   return (
     <ul className="pr-layers">
@@ -109,6 +122,17 @@ export function LayersPanel({ layers, is3d, meta, corridor, rain, rainError, now
         swatch={<span className="sw sw--alerts" />}
         checked={layers.alerts}
         onToggle={(alerts) => set({ alerts })}
+      />
+      <LayerRow
+        label="Referencias ambientales"
+        hint={`${environmentalCount} referencias oficiales; zonas críticas y pronósticos, no eventos confirmados`}
+        freshness={{
+          text: environmentalRetrievedAt ? `Captura revisada: ${formatDateTime(environmentalRetrievedAt)}` : "Investigación no disponible",
+          warn: !environmentalRetrievedAt,
+        }}
+        swatch={<span className="pr-evidence-key pr-evidence-key--critical">!</span>}
+        checked={layers.environment}
+        onToggle={(environment) => set({ environment })}
       />
       <LayerRow
         label="Carretera Central"
@@ -207,7 +231,7 @@ export function LayersPanel({ layers, is3d, meta, corridor, rain, rainError, now
       />
       <LayerRow
         label="Imagen satelital"
-        hint="Sentinel-2 cloudless 2016"
+        hint="Esri World Imagery (alta resolución)"
         swatch={<span className="sw sw--satellite" />}
         checked={layers.satellite}
         onToggle={(satellite) => set({ satellite })}

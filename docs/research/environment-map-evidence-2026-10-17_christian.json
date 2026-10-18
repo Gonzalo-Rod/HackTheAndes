@@ -1,0 +1,397 @@
+{
+  "type": "FeatureCollection",
+  "name": "PeruRoad Climate environmental evidence",
+  "schemaVersion": 1,
+  "retrievedAt": "2026-10-18T00:34:26Z",
+  "tool": "Tavily MCP search, extract and crawl",
+  "projectScope": "PE-22 Lima–La Oroya plus Mantaro/Huancayo agricultural extension",
+  "coordinateOrder": "[longitude, latitude]",
+  "interpretation": "Data-only handoff, not a visualization. Forecasts, observations, hazard context and surveillance references remain separate. A null geometry means no defensible point was verified. No current road closure, flood, or pest outbreak is asserted here.",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "senamhi-rimac-chosica-flow-september-2026",
+      "geometry": {"type": "Point", "coordinates": [-76.689944, -11.930139]},
+      "properties": {
+        "recordType": "measured_hydrology",
+        "status": "historical_observation",
+        "provider": "SENAMHI / ENFEN",
+        "station": {"name": "Chosica R-2", "river": "Rímac", "altitudeM": 906},
+        "observationPeriod": {"start": "2026-09-01", "end": "2026-09-25", "summary": "September pentad table; the report diagnosis is dated 25 September"},
+        "values": {"pentadFlowM3s": [26.27, 25.57, 25.51, 26.51, 26.07], "periodMeanM3s": 25.99, "anomalyPct": 19.91, "classification": "slightly above normal"},
+        "sourceUrl": "https://www.senamhi.gob.pe/load/file/02273SENA-56.pdf",
+        "coordinateSourceUrl": "https://www.senamhi.gob.pe/load/file/01401SENA-66.pdf",
+        "coordinatePrecision": "The station report gives 11°55'48.5\"S, 76°41'23.8\"W (approximately 3 m coordinate rounding).",
+        "limitations": ["Archived September data, not a live flow reading.", "Pentad labels are not included in the Tavily-extracted table text."]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "senamhi-casapalca-rain-september-2026",
+      "geometry": {"type": "Point", "coordinates": [-76.233, -11.638]},
+      "properties": {
+        "recordType": "measured_rainfall",
+        "status": "historical_observation",
+        "provider": "SENAMHI",
+        "station": {"code": "111114", "name": "Casapalca", "altitudeM": 4233, "coordinateSourceUrl": "https://www.senamhi.gob.pe/load/file/02269SENA-112.pdf"},
+        "observationPeriod": {"start": "2026-09-01", "end": "2026-09-30"},
+        "values": {"rainfallMm": 36.3, "rainyDays": 14, "monthlyAnomalyPct": 36},
+        "sourceUrl": "https://www.senamhi.gob.pe/load/file/02231SENA-94.pdf",
+        "limitations": ["September monitoring, not current rainfall.", "CHIRILU describes the wider basin and headwaters as predominantly dry; this station was a local exception."]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "senamhi-huayao-maize-frost-impact-october-2026",
+      "geometry": {"type": "Point", "coordinates": [-75.3, -12.0]},
+      "properties": {
+        "recordType": "crop_weather_observation",
+        "status": "reported_observation",
+        "provider": "SENAMHI",
+        "station": {"code": "112056", "name": "Huayao", "department": "Junín", "province": "Chupaca", "district": "Huachac", "altitudeM": 3360},
+        "observationPeriod": {"start": "2026-10-06", "end": "2026-10-12"},
+        "crop": {"name": "maize", "variety": "Cusqueado", "phenology": "seven leaves"},
+        "values": {"tmaxC": 24.9, "tminC": 1.6, "reportedFrostMinimumC": -3.5, "consecutiveDaysNearZero": 2},
+        "impact": "SENAMHI reports severe crop damage during a frost; the exact frost day is not stated.",
+        "sourceUrl": "https://cdn.www.gob.pe/uploads/document/file/10804979/8727498-reporte-agrometeorologico-de-impactos-n-40-2026_region-sierra.pdf?v=1792162365",
+        "coordinateSourceUrl": "https://www.senamhi.gob.pe/pdf/anexos-atlas-climatico.pdf",
+        "coordinatePrecision": "Official station coordinates are rounded to 0.1 degree (about 5.5 km per axis); show only as an approximate station marker, never a field boundary.",
+        "limitations": ["Reported crop condition is not a road incident.", "No exact frost time or affected plot geometry was published in the extracted text."]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "senamhi-ingenio-artichoke-frost-observation-october-2026",
+      "geometry": {"type": "Point", "coordinates": [-75.3, -11.9]},
+      "properties": {
+        "recordType": "crop_weather_observation",
+        "status": "reported_observation",
+        "provider": "SENAMHI",
+        "station": {"code": "111097", "name": "Ingenio", "department": "Junín", "province": "Concepción", "district": "Santa Rosa de Ocopa", "altitudeM": 3390},
+        "observationPeriod": {"start": "2026-10-06", "end": "2026-10-12"},
+        "crop": {"name": "artichoke", "variety": "Criolla sin espinas", "phenology": "vegetative growth", "condition": "good"},
+        "values": {"tmaxC": 23.8, "tminC": 2.4, "rainfallMm": 0},
+        "impact": "The report says the crop resisted a frost earlier in October without reported damage; available water depended on irrigation.",
+        "sourceUrl": "https://cdn.www.gob.pe/uploads/document/file/10804979/8727498-reporte-agrometeorologico-de-impactos-n-40-2026_region-sierra.pdf?v=1792162365",
+        "coordinateSourceUrl": "https://www.senamhi.gob.pe/pdf/anexos-atlas-climatico.pdf",
+        "coordinatePrecision": "Official station coordinates are rounded to 0.1 degree (about 5.5 km per axis); show only as an approximate station marker.",
+        "limitations": ["The earlier frost date is not specified.", "This is a crop observation, not a frost alert or damage event."]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "senamhi-forecast-chosica-2026-10-17",
+      "geometry": {"type": "Point", "coordinates": [-76.690, -11.930]},
+      "properties": {
+        "recordType": "town_weather_forecast",
+        "status": "forecast",
+        "provider": "SENAMHI",
+        "location": "Chosica, Lima",
+        "issueDate": "2026-10-16",
+        "validDates": ["2026-10-17", "2026-10-18"],
+        "forecastDays": [{"date": "2026-10-17", "tmaxC": 27, "tminC": 16, "description": "Cloudy early, clearing toward midday, cloudy at sunset."}, {"date": "2026-10-18", "tmaxC": 26, "tminC": 17, "description": "Cloudy early, scattered clouds to clear around midday, partly cloudy at sunset."}],
+        "sourceUrl": "https://www.senamhi.gob.pe/main.php?dp=lima&p=pronostico-meteorologico",
+        "coordinateSourceUrl": "https://www.senamhi.gob.pe/load/file/02269SENA-112.pdf",
+        "coordinatePrecision": "Approximate published Chosica station reference, rounded to 0.001 degree; forecast is for the named town, not a station measurement.",
+        "limitations": ["Forecast, not observed weather.", "Town marker does not imply forecast-grid or road-segment precision."]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "senamhi-forecast-matucana-2026-10-17",
+      "geometry": {"type": "Point", "coordinates": [-76.378, -11.839]},
+      "properties": {
+        "recordType": "town_weather_forecast",
+        "status": "forecast",
+        "provider": "SENAMHI",
+        "location": "Matucana, Lima",
+        "issueDate": "2026-10-16",
+        "validDates": ["2026-10-17", "2026-10-18"],
+        "forecastDays": [{"date": "2026-10-17", "tmaxC": 24, "tminC": 11, "description": "Scattered clouds, clear morning then cloudy afternoon with a light-rain tendency."}, {"date": "2026-10-18", "tmaxC": 23, "tminC": 10, "description": "Scattered clouds, clear morning then cloudy afternoon with a light-rain tendency."}],
+        "sourceUrl": "https://www.senamhi.gob.pe/main.php?dp=lima&p=pronostico-meteorologico",
+        "coordinateSourceUrl": "https://www.senamhi.gob.pe/load/file/02269SENA-112.pdf",
+        "coordinatePrecision": "Published Matucana station reference, rounded to 0.001 degree; forecast is for the named town, not a station measurement.",
+        "limitations": ["Forecast, not observed rain.", "Do not assign town forecast to a specific PE-22 kilometer."]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "senamhi-forecast-casapalca-2026-10-17",
+      "geometry": {"type": "Point", "coordinates": [-76.233, -11.638]},
+      "properties": {
+        "recordType": "town_weather_forecast",
+        "status": "forecast",
+        "provider": "SENAMHI",
+        "location": "Casapalca, Lima",
+        "issueDate": "2026-10-16",
+        "validDates": ["2026-10-17", "2026-10-18"],
+        "forecastDays": [{"date": "2026-10-17", "tmaxC": 13, "tminC": 3, "description": "Scattered clouds, partly cloudy near midday, covered sky with light showers in the afternoon."}, {"date": "2026-10-18", "tmaxC": 12, "tminC": 4, "description": "Scattered clouds, partly cloudy near midday, covered sky with light showers in the afternoon."}],
+        "sourceUrl": "https://www.senamhi.gob.pe/main.php?dp=lima&p=pronostico-meteorologico",
+        "coordinateSourceUrl": "https://www.senamhi.gob.pe/load/file/02269SENA-112.pdf",
+        "coordinatePrecision": "Published Casapalca station reference, rounded to 0.001 degree; forecast is for the named town, not a station measurement.",
+        "limitations": ["Forecast, not observed showers.", "Do not assign town forecast to a specific PE-22 kilometer."]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "senamhi-forecast-la-oroya-2026-10-17",
+      "geometry": {"type": "Point", "coordinates": [-76.0, -11.6]},
+      "properties": {
+        "recordType": "town_weather_forecast",
+        "status": "forecast",
+        "provider": "SENAMHI",
+        "location": "La Oroya, Junín",
+        "issueDate": "2026-10-16",
+        "validDates": ["2026-10-17", "2026-10-18", "2026-10-19", "2026-10-20", "2026-10-21"],
+        "forecastDays": [{"date": "2026-10-17", "tmaxC": 20, "tminC": 1, "description": "Clouds by afternoon with moderate rain."}, {"date": "2026-10-18", "tmaxC": 19, "tminC": 2, "description": "Clouds by afternoon with light rain."}, {"date": "2026-10-19", "tmaxC": 18, "tminC": 2, "description": "Clouds by afternoon with light rain."}, {"date": "2026-10-20", "tmaxC": 17, "tminC": 3, "description": "Partly cloudy."}, {"date": "2026-10-21", "tmaxC": 17, "tminC": 4, "description": "Partly cloudy."}],
+        "sourceUrl": "https://www.senamhi.gob.pe?dp=junin&p=pronostico-meteorologico",
+        "coordinateSourceUrl": "https://www.senamhi.gob.pe/pdf/anexos-atlas-climatico.pdf",
+        "coordinatePrecision": "Official La Oroya station reference is rounded to 0.1 degree (about 5.5 km per axis); show only as an approximate town marker.",
+        "limitations": ["Forecast, not observed rain.", "The coordinate is a station reference matched by the same locality name, not a forecast-grid coordinate."]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "indeci-frost-yauli-junin-2026-06-11",
+      "geometry": null,
+      "properties": {
+        "recordType": "reported_frost_event",
+        "status": "historical_reported_event",
+        "provider": "INDECI / COEN",
+        "occurrence": {"date": "2026-06-11", "timeLocal": "10:26"},
+        "location": {"department": "Junín", "province": "Yauli", "district": "Yauli", "sectors": ["Yauli", "Pachachaca", "Manuel Montero", "Pomacocha"]},
+        "reportedImpact": "Health effects from acute respiratory infections (IRAS).",
+        "sourceUrl": "https://portal.indeci.gob.pe/emergencias/reporte-complementario-n-8033-13-6-2026-coen-indeci-1830-horas-reporte-n-1-helada-en-el-distrito-de-yauli-junin",
+        "limitations": ["INDECI gives sector names but no point coordinates in the extracted report.", "This is a June event, not a current frost alert or a crop-damage report."]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "senamhi-comas-potato-observation-2026-10-06-12",
+      "geometry": null,
+      "properties": {
+        "recordType": "crop_weather_observation",
+        "status": "reported_observation",
+        "provider": "SENAMHI",
+        "location": {"name": "Comas", "department": "Junín"},
+        "observationPeriod": {"start": "2026-10-06", "end": "2026-10-12"},
+        "crop": {"name": "potato", "variety": "Yungay", "phenology": "flower-bud stage", "condition": "good"},
+        "values": {"tmaxC": 16.9, "tminC": 2.5, "rainfallMm": 2.5},
+        "impact": "The report says irrigation maintained available water; no exact station point was verified.",
+        "sourceUrl": "https://cdn.www.gob.pe/uploads/document/file/10804979/8727498-reporte-agrometeorologico-de-impactos-n-40-2026_region-sierra.pdf?v=1792162365",
+        "limitations": ["No station code or point coordinates were verified by Tavily.", "Do not place at a guessed district centroid."]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "senamhi-mantaro-crop-cold-impacts-2026-10-02",
+      "geometry": null,
+      "properties": {
+        "recordType": "agriculture_impact_report",
+        "status": "reported_observation",
+        "provider": "SENAMHI",
+        "publicationDate": "2026-10-02",
+        "location": {"region": "Sierra central", "department": "Junín", "area": "Mantaro Valley"},
+        "reportedImpact": "SENAMHI says cold damaged crops of maize, potato and quinoa in central highland production areas; in the Mantaro Valley, maize leaves were burned while crops were developing. It mentions both the small crop campaign and first 2026–2027 sowings.",
+        "sourceUrl": "https://www.gob.pe/institucion/senamhi/noticias/1451967-panorama-del-sector-agropecuario-de-la-sierra-central-y-sur-ante-las-bajas-temperaturas",
+        "limitations": ["The press release is area-level; it gives no event-day point or affected-field coordinates.", "Do not count this as an independent incident from the Huayao report without deduplication."]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "enfen-rimac-san-mateo-flow-september-2026",
+      "geometry": null,
+      "properties": {
+        "recordType": "measured_hydrology",
+        "status": "historical_observation",
+        "provider": "SENAMHI / ENFEN",
+        "station": {"name": "Rímac San Mateo", "river": "Rímac"},
+        "observationPeriod": {"start": "2026-09-01", "end": "2026-09-25", "summary": "September pentad table; the report diagnosis is dated 25 September"},
+        "values": {"pentadFlowM3s": [7.34, 7.66, 7.14, 8.37, 6.69], "periodMeanM3s": 7.44, "anomalyPct": -32.39, "classification": "slightly below normal"},
+        "sourceUrl": "https://www.senamhi.gob.pe/load/file/02273SENA-56.pdf",
+        "limitations": ["Archived September data, not a live flow reading.", "The station coordinate match was not established; geometry remains null."]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "senamhi-huancayo-forecast-2026-10-17",
+      "geometry": null,
+      "properties": {
+        "recordType": "town_weather_forecast",
+        "status": "forecast",
+        "provider": "SENAMHI",
+        "location": "Huancayo, Junín",
+        "issueDate": "2026-10-16",
+        "validDates": ["2026-10-17", "2026-10-18", "2026-10-19", "2026-10-20", "2026-10-21"],
+        "forecastDays": [{"date": "2026-10-17", "tmaxC": null, "tminC": null, "description": "Light-rain tendency."}, {"date": "2026-10-18", "tmaxC": null, "tminC": null, "description": "Light-rain tendency."}, {"date": "2026-10-19", "tmaxC": 22, "tminC": 5, "description": "Light-rain tendency, becoming moderate."}, {"date": "2026-10-20", "tmaxC": 21, "tminC": 6, "description": "Partly cloudy."}, {"date": "2026-10-21", "tmaxC": 20, "tminC": 6, "description": "Partly cloudy with light rain."}],
+        "sourceUrl": "https://www.senamhi.gob.pe?dp=junin&p=pronostico-meteorologico",
+        "limitations": ["No town or matching-station coordinates were verified; geometry remains null.", "Forecast, not observed rain; missing temperatures remain null."]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "senamhi-yanacancha-cold-forecast-2026-10-17",
+      "geometry": null,
+      "properties": {
+        "recordType": "town_weather_forecast",
+        "status": "forecast",
+        "provider": "SENAMHI",
+        "location": "Yanacancha, Junín",
+        "issueDate": "2026-10-16",
+        "validDates": ["2026-10-17", "2026-10-18", "2026-10-19", "2026-10-20", "2026-10-21"],
+        "forecastDays": [{"date": "2026-10-17", "tmaxC": 16, "tminC": -2, "description": "Light rain."}, {"date": "2026-10-18", "tmaxC": 15, "tminC": 0, "description": "Light rain."}, {"date": "2026-10-19", "tmaxC": 15, "tminC": 2, "description": "Moderate rain."}, {"date": "2026-10-20", "tmaxC": 14, "tminC": 2, "description": "Partly cloudy."}, {"date": "2026-10-21", "tmaxC": 13, "tminC": 3, "description": "Partly cloudy."}],
+        "sourceUrl": "https://www.senamhi.gob.pe?dp=junin&p=pronostico-meteorologico",
+        "limitations": ["This is a forecast for a named locality, not an observed frost.", "Coordinates for this locality forecast were not verified."]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "senasa-junin-fruit-fly-trap-network-reference",
+      "geometry": null,
+      "properties": {
+        "recordType": "pest_surveillance_reference",
+        "status": "undated_reference_not_current_count",
+        "provider": "SENASA",
+        "location": {"department": "Junín"},
+        "values": {"reportedTrapCount": 495, "distributionByArea": {"Chanchamayo": 80, "Satipo": 80, "MantaroValleyProvinces": 102, "Tarma": 90, "EasternMantaroDistricts": 143}},
+        "mantaroValleyProvinces": ["Jauja", "Concepción", "Huancayo", "Chupaca"],
+        "sourceUrl": "https://www.senasa.gob.pe/senasacontigo/junin-senasa-controla-incidencia-de-mosca-de-la-fruta-mediante-sistema-de-trampeo",
+        "limitations": ["The original publication date was not established; counts are not current surveillance totals.", "Trap coverage is surveillance infrastructure, not a confirmed infestation or outbreak.", "No trap coordinates were published in the extracted article."]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "cenepred-summer-2027-risk-context-lima-junin",
+      "geometry": null,
+      "properties": {
+        "recordType": "seasonal_risk_context",
+        "status": "future_scenario_not_current_alert",
+        "provider": "CENEPRED / SIGRID",
+        "publicationMonth": "2026-08",
+        "forecastPeriod": {"start": "2027-01-01", "end": "2027-03-31"},
+        "aggregatedCounts": {"massMovementCriticalZones": {"national": 2186, "Lima": 363, "Junín": 75}, "floodCriticalPoints": {"national": 2244, "Lima": 302, "Junín": 128}},
+        "sourceUrl": "https://sigrid.cenepred.gob.pe/sigridv3/storage/biblioteca/22390_estudio-de-escenario-de-riesgo-por-lluvias-para-el-verano-2027-basado-en-el-informe-tecnico-n0-09-2026senamhi-dma-spc.pdf",
+        "limitations": ["Department totals do not identify PE-22 or a district intersection.", "Risk scenario is not an active warning or observed impact.", "Spatial archive geometry was not retrieved in this Tavily pass."]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "indeci-quebradas-191-2026-local-coverage-unresolved",
+      "geometry": null,
+      "properties": {
+        "recordType": "short_term_hazard_notice",
+        "status": "current_at_retrieval_local_coverage_unverified",
+        "provider": "INDECI / COEN",
+        "issueDate": "2026-10-17",
+        "validity": {"start": "2026-10-17T13:00:00-05:00", "end": "2026-10-18T13:00:00-05:00"},
+        "sourceNotice": "SENAMHI short-term notice 290",
+        "sourceUrl": "https://portal.indeci.gob.pe/wp-content/uploads/2026/10/BOLET%C3%8DN-INFORMATIVO-DE-AVISO-DE-CORTO-PLAZO-ANTE-POSIBLE-ACTIVACI%C3%93N-DE-QUEBRADAS-N%C2%B0191-17-10-2026.pdf",
+        "limitations": ["The notice describes possible quebrada activation, not a confirmed huaico.", "The corridor-specific province/geometry overlap was not verified; do not render as a local hazard pin."]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "indeci-ingenio-rainfall-2026-10-17",
+      "geometry": {"type": "Point", "coordinates": [-75.3, -11.9]},
+      "properties": {
+        "recordType": "measured_rainfall",
+        "status": "observed_station_daily_total",
+        "provider": "SENAMHI / INDECI",
+        "location": {"department": "Junín", "province": "Concepción", "district": "Ingenio"},
+        "station": {"name": "Ingenio", "code": "111097", "altitudeM": 3390},
+        "observationPeriod": {"start": "2026-10-16T07:00:00-05:00", "end": "2026-10-17T07:00:00-05:00"},
+        "values": {"rainfallMm": 12.0, "classification": "Día lluvioso"},
+        "sourceUrl": "https://portal.indeci.gob.pe/wp-content/uploads/2026/10/BOLET%C3%8DN-INFORMATIVO-MONITOREO-DE-PELIGROS-Y-PERSPECTIVAS-N%C2%B0290-del-17-10-2026.pdf",
+        "coordinateSourceUrl": "https://www.senamhi.gob.pe/pdf/anexos-atlas-climatico.pdf",
+        "coordinatePrecision": "SENAMHI station-atlas coordinates are rounded to 0.1 degree; marker is approximate.",
+        "limitations": ["This is a station observation for the stated 24-hour interval, not rainfall measured on PE-22.", "The approximate station coordinate must not be read as a field or road-segment location."]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "indeci-surco-forest-fire-agricultural-loss-2026-09-30",
+      "geometry": null,
+      "properties": {
+        "recordType": "agriculture_impact_event",
+        "status": "historical_event_closed",
+        "provider": "INDECI / COEN",
+        "eventDate": "2026-09-30T12:49:00-05:00",
+        "reportUpdatedAt": "2026-10-14T22:10:00-05:00",
+        "location": {"department": "Lima", "province": "Huarochirí", "district": "Surco", "annex": "Ayas"},
+        "values": {"agriculturalAreaAffectedHa": 45, "naturalCoverDestroyedHa": 25, "affectedCrops": ["palta", "chirimoya", "alfalfa", "membrillo", "tuna", "eucalyptus"]},
+        "sourceUrl": "https://portal.indeci.gob.pe/wp-content/uploads/2026/10/REPORTE-COMPLEMENTARIO-N.%C2%BA-14162-14OCT2026-INCENDIO-FORESTAL-EN-EL-DISTRITO-DE-SURCO-LIMA-5.pdf",
+        "limitations": ["Damage totals were reported as of 2026-10-02 while the report was later updated on 2026-10-14.", "INDECI reports the fire extinguished and closes the report; this is not a current fire alert.", "The source identifies Ayas annex but provides no verified point coordinate or affected-field polygon.", "Do not infer a PE-22 closure or route intersection from district-level location."]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "senamhi-warning-422-central-andes-2026-10-18-19",
+      "geometry": null,
+      "properties": {
+        "recordType": "precipitation_forecast_notice",
+        "status": "forecast_valid_after_retrieval",
+        "provider": "SENAMHI / summarized by INDECI",
+        "issueDate": "2026-10-16",
+        "severity": "yellow",
+        "validity": {"start": "2026-10-18T14:00:00-05:00", "end": "2026-10-19T23:59:00-05:00"},
+        "location": {"namedProvinces": ["Huarochirí", "Yauli", "Huancayo", "Concepción", "Jauja", "Chupaca"]},
+        "values": {"forecastRainfallMmPerDay": {"2026-10-18": "8-11 central Andes", "2026-10-19": "9-13 central and southern Andes"}, "phenomena": ["rain", "hail above 2800 m", "significant snowfall above 3800 m", "squalls above 55 km/h", "electrical discharges"]},
+        "sourceUrl": "https://www.senamhi.gob.pe/?p=aviso-meteorologico-vigente&a=2026&b=29287&c=00&d=SENA",
+        "corroboratingBulletinUrl": "https://portal.indeci.gob.pe/wp-content/uploads/2026/10/BOLET%C3%8DN-INFORMATIVO-MONITOREO-DE-PELIGROS-Y-PERSPECTIVAS-N%C2%B0290-del-17-10-2026.pdf",
+        "advertisedGeometryDownloads": ["https://idesep.senamhi.gob.pe/geoserver/g_aviso/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=g_aviso:view_aviso&format_options=filename:shp_aviso_422_1_2026.zip&maxFeatures=50&viewparams=qry:422_1_2026&outputFormat=SHAPE-ZIP", "https://idesep.senamhi.gob.pe/geoserver/g_aviso/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=g_aviso:view_aviso&format_options=filename:shp_aviso_422_2_2026.zip&maxFeatures=50&viewparams=qry:422_2_2026&outputFormat=SHAPE-ZIP"],
+        "limitations": ["This is a forecast, not an observation or confirmed impact.", "Province inclusion does not establish road-segment overlap.", "The official shape downloads were advertised but Tavily extraction failed; geometry remains null until the published polygons can be inspected."]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "cenepred-summer-2027-risk-context-update-2026-10-07",
+      "geometry": null,
+      "properties": {
+        "recordType": "seasonal_risk_exposure_context",
+        "status": "future_national_scenario_not_current_alert",
+        "provider": "CENEPRED / SIGRID",
+        "publicationDate": "2026-10-07",
+        "forecastPeriod": {"start": "2027-01-01", "end": "2027-03-31"},
+        "scope": {"level": "national", "relevantDepartments": ["Lima", "Junín", "Pasco"]},
+        "massMovementScenario": {
+          "veryHighRiskDistricts": 702,
+          "populationInVeryHighRiskDistricts": 8695261,
+          "residentsInHigherSusceptibilityAreas": 3333277,
+          "homesInHigherSusceptibilityAreas": 1156342,
+          "roadNetworkKmInHigherSusceptibilityAreas": 63290,
+          "agriculturalAreaHaInHigherSusceptibilityAreas": 3610747
+        },
+        "floodScenario": {
+          "residentsInAreasOfHigherSusceptibility": 3571687,
+          "homesInAreasOfHigherSusceptibility": 1042756,
+          "roadNetworkKmInAreasOfHigherSusceptibility": 7673,
+          "agriculturalAreaHaInAreasOfHigherSusceptibility": 797918
+        },
+        "sourceUrl": "https://www.gob.pe/institucion/cenepred/noticias/1454178-cenepred-presenta-el-estudio-de-escenarios-de-riesgo-por-lluvias-para-el-verano-2027",
+        "studyPageUrl": "https://sigrid.cenepred.gob.pe/sigridv3/documento/22888",
+        "limitations": ["National scenario totals are not PE-22 or district-level exposure counts.", "The January-March 2027 scenario is future risk context, not a current event or short-term warning.", "Null geometry is intentional; no local polygon was verified in this review."]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "cenepred-water-deficit-risk-context-2026-2027-september",
+      "geometry": null,
+      "properties": {
+        "recordType": "seasonal_water_deficit_risk_context",
+        "status": "seasonal_scenario_not_current_water_shortage",
+        "provider": "CENEPRED / SIGRID",
+        "publicationMonth": "2026-09",
+        "scenarioPeriod": "Rainy period 2026-2027",
+        "scope": {"level": "national", "veryHighRiskDistricts": 397, "targetDepartmentCounts": {"Junín": 18, "Pasco": 10}},
+        "nationalExposureInVeryHighRiskDistricts": {
+          "population": 2481033,
+          "homes": 994455,
+          "agriculturalAreaHa": 2466388,
+          "pastureAreaHa": 8024224
+        },
+        "sourceUrl": "https://sigrid.cenepred.gob.pe/sigridv3/storage/biblioteca/22787_estudio-de-escenario-de-riesgo-por-deficit-hidrico-para-el-periodo-de-lluvias-2026-2027-actualizacion-setiembre.pdf",
+        "limitations": ["These are forecast risk classes, not observed water shortages, crop losses, or irrigation restrictions.", "Junín and Pasco figures count districts; no district polygons or PE-22 intersection were verified.", "National agricultural and pasture exposure totals must not be attributed to the target corridor."]
+      }
+    }
+  ]
+}

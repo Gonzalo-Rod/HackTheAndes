@@ -16,6 +16,7 @@ import { PNG } from "pngjs";
 
 import type { CorridorData } from "../src/contracts/corridor";
 import { buildMeasuredCorridor } from "../src/domain/geo/corridor-builder";
+import { exteriorBoundarySegments } from "../src/domain/geo/exterior-boundary";
 import { haversineKm, pointAtKm, projectOnMeasuredLine, type LngLat, type MeasuredVertex } from "../src/domain/geo/measure";
 import { dedupeConsecutive, roundCoord, simplifyLine } from "../src/domain/geo/simplify";
 import { regionKey } from "../src/domain/road-alerts/parsing";
@@ -342,13 +343,35 @@ async function main() {
   });
 
   console.log("Regions…");
+  const regionFeatures = regions.features.map((feature) => {
+    const { geometry, bbox } = simplifiedPolygons(feature.geometry);
+    return { type: "Feature" as const, geometry, properties: { key: regionKey(String(feature.properties.departamento ?? "")), bbox } };
+  });
   await writeJson("regiones.geojson", {
     type: "FeatureCollection",
     metadata: { source: "Region boundaries served by SUTRAN", url: SOURCES.regions, retrievedAt },
-    features: regions.features.map((feature) => {
-      const { geometry, bbox } = simplifiedPolygons(feature.geometry);
-      return { type: "Feature", geometry, properties: { key: regionKey(String(feature.properties.departamento ?? "")), bbox } };
-    }),
+    features: regionFeatures,
+  });
+  const polygonFeatures = regionFeatures.map(({ geometry }) => {
+    if (geometry.type === "Polygon") {
+      return { type: "Feature" as const, geometry: { type: "Polygon" as const, coordinates: geometry.coordinates as LngLat[][] } };
+    }
+    if (geometry.type === "MultiPolygon") {
+      return {
+        type: "Feature" as const,
+        geometry: { type: "MultiPolygon" as const, coordinates: geometry.coordinates as LngLat[][][] },
+      };
+    }
+    throw new Error("Region source must contain polygon geometries.");
+  });
+  await writeJson("peru-outline.geojson", {
+    type: "FeatureCollection",
+    metadata: {
+      source: "Exterior perimeter derived from the SUTRAN department boundaries; shared department edges removed",
+      url: SOURCES.regions,
+      retrievedAt,
+    },
+    features: [exteriorBoundarySegments(polygonFeatures)],
   });
 
   await checkAlertKm(line);
