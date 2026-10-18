@@ -3,7 +3,6 @@ import type { Map as MLMap, Marker } from "maplibre-gl";
 import { STATUS_META, STATUS_PRIORITY } from "@/components/alert-meta";
 import { iconMarkup } from "@/components/icons";
 import type { RoadAlert } from "@/contracts/road-alerts";
-import { createIncidentPreview, type IncidentPreview } from "./incident-preview_christian";
 
 // Alerts are HTML markers (real <button>s) so they are keyboard-focusable and announce
 // their status, cause and location to screen readers.
@@ -11,10 +10,6 @@ import { createIncidentPreview, type IncidentPreview } from "./incident-preview_
 export interface MarkerEntry {
   marker: Marker;
   el: HTMLButtonElement;
-}
-
-export interface RoadMarkerEntry extends MarkerEntry {
-  preview: IncidentPreview;
 }
 
 export interface MarkerSyncInput {
@@ -31,11 +26,7 @@ function chipLabel(alert: RoadAlert): string {
   return [km, alert.roadCode].filter(Boolean).join(" · ") || alert.district;
 }
 
-function createMarkerElement(
-  alert: RoadAlert,
-  input: Pick<MarkerSyncInput, "onSelect" | "onHover">,
-  onReplay: () => void,
-): HTMLButtonElement {
+function createMarkerElement(alert: RoadAlert, input: Pick<MarkerSyncInput, "onSelect" | "onHover">): HTMLButtonElement {
   const el = document.createElement("button");
   el.type = "button";
   el.className = "pr-marker";
@@ -48,7 +39,6 @@ function createMarkerElement(
   el.append(pulse, dot, chip);
   el.addEventListener("click", (event) => {
     event.stopPropagation();
-    if (el.getAttribute("aria-pressed") === "true") onReplay();
     input.onSelect(alert.id);
   });
   el.addEventListener("mouseenter", () => input.onHover(alert.id));
@@ -58,7 +48,7 @@ function createMarkerElement(
   return el;
 }
 
-function paintMarker(entry: RoadMarkerEntry, alert: RoadAlert, input: MarkerSyncInput): void {
+function paintMarker(entry: MarkerEntry, alert: RoadAlert, input: MarkerSyncInput): void {
   const { el } = entry;
   const status = STATUS_META[alert.roadStatus];
   el.dataset.status = alert.roadStatus;
@@ -87,34 +77,27 @@ function paintMarker(entry: RoadMarkerEntry, alert: RoadAlert, input: MarkerSync
   el.setAttribute("aria-hidden", String(hidden));
   el.setAttribute("aria-pressed", String(selected));
   entry.marker.getElement().style.zIndex = String(selected ? 30 : hovered ? 20 : 10 + STATUS_PRIORITY[alert.roadStatus]);
-
-  entry.preview.update(alert);
-  if (selected && !hidden) entry.preview.show();
-  else entry.preview.hide();
 }
 
 /** Hides markers outside the visible area; in steep 3D views far-away points can project into view. */
-export function cullMarkers(map: MLMap, entries: ReadonlyMap<string, MarkerEntry>): void {
+export function cullMarkers(map: MLMap, entries: Map<string, MarkerEntry>): void {
   const bounds = map.getBounds();
   for (const { marker, el } of entries.values()) el.classList.toggle("is-offscreen", !bounds.contains(marker.getLngLat()));
 }
 
 /** Adds, updates and removes markers so they match the given alerts. */
-export function syncMarkers(map: MLMap, MarkerClass: typeof Marker, entries: Map<string, RoadMarkerEntry>, input: MarkerSyncInput): void {
+export function syncMarkers(map: MLMap, MarkerClass: typeof Marker, entries: Map<string, MarkerEntry>, input: MarkerSyncInput): void {
   const keep = new Set(input.alerts.map((a) => a.id));
   for (const [id, entry] of entries) {
     if (keep.has(id)) continue;
-    entry.preview.dispose();
     entry.marker.remove();
     entries.delete(id);
   }
   for (const alert of input.alerts) {
     let entry = entries.get(alert.id);
     if (!entry) {
-      const preview = createIncidentPreview(alert);
-      const el = createMarkerElement(alert, input, () => preview.replay());
-      map.getContainer().append(preview.element);
-      entry = { el, preview, marker: new MarkerClass({ element: el, anchor: "center" }).setLngLat([alert.lng, alert.lat]).addTo(map) };
+      const el = createMarkerElement(alert, input);
+      entry = { el, marker: new MarkerClass({ element: el, anchor: "center" }).setLngLat([alert.lng, alert.lat]).addTo(map) };
       entries.set(alert.id, entry);
     }
     entry.marker.setLngLat([alert.lng, alert.lat]);
@@ -123,10 +106,7 @@ export function syncMarkers(map: MLMap, MarkerClass: typeof Marker, entries: Map
   cullMarkers(map, entries);
 }
 
-export function disposeMarkers(entries: Map<string, RoadMarkerEntry>): void {
-  for (const { marker, preview } of entries.values()) {
-    preview.dispose();
-    marker.remove();
-  }
+export function disposeMarkers(entries: Map<string, MarkerEntry>): void {
+  for (const { marker } of entries.values()) marker.remove();
   entries.clear();
 }

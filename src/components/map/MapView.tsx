@@ -31,7 +31,7 @@ import {
   setProfilePoint,
   startFlowAnimation,
 } from "./map-layers";
-import { cullMarkers, disposeMarkers, syncMarkers, type RoadMarkerEntry } from "./map-markers";
+import { cullMarkers, disposeMarkers, syncMarkers, type MarkerEntry } from "./map-markers";
 import { addEnvironmentLayers, selectEnvironmentFeature, syncEnvironmentLayers } from "./environment-layers_christian";
 
 export type MapViewHandle = Omit<CameraController, "stopAll" | "flyToAlert"> & {
@@ -86,7 +86,7 @@ export function MapView(props: MapViewProps) {
   const mapRef = useRef<MLMap | null>(null);
   const markerClassRef = useRef<typeof import("maplibre-gl").Marker | null>(null);
   const cameraRef = useRef<CameraController | null>(null);
-  const markersRef = useRef(new Map<string, RoadMarkerEntry>());
+  const markersRef = useRef(new Map<string, MarkerEntry>());
   const readyRef = useRef(false);
   const pendingBoundsRef = useRef<[number, number, number, number] | null>(null);
   const [mapReady, setMapReady] = useState(false);
