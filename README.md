@@ -85,7 +85,10 @@ and [ML checkpoint](docs/data/ml-readiness.md) for coverage, reproduction and th
 unresolved labels/forecast-availability decisions before training.
 
 Risk prediction, dispatch decisions and weekly generation still require C's
-model/data implementation. Their unavailable states do not mean low risk. No ML
-model has been selected, trained or evaluated in this integration, and no real
+model/data implementation. Their unavailable states do not mean low risk. The
+regularized logistic-regression pipeline is implemented; real-data fitting remains
+blocked by the reviewed-label and historical availability gaps described in the
+[training handoff](docs/data/logistic-pipeline.md). No real-data model has been
+trained or evaluated in this integration, and no real
 WhatsApp report or real user validation is claimed. Payments and Qatom are outside
 the participant-authorized implementation scope for this step.

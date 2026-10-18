@@ -330,7 +330,17 @@ Small quebradas below the resolution of the delineation are grouped and flagged 
 risk forecasting. Keep a transparent rainfall/rule-based model as the evaluation
 baseline. Before beginning the forecasting implementation, notify the participant
 and agree on the prediction target, labeled dataset, features, algorithm, and
-time-based validation split; these choices and the trained model remain pending.
+time-based validation split. The checkpoint update below records the subsequent
+implementation decision; a trained model remains pending.
+
+**Training checkpoint update:** the participant approved reviewing labels and
+building the regularized logistic-regression pipeline for rainfall-related
+road-disruption onset. The initial five-feature design, fixed 2024 chronological
+training/validation split and separate 2025 evaluation are recorded in
+[the pipeline handoff](data/logistic-pipeline.md). The reviewed registry supports
+six positive events but only two mapped positives in one episode, with no verified
+negative windows or as-of feature records. The pipeline therefore reports blocked
+readiness; no real-data model or operational warning thresholds have been fitted.
 
 For each catchment, every hour:
 

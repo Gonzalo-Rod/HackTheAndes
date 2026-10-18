@@ -10,7 +10,7 @@ export const historicalEventSchema = z
     date: z.iso.date(),
     occurrenceFromUtc: timestamp,
     occurrenceUntilUtc: timestamp,
-    timePrecision: z.enum(["day", "conflicting_hours"]),
+    timePrecision: z.enum(["day", "minute", "conflicting_hours"]),
     timeCandidatesUtc: z.array(timestamp),
     position: positionSchema.nullable(),
     sourceKmStart: z.number().nonnegative().nullable(),
@@ -49,6 +49,46 @@ export const historicalEventSchema = z
       });
     if (event.timePrecision === "conflicting_hours" && event.timeCandidatesUtc.length < 2)
       context.addIssue({ code: "custom", message: "Conflicting times must remain explicit" });
+    const dayStart = Date.parse(`${event.date}T05:00:00Z`);
+    if (
+      event.timePrecision === "day" &&
+      (Date.parse(event.occurrenceFromUtc) !== dayStart ||
+        Date.parse(event.occurrenceUntilUtc) !== dayStart + 86_400_000)
+    )
+      context.addIssue({
+        code: "custom",
+        message: "Date-only records must preserve the entire Lima calendar day",
+      });
+    const candidates = event.timeCandidatesUtc.map(Date.parse);
+    if (
+      event.timePrecision === "minute" &&
+      (candidates.length !== 1 ||
+        candidates[0] !== Date.parse(event.occurrenceFromUtc) ||
+        Date.parse(event.occurrenceUntilUtc) - Date.parse(event.occurrenceFromUtc) !== 60_000)
+    )
+      context.addIssue({
+        code: "custom",
+        message: "Minute precision requires one documented minute interval",
+      });
+    if (
+      event.timePrecision === "conflicting_hours" &&
+      (new Set(candidates).size < 2 ||
+        Math.min(...candidates) !== Date.parse(event.occurrenceFromUtc) ||
+        Math.max(...candidates) + 60_000 !== Date.parse(event.occurrenceUntilUtc))
+    )
+      context.addIssue({
+        code: "custom",
+        message: "Conflict interval must include every documented candidate minute",
+      });
+    if (
+      candidates.some(
+        (time) => time % 60_000 !== 0 || time < dayStart || time >= dayStart + 86_400_000,
+      )
+    )
+      context.addIssue({
+        code: "custom",
+        message: "Candidate minutes must belong to the reported Lima date",
+      });
   });
 export const historicalEventsSchema = z
   .object({

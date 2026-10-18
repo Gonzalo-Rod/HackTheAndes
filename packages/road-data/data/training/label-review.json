@@ -1,0 +1,170 @@
+{
+  "schemaVersion": 1,
+  "target": "rainfall_related_road_disruption_onset",
+  "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
+  "candidateRegistrySha256": "0e408c627600e178b75689617c01600a76353b0cabc408f43742b06ee85c9416",
+  "reviewedAt": "2026-10-17T19:11:21-05:00",
+  "reviews": [
+    {
+      "eventId": "provias:19631",
+      "episodeId": "pe22-2024-01-30",
+      "rainfallCause": "unverified",
+      "roadDisruption": "documented",
+      "decision": "unknown",
+      "evidence": [
+        {
+          "sourceUrl": "https://wsgcv.proviasnac.gob.pe/emergenciavial/EmergenciaVial/ReportToPdfDeExcel?fechaInicio=01%2F01%2F2024&fechaFin=30%2F04%2F2024&idDepartamento=&idTipoEmergencia=&idTipoAdministracion=1_2_3_4_5_6_7",
+          "sourceSha256": "4e141d60a499995276775db650abd6f6ffc4c7554936cc6f8591acbcd0c268c3",
+          "locator": "Worksheet row CODIGO=19631; DESARROLLO, INICIO and TRANSITABILIDAD INICIAL",
+          "finding": "The source describes debris removal, one reopened lane and initially restricted traffic. It does not explicitly identify rainfall as the trigger."
+        }
+      ],
+      "unresolved": [
+        "Rainfall causation unverified.",
+        "Date-only onset; no catchment link."
+      ]
+    },
+    {
+      "eventId": "provias:19753",
+      "episodeId": "pe22-2024-02-21-22",
+      "rainfallCause": "documented",
+      "roadDisruption": "documented",
+      "decision": "positive_event",
+      "evidence": [
+        {
+          "sourceUrl": "https://wsgcv.proviasnac.gob.pe/emergenciavial/EmergenciaVial/ReportToPdfDeExcel?fechaInicio=01%2F01%2F2024&fechaFin=30%2F04%2F2024&idDepartamento=&idTipoEmergencia=&idTipoAdministracion=1_2_3_4_5_6_7",
+          "sourceSha256": "4e141d60a499995276775db650abd6f6ffc4c7554936cc6f8591acbcd0c268c3",
+          "locator": "Worksheet row CODIGO=19753; DESARROLLO, INICIO and TRANSITABILIDAD INICIAL",
+          "finding": "The DESARROLLO field attributes falling rock and loose material to rainfall and slope instability; the initial road status is interrupted."
+        }
+      ],
+      "unresolved": [
+        "Date-only onset.",
+        "Catchment association is derived from coarse road-segment links."
+      ]
+    },
+    {
+      "eventId": "provias:19754",
+      "episodeId": "pe22-2024-02-21-22",
+      "rainfallCause": "documented",
+      "roadDisruption": "documented",
+      "decision": "positive_event",
+      "evidence": [
+        {
+          "sourceUrl": "https://wsgcv.proviasnac.gob.pe/emergenciavial/EmergenciaVial/ReportToPdfDeExcel?fechaInicio=01%2F01%2F2024&fechaFin=30%2F04%2F2024&idDepartamento=&idTipoEmergencia=&idTipoAdministracion=1_2_3_4_5_6_7",
+          "sourceSha256": "4e141d60a499995276775db650abd6f6ffc4c7554936cc6f8591acbcd0c268c3",
+          "locator": "Worksheet row CODIGO=19754; DESARROLLO, INICIO and TRANSITABILIDAD INICIAL",
+          "finding": "The DESARROLLO field attributes falling rock and loose material to rainfall and slope instability; the initial road status is interrupted."
+        }
+      ],
+      "unresolved": [
+        "Date-only onset.",
+        "Source point is approximately 272 m from the road axis.",
+        "Catchment association is derived from coarse road-segment links."
+      ]
+    },
+    {
+      "eventId": "provias:19830",
+      "episodeId": "pe22-2024-03-02",
+      "rainfallCause": "documented",
+      "roadDisruption": "documented",
+      "decision": "positive_event",
+      "evidence": [
+        {
+          "sourceUrl": "https://wsgcv.proviasnac.gob.pe/emergenciavial/EmergenciaVial/ReportToPdfDeExcel?fechaInicio=01%2F01%2F2024&fechaFin=30%2F04%2F2024&idDepartamento=&idTipoEmergencia=&idTipoAdministracion=1_2_3_4_5_6_7",
+          "sourceSha256": "4e141d60a499995276775db650abd6f6ffc4c7554936cc6f8591acbcd0c268c3",
+          "locator": "Worksheet row CODIGO=19830; DESARROLLO, INICIO and TRANSITABILIDAD INICIAL",
+          "finding": "The DESARROLLO field explicitly attributes a slope failure and total road impact to rainfall."
+        }
+      ],
+      "unresolved": [
+        "Date-only onset.",
+        "No linked catchment for the matched road segment."
+      ]
+    },
+    {
+      "eventId": "provias:19833",
+      "episodeId": "pe22-2024-03-02",
+      "rainfallCause": "documented",
+      "roadDisruption": "documented",
+      "decision": "positive_event",
+      "evidence": [
+        {
+          "sourceUrl": "https://wsgcv.proviasnac.gob.pe/emergenciavial/EmergenciaVial/ReportToPdfDeExcel?fechaInicio=01%2F01%2F2024&fechaFin=30%2F04%2F2024&idDepartamento=&idTipoEmergencia=&idTipoAdministracion=1_2_3_4_5_6_7",
+          "sourceSha256": "4e141d60a499995276775db650abd6f6ffc4c7554936cc6f8591acbcd0c268c3",
+          "locator": "Worksheet row CODIGO=19833; DESARROLLO, INICIO and TRANSITABILIDAD INICIAL",
+          "finding": "The DESARROLLO field explicitly attributes a slope failure and total road impact to rainfall."
+        }
+      ],
+      "unresolved": [
+        "Date-only onset.",
+        "No linked catchment for the matched road segment."
+      ]
+    },
+    {
+      "eventId": "provias:19985",
+      "episodeId": "pe22-2024-03-24",
+      "rainfallCause": "documented",
+      "roadDisruption": "documented",
+      "decision": "positive_event",
+      "evidence": [
+        {
+          "sourceUrl": "https://wsgcv.proviasnac.gob.pe/emergenciavial/EmergenciaVial/ReportToPdfDeExcel?fechaInicio=01%2F01%2F2024&fechaFin=30%2F04%2F2024&idDepartamento=&idTipoEmergencia=&idTipoAdministracion=1_2_3_4_5_6_7",
+          "sourceSha256": "4e141d60a499995276775db650abd6f6ffc4c7554936cc6f8591acbcd0c268c3",
+          "locator": "Worksheet row CODIGO=19985; DESARROLLO, INICIO and TRANSITABILIDAD INICIAL",
+          "finding": "The DESARROLLO field attributes a slope failure and complete road impact to rainfall, followed by partial reopening."
+        }
+      ],
+      "unresolved": [
+        "Initial NORMAL status conflicts with the impact narrative; the positive decision uses explicit impact evidence.",
+        "Date-only onset.",
+        "No linked catchment for the matched road segment."
+      ]
+    },
+    {
+      "eventId": "provias:20934",
+      "episodeId": "pe22-2025-02-05",
+      "rainfallCause": "unverified",
+      "roadDisruption": "unverified",
+      "decision": "unknown",
+      "evidence": [
+        {
+          "sourceUrl": "https://wsgcv.proviasnac.gob.pe/emergenciavial/EmergenciaVial/ReportToPdfDeExcel?fechaInicio=01%2F01%2F2025&fechaFin=30%2F04%2F2025&idDepartamento=&idTipoEmergencia=&idTipoAdministracion=1_2_3_4_5_6_7",
+          "sourceSha256": "38daa119e1eb77c0e14cbd578356a4d61d438c5146ba91b70551af0dac3d9d00",
+          "locator": "Worksheet row CODIGO=20934; DESARROLLO, INICIO and TRANSITABILIDAD INICIAL",
+          "finding": "The development narrative describes deep pavement repairs, heavy-traffic wear and unspecified natural effects; it does not explicitly establish a rainfall-triggered disruption onset."
+        }
+      ],
+      "unresolved": [
+        "Mixed/unspecified cause.",
+        "Initial NORMAL status does not establish a verified negative.",
+        "No linked catchment for the matched road segment."
+      ]
+    },
+    {
+      "eventId": "coen:sinpad-224418",
+      "episodeId": "pe22-2025-02-22",
+      "rainfallCause": "documented",
+      "roadDisruption": "documented",
+      "decision": "positive_event",
+      "evidence": [
+        {
+          "sourceUrl": "https://portal.indeci.gob.pe/wp-content/uploads/2025/02/REPORTE-COMPLEMENTARIO-N.%C2%BA-2411-22-FEB2025-DESLIZAMIENTO-EN-EL-DISTRITO-DE-SURCO-LIMA-1-1.pdf",
+          "sourceSha256": null,
+          "locator": "Report 2411: page 1 HECHOS and page 2 section 3.2; report 5032: page 1 HECHOS and page 2 section 3.2",
+          "finding": "The reports explicitly attribute the Surco landslide to intense rainfall and document restricted PE-22 traffic at km 68+800."
+        },
+        {
+          "sourceUrl": "https://portal.indeci.gob.pe/wp-content/uploads/2025/02/REPORTE-COMPLEMENTARIO-N.%C2%BA-5032-19ABR2025-DESLIZAMIENTO-EN-EL-DISTRITO-DE-SURCO-LIMA-2.pdf",
+          "sourceSha256": null,
+          "locator": "Report 2411: page 1 HECHOS and page 2 section 3.2; report 5032: page 1 HECHOS and page 2 section 3.2",
+          "finding": "The reports explicitly attribute the Surco landslide to intense rainfall and document restricted PE-22 traffic at km 68+800."
+        }
+      ],
+      "unresolved": [
+        "Conflicting occurrence hours, retained as an interval.",
+        "Official chainage has not been independently geocoded."
+      ]
+    }
+  ]
+}

@@ -1,69 +1,54 @@
-# ML training checkpoint
+# ML training readiness
 
-Input engineering for Role C tasks 1–3 is implemented. No model has been selected,
-trained or evaluated. Follow the [Team Plan](../team-plan.md): agree on the target,
-labels, features, algorithm and temporal evaluation before starting training.
+We have chosen **regularized logistic regression to predict rainfall-related road
+disruption**, using existing weather forecasts as inputs. The participant approved
+label review and pipeline implementation. The pipeline is implemented, but the real
+dataset is not yet sufficient for fitting; no real-data model has been trained or evaluated.
 
-## What is ready
+## Reviewed evidence
 
-The [input manifest](../../packages/road-data/data/model-inputs-manifest.json)
-identifies eight weather captures, terrain and official spatial context, and
-eight dated PE-22 incident candidates. Scripts, validated contracts, Supabase
-persistence and read APIs are described in the [input handoff](model-inputs.md).
-January–April 2024 and 2025 fixed-lead rainfall archives and retrospective ERA5
-references allow a rainfall-forecast study. February–March 2023 ERA5 supports a
-Yaku reconstruction; it cannot demonstrate that an alert was predictable.
+| Status | Current result |
+|---|---|
+| Documented positive events | Six: five Provías records with explicit rainfall/road-impact narratives, plus one deduplicated COEN event |
+| Unresolved candidates | Two: rainfall causation or disruption onset remains unverified |
+| Independent positive episodes | Four conservatively grouped episodes |
+| Mapped positive events | Two, both in the same weather episode |
+| Verified non-event monitoring windows | Zero |
+| Historically available feature observations | Zero |
 
-## What prevents a credible road-event probability model today
+The original eight-candidate source capture is preserved. The separate
+[label review](training-labels.md) records the evidence and corrects the initial
+assumption that every Provías rainfall trigger was unresolved. A positive event
+can still be unusable for fitting because location, timing or predictor availability
+is unresolved. Unreported days remain unknown, not negative labels.
 
-- Only six candidate events are available in 2024 and two in 2025. The candidates
-  still require label review. Two 2024 records occur on the same day and must not
-  be treated as independent weather episodes in a random split.
-- The Provías export misses an independently documented COEN event. Unreported
-  days/segments are unknown, not verified negative examples. A conventional binary
-  classifier trained on invented negatives would have misleading accuracy.
-- Provías times are date-only. The additional COEN event has conflicting times
-  and still needs geocoding. No event hour or catchment assignment is invented.
-- The January 30, 2024 event lacks the selected archived forecast coverage. Later
-  offsets also have different archive start dates; use explicit missingness masks.
-- Previous Runs stores fixed offsets for each valid hour. Combining them into a
-  24/72-hour forecast at one historical decision time requires an explicit as-of
-  design and proof of information availability. Capture time is not issuance.
-- ERA5 retrospective rain and present-day susceptibility are not automatically
-  legitimate pre-event predictors. Geological publication history is unverified.
-- Catchments are coarse, only 38 of 174 segments have links, slope is sampled and
-  official chainage is uncalibrated. The forecast grid cannot resolve individual
-  small quebradas. These gaps remain visible in any eventual output.
+## Implemented pipeline
 
-The current registry deliberately records `negativeExamples: 0`,
-`coverage: "incomplete"` and `trainingReady: false`. Those flags are evidence
-controls, not a claim that an algorithm cannot technically fit these rows.
+The [pipeline handoff](logistic-pipeline.md) describes executable preparation,
+training and evaluation commands. It supports 6-, 24- and 72-hour targets, strict
+historical feature provenance, chronological 2024 training/validation and frozen
+2025 evaluation. It compares against a transparent rainfall threshold, exports a
+portable experimental JSON model, and refuses to fit unsupported labels.
 
-## Decisions for the next checkpoint
+Tests fit synthetic fixtures to verify the implementation. They are separate from
+the real dataset and establish no forecast accuracy. Current real-data commands
+produce a blocked report and no model artifact. Risk APIs, warning levels and alert
+delivery are not activated by running this offline pipeline.
 
-The original product target is road-disruption risk. Retain that direction by
-agreeing on a precise target (for example, rainfall-related disruption within
-24 hours), reviewing candidate labels and obtaining trustworthy coverage for
-event and non-event periods. Freeze the 2025 holdout before feature selection or
-tuning. Keep correlated catchments, neighboring segments and same-day records
-together when defining validation groups. With the present counts, treat any
-experiment as exploratory and report the uncertainty; do not claim calibrated
-probabilities or reliable held-out skill.
+## Evidence needed before fitting real data
 
-An alternative to discuss explicitly is ML calibration of **rainfall forecasts**
-against retrospective reference rainfall, followed by a transparent road-hazard
-baseline. The captured weather seasons support investigating that target, but
-rainfall skill would not establish road-disruption skill. This changes what the
-ML component predicts and must be agreed with the participant before implementation.
-No such substitution has been made.
+1. Obtain reviewed monitoring periods that affirmatively establish no target event
+   across the linked roads; feed silence and an initial `NORMAL` status are insufficient.
+2. Improve catchment/road associations and event timing, especially for the 2025
+   COEN case. Date-only records cannot become exact six-hour examples.
+3. Establish historical availability for every predictor. Current capture time is
+   not past issuance; ERA5 reconstruction cannot substitute for a historical forecast.
+4. Add enough independent episodes for the fixed training, validation and holdout
+   partitions. The present mapped positives cover only one 2024 episode.
 
-For either choice, write the decision-time/valid-time contract first, restrict
-predictors to information demonstrably available then, compare against an
-unchanged transparent baseline and evaluate separately at 6, 24 and 72 hours.
-Choose the smallest defensible algorithm only after that data contract; no
-library, model family, threshold or performance number is selected here.
-
-After the checkpoint: implement the agreed feature matrix and training pipeline,
-save the model and provenance, perform the fixed temporal evaluation, then wire
-hourly inference and B's alert evaluation. Risk, dispatch and alert outputs remain
-unavailable until those components are implemented and verified.
+The selected IFS archive is missing early 2024 hours. Catchments remain coarse,
+only 38 of 174 segments have links, sampled slope is approximate and official
+chainage is uncalibrated. Keep those uncertainties explicit. The next step is
+improving the evidence, then rerunning the existing pipeline without weakening its
+label/time checks. Hourly inference, risk storage, dispatch and alert evaluation
+follow a defensible trained result.

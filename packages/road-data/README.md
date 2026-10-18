@@ -233,3 +233,26 @@ uses the ignored public XLSX captures downloaded by `events:capture`.
 `model-inputs:check` audits coverage and regenerates the hash manifest.
 No model is trained by these commands. The registry retains incomplete event
 coverage, unknown negatives and missing forecast hours explicitly.
+
+## Logistic-regression pipeline
+
+The participant approved label review and an L2 logistic-regression pipeline.
+See [training labels](../../docs/data/training-labels.md) and the
+[offline pipeline handoff](../../docs/data/logistic-pipeline.md). Install the pinned
+`requirements-ml.lock.txt` in the local Python environment before using the trainer;
+Python/scikit-learn are not server dependencies.
+
+```sh
+npm --prefix packages/road-data run ml:labels:check -- --verify
+npm --prefix packages/road-data run ml:prepare
+npm --prefix packages/road-data run ml:train -- --horizon 24
+```
+
+The current training command returns exit 2, a readiness report and `model: null`.
+Six source-supported positive events do not yet supply a training dataset: only
+two map to catchments, they share an episode, and negative monitoring windows and
+historical feature-availability evidence are missing. Unknown periods and nominal
+archive features never become supervised examples automatically. The compiled
+`/training` scorer consumes an explicitly experimental JSON artifact; it does not
+assign operational warning levels or activate the risk API. Tests with synthetic
+fixtures verify the code path without claiming real-data forecast skill.

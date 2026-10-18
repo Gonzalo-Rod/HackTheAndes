@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "logistic-v1-2024-2025",
+  "train": {
+    "fromUtc": "2024-01-01T05:00:00Z",
+    "untilUtc": "2024-04-01T05:00:00Z"
+  },
+  "validation": {
+    "fromUtc": "2024-04-04T05:00:00Z",
+    "untilUtc": "2024-05-01T05:00:00Z"
+  },
+  "test": {
+    "fromUtc": "2025-01-01T05:00:00Z",
+    "untilUtc": "2025-05-01T05:00:00Z"
+  },
+  "embargoHours": 72,
+  "regularizationC": 0.1,
+  "maximumIterations": 2000,
+  "baselineQuantiles": [
+    0.5,
+    0.75,
+    0.9,
+    0.95
+  ]
+}

@@ -16,6 +16,15 @@ current hashes and coverage are in the [manifest](../../packages/road-data/data/
 This implements data preparation without resolving missing labels or establishing
 forecast skill; see the [ML checkpoint](ml-readiness.md).
 
+## Subsequent label review
+
+The [training-label review](training-labels.md) now examines `DESARROLLO`, not just
+the typed hazard fields. Five Provías narratives explicitly attribute road impacts
+to rainfall, so they and the COEN event are supported positive events; two candidates
+remain unresolved. Only two positives have catchment links, in one shared episode,
+and there are no verified non-event windows. The original source registry remains
+a candidate capture; the separate reviewed registry supplies training decisions.
+
 ## Official public source found
 
 The [Provías Nacional emergency viewer](https://wsgcv.proviasnac.gob.pe/emergenciavial)
