@@ -9,14 +9,14 @@ export function createDashboardRepository(pool: Pick<Pool, "query">, geometryRev
       const result = await pool.query(`select jsonb_build_object(
         'id','community:'||i.id,'code',left(i.id::text,8),'cause',case when i.type='accidente' then 'accidentes' when i.type in ('huaico','derrumbe','inundación') then 'fenomenos_naturales' when i.type='obra' then 'infraestructura' when i.type='bloqueo' then 'humano' else 'otro' end,
         'roadStatus',case when i.road_status='unknown' then 'desconocido' else i.road_status end,
-        'title',i.type||case when i.is_test then ' · DEMO' else '' end,
+        'title',i.type||case when i.origin='community' then ' · no confirmado' else '' end||case when i.is_test then ' · DEMO' else '' end,
         'description',case when i.origin='community' then 'Reporte comunitario. No confirmado por una autoridad.' else 'Registro operativo; consulta la fuente y su estado.' end,
         'currentSituation',i.status,'lat',extensions.st_y(i.location),'lng',extensions.st_x(i.location),
         'region','','regionKey','','province','','district','','roadCode',i.road_code,'roadName','Carretera Central',
         'kmText','Ubicación por coordenadas; km oficial sin calibrar','km',null,'kmEnd',null,'direction','',
         'pnpActions',null,'detainedPassengers',0,'detainedGoods',0,'eventDate',to_char(i.first_seen at time zone 'America/Lima','YYYY-MM-DD'),
         'validFrom',null,'validUntil',null,'administrator','','source',case when i.is_test then 'Demostración' when i.origin='community' then 'Comunidad · no confirmado' else 'Registro operativo' end,
-        'sourceUrl',null,'reportCount',(select count(*) from public.incident_reports ir where ir.incident_id=i.id),
+        'sourceUrl',null,'reportCount',(select count(distinct r.reporter_key) from public.incident_reports ir join public.reports r on r.id=ir.report_id where ir.incident_id=i.id),
         'lastActionAt',to_char(i.last_confirmed at time zone 'UTC','YYYY-MM-DD"T"HH24:MI:SS.MS"Z"')) as alert
         from public.incidents i where i.road_code='PE-22' and i.status<>'cleared' and i.location is not null
         order by i.last_confirmed desc limit 1000`);

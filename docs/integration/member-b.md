@@ -128,12 +128,13 @@ facts to community incidents.
 ## Remaining team connection
 
 The shared application now wires the signed WhatsApp webhook, messaging provider,
-intent parser and road/exposure queries. B still needs extraction/grouping, report
-storage and follow-ups, dedupe/confidence/clearing, and subscription/alert delivery. This interface
+intent parser and road/exposure queries. Text-report extraction, confirmed-location publication and community duplicate
+matching now use the [report flow](whatsapp-reports.md). B still needs mixed-media
+grouping, full confidence/clearing, official/community coalescing and subscriptions/alerts. This interface
 makes C's existing location and official-source inputs available for that work;
 the participant has confirmed both shared query replies in the
 [phone check](zavu-messaging.md#recorded-verification). Report and subscription
-flows still need their own delivery tests.
+flows have separate delivery checks; the progress log records the latest result.
 
 The participant-approved [climate-exposure direction](../data/climate-exposure.md)
 retains **driver WhatsApp alerts and live conditions**. Weather, catchment and

@@ -100,12 +100,12 @@ export function loadZavuConfiguration(): ZavuConfiguration {
   };
 }
 
-export function loadIntentConfiguration(): { apiKey: string; model: string } | null {
+export function loadOpenAiConfiguration(): { apiKey: string; model: string } | null {
   if (!process.env.OPENAI_API_KEY) return null;
   const result = z
     .object({ OPENAI_API_KEY: z.string().min(1), OPENAI_INTENT_MODEL: z.string().min(1).default("gpt-4.1-mini-2025-04-14") })
     .safeParse({ ...process.env, OPENAI_INTENT_MODEL: process.env.OPENAI_INTENT_MODEL || undefined });
   if (!result.success)
-    throw new Error(`Invalid intent configuration: ${result.error.issues.map((issue) => issue.path.join(".")).join(", ")}`);
+    throw new Error(`Invalid OpenAI configuration: ${result.error.issues.map((issue) => issue.path.join(".")).join(", ")}`);
   return { apiKey: result.data.OPENAI_API_KEY, model: result.data.OPENAI_INTENT_MODEL };
 }

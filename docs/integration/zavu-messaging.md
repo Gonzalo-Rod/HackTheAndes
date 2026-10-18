@@ -21,13 +21,16 @@ intent parser and source-grounded query handlers.
   a literal place reference. It never produces a road status, risk probability,
   coordinates or advisory. Deterministic services compose the answer from validated
   data. A missing key, timeout, refusal or invalid output offers explicit commands.
-- Text reports, media and subscription requests receive an honest unavailable
-  response. No incident/report is stored, no subscription is created, and no
-  automated alert, SMS fallback or call is sent by these query handlers.
+- Text reports now use the [confirmation and publication flow](whatsapp-reports.md):
+  validated extraction, proposed/shared pin, explicit confirmation, then an
+  unconfirmed community marker. `REPORTE PRUEBA` keeps a demo out of impact counts.
+- Media and subscription requests retain an honest unavailable response. No
+  subscription, automatic alert, SMS fallback or call is activated by this step.
 
-This integration does not complete all of Role B. Report extraction/grouping,
-confirmation and storage, confidence/dedupe, opt-in/out persistence, alert policy,
-quiet hours, approved templates and media transcription remain B's next work.
+This integration does not complete all of Role B. Text-report publication and
+community duplicate matching are implemented; full mixed-media grouping,
+confidence/reputation/clearing, SUTRAN/community coalescing, opt-in/out persistence,
+alert policy, quiet hours, approved templates and transcription remain later work.
 No free-form LLM answer can enable those actions. `automatedAlertUse` stays false.
 The existing SUTRAN scheduler and independent API deployment remain unchanged.
 

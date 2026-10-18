@@ -1,7 +1,7 @@
 import type { MessageIntent } from "@/contracts/messaging";
 
 export const HELP_REPLY =
-  "PeruRoad Climate: consulta ESTADO para ver alertas SUTRAN de PE-22, o EXPOSICION para la exposición climática estimada a 24 h. Puedes escribir EXPOSICION seguido de un lugar o compartir un pin de WhatsApp. Este canal atiende consultas; aún no publica reportes ni activa suscripciones.";
+  "PeruRoad Climate: consulta ESTADO o EXPOSICION (24 h). Para reportar, escribe REPORTE seguido de lo que observas en PE-22; después confirma el lugar y el código que te indicaremos. Usa REPORTE PRUEBA para una demostración, o CANCELAR para descartar un borrador. No hay suscripciones automáticas activas.";
 export function parseCommand(text: string): MessageIntent | null {
   const normalized = text
     .trim()

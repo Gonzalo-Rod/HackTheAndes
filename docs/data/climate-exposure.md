@@ -31,7 +31,7 @@ location or time of a future landslide, or certify that a route is safe.
 | Catchments and terrain | `/api/catchments`, geometry and slope captures | Coarse associations and sampled slopes, with low-confidence notices; 38 of 174 road segments currently have catchment links. |
 | SENAMHI activation advisories | Official-product capture and `/api/hazards` | Keep official severity, affected area and validity separate from PeruRoad exposure. Current captures have `automatedRiskUse: false`. |
 | Current road conditions | SUTRAN ingestion/history and incident APIs | Confirmed source-reported impacts and dated status changes. An absent alert does not establish clearance. |
-| Environmental field reports | Planned B report pipeline and existing location interface | Rain, debris, rising water, drainage obstruction and slope failures; retain verification status and source. |
+| Environmental field reports | B text-report flow after location confirmation; media/verification pending | Rain, debris, rising water, drainage obstruction and slope failures; retain verification status and source. |
 
 See [model inputs](model-inputs.md) for source provenance and reproduction.
 Forecast availability is independent of whether our own disruption classifier can
@@ -198,7 +198,6 @@ target, baseline and evaluation design; it is not a dependency for this pivot.
 
 Completed: **assessment rules/contracts and offline tests → storage and read API**.
 B's transport snapshot is now connected to source-grounded WhatsApp queries; see
-[the integration guide](../integration/zavu-messaging.md). No automatic alerts or
-real-user delivery are established. The next checkpoint includes **dashboard wiring**, followed by hourly refresh,
+[the integration guide](../integration/zavu-messaging.md). Automatic driver-alert delivery remains pending. The next checkpoint includes **dashboard wiring**, followed by hourly refresh,
 alert evaluation and consenting-driver end-to-end verification. This continues the
 participant's step-by-step workflow. Payments, Qatom and Yape remain outside scope.

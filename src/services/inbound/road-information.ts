@@ -74,9 +74,9 @@ export function createRoadInformation(deps: {
     },
   };
 }
-export function createDefaultRoadInformation(publicUrl: string): RoadInformation {
+export function createMessagingRoadContext() {
   const geometryRevision = loadGeometryRevision();
-  const service = createRoadContextService({
+  return createRoadContextService({
     repository: createPostgresRoadContextRepository(database(), geometryRevision),
     logger: (entry) =>
       logger[entry.result === "repository_failure" ? "warn" : "info"]({
@@ -85,6 +85,10 @@ export function createDefaultRoadInformation(publicUrl: string): RoadInformation
         contextState: entry.result,
       }),
   });
+}
+export function createDefaultRoadInformation(publicUrl: string): RoadInformation {
+  const geometryRevision = loadGeometryRevision();
+  const service = createMessagingRoadContext();
   return createRoadInformation({
     context: (input, requestId = randomUUID()) => service.execute(input, requestId),
     exposure: () => loadExposureView(24),

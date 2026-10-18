@@ -78,8 +78,8 @@ Use these application helpers for the remaining report/subscription work:
 
 Cryptographic choices follow [Node.js crypto](https://nodejs.org/docs/latest-v24.x/api/crypto.html).
 The signed webhook and source-grounded query handlers are implemented and tested.
-Transcription, report publication, confidence and automatic alert delivery remain
-pending. The participant confirmed both source-query replies after shared webhook
+Transcription, full confidence and automatic alert delivery remain pending.
+Text-report publication uses [explicit reporter confirmation](integration/whatsapp-reports.md). The participant confirmed both source-query replies after shared webhook
 cutover; see the [recorded verification](integration/zavu-messaging.md#recorded-verification).
 
 ## Realtime and metrics
@@ -137,7 +137,7 @@ does not currently consume these providers. On October 17, 2026, all four were
 configured as sensitive variables for the `feat/data-model` Preview only.
 The [shared WhatsApp integration](integration/zavu-messaging.md) implements the
 signed webhook, durable delivery leases, Zavu replies and a structured OpenAI
-intent parser backed by C's source services. Report/media processing and automatic
-subscriptions remain pending B. The participant confirmed receiving both `ESTADO`
+intent parser backed by C's source services. Text reports now publish after explicit location/code confirmation. Media processing
+and automatic subscriptions remain pending B. The participant confirmed receiving both `ESTADO`
 and `EXPOSICION` replies from the shared deployment on October 17, 2026; this is a
 query-delivery check, not external-user traction or report/alert verification.

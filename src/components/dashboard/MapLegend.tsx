@@ -9,7 +9,7 @@ import type { AlertCause, RoadStatus } from "@/contracts/road-alerts";
 
 import { CONDITION_COLORS, type LayerState } from "./types";
 
-const LEGEND_STATUSES: RoadStatus[] = ["interrumpido", "restringido", "normal"];
+const LEGEND_STATUSES: RoadStatus[] = ["interrumpido", "restringido", "normal", "desconocido"];
 const LEGEND_CAUSES: AlertCause[] = ["fenomenos_naturales", "accidentes", "infraestructura", "humano"];
 
 export function MapLegend({ layers }: { layers: LayerState }) {

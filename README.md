@@ -104,5 +104,6 @@ B's Zavu snapshot is integrated on `feat/data-model`. The signed webhook answers
 road-status and estimated-exposure queries using the existing validated data
 services; a narrow OpenAI intent parser supports natural-language questions.
 See [setup, supported behavior and cutover checks](docs/integration/zavu-messaging.md).
-Report publication, media transcription and automatic subscriptions remain pending;
-the data pipeline's automated-alert flags remain disabled.
+Text reports now follow an [explicit location/confirmation flow](docs/integration/whatsapp-reports.md)
+before appearing as unconfirmed community markers. Media transcription and automatic
+subscriptions remain pending; the data pipeline's automated-alert flags stay disabled.

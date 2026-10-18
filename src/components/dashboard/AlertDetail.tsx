@@ -91,6 +91,7 @@ function Evidence({ data }: { data: AlertDetailResponse }) {
 
 export function AlertDetail({ alert, detail, corridorContext, roadAlertCount, now, onRetryDetail, onCenter, onClose }: AlertDetailProps) {
   const status = STATUS_META[alert.roadStatus];
+  const isCommunity = alert.id.startsWith("community:");
   return (
     <article className="pr-detail" aria-labelledby="detail-title">
       <header className="pr-detail__head" style={{ borderColor: status.color }}>
@@ -130,7 +131,7 @@ export function AlertDetail({ alert, detail, corridorContext, roadAlertCount, no
           <dd>{alert.direction || "—"}</dd>
         </div>
         <div>
-          <dt>Fecha del evento</dt>
+          <dt>{isCommunity ? "Fecha del reporte" : "Fecha del evento"}</dt>
           <dd>{formatCalendarDate(alert.eventDate)}</dd>
         </div>
         <div>
@@ -138,7 +139,7 @@ export function AlertDetail({ alert, detail, corridorContext, roadAlertCount, no
           <dd>{formatCalendarDate(alert.validUntil)}</dd>
         </div>
         <div>
-          <dt>Última acción</dt>
+          <dt>{isCommunity ? "Último reporte" : "Última acción"}</dt>
           <dd>{now ? formatRelative(alert.lastActionAt, now) : "—"}</dd>
         </div>
       </dl>
@@ -197,6 +198,7 @@ export function AlertDetail({ alert, detail, corridorContext, roadAlertCount, no
             </>
           )}
         </Row>
+        {isCommunity && <Row label="Reportantes independientes">{alert.reportCount}</Row>}
         {alert.pnpActions && <Row label="Acciones PNP">{alert.pnpActions}</Row>}
         {(alert.detainedPassengers > 0 || alert.detainedGoods > 0) && (
           <Row label="Detenidos">{`${alert.detainedPassengers} pasajeros · ${alert.detainedGoods} mercancías`}</Row>
@@ -235,10 +237,12 @@ export function AlertDetail({ alert, detail, corridorContext, roadAlertCount, no
           <Icon name="crosshair" size={13} />
           Centrar en el mapa
         </button>
-        <a className="pr-btn" href={sutranAlertUrl(alert.id)} target="_blank" rel="noopener noreferrer">
-          Ver en SUTRAN
-          <Icon name="external" size={12} />
-        </a>
+        {!isCommunity && (
+          <a className="pr-btn" href={sutranAlertUrl(alert.id)} target="_blank" rel="noopener noreferrer">
+            Ver en SUTRAN
+            <Icon name="external" size={12} />
+          </a>
+        )}
       </footer>
     </article>
   );

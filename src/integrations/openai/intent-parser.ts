@@ -4,15 +4,8 @@ import { redactContactDetails } from "@/domain/messaging/commands";
 import { postJson, type RequestOptions } from "@/integrations/http/fetch-json";
 import { logger } from "@/lib/logger";
 
-const responseSchema = z.object({
-  status: z.literal("completed"),
-  output: z.array(
-    z.object({
-      type: z.string(),
-      content: z.array(z.object({ type: z.string(), text: z.string().optional() })).optional(),
-    }),
-  ),
-});
+import { parseStructuredResponse } from "./structured-response";
+
 export function createOpenAiIntentParser(
   config: { apiKey: string; model: string },
   options: Pick<RequestOptions, "fetchImpl" | "sleep" | "timeoutMs"> = {},
@@ -43,10 +36,7 @@ export function createOpenAiIntentParser(
             ...options,
           },
         );
-        const parsed = responseSchema.parse(response.body);
-        const outputs = parsed.output.filter((item) => item.type === "message").flatMap((item) => item.content ?? []);
-        if (outputs.length !== 1 || outputs[0]?.type !== "output_text" || !outputs[0].text) throw new Error("Invalid intent response");
-        const intent = messageIntentSchema.parse(JSON.parse(outputs[0].text));
+        const intent = messageIntentSchema.parse(parseStructuredResponse(response.body));
         if (intent.place && !text.toLocaleLowerCase("es").includes(intent.place.toLocaleLowerCase("es"))) return null;
         return intent;
       } catch (error) {

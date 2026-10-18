@@ -89,3 +89,16 @@ it("serializes concurrent deliveries and retries work after a failure", async ()
   ).rejects.toThrow();
   expect(await processor.processOnce("zavu", "other", work)).toBe(true);
 });
+
+it("uses the durable report flow before the query router without another LLM call", async () => {
+  const deps = dependencies();
+  deps.reports = { route: vi.fn(async () => ({ kind: "reply" as const, text: "Pending confirmation" })) };
+  expect(await chooseReply(message({ text: "REPORTE Hay un derrumbe" }), deps, "req")).toBe("Pending confirmation");
+  expect(deps.intentParser?.parse).not.toHaveBeenCalled();
+});
+it("uses a classified query from the report router without classifying it twice", async () => {
+  const deps = dependencies();
+  deps.reports = { route: vi.fn(async () => ({ kind: "intent" as const, intent: { kind: "status" as const, place: null } })) };
+  expect(await chooseReply(message({ text: "¿Cómo está la vía?" }), deps, "req")).toBe("SUTRAN status");
+  expect(deps.intentParser?.parse).not.toHaveBeenCalled();
+});

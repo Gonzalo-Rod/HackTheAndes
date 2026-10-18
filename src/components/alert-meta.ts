@@ -21,9 +21,9 @@ export const STATUS_META: Record<RoadStatus, { label: string; adjective: string;
     ink: "#ffffff",
   },
   desconocido: {
-    label: "Sin dato",
-    adjective: "Estado sin dato",
-    description: "SUTRAN no indicó el estado",
+    label: "Sin confirmar",
+    adjective: "Estado no confirmado",
+    description: "El estado de la vía no está confirmado; consulta la fuente",
     color: "#857d70",
     ink: "#ffffff",
   },

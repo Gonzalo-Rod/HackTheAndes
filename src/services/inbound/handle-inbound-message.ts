@@ -4,6 +4,7 @@ import type { IntentParser, MessageIntent } from "@/contracts/messaging";
 import { HELP_REPLY, parseCommand } from "@/domain/messaging/commands";
 import { logger } from "@/lib/logger";
 import type { RoadInformation } from "./road-information";
+import type { ReportRouter } from "@/contracts/reports";
 
 export const REPLIES = {
   help: HELP_REPLY,
@@ -22,6 +23,7 @@ export interface InboundDependencies {
   messaging: MessagingProvider;
   information: RoadInformation;
   intentParser: IntentParser | null;
+  reports?: ReportRouter;
 }
 async function intentReply(intent: MessageIntent, information: RoadInformation, requestId: string): Promise<string> {
   switch (intent.kind) {
@@ -40,6 +42,9 @@ async function intentReply(intent: MessageIntent, information: RoadInformation, 
   }
 }
 export async function chooseReply(message: InboundMessageData, deps: InboundDependencies, requestId: string): Promise<string> {
+  const routed = await deps.reports?.route(message, requestId);
+  if (routed?.kind === "reply") return routed.text;
+  if (routed?.kind === "intent") return routed.intent ? intentReply(routed.intent, deps.information, requestId) : REPLIES.parserUnavailable;
   if (message.messageType === "location") {
     const content = message.content;
     return content?.latitude !== undefined && content.longitude !== undefined
