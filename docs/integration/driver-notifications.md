@@ -37,8 +37,9 @@ remains eligible on a later evaluation. Retries reuse the delivery's provider ke
 - **Estimated climate exposure:** a fresh database assessment, supported segment,
   complete required inputs and an escalation to `priority` or `high_attention`.
   An unchanged category is silent even when a new forecast batch arrives. The
-  message includes modeled rainfall, the forecast window, source age, susceptibility
-  basis and experimental/low-confidence association wording. It is not a probability.
+  driver notice gives the approximate location and forecast end time in Peru time,
+  with a short estimated/not-confirmed warning. `EXPOSICION` supplies rainfall, source
+  times, susceptibility and experimental association details. It is not a probability.
 - **Community:** initial unconfirmed reports have confidence 0.2 and do not trigger
   production alerts. The release's conservative notification gate is 0.7; the full
   confidence/clearing model is still pending. Explicit DEMO incidents can exercise
@@ -50,6 +51,33 @@ remains eligible on a later evaluation. Retries reuse the delivery's provider ke
 Unknown data preserves the last known notification baseline; it is not a decrease
 or a clearance. Pending messages are cancelled if their source condition changes or
 is no longer eligible, and expire at their source validity boundary.
+
+## Short driver notices
+
+Notifications use deterministic plain Spanish, not LLM paraphrasing. One climate
+explanation covers the selected updates; repeated nearby landmark labels appear
+once. Names come only from the same geometry revision's imported catalog, within
+2 km along the road segment, and are explicitly approximate. Where no landmark
+qualifies, retain distance from the map origin with **not official kilometers**;
+never invent a town or translate an uncalibrated distance into a highway marker.
+Forecast validity uses `America/Lima`, without raw UTC timestamps or internal
+category names. The up-to-three-update bundle stays within 650 characters;
+`ESTADO` and `EXPOSICION` provide the detailed evidence and map links. DEMO,
+SUTRAN and unconfirmed-community labels, uncertainty and `BAJA` remain visible.
+
+The original three-segment example becomes:
+
+```text
+DEMO · PeruRoad · PE-22
+Atención por lluvias: cerca del puente CARLOS GRAÑA; cerca del puente HUACHIPA.
+Hasta 18/10, 21:00 (hora Perú).
+Lluvia prevista en zonas propensas a huaicos o derrumbes. Es una estimación, no un evento confirmado.
+Antes de salir, consulta ESTADO. EXPOSICION: detalles. BAJA: cancelar.
+```
+
+This is a formatting example using catalog landmarks, not a new observed event.
+Presentation changes do not reset condition checkpoints or trigger new alerts.
+Already pending deliveries retain their original body/provider key for safe retry.
 
 ## WhatsApp delivery
 

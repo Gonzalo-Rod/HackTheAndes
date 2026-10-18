@@ -34,6 +34,8 @@ export const alertCandidateSchema = z.object({
   endKm: z.number().nonnegative(),
   expiresAt: z.iso.datetime(),
   text: z.string().min(1).max(800),
+  locationLabel: z.string().min(1).max(100).optional(),
+  forecastUntil: z.iso.datetime().optional(),
   isTest: z.boolean(),
 });
 export type AlertCandidate = z.infer<typeof alertCandidateSchema>;

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { planAlerts, formatAlertBundle, ALERT_INTERVAL_MS } from "./policy";
+import { planAlerts, ALERT_INTERVAL_MS } from "./policy";
 import type { AlertCandidate } from "@/contracts/notifications";
 const NOW = Date.parse("2026-10-18T03:30:00Z");
 const range = { startKm: 10, endKm: 30, isTest: false };
@@ -57,6 +57,4 @@ describe("30-minute material alert policy without quiet hours", () => {
     expect(p.selected).toHaveLength(3);
     expect(planAlerts(c, p.checkpoint, range, NOW).selected).toHaveLength(2);
   });
-  it("retains attribution, uncertainty and opt-out in the bundle", () =>
-    expect(formatAlertBundle([candidate()], "PE-22", "https://example.test", true)).toMatch(/DEMO.*[\s\S]*SUTRAN.*[\s\S]*BAJA/));
 });

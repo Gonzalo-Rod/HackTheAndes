@@ -36,11 +36,7 @@ export const evaluateAlerts = platformRoute("alerts.job", async (request) => {
     requestId,
   );
   const dispatch = createAlertDispatcher({
-    repository: createAlertDeliveryRepository(
-      database(),
-      { key: platform.CONTACT_ENCRYPTION_KEY, version: platform.CONTACT_KEY_VERSION },
-      config.publicAppUrl,
-    ),
+    repository: createAlertDeliveryRepository(database(), { key: platform.CONTACT_ENCRYPTION_KEY, version: platform.CONTACT_KEY_VERSION }),
     messaging: createZavuClient(config),
     templates: createZavuTemplateSender({ ...config, templateId: notification.templateId }),
     revision: loadGeometryRevision(),

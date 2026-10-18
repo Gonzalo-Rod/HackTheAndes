@@ -147,14 +147,16 @@ Subscriptions use a driver-confirmed stretch or route. The planned categories ar
 | Alert | Required basis | Message distinction |
 | --- | --- | --- |
 | Road-condition update | Current official or independently confirmed incident/status change | State the source-reported condition and observation time. |
-| Climate-exposure advisory | Fresh, complete assessment that crosses a documented attention threshold and has a supported link to the subscribed stretch | Say **estimated climate exposure**, identify the forecast window and reasons, and link the corresponding map view. |
+| Climate-exposure advisory | Fresh, complete assessment that crosses a documented attention threshold and has a supported link to the subscribed stretch | Use a short estimated/not-confirmed notice, approximate location and forecast end time; `EXPOSICION` provides the evidence. |
 | Official advisory | An applicable, currently valid SENAMHI advisory with verified product identity and temporal eligibility | Attribute the advisory to SENAMHI and preserve its severity and validity. |
 | Community report | Report pipeline evidence meeting B's confidence/notification policy | Preserve `no confirmado` until independently verified; never describe it as an official event. |
 
-For a climate-exposure message, include the named stretch, forecast rainfall and
-window, susceptibility, data age and uncertainty. Official kilometer references
-must remain distinct from uncalibrated distances along the captured road geometry.
-Use concise Spanish messages and a dashboard link. Do not imply live driver GPS;
+The proactive climate notice uses plain Spanish: approximate place, forecast
+window and an estimated/not-confirmed warning. Group repeated explanations; put
+rainfall amounts, susceptibility, source age and rule limitations in `EXPOSICION`,
+which links the dashboard. Official kilometer references must remain distinct from
+uncalibrated distances along the captured road geometry. See the
+[short notification policy](../integration/driver-notifications.md#short-driver-notices). Do not imply live driver GPS;
 trip position remains a schedule estimate unless a person explicitly shares a pin.
 
 Keep explicit opt-in, opt-out, deduplication, bundling and approved provider

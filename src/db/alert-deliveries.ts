@@ -2,8 +2,9 @@ import { randomUUID } from "node:crypto";
 import type { Pool } from "pg";
 import { z } from "zod";
 import { alertCandidateSchema, checkpointSchema, type AlertCandidate } from "@/contracts/notifications";
-import { ALERT_INTERVAL_MS, ALERT_LEASE_MS, formatAlertBundle, planAlerts } from "@/domain/alerts/policy";
+import { ALERT_INTERVAL_MS, ALERT_LEASE_MS, planAlerts } from "@/domain/alerts/policy";
 import { EncryptedContactSchema, decryptContact } from "@/integrations/security/contacts";
+import { formatAlertBundle } from "@/domain/alerts/messages";
 import { transaction } from "./transaction";
 const subscriptionSchema = z.object({
   id: z.uuid(),
@@ -23,7 +24,7 @@ const deliverySchema = z.object({
   consentAt: z.date(),
   leaseId: z.uuid(),
 });
-export function createAlertDeliveryRepository(pool: Pool, encryption: { key: string; version: string }, publicUrl: string) {
+export function createAlertDeliveryRepository(pool: Pool, encryption: { key: string; version: string }) {
   return {
     async subscriptions(revision: string) {
       const r = await pool.query(
@@ -83,7 +84,7 @@ export function createAlertDeliveryRepository(pool: Pool, encryption: { key: str
             [
               subscriptionId,
               sub.consentAt,
-              formatAlertBundle(plan.selected, sub.label, publicUrl, sub.isTest),
+              formatAlertBundle(plan.selected, sub.isTest),
               JSON.stringify(plan.checkpoint),
               new Date(Math.min(...plan.selected.map((c) => Date.parse(c.expiresAt)))),
               JSON.stringify(Object.fromEntries(plan.selected.map((c) => [c.key, c.fingerprint]))),

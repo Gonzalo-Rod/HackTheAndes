@@ -8,7 +8,7 @@ import type { AlertCandidate } from "@/contracts/notifications";
 const pool = database();
 const encryption = { key: randomBytes(32).toString("base64url"), version: "notification-test-v1" };
 const subscription = createSubscriptionRepository(pool, encryption),
-  delivery = createAlertDeliveryRepository(pool, encryption, "https://example.test");
+  delivery = createAlertDeliveryRepository(pool, encryption);
 const key = createHash("sha256").update(randomUUID()).digest("hex");
 const now = Date.now();
 const event = () => createHash("sha256").update(randomUUID()).digest("hex");

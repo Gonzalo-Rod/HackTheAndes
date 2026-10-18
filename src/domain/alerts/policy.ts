@@ -32,6 +32,3 @@ export function planAlerts(
   }
   return { selected, checkpoint: next };
 }
-export function formatAlertBundle(selected: AlertCandidate[], label: string, publicUrl: string, isTest: boolean) {
-  return `${isTest ? "DEMO · " : ""}PeruRoad · ${label}\n${selected.map((c) => c.text).join("\n")}\nFuentes y vigencia: ${publicUrl}\nNo certifica vía segura. BAJA cancela las alertas.`;
-}

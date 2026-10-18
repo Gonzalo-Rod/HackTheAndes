@@ -5,6 +5,8 @@ import { roadContextResponseSchema } from "@peruroad/road-data/context/contracts
 import type { ExposureLayer } from "@/contracts/exposure";
 import { ExposureLayerSchema } from "@/contracts/exposure";
 import { alertCandidateSchema, type AlertCandidate } from "@/contracts/notifications";
+import { readAlertLandmarks } from "@/db/alert-landmarks";
+import { alertLocation, officialAlertText, communityAlertText } from "@/domain/alerts/messages";
 import { COMMUNITY_ALERT_CONFIDENCE } from "@/domain/alerts/policy";
 /** Matches C's 30-minute complete-poll freshness boundary. */
 const OFFICIAL_MAX_AGE_MS = 30 * 60_000;
@@ -21,6 +23,7 @@ export async function collectAlertCandidates(
   requestId: string,
 ) {
   const candidates: AlertCandidate[] = [];
+  const landmarks = await readAlertLandmarks(deps.pool, deps.revision);
   const official = roadContextResponseSchema.parse(await deps.context({ kind: "official_alerts" }, requestId));
   if (
     official.kind === "official_alerts" &&
@@ -50,7 +53,7 @@ export async function collectAlertCandidates(
         startKm: km,
         endKm: km,
         expiresAt: new Date(Date.parse(official.asOf) + OFFICIAL_MAX_AGE_MS).toISOString(),
-        text: `SUTRAN: ${a.title.slice(0, 180)} · ${a.roadStatus}. Fuente: ${a.sourceUpdatedAt ?? official.asOf} UTC.`,
+        text: officialAlertText(a.roadStatus, a.title, alertLocation(km, km, landmarks)),
         isTest: false,
       });
     }
@@ -86,7 +89,7 @@ export async function collectAlertCandidates(
       startKm: row.startKm,
       endKm: row.endKm,
       expiresAt: new Date(row.lastConfirmed.getTime() + COMMUNITY_MAX_AGE_MS).toISOString(),
-      text: `${row.isTest ? "DEMO · " : ""}Comunidad: ${row.type}, NO CONFIRMADO por una autoridad. Reporte: ${row.lastConfirmed.toISOString()} UTC.`,
+      text: communityAlertText(row.type, alertLocation(row.startKm, row.endKm, landmarks), row.isTest),
       isTest: row.isTest,
     });
   }
@@ -115,7 +118,9 @@ export async function collectAlertCandidates(
             Date.parse(exposure.data.sources.weatherCapturedAt) + exposure.data.policy.weatherMaxAgeMs,
           ),
         ).toISOString(),
-        text: `Exposición climática ESTIMADA (${window.category}), eje ${segment.distanceFromOriginStartKm.toFixed(1)}–${segment.distanceFromOriginEndKm.toFixed(1)} km: lluvia modelada ${window.forecastRain.precipitationMm.toFixed(1)} mm/24 h y susceptibilidad INGEMMET. Captura ${exposure.data.sources.weatherCapturedAt}, ventana hasta ${window.validUntil}. Reglas experimentales; asociación de cuenca aproximada.`,
+        text: "Lluvia prevista en zonas propensas a huaicos o derrumbes; estimación, no evento confirmado.",
+        locationLabel: alertLocation(segment.distanceFromOriginStartKm, segment.distanceFromOriginEndKm, landmarks),
+        forecastUntil: window.validUntil,
         isTest: false,
       });
     }
