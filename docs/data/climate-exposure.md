@@ -5,9 +5,10 @@ preparedness for rainfall-related hazards along the Rímac–PE-22 corridor. It
 combines forecast rainfall with mapped terrain susceptibility and valid official
 advisories, while retaining live road conditions and WhatsApp alerts for drivers.
 **Tasks 1–2 are implemented:** deterministic assessment, immutable Supabase
-persistence, a validated bundled fallback and `GET /api/exposure`. Driver-message
-delivery, dashboard wiring, hourly scheduling and departure planning remain later
-integration steps. No driver alert has been sent by this implementation.
+persistence, a validated bundled fallback and `GET /api/exposure`. Driver subscriptions, conditional 30-minute alert evaluation and hourly weather
+refresh are implemented in the [notification integration](../integration/driver-notifications.md);
+dashboard exposure wiring and departure planning remain later integration steps.
+Live delivery checks are recorded in the local progress log.
 
 ## Users and decisions
 
@@ -114,8 +115,9 @@ safe 503 with the standard error shape.
 At read time, stale/future sources and expired windows lose their public category
 and become unknown; their original anchor is never moved. This is a projection of
 the stored batch, whose identity remains the audit reference. A database outage
-can use the validated, dated bundle with the same freshness checks. Both responses
-keep `automatedAlertUse: false` pending the separate B integration. SENAMHI remains
+can use the validated, dated bundle with the same freshness checks. Stored assessments retain their original replayable flags. The public projection
+sets `automatedAlertUse: true` only for fresh usable database assessments under the
+new notification policy; snapshot, stale and unavailable projections remain false. SENAMHI remains
 attributed context via `/api/hazards`, with automated assessment use disabled.
 
 ### Reproduce and refresh manually
@@ -135,9 +137,8 @@ npm --prefix packages/road-data run exposure:prepare -- --verify
 
 The gzip bundle is `packages/road-data/data/exposure/latest.json.gz`. It contains
 public source data only and is included in the package/deployment. CI verifies
-that it reproduces from committed source inputs. Until the later hourly job is
-connected, manually refresh/import as above; a successful initial import does not
-keep forecasts fresh indefinitely.
+that it reproduces from committed source inputs. The hourly authenticated job now refreshes rainfall on the reviewed grid plan and
+persists new assessments; the commands above remain available for operator recovery.
 
 ## WhatsApp alerts stay in the core
 
@@ -156,11 +157,10 @@ must remain distinct from uncalibrated distances along the captured road geometr
 Use concise Spanish messages and a dashboard link. Do not imply live driver GPS;
 trip position remains a schedule estimate unless a person explicitly shares a pin.
 
-Keep explicit opt-in, opt-out, deduplication, bundling, quiet hours and approved
-provider delivery mechanisms. B owns messaging and subscription policy; C supplies
-validated assessments and changes. Normal exposure updates respect quiet hours;
-any urgent exception requires an explicit reviewed policy and is not inferred from
-an estimated exposure category. Stale/incomplete inputs suppress new automated
+Keep explicit opt-in, opt-out, deduplication, bundling and approved provider
+delivery mechanisms. The participant now requires evaluation every 30 minutes,
+only material updates and **no quiet hours**. B owns messaging/subscription policy;
+C supplies validated assessments and changes. Stale/incomplete inputs suppress new automated
 climate-exposure escalation and expose an unavailable state. The same assessment
 cannot generate repeated alerts on every poll.
 
@@ -198,6 +198,6 @@ target, baseline and evaluation design; it is not a dependency for this pivot.
 
 Completed: **assessment rules/contracts and offline tests → storage and read API**.
 B's transport snapshot is now connected to source-grounded WhatsApp queries; see
-[the integration guide](../integration/zavu-messaging.md). Automatic driver-alert delivery remains pending. The next checkpoint includes **dashboard wiring**, followed by hourly refresh,
+[the integration guide](../integration/zavu-messaging.md). Driver-alert delivery and hourly refresh are covered by the [notification integration](../integration/driver-notifications.md). The next checkpoint includes **dashboard wiring**, followed by
 alert evaluation and consenting-driver end-to-end verification. This continues the
 participant's step-by-step workflow. Payments, Qatom and Yape remain outside scope.

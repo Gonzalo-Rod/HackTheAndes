@@ -37,7 +37,7 @@ export async function loadExposureView(horizonHours: 24 | 72, nowMs = Date.now()
     record.assessment.policySha256 !== exposureHash(DEFAULT_EXPOSURE_POLICY)
   )
     failure(503, "exposure_unavailable", "Evaluación no disponible para la geometría y reglas actuales.");
-  const view = createExposureView(record.assessment, nowMs, storage, horizonHours);
+  const view = createExposureView(record.assessment, nowMs, storage, horizonHours, true);
   if (storage === "snapshot") view.meta.message = `Instantánea del ${view.data.sources.weatherCapturedAt}. ${view.meta.message}`;
   return view;
 }

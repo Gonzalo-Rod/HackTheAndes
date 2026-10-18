@@ -1,3 +1,11 @@
+import { loadNotificationConfiguration } from "@/config/env";
+import { createZavuAudioSource } from "@/integrations/zavu/audio";
+import { createOpenAiTranscriber } from "@/integrations/openai/transcriber";
+import { createAudioCache } from "@/db/audio-transcripts";
+import { createVoiceInput } from "@/services/audio/voice-input";
+import { createSubscriptionRepository } from "@/db/subscriptions";
+import { createSubscriptionFlow, senderKey } from "@/services/subscriptions/subscription-flow";
+import { keyedDigest } from "@/integrations/security/contacts";
 import { loadGeometryRevision, loadOpenAiConfiguration, loadPlatformConfiguration, loadZavuConfiguration } from "@/config/env";
 import { database } from "@/db/pool";
 import { createPostgresWebhookProcessor } from "@/db/webhook-processor";
@@ -22,8 +30,34 @@ export function createZavuWebhook() {
   const processor = createPostgresWebhookProcessor(database());
   const platform = loadPlatformConfiguration();
   const context = createMessagingRoadContext();
+  const notification = loadNotificationConfiguration();
+  const encryption = { key: platform.CONTACT_ENCRYPTION_KEY, version: platform.CONTACT_KEY_VERSION };
+  const limiter = createRateLimiter(database());
   const intentParser = intentConfig ? createOpenAiIntentParser(intentConfig) : null;
   const deps = {
+    subscriptions: createSubscriptionFlow({
+      repository: createSubscriptionRepository(database(), encryption),
+      context: (input, id) => context.execute(input, id),
+      pepper: platform.PHONE_KEY_PEPPER,
+      revision: loadGeometryRevision(),
+      teamKeys: platform.TEAM_PHONE_KEYS,
+      testKeys: platform.TEST_PHONE_KEYS,
+      now: Date.now,
+    }),
+    voice: intentConfig
+      ? createVoiceInput({
+          source: createZavuAudioSource(config.apiKey),
+          transcriber: createOpenAiTranscriber({ apiKey: intentConfig.apiKey, model: notification.transcriptionModel }),
+          cache: createAudioCache(database(), encryption),
+          quota: (from) =>
+            limiter.consume(
+              keyedDigest(senderKey(from, platform.PHONE_KEY_PEPPER), platform.PHONE_KEY_PEPPER, "audio-rate"),
+              5,
+              15 * 60_000,
+              Date.now(),
+            ),
+        })
+      : undefined,
     messaging: createZavuClient({ apiKey: config.apiKey, senderId: config.senderId }),
     information: createDefaultRoadInformation(config.publicAppUrl),
     intentParser,

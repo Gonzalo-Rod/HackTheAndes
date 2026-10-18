@@ -4,12 +4,13 @@ import type { IntentParser, MessageIntent } from "@/contracts/messaging";
 import { HELP_REPLY, parseCommand } from "@/domain/messaging/commands";
 import { logger } from "@/lib/logger";
 import type { RoadInformation } from "./road-information";
+import type { SubscriptionRouter, VoiceInput } from "@/contracts/notifications";
 import type { ReportRouter } from "@/contracts/reports";
 
 export const REPLIES = {
   help: HELP_REPLY,
   media:
-    "Aún no puedo interpretar notas de voz ni fotos. Escribe ESTADO o EXPOSICION, o comparte un pin de WhatsApp. El archivo no se ha publicado como reporte.",
+    "No proceso fotos ni videos. Para una nota de voz, el servicio debe estar disponible. Escribe ESTADO o EXPOSICION, o comparte un pin de WhatsApp. El archivo no se ha publicado como reporte.",
   report:
     "El registro de reportes aún no está disponible aquí. Tu mensaje no se ha publicado ni confirmado como incidente. Puedes consultar ESTADO o EXPOSICION.",
   subscribe:
@@ -24,6 +25,8 @@ export interface InboundDependencies {
   information: RoadInformation;
   intentParser: IntentParser | null;
   reports?: ReportRouter;
+  subscriptions?: SubscriptionRouter;
+  voice?: VoiceInput;
 }
 async function intentReply(intent: MessageIntent, information: RoadInformation, requestId: string): Promise<string> {
   switch (intent.kind) {
@@ -42,9 +45,24 @@ async function intentReply(intent: MessageIntent, information: RoadInformation, 
   }
 }
 export async function chooseReply(message: InboundMessageData, deps: InboundDependencies, requestId: string): Promise<string> {
+  if (message.messageType === "audio" && deps.voice) {
+    const result = await deps.voice.convert(message, requestId);
+    return result.ok
+      ? `Nota de voz interpretada. ${await chooseReply(result.message, { ...deps, voice: undefined }, requestId)}`
+      : result.reply;
+  }
+  const subscription = await deps.subscriptions?.handle(message, requestId);
+  if (subscription) return subscription;
   const routed = await deps.reports?.route(message, requestId);
   if (routed?.kind === "reply") return routed.text;
-  if (routed?.kind === "intent") return routed.intent ? intentReply(routed.intent, deps.information, requestId) : REPLIES.parserUnavailable;
+  if (routed?.kind === "intent") {
+    if (routed.intent?.kind === "subscribe" || routed.intent?.kind === "unsubscribe")
+      return (
+        (await deps.subscriptions?.handle(message, requestId, routed.intent.kind)) ??
+        intentReply(routed.intent, deps.information, requestId)
+      );
+    return routed.intent ? intentReply(routed.intent, deps.information, requestId) : REPLIES.parserUnavailable;
+  }
   if (message.messageType === "location") {
     const content = message.content;
     return content?.latitude !== undefined && content.longitude !== undefined
@@ -60,6 +78,7 @@ export async function chooseReply(message: InboundMessageData, deps: InboundDepe
   return intent ? intentReply(intent, deps.information, requestId) : REPLIES.parserUnavailable;
 }
 export async function handleInboundMessage(message: InboundMessageData, deps: InboundDependencies, requestId: string): Promise<void> {
+  await deps.subscriptions?.touch(message);
   const result = await deps.messaging.sendText({
     to: message.from,
     text: await chooseReply(message, deps, requestId),

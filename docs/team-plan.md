@@ -129,6 +129,10 @@ Access is sold **by time, not by message**: a driver pays for the days they will
 
 ### F1. Report by WhatsApp (P0)
 
+**Participant update, October 17:** voice input is connected through the existing
+OpenAI credential; photos are excluded from the current implementation. See
+[driver notifications](integration/driver-notifications.md) for the implemented scope.
+
 People near an incident send it to our Zavu WhatsApp number.
 
 - **Accepted inputs:** text, voice note (OGG/Opus), photo, location pin, or a mix. Messages from the same sender within 2 minutes are grouped into one report.
@@ -159,7 +163,7 @@ People near an incident send it to our Zavu WhatsApp number.
   - an incident in the range is cleared;
   - a fresh, complete climate-exposure assessment for a linked segment in the subscribed range crosses a documented attention threshold, labeled **estimated climate exposure**;
   - a new, valid and temporally eligible SENAMHI advisory covers the range, attributed to SENAMHI and separate from our assessment.
-- **Noise control:** retain at most one bundled message per subscription every 30 minutes, deduplication and quiet hours (22:00–05:00); ordinary exposure updates wait until quiet hours end. Any urgent exception requires an explicit reviewed policy and is not inferred from an estimated category. Stale/incomplete assessment inputs suppress new automated climate-exposure escalation.
+- **Noise control:** retain evaluation every 30 minutes and at most one bundled message per subscription per 30 minutes, only when relevant conditions change. **Participant update:** no quiet hours; alerts may arrive at any time. Unchanged conditions produce no message. Stale/incomplete assessment inputs suppress new automated climate-exposure escalation.
 - **Outside the 24-hour window:** an approved WhatsApp utility template, e.g. *"Alerta PeruRoad: {tipo} en {tramo}, {estado}. Responde ESTADO para más detalles."* SMS fallback until it is approved.
 
 ### F4. Trip watch and call alerts (P2; Route Pass and Company Predictions)
@@ -660,7 +664,7 @@ The times assume work starts on Saturday at 13:30 and end at the Sunday 09:00 de
 | 1 | Webhook → store report (download media) → crude extraction → incident → acknowledgment reply | A real WhatsApp message shows on the public map |
 | 2 | ElevenLabs transcription; LLM structured extraction with a fixed schema; 2-minute message grouping; location (pin snapping and C's gazetteer); follow-up question when type or place is missing | Tests pass on 10–20 real road messages |
 | 2 | Dedupe against community and SUTRAN incidents; confidence v1; clearing logic | Tests for dedupe and confidence pass |
-| 2 | Subscriptions and alert engine (F3): free closure alerts vs pass alerts, bundling, quiet hours, template or SMS fallback outside the 24 h window; send helper with retry | A subscriber receives an alert for a new incident |
+| 2 | Subscriptions and alert engine (F3): free closure alerts vs pass alerts, conditional 30-minute bundling without quiet hours, approved-template fallback outside the 24 h window (SMS requires separate consent); send helper with retry | A subscriber receives an alert for a new incident |
 | 3 | Ask by WhatsApp (F2), with a voice-note reply when the question was a voice note | *"¿Cómo está la Central?"* gets a correct summary |
 | 3 | WhatsApp flows for *PASE* (calls A's payment module) and *"¿Sale el bus de las 22:00 a Huancayo?"* (calls `/api/dispatch-decision`) | Both flows work end to end on a phone |
 | 4 | Weekly report delivery endpoint (Zavu email or WhatsApp template) used by n8n (F6) | One report delivered |

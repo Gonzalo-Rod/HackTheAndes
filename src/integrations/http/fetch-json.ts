@@ -44,9 +44,12 @@ export interface RequestOptions {
   random?: () => number;
   /** Non-2xx statuses the caller treats as a normal answer (e.g. 409 replaying an idempotent send). */
   acceptStatuses?: readonly number[];
+  redirect?: RequestRedirect;
+  /** Hide stored media paths from structured logs. */
+  logTarget?: string;
 }
 
-type HttpMethod = { method: "GET" } | { method: "POST"; body: unknown };
+type HttpMethod = { method: "GET" } | { method: "POST"; body: unknown } | { method: "FORM"; body: FormData };
 
 type Attempt<T> = { ok: true; value: T } | { ok: false; error: UpstreamError };
 
@@ -81,7 +84,9 @@ async function readErrorBody(response: Response): Promise<unknown> {
 }
 
 function buildInit(request: HttpMethod, options: RequestOptions, signal: AbortSignal): RequestInit {
-  if (request.method === "GET") return { method: "GET", headers: options.headers, signal, cache: "no-store" };
+  if (request.method === "GET") return { method: "GET", headers: options.headers, signal, cache: "no-store", redirect: options.redirect };
+  if (request.method === "FORM")
+    return { method: "POST", body: request.body, headers: options.headers, signal, redirect: options.redirect };
   return {
     method: "POST",
     headers: { "Content-Type": "application/json", ...options.headers },
@@ -150,7 +155,7 @@ async function requestWithRetry<T>(
         operation: options.operation,
         provider: options.provider,
         requestId: options.requestId,
-        target: describeTarget(url),
+        target: options.logTarget ?? describeTarget(url),
         durationMs: Date.now() - started,
         attempts,
         result: "ok",
@@ -167,7 +172,7 @@ async function requestWithRetry<T>(
     operation: options.operation,
     provider: options.provider,
     requestId: options.requestId,
-    target: describeTarget(url),
+    target: options.logTarget ?? describeTarget(url),
     durationMs: Date.now() - started,
     attempts,
     result: "error",
@@ -202,5 +207,36 @@ export function postJson(url: string, body: unknown, options: RequestOptions & {
   return requestWithRetry(url, { method: "POST", body }, { ...options, retries }, async (response) => {
     const text = await response.text();
     return { status: response.status, body: text ? (JSON.parse(text) as unknown) : null };
+  });
+}
+
+/** Non-idempotent transcription uploads are never retried automatically. */
+export function postForm(url: string, body: FormData, options: RequestOptions): Promise<unknown> {
+  return requestWithRetry(url, { method: "FORM", body }, { ...options, retries: 0 }, (r) => r.json() as Promise<unknown>);
+}
+/** Stream with a hard byte limit; redirect following is disabled for stored media URLs. */
+export function getBoundedAudio(url: string, maxBytes: number, options: RequestOptions): Promise<{ bytes: Uint8Array; mimeType: string }> {
+  return requestWithRetry(url, { method: "GET" }, { ...options, redirect: "error" }, async (response) => {
+    const declared = Number(response.headers.get("content-length") ?? 0);
+    if (declared > maxBytes || !response.body) throw new Error("Audio exceeds limit or is empty");
+    const reader = response.body.getReader();
+    const chunks: Uint8Array[] = [];
+    let size = 0;
+    try {
+      while (true) {
+        const part = await reader.read();
+        if (part.done) break;
+        size += part.value.byteLength;
+        if (size > maxBytes) {
+          await reader.cancel();
+          throw new Error("Audio exceeds limit");
+        }
+        chunks.push(part.value);
+      }
+    } finally {
+      reader.releaseLock();
+    }
+    if (!size) throw new Error("Empty audio");
+    return { bytes: new Uint8Array(Buffer.concat(chunks)), mimeType: response.headers.get("content-type")?.split(";")[0] ?? "" };
   });
 }

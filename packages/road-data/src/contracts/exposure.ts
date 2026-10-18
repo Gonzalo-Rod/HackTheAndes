@@ -100,7 +100,7 @@ export const exposureAssessmentSchema = z
     assessedAt: timestamp,
     anchorAt: timestamp,
     interpretation: z.literal("estimated_climate_exposure_not_disruption_probability"),
-    automatedAlertUse: z.literal(false),
+    automatedAlertUse: z.boolean(),
     policy: exposurePolicySchema,
     policySha256: hash,
     sources: z

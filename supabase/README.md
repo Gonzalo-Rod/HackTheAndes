@@ -11,7 +11,7 @@ Project: [HackTheAndes](https://supabase.com/dashboard/project/cdqnintcqryfbfjjl
 region `us-west-2`. Existing project API keys were retrieved; no additional
 project, subscription, API key, or administrator-password reset was created.
 
-Thirteen migrations have been applied after rollback-only dry runs. They create
+Fourteen migrations have been applied after rollback-only dry runs. They create
 PostGIS and the application tables. Operational tables have RLS and no browser
 grants; `incident_updates` is the explicitly browser-readable revision signal. A scoped `peruroad_backend` login has application
 table permissions and its own RLS policies, without superuser, database/role
@@ -207,3 +207,5 @@ stored there. See [messaging integration](../docs/integration/zavu-messaging.md)
 The report step adds server-only encrypted `private.report_conversations` and
 `private.report_message_results`, with per-sender leases and atomic publication
 into the existing reports/incidents tables. See [report setup and retention](../docs/integration/whatsapp-reports.md).
+
+The fourteenth migration adds server-only audio transcript caches, subscription proposals/replay, delivery checkpoints and a leased alert outbox. See [driver notifications](../docs/integration/driver-notifications.md).

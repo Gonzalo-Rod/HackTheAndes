@@ -24,14 +24,11 @@ intent parser and source-grounded query handlers.
 - Text reports now use the [confirmation and publication flow](whatsapp-reports.md):
   validated extraction, proposed/shared pin, explicit confirmation, then an
   unconfirmed community marker. `REPORTE PRUEBA` keeps a demo out of impact counts.
-- Media and subscription requests retain an honest unavailable response. No
-  subscription, automatic alert, SMS fallback or call is activated by this step.
+- Voice input, explicit subscriptions and conditional alerts now use the [notification integration](driver-notifications.md). Photos and calls are excluded, and SMS fallback remains disabled.
 
 This integration does not complete all of Role B. Text-report publication and
 community duplicate matching are implemented; full mixed-media grouping,
-confidence/reputation/clearing, SUTRAN/community coalescing, opt-in/out persistence,
-alert policy, quiet hours, approved templates and transcription remain later work.
-No free-form LLM answer can enable those actions. `automatedAlertUse` stays false.
+confidence/reputation/clearing and SUTRAN/community coalescing remain later work. Voice transcription and explicit subscription/alert policy are now implemented separately; no free-form LLM answer alone authorizes publication or consent.
 The existing SUTRAN scheduler and independent API deployment remain unchanged.
 
 ## Recorded verification
@@ -114,7 +111,7 @@ and safe result/error types. Synthetic tests do not count as user traction.
 | OpenAI absent, timeout, 429/5xx, refusal or invalid JSON | Spanish command help; no guessed intent or fabricated hazard answer. |
 | SUTRAN storage/poll unavailable | Source unavailable; no inference of a clear road. Stale polls are explicitly dated. |
 | Exposure database unavailable | Validated dated bundle with the same freshness projection. Missing/stale/unsupported exposure stays unavailable. |
-| Zavu send timeout, rate limit, rejected send or closed WhatsApp window | Safe error log and retryable webhook failure; no silent success or unapproved alternate channel. Template fallback remains pending B. |
+| Zavu send timeout, rate limit, rejected send or closed WhatsApp window | Safe error log and retryable webhook failure; no silent success or unapproved alternate channel. Approved-template fallback is implemented for proactive alerts; pending approval never becomes an unapproved send. |
 | Database lease storage unavailable | HTTP 503 and provider redelivery; never a cross-instance memory fallback. |
 
 ## Reproduce and verify

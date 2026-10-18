@@ -130,7 +130,7 @@ facts to community incidents.
 The shared application now wires the signed WhatsApp webhook, messaging provider,
 intent parser and road/exposure queries. Text-report extraction, confirmed-location publication and community duplicate
 matching now use the [report flow](whatsapp-reports.md). B still needs mixed-media
-grouping, full confidence/clearing, official/community coalescing and subscriptions/alerts. This interface
+grouping, full confidence/clearing, official/community coalescing while voice input and subscriptions/alerts use [driver notifications](driver-notifications.md). This interface
 makes C's existing location and official-source inputs available for that work;
 the participant has confirmed both shared query replies in the
 [phone check](zavu-messaging.md#recorded-verification). Report and subscription
@@ -141,15 +141,14 @@ retains **driver WhatsApp alerts and live conditions**. Weather, catchment and
 susceptibility inputs and the assessment service are prepared. The root application
 now exposes `GET /api/exposure?horizonHours=24|72`; see the [assessment contract](../data/climate-exposure.md).
 The existing road-context endpoint remains unchanged. Its alert-change contract,
-departure planning and automatic alert integration remain later checkpoints; the public
-exposure read keeps `automatedAlertUse: false` until that integration is designed.
+departure planning remains later work. The public exposure projection now exposes alert eligibility only for fresh usable database assessments.
 
 B will consume C's versioned assessments for the driver's confirmed subscription
 stretch. Keep three bases distinct: confirmed road-condition changes, estimated
 climate-exposure advisories, and attributed valid official advisories. Community
 reports retain verification labels. Messages include the relevant time window,
 source/data age, reasons and map link. Preserve consent, opt-out, idempotency,
-bundling and quiet hours; stale/incomplete assessments cannot cause a new automated
+bundling with conditional 30-minute evaluation and no quiet hours, per the participant update; stale/incomplete assessments cannot cause a new automated
 exposure escalation. No exposure decrease or missing incident clears a road.
 
 Shared contracts and every consumer must be updated together before wiring those

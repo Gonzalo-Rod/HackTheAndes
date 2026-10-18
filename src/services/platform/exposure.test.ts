@@ -22,11 +22,11 @@ afterEach(() => {
   vi.useRealTimers();
 });
 const request = (query = "") => new Request(`https://example.test/api/exposure${query}`);
-it("returns a validated public assessment with no writes, raw input bundle or automatic-alert activation", async () => {
+it("returns a validated public assessment with no writes or raw input bundle, with fresh-database alert eligibility", async () => {
   const response = await readExposure(request("?horizonHours=72"));
   expect(response.status).toBe(200);
   const value = ExposureLayerSchema.parse(await response.json());
-  expect(value.meta).toMatchObject({ storage: "database", state: "ready", selectedHorizonHours: 72, automatedAlertUse: false });
+  expect(value.meta).toMatchObject({ storage: "database", state: "ready", selectedHorizonHours: 72, automatedAlertUse: true });
   expect(value.data.segments).toHaveLength(174);
   expect(value.data.segments.some((s) => !s.catchmentIds.length && s.windows.next72h.category === null)).toBe(true);
   expect(Object.keys(value)).toEqual(["data", "meta"]);

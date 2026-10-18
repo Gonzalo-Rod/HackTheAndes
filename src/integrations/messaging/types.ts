@@ -26,3 +26,7 @@ export type SentMessage = { providerMessageId: string };
 export interface MessagingProvider {
   sendText(message: OutboundText): Promise<Result<SentMessage, SendFailure>>;
 }
+
+export interface TemplateSender {
+  sendTemplate(message: OutboundText): Promise<Result<SentMessage, SendFailure>>;
+}

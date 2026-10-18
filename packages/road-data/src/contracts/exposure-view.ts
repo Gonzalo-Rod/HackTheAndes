@@ -11,7 +11,7 @@ export const exposureViewSchema = z
         ageSeconds: z.number().nonnegative(),
         selectedHorizonHours: z.union([z.literal(24), z.literal(72)]),
         operationallyUsable: z.boolean(),
-        automatedAlertUse: z.literal(false),
+        automatedAlertUse: z.boolean(),
         message: z.string().min(1),
       })
       .strict(),

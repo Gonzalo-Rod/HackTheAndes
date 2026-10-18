@@ -109,3 +109,24 @@ export function loadOpenAiConfiguration(): { apiKey: string; model: string } | n
     throw new Error(`Invalid OpenAI configuration: ${result.error.issues.map((issue) => issue.path.join(".")).join(", ")}`);
   return { apiKey: result.data.OPENAI_API_KEY, model: result.data.OPENAI_INTENT_MODEL };
 }
+
+export function loadNotificationConfiguration() {
+  const parsed = z
+    .object({
+      OPENAI_TRANSCRIPTION_MODEL: z.string().min(1).default("gpt-4o-mini-transcribe"),
+      ZAVU_ALERT_TEMPLATE_ID: z.string().min(1).optional(),
+      ROAD_DATA_JOB_SECRET: z.string().min(32),
+    })
+    .safeParse({
+      ...process.env,
+      OPENAI_TRANSCRIPTION_MODEL: process.env.OPENAI_TRANSCRIPTION_MODEL || undefined,
+      ZAVU_ALERT_TEMPLATE_ID: process.env.ZAVU_ALERT_TEMPLATE_ID || undefined,
+    });
+  if (!parsed.success)
+    throw new Error(`Invalid notification configuration: ${parsed.error.issues.map((i) => i.path.join(".")).join(", ")}`);
+  return {
+    transcriptionModel: parsed.data.OPENAI_TRANSCRIPTION_MODEL,
+    templateId: parsed.data.ZAVU_ALERT_TEMPLATE_ID ?? null,
+    jobSecret: parsed.data.ROAD_DATA_JOB_SECRET,
+  };
+}

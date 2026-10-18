@@ -5,6 +5,7 @@ export function createExposureView(
   nowMs: number,
   storage: "database" | "snapshot",
   selectedHorizonHours: 24 | 72 = 24,
+  alertsEnabled = false,
 ): ExposureView {
   if (!Number.isFinite(nowMs)) throw new Error("Invalid exposure read time");
   const ageMs = nowMs - Date.parse(assessment.sources.weatherCapturedAt);
@@ -47,7 +48,10 @@ export function createExposureView(
         ? "ready"
         : "unavailable";
   return exposureViewSchema.parse({
-    data,
+    data: {
+      ...data,
+      automatedAlertUse: alertsEnabled && operationallyUsable && storage === "database",
+    },
     meta: {
       state,
       storage,
@@ -55,7 +59,7 @@ export function createExposureView(
       ageSeconds: Math.max(0, ageMs / 1000),
       selectedHorizonHours,
       operationallyUsable,
-      automatedAlertUse: false,
+      automatedAlertUse: alertsEnabled && operationallyUsable && storage === "database",
       message:
         state === "ready"
           ? "Exposición climática estimada; cobertura parcial y reglas experimentales. No certifica una ruta segura."

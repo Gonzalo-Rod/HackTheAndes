@@ -195,3 +195,21 @@ were superseded by PR #10, with all commits retained. Manual execution `12`
 returned a complete outcome on the new deployment, with four unchanged alerts
 and a verified Supabase audit, before the URL change was published as version
 `7a3eba98-6a85-4a94-8b2c-e0bcc9777eaf`. The schedule remains active.
+
+## Driver alerts and hourly climate refresh
+
+The participant requires alerts **every 30 minutes only when there is a relevant
+change, with no quiet hours**. New independent workflows use the same existing
+Header Auth job credential, with no secret in either export:
+
+- [Driver alerts](https://gozlie.app.n8n.cloud/workflow/uUJ6gjv8kXsK5KdR):
+  `driver-alerts.sdk.js`, POST to the root application's `/api/jobs/alerts`.
+- [Hourly climate refresh](https://gozlie.app.n8n.cloud/workflow/pudkrAOSOlEpoOSS):
+  `climate-refresh.sdk.js`, POST to `/api/jobs/climate`.
+
+Both use America/Lima. Alert execution is bounded to the trial instance's
+180-second maximum (170-second HTTP timeout); climate uses 130/110 seconds.
+The backend owns consent, leases, duplicate suppression and source validation.
+A schedule run is not proof that a subscriber received a message; record actual
+provider acceptance and the consenting phone's result separately. See the
+[notification guide](../../docs/integration/driver-notifications.md).

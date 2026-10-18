@@ -219,3 +219,11 @@ it("also marks the REPORTAR PRUEBA alias as test traffic", async () => {
   await s.flow.route(s.message("REPORTAR PRUEBA Hay un derrumbe"), "req");
   expect(s.getDraft()?.isTest).toBe(true);
 });
+it.each(["REPORTE PRUEBA: Hay un derrumbe", "REPORTE PRUEBA. Hay un derrumbe"])(
+  "keeps demonstration traffic excluded when punctuation follows PRUEBA: %s",
+  async (value) => {
+    const s = setup();
+    await s.flow.route(s.message(value), "req");
+    expect(s.getDraft()?.isTest).toBe(true);
+  },
+);

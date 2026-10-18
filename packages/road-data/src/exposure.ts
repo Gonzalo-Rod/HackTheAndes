@@ -8,3 +8,4 @@ export {
   loadBundledExposureSources,
   writeExposureRecord,
 } from "./integrations/exposure/files.ts";
+export { refreshExposureWeather } from "./services/refresh-exposure.ts";

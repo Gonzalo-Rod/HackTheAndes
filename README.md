@@ -90,8 +90,8 @@ that retains live road conditions, the map and WhatsApp alerts for drivers. The
 assessment service combines forecast rainfall and mapped susceptibility, with
 official advisories kept separate pending eligibility. Immutable assessments and
 `GET /api/exposure` provide attention categories, reasons and explicit unknown
-coverage. B/D wiring, alert delivery, hourly scheduling, departure planning and
-weekly generation remain pending; existing unavailable responses do not mean low exposure or a safe
+coverage. Dashboard exposure wiring, departure planning and weekly generation remain pending;
+voice input, subscriptions, conditional alerts and hourly climate refresh now have a separate integration; existing unavailable responses do not mean low exposure or a safe
 road. The logistic pipeline remains deferred research, blocked by the evidence gaps
 in the [training handoff](docs/data/logistic-pipeline.md). No real-data model has
 been trained or evaluated in this integration, and no real
@@ -105,5 +105,6 @@ road-status and estimated-exposure queries using the existing validated data
 services; a narrow OpenAI intent parser supports natural-language questions.
 See [setup, supported behavior and cutover checks](docs/integration/zavu-messaging.md).
 Text reports now follow an [explicit location/confirmation flow](docs/integration/whatsapp-reports.md)
-before appearing as unconfirmed community markers. Media transcription and automatic
-subscriptions remain pending; the data pipeline's automated-alert flags stay disabled.
+before appearing as unconfirmed community markers. Voice transcription, explicit subscriptions, conditional 30-minute alerts and hourly
+weather refresh are implemented in [driver notifications](docs/integration/driver-notifications.md).
+Photos are excluded. Live verification and template approval status remain explicit.

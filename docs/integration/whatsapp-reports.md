@@ -2,7 +2,7 @@
 
 This step connects a driver's text observation to an unconfirmed community marker.
 The signed Zavu webhook, query handlers and existing dashboard remain in place.
-Media transcription, subscriptions and automatic alerts are separate work.
+Voice notes now enter this same flow through [the audio/subscription integration](driver-notifications.md). Photos are excluded; full confidence and official/community coalescing remain separate work.
 
 ## Conversation
 
@@ -25,7 +25,7 @@ Codes change after a draft edit or replacement pin, preventing an older confirma
 from publishing revised details. Drafts expire at 30 minutes, including at the exact
 boundary. An explicit new `REPORTE` starts a fresh draft. Ordinary status/exposure
 commands preserve the pending report. A location without a draft remains an exposure
-query. Media does not replace or publish a pending text draft.
+query. A transcribed voice note can continue a draft; photos cannot replace or publish it.
 
 The location is what the reporter confirms, not live GPS tracking or independent
 verification. Model output and the user's confirmation never become official road
@@ -85,7 +85,7 @@ npm run build -- --webpack
 
 Only HMAC sender identities are stored. Drafts, accumulated report text and replay
 results are AES-256-GCM encrypted with random IVs and authenticated tags. Destination
-numbers stay transient; this step creates no subscription or delivery contact.
+numbers stay transient in report intake. Only the separately confirmed subscription flow stores an encrypted delivery contact.
 Public incident APIs expose fixed type/provenance labels and coordinates, never
 raw messages, phone keys or decrypted text. OpenAI receives redacted text without
 a sender ID and with response storage disabled. Logs contain safe operation/result
