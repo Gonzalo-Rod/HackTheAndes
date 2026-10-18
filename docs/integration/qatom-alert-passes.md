@@ -18,6 +18,10 @@ Qatom collects payment; PeruRoad grants and expires alert access.
    and an opaque request UUID. No phone number, route coordinates or raw driver
    message enters this payment request. The driver's own Qatom checkout page
    handles payment and credentials. The server never spends a seller/agent wallet.
+   The Responses MCP result can contain Qatom's three-line text receipt rather
+   than JSON. The adapter accepts that exact receipt and validated JSON/MCP
+   envelopes, checks the displayed 0.001 price and trusted HTTPS checkout domain,
+   and ignores assistant prose. Parsing a link never activates a pass.
 4. Qatom calls `POST /api/qatom/alert-pass` after settlement. The backend checks its
    secret Authorization fulfilment header, validates `X-Qatom-Transaction-Id`, and
    fetches `/v4/catalog/purchases/{transaction_id}`. Only the expected item, exactly

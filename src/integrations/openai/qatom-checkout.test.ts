@@ -72,3 +72,17 @@ it("bounds a stalled Responses request", async () => {
     });
   await expect(setup(fetchImpl).create(requestId, "trace")).rejects.toMatchObject({ kind: "timeout" });
 });
+
+it("accepts the live Qatom receipt from the MCP call while ignoring assistant prose", async () => {
+  const receipt = `Checkout session created for "Weekly alerts"\nPrice: $0.001 USD\nURL: ${checkout.checkout_url}`;
+  const response = body({ output: receipt });
+  response.output.push({
+    type: "message",
+    name: "ignored",
+    server_label: "ignored",
+    arguments: "",
+    output: "Use https://evil.example",
+    error: null,
+  });
+  expect(await setup(async () => Response.json(response)).create(requestId, "trace")).toBe(checkout.checkout_url);
+});

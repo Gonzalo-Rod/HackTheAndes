@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { AlertPassCheckout } from "@/contracts/alert-passes";
-import { alertPassInputSchema, checkoutUrlSchema } from "@/contracts/alert-passes";
+import { alertPassInputSchema } from "@/contracts/alert-passes";
+import { parseQatomCheckoutOutput } from "@/integrations/qatom/checkout-output";
 import { postJson, type RequestOptions } from "@/integrations/http/fetch-json";
 
 const callSchema = z.object({
@@ -11,23 +12,6 @@ const callSchema = z.object({
   output: z.string(),
   error: z.null().optional(),
 });
-const checkoutSchema = z.object({ name: z.string(), description: z.string(), price: z.literal(0.001), checkout_url: checkoutUrlSchema });
-function parseCheckout(value: unknown): z.infer<typeof checkoutSchema> {
-  const direct = checkoutSchema.safeParse(value);
-  if (direct.success) return direct.data;
-  const result = z
-    .object({
-      isError: z.boolean().optional(),
-      structuredContent: z.unknown().optional(),
-      content: z.array(z.object({ type: z.string(), text: z.string().optional() })).optional(),
-    })
-    .parse(value);
-  if (result.isError) throw new Error("Qatom checkout unavailable");
-  if (result.structuredContent) return checkoutSchema.parse(result.structuredContent);
-  const text = result.content?.find((item) => item.type === "text")?.text;
-  if (!text) throw new Error("Missing Qatom checkout output");
-  return checkoutSchema.parse(JSON.parse(text) as unknown);
-}
 export function createOpenAiQatomCheckout(
   config: {
     apiKey: string;
@@ -87,7 +71,7 @@ export function createOpenAiQatomCheckout(
         .strict()
         .parse(JSON.parse(call.arguments) as unknown);
       if (supplied.arguments.request_id !== requestId) throw new Error("Checkout request mismatch");
-      return parseCheckout(JSON.parse(call.output) as unknown).checkout_url;
+      return parseQatomCheckoutOutput(call.output);
     },
   };
 }
