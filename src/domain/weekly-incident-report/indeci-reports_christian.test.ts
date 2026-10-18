@@ -127,5 +127,6 @@ describe("isReportInWeek", () => {
     const { publishedAt } = feedItem(realIndeciFeedPage(1), INDECI_TITLES.bulletin);
     expect(isReportInWeek(WEEK_42, { occurredDate: null, publishedAt })).toBe(true);
     expect(isReportInWeek({ startDate: "2026-10-05", endDate: "2026-10-11" }, { occurredDate: null, publishedAt })).toBe(false);
+    expect(isReportInWeek({ startDate: "2026-10-19", endDate: "2026-10-25" }, { occurredDate: null, publishedAt })).toBe(false);
   });
 });

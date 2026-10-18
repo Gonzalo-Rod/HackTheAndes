@@ -49,8 +49,8 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           if git ls-remote --exit-code --heads origin "$REPORT_BRANCH" > /dev/null; then
             git checkout -B "$REPORT_BRANCH" "origin/$REPORT_BRANCH"
-            # Take code changes from the base branch; on report files the bot's newer data wins.
-            git merge --no-edit -X ours "origin/$BASE_BRANCH"
+            # Never silently override teammates' code. A real conflict needs review.
+            git merge --no-edit "origin/$BASE_BRANCH"
           else
             git checkout -B "$REPORT_BRANCH"
           fi
@@ -61,6 +61,11 @@ jobs:
           cache: npm
 
       - run: npm ci
+
+      - name: Verify the collector before accessing sources
+        run: |
+          npx vitest run src/domain/weekly-incident-report src/integrations/google-news src/integrations/indeci src/integrations/weekly-report-files src/services/weekly-incident-report-service_christian.test.ts
+          npm run typecheck
 
       - name: Collect incidents and render the report
         env:
@@ -74,7 +79,7 @@ jobs:
 
       - name: Commit and push the report
         run: |
-          git add docs/research/weekly
+          git add -- 'docs/research/weekly/*_christian.json' 'docs/research/weekly/*_christian.md'
           if git diff --cached --quiet; then
             echo "No report changes in this run."
           else
@@ -92,7 +97,7 @@ jobs:
             echo "Nothing to review."
             exit 0
           fi
-          open_pr=$(gh pr list --head "$REPORT_BRANCH" --state open --json number --jq '.[0].number')
+          open_pr=$(gh pr list --head "$REPORT_BRANCH" --base "$BASE_BRANCH" --state open --json number --jq '.[0].number')
           if [ -n "$open_pr" ]; then
             echo "Pull request #$open_pr is already open."
             exit 0

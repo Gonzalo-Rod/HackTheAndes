@@ -5,6 +5,8 @@ import { DAY_MS, limaDateToUtcMs, limaIsoDate } from "@/lib/time";
 // reports never overlap and every day belongs to exactly one report. Pure functions.
 
 const DAYS_PER_WEEK = 7;
+/** Revisit through Wednesday morning to include reports published up to two calendar days after Sunday. */
+const PREVIOUS_WEEK_COLLECTION_DAYS = 3;
 const MONTHS = [
   "January",
   "February",
@@ -45,14 +47,14 @@ export function weekContaining(isoDate: string): ReportWindow {
 }
 
 /**
- * Weeks a run at `nowMs` updates: the current week, and on Mondays also the week that just
- * ended, so its last day is collected once more before the report is closed.
+ * Weeks a run at `nowMs` updates: the current week, and Monday through Wednesday also the
+ * previous week. Wednesday catches reports published late on Tuesday within the two-day allowance.
  */
 export function windowsToUpdate(nowMs: number): ReportWindow[] {
   const today = limaIsoDate(nowMs);
   const current = weekContaining(today);
-  const previous = weekContaining(addDays(today, -1));
-  return previous.startDate === current.startDate ? [current] : [previous, current];
+  const previous = weekContaining(addDays(current.startDate, -1));
+  return isoWeekday(today) <= PREVIOUS_WEEK_COLLECTION_DAYS ? [previous, current] : [current];
 }
 
 export function isDateInWindow(window: ReportWindow, isoDate: string): boolean {

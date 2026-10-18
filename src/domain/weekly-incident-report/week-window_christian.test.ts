@@ -33,13 +33,20 @@ describe("weekContaining", () => {
 });
 
 describe("windowsToUpdate", () => {
-  it("updates only the current week from Tuesday to Sunday", () => {
+  it("updates only the current week from Thursday to Sunday", () => {
     expect(windowsToUpdate(Date.parse("2026-10-17T21:00:00Z"))).toEqual([WEEK_42]);
   });
 
   it("also closes the previous week on a Monday", () => {
     // 12:00 UTC is 07:00 in Lima, the scheduled run time.
     expect(windowsToUpdate(Date.parse("2026-10-19T12:00:00Z"))).toEqual([WEEK_42, { startDate: "2026-10-19", endDate: "2026-10-25" }]);
+  });
+
+  it("revisits the previous week through Wednesday to catch reports published late on Tuesday", () => {
+    for (const day of ["2026-10-20", "2026-10-21"]) {
+      expect(windowsToUpdate(Date.parse(`${day}T12:00:00Z`))).toEqual([WEEK_42, { startDate: "2026-10-19", endDate: "2026-10-25" }]);
+    }
+    expect(windowsToUpdate(Date.parse("2026-10-22T12:00:00Z"))).toEqual([{ startDate: "2026-10-19", endDate: "2026-10-25" }]);
   });
 
   it("uses Lima time at the day boundary", () => {

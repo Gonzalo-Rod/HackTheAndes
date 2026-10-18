@@ -3,11 +3,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { CAUSE_ORDER } from "@/components/alert-meta";
-import { CauseStatusChart } from "@/components/charts/CauseStatusChart";
-import { CumulativeChart } from "@/components/charts/CumulativeChart";
-import { ElevationProfile } from "@/components/charts/ElevationProfile";
 import { Icon } from "@/components/icons";
 import type { MapViewHandle } from "@/components/map/MapView";
+import type { ResearchCatalog } from "@/contracts/research_christian";
 import { boundsOfPoints } from "@/domain/geo/measure";
 import { elevationAtKm, nearestPlace, placeAlertsOnCorridor } from "@/domain/road-alerts/corridor-placement";
 import {
@@ -18,7 +16,6 @@ import {
   hasActiveFilters,
   regionOptions,
   sortByRecentAction,
-  summarizeAlerts,
   toggleValue,
   type AlertFilters,
 } from "@/domain/road-alerts/filters";
@@ -38,17 +35,19 @@ import { useCorridorRain } from "@/hooks/use-corridor-rain";
 import { useCorridor } from "@/hooks/use-corridor";
 import { useNow } from "@/hooks/use-now";
 import { useRoadAlerts } from "@/hooks/use-road-alerts";
+import { useEvidenceMap } from "@/hooks/use-evidence-map_christian";
 import { useTimelinePlayback } from "@/hooks/use-timeline-playback";
 
 import { AlertDetail } from "./AlertDetail";
 import { EventList } from "./EventList";
 import { FilterBar } from "./FilterBar";
+import { HistoryDock } from "./HistoryDock_christian";
 import { LayersPanel } from "./LayersPanel";
 import { MapArea } from "./MapArea";
 import { Sidebar } from "./Sidebar";
 import { SourcesPanel } from "./SourcesPanel";
-import { SummaryPanel } from "./SummaryPanel";
-import { Timeline } from "./Timeline";
+import { ResearchPanel } from "./research/ResearchPanel_christian";
+import { ResearchFilterBar } from "./research/ResearchFilterBar_christian";
 import { TopBar } from "./TopBar";
 import { DEFAULT_LAYERS, type MapMode, type Scope, type SidebarTab } from "./types";
 
@@ -59,16 +58,17 @@ const REGION_FIT_PADDING_DEG = 0.6;
 
 const readDeepLink = () => (typeof window === "undefined" ? null : new URLSearchParams(window.location.search).get("alerta"));
 
-export function Dashboard() {
+export function Dashboard({ initialResearch = null }: { initialResearch?: ResearchCatalog | null }) {
   const alertsState = useRoadAlerts();
   const corridorState = useCorridor();
   const rainState = useCorridorRain();
   const now = useNow();
   const mapRef = useRef<MapViewHandle>(null);
+  const [mapReady, setMapReady] = useState(false);
 
-  const [scope, setScope] = useState<Scope>("pais");
+  const [scope, setScope] = useState<Scope>("pe22");
   const [filters, setFilters] = useState<AlertFilters>(EMPTY_FILTERS);
-  const [selectedId, setSelectedId] = useState<string | null>(readDeepLink);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [layers, setLayers] = useState(DEFAULT_LAYERS);
   const [mode, setMode] = useState<MapMode>("3d");
@@ -79,13 +79,30 @@ export function Dashboard() {
   const [tourKm, setTourKm] = useState<number | null>(null);
   const [detailReload, setDetailReload] = useState(0);
 
+  const activateResearch = useCallback(() => {
+    setSelectedId(null);
+    setTabChoice("ambiente");
+    setLayers((current) => ({ ...current, environment: true }));
+  }, []);
+  const {
+    state: researchState,
+    records: evidenceRecords,
+    points: evidencePoints,
+    topic: researchTopic,
+    selectedId: selectedEvidenceId,
+    select: selectEvidence,
+    center: centerEvidence,
+    fit: fitEvidence,
+    clearSelection: clearEvidenceSelection,
+    changeTopic,
+  } = useEvidenceMap({ initialData: initialResearch, mapRef, mapReady, onActivate: activateResearch });
+
   const corridor = corridorState.status === "ready" ? corridorState.data : null;
   const allAlerts = useMemo(() => alertsState.data?.alerts ?? [], [alertsState.data]);
   const scopedFilters = useMemo(() => ({ ...filters, roadCode: scope === "pe22" ? PE22 : null }), [filters, scope]);
   const filtered = useMemo(() => sortByRecentAction(filterAlerts(allAlerts, scopedFilters)), [allAlerts, scopedFilters]);
   const facets = useMemo(() => facetCounts(allAlerts, scopedFilters), [allAlerts, scopedFilters]);
   const regions = useMemo(() => regionOptions(allAlerts), [allAlerts]);
-  const summary = useMemo(() => summarizeAlerts(filtered), [filtered]);
   const matrix = useMemo(() => causeStatusMatrix(filtered, CAUSE_ORDER), [filtered]);
   const corridorAlerts = useMemo(() => (corridor ? placeAlertsOnCorridor(filtered, corridor) : []), [filtered, corridor]);
   const rain = rainState.data;
@@ -97,7 +114,7 @@ export function Dashboard() {
 
   const selected = allAlerts.find((a) => a.id === selectedId) ?? null;
   const detail = useAlertDetail(selected?.id ?? null, detailReload);
-  const tab: SidebarTab = tabChoice ?? (selected ? "detalle" : "capas");
+  const tab: SidebarTab = tabChoice ?? (selected ? "detalle" : "ambiente");
   const filtersActive = hasActiveFilters(filters);
   const roadCounts = useMemo(() => countByRoad(allAlerts), [allAlerts]);
   const pe22Count = allAlerts.filter((a) => a.roadCode === PE22).length;
@@ -117,33 +134,40 @@ export function Dashboard() {
   const select = useCallback(
     (id: string | null) => {
       setSelectedId(id);
-      setTabChoice(null);
+      clearEvidenceSelection();
+      setTabChoice((choice) => (id ? null : choice === "detalle" || selectedId ? "alertas" : choice));
       window.history.replaceState(null, "", id ? `?alerta=${encodeURIComponent(id)}` : window.location.pathname);
       const alert = id ? allAlerts.find((a) => a.id === id) : undefined;
       if (alert) mapRef.current?.flyToAlert(alert);
     },
-    [allAlerts],
+    [allAlerts, selectedId, clearEvidenceSelection],
   );
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setSelectedId(readDeepLink()), 0);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   // Fly to a deep-linked alert once its data has arrived (the camera ignores calls before the map loads).
   const deepLinkHandled = useRef(readDeepLink() === null);
   useEffect(() => {
-    if (deepLinkHandled.current || !selected) return;
+    if (deepLinkHandled.current || !selected || !mapReady) return;
     deepLinkHandled.current = true;
-    const timer = window.setTimeout(() => mapRef.current?.flyToAlert(selected), 1200);
-    return () => window.clearTimeout(timer);
-  }, [selected]);
+    mapRef.current?.flyToAlert(selected);
+  }, [selected, mapReady]);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return;
       mapRef.current?.stopTour();
       setSelectedId(null);
+      clearEvidenceSelection();
       setTabChoice(null);
+      window.history.replaceState(null, "", window.location.pathname);
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, []);
+  }, [clearEvidenceSelection]);
 
   const changeScope = (next: Scope) => {
     setScope(next);
@@ -184,24 +208,32 @@ export function Dashboard() {
         now={now}
         onScopeChange={changeScope}
         onRefresh={alertsState.refresh}
-        onOpenSources={() => setTabChoice("fuentes")}
       />
-      <FilterBar
-        filters={filters}
-        facets={facets}
-        regions={regions}
-        resultCount={filtered.length}
-        totalCount={scope === "pe22" ? pe22Count : allAlerts.length}
-        active={filtersActive}
-        onChange={changeFilters}
-        onClear={clearFilters}
-      />
+      {tab === "ambiente" ? (
+        <ResearchFilterBar records={evidenceRecords} topic={researchTopic} onTopicChange={changeTopic} onFit={fitEvidence} />
+      ) : (
+        <FilterBar
+          filters={filters}
+          facets={facets}
+          regions={regions}
+          resultCount={filtered.length}
+          totalCount={scope === "pe22" ? pe22Count : allAlerts.length}
+          active={filtersActive}
+          onChange={changeFilters}
+          onClear={clearFilters}
+        />
+      )}
 
       <main className="pr-main">
         <MapArea
           mapRef={mapRef}
           handle={() => mapRef.current}
           alerts={filtered}
+          evidence={evidencePoints}
+          selectedEvidenceId={selectedEvidenceId}
+          initialScope={scope}
+          onSelectEvidence={selectEvidence}
+          onMapReady={() => setMapReady(true)}
           hiddenIds={hiddenIds}
           hoveredId={hoveredId}
           selected={selected}
@@ -218,6 +250,7 @@ export function Dashboard() {
             dataError: alertsState.status === "error" ? alertsState.error : null,
             staleMessage: alertsState.data && alertsState.error ? alertsState.error : null,
             refreshing: alertsState.refreshing,
+            partialData: evidenceRecords.length > 0,
             onRetry: alertsState.refresh,
           }}
           onSelect={select}
@@ -230,33 +263,34 @@ export function Dashboard() {
 
         <Sidebar
           tab={tab}
+          alertsCount={filtered.length}
           hasSelection={selected !== null}
           onTabChange={setTabChoice}
-          layersContent={
-            <>
-              <SummaryPanel
-                summary={summary}
-                scope={scope}
-                latestActionAt={alertsState.data?.meta.latestActionAt ?? null}
-                now={now}
-                filtered={filtersActive}
-              />
-              <section className="pr-panel" aria-labelledby="layers-title">
-                <header className="pr-panel__head">
-                  <h2 id="layers-title">Capas</h2>
-                </header>
-                <LayersPanel
-                  layers={layers}
-                  is3d={mode === "3d"}
-                  meta={alertsState.data?.meta ?? null}
-                  corridor={corridor}
-                  rain={rain}
-                  rainError={rainState.error}
-                  now={now}
-                  onChange={setLayers}
-                />
-              </section>
-            </>
+          eventsContent={
+            <EventList
+              alerts={filtered}
+              hiddenIds={hiddenIds}
+              selectedId={selected?.id ?? null}
+              hoveredId={hoveredId}
+              now={now}
+              loading={loading}
+              emptyReason={emptyReason}
+              onSelect={select}
+              onHover={setHoveredId}
+              onClearFilters={clearFilters}
+            />
+          }
+          environmentContent={
+            <ResearchPanel
+              key={researchTopic ?? "all"}
+              state={researchState}
+              now={now}
+              topic={researchTopic}
+              selectedId={selectedEvidenceId}
+              onSelect={selectEvidence}
+              onCenter={centerEvidence}
+              liveSources={<SourcesPanel meta={alertsState.data?.meta ?? null} corridor={corridor} rain={rain} />}
+            />
           }
           detailContent={
             selected ? (
@@ -273,66 +307,68 @@ export function Dashboard() {
             ) : (
               <div className="pr-empty pr-empty--panel">
                 <Icon name="pin" size={20} />
-                <p>Selecciona una alerta en el mapa, la línea de tiempo o la lista de eventos para ver su detalle e historial.</p>
+                <p>Selecciona una alerta en el mapa o en la lista de avisos para consultar su detalle e historial.</p>
               </div>
             )
           }
-          sourcesContent={<SourcesPanel meta={alertsState.data?.meta ?? null} corridor={corridor} rain={rain} />}
+          layersContent={
+            <section className="pr-panel" aria-labelledby="layers-title">
+              <header className="pr-panel__head">
+                <h2 id="layers-title">Capas y visualización 3D</h2>
+              </header>
+              <LayersPanel
+                layers={layers}
+                is3d={mode === "3d"}
+                meta={alertsState.data?.meta ?? null}
+                corridor={corridor}
+                rain={rain}
+                rainError={rainState.error}
+                environmentalCount={evidenceRecords.filter((record) => record.coordinates !== null).length}
+                environmentalRetrievedAt={researchState.data?.retrievedAt ?? null}
+                now={now}
+                onChange={setLayers}
+              />
+            </section>
+          }
         />
 
-        <div className="pr-dock">
-          <div className="pr-dock__main">
-            <Timeline
-              alerts={filtered}
-              window={timeWindow}
-              range={range}
-              cursorMs={cursorMs}
-              playing={playback.playing}
-              earlierCount={countBefore(filtered, timeWindow.startMs)}
-              selectedId={selected?.id ?? null}
-              onRangeChange={setRange}
-              onCursorChange={(ms) => {
-                playback.stop();
-                setCursorMs(ms);
-              }}
-              onTogglePlay={playback.toggle}
-              onStep={stepTimeline}
-              onSelect={select}
-              onHover={setHoveredId}
-            />
-            <div className="pr-charts">
-              <CumulativeChart points={cumulative} window={timeWindow} cursorMs={cursorMs} onPickDay={setCursorMs} />
-              <CauseStatusChart
-                rows={matrix}
-                activeCauses={filters.causes}
-                onToggleCause={(cause) => setFilters({ ...filters, causes: toggleValue(filters.causes, cause) })}
-              />
-              <ElevationProfile
-                corridor={corridor}
-                rainBands={rainBands}
-                placed={corridorAlerts}
-                hiddenIds={hiddenIds}
-                activeKm={tourKm}
-                selectedId={selected?.id ?? null}
-                onHoverKm={setProfileKm}
-                onPickKm={(km) => mapRef.current?.flyToKm(km)}
-                onSelectAlert={select}
-              />
-            </div>
-          </div>
-          <EventList
-            alerts={filtered}
-            hiddenIds={hiddenIds}
-            selectedId={selected?.id ?? null}
-            hoveredId={hoveredId}
-            now={now}
-            loading={loading}
-            emptyReason={emptyReason}
-            onSelect={select}
-            onHover={setHoveredId}
-            onClearFilters={clearFilters}
-          />
-        </div>
+        <HistoryDock
+          timeline={{
+            alerts: filtered,
+            window: timeWindow,
+            range,
+            cursorMs,
+            playing: playback.playing,
+            earlierCount: countBefore(filtered, timeWindow.startMs),
+            selectedId: selected?.id ?? null,
+            onRangeChange: setRange,
+            onCursorChange: (ms) => {
+              playback.stop();
+              setCursorMs(ms);
+            },
+            onTogglePlay: playback.toggle,
+            onStep: stepTimeline,
+            onSelect: select,
+            onHover: setHoveredId,
+          }}
+          cumulative={{ points: cumulative, window: timeWindow, cursorMs, onPickDay: setCursorMs }}
+          causes={{
+            rows: matrix,
+            activeCauses: filters.causes,
+            onToggleCause: (cause) => setFilters({ ...filters, causes: toggleValue(filters.causes, cause) }),
+          }}
+          profile={{
+            corridor,
+            rainBands,
+            placed: corridorAlerts,
+            hiddenIds,
+            activeKm: tourKm,
+            selectedId: selected?.id ?? null,
+            onHoverKm: setProfileKm,
+            onPickKm: (km) => mapRef.current?.flyToKm(km),
+            onSelectAlert: select,
+          }}
+        />
       </main>
     </div>
   );

@@ -1,0 +1,149 @@
+{
+  "schemaVersion": 1,
+  "retrievedAt": "2026-10-17T23:26:50Z",
+  "tool": "Tavily MCP search and extract",
+  "projectScope": "PE-22 Lima–La Oroya and Mantaro extension toward Huancayo",
+  "interpretation": "Reference metadata and official forecasts only. This file establishes no observed flood, frost, crop damage, pest occurrence or road closure.",
+  "stationReferences": {
+    "sourceUrl": "https://www.senamhi.gob.pe/load/file/02269SENA-112.pdf",
+    "sourceTitle": "CHIRILU rainfall bulletin N03-2026",
+    "reportObservationPeriod": {
+      "start": "2026-09-21",
+      "end": "2026-09-30"
+    },
+    "climatologyReferencePeriod": "1991-2020",
+    "publicationDate": null,
+    "stations": [
+      {
+        "code": "111023",
+        "name": "Ñaña",
+        "elevationM": 543,
+        "lat": -11.987,
+        "lng": -76.842,
+        "dataKind": "station_reference_metadata",
+        "currentObservation": null
+      },
+      {
+        "code": "111027",
+        "name": "Matucana",
+        "elevationM": 2348,
+        "lat": -11.839,
+        "lng": -76.378,
+        "dataKind": "station_reference_metadata",
+        "currentObservation": null
+      },
+      {
+        "code": "111028",
+        "name": "Marcapomacocha",
+        "elevationM": 4500,
+        "lat": -11.404,
+        "lng": -76.325,
+        "dataKind": "station_reference_metadata",
+        "currentObservation": null
+      },
+      {
+        "code": "111060",
+        "name": "Chosica",
+        "elevationM": 867,
+        "lat": -11.93,
+        "lng": -76.69,
+        "dataKind": "station_reference_metadata",
+        "currentObservation": null
+      },
+      {
+        "code": "111061",
+        "name": "Río Blanco",
+        "elevationM": 3550,
+        "lat": -11.734,
+        "lng": -76.26,
+        "dataKind": "station_reference_metadata",
+        "currentObservation": null
+      },
+      {
+        "code": "111114",
+        "name": "Casapalca",
+        "elevationM": 4233,
+        "lat": -11.638,
+        "lng": -76.233,
+        "dataKind": "station_reference_metadata",
+        "currentObservation": null
+      },
+      {
+        "code": "111175",
+        "name": "San Mateo de Huanchor",
+        "elevationM": 3015,
+        "lat": -11.76,
+        "lng": -76.301,
+        "dataKind": "station_reference_metadata",
+        "currentObservation": null
+      }
+    ],
+    "limitations": [
+      "Coordinates and elevations are published station reference values; no current measurements were extracted.",
+      "The bulletin is historical at retrieval; it says next update 10 October 2026.",
+      "The station inventory is not a delineation of upstream catchments."
+    ]
+  },
+  "forecastEvidence": [
+    {
+      "id": "senamhi-rainfall-24h-290-2026",
+      "sourceUrl": "https://www.senamhi.gob.pe/main.php?dp=junin&p=aviso-24H",
+      "dataKind": "official_forecast",
+      "warningNumber": 290,
+      "warningYear": 2026,
+      "level": "NARANJA",
+      "publicationDate": null,
+      "validFrom": "2026-10-17T13:00:00-05:00",
+      "durationHours": 24,
+      "geographicScope": "National bulletin: northern/central sierra, selected selva and coast areas",
+      "reportedRegionalRange": {
+        "region": "SIERRA",
+        "minMmPerDay": 5,
+        "maxMmPerDay": 20
+      },
+      "corridorIntersection": "not_verified",
+      "advertisedDownloadUrl": "https://www.senamhi.gob.pe/load/file/02249SENA-3494.zip",
+      "downloadPayloadVerified": false,
+      "limitations": [
+        "Regional forecast range cannot be assigned to a road segment or station.",
+        "The Junin page parameter does not prove the warning polygon intersects PE-22.",
+        "ZIP link was extracted from the official page, not downloaded or inspected."
+      ]
+    },
+    {
+      "id": "senamhi-cold-410-2026",
+      "sourceUrl": "https://www.senamhi.gob.pe/?p=aviso-meteorologico-detalle&a=2026&b=29256&c=00&d=SENA",
+      "dataKind": "official_forecast",
+      "warningNumber": 410,
+      "warningYear": 2026,
+      "level": "NARANJA",
+      "publicationDate": "2026-10-11",
+      "validFrom": "2026-10-13T00:00:00-05:00",
+      "validUntil": "2026-10-14T23:59:00-05:00",
+      "statusAtRetrieval": "expired",
+      "corridorIntersection": "not_supported_by_listed_departments",
+      "disposition": "exclude_from_current_corridor_alerts",
+      "limitations": [
+        "Neither Lima nor Junin appears in the extracted daily affected-department lists.",
+        "The broad title mentioning the central sierra is insufficient for local attribution.",
+        "The detail page contains multiple current warning panels before the requested historical panel."
+      ]
+    }
+  ],
+  "waterAccessCheck": {
+    "url": "https://www.senamhi.gob.pe/servicios?p=monitoreo-chirilu",
+    "pageExtractionSucceeded": true,
+    "provider": "SENAMHI PHISIS",
+    "dataKind": "official_observation_portal",
+    "visibleTableFields": [
+      "station",
+      "today",
+      "anomaly",
+      "trend",
+      "red_threshold"
+    ],
+    "measurementPayloadExtracted": false,
+    "currentRimacDischargeM3PerS": null,
+    "limitation": "Tavily extracted a loading placeholder instead of station values. A search snippet timestamp is not a retrieved observation."
+  }
+}

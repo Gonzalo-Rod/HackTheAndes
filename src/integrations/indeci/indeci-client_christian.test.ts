@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { parseFeedItems } from "@/domain/weekly-incident-report/feed-items_christian";
 import { MAX_RETRIES } from "@/integrations/http/fetch-json";
-import { realGoogleNewsFeed, realIndeciFeedPage, realIndeciReportPage } from "@/test/fixtures/weekly-report_christian";
+import { realGoogleNewsFeed, realIndeciFeedPage, realIndeciReportPage, realNonFeedPage } from "@/test/fixtures/weekly-report_christian";
 
 import { createIndeciClient } from "./indeci-client_christian";
 
@@ -39,6 +39,18 @@ beforeEach(() => {
 afterEach(() => vi.restoreAllMocks());
 
 describe("listReports", () => {
+  it("fails on an HTML first page and marks an HTML later page as partial", async () => {
+    const firstPage = servePages({ [FEED_URL]: realNonFeedPage() });
+    await expect(createIndeciClient({ fetchImpl: firstPage, sleep: noSleep }).listReports(START_OF_WEEK_42, ctx)).rejects.toMatchObject({
+      kind: "invalid_body",
+      provider: "indeci",
+    });
+    const laterPage = servePages({ [FEED_URL]: realIndeciFeedPage(1), [`${FEED_URL}?paged=2`]: realNonFeedPage() });
+    const listing = await createIndeciClient({ fetchImpl: laterPage, sleep: noSleep }).listReports(START_OF_WEEK_42, ctx);
+    expect(listing.complete).toBe(false);
+    expect(listing.items).toHaveLength(3);
+  });
+
   it("pages back until a page reaches reports published before the start, pausing between pages", async () => {
     const fetchImpl = servePages(REAL_PAGES);
     const listing = await createIndeciClient({ fetchImpl, sleep: noSleep }).listReports(START_OF_17_OCT, ctx);

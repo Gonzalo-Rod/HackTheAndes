@@ -3,12 +3,13 @@
 import type { Map as MLMap, MapLayerMouseEvent, Popup } from "maplibre-gl";
 import { useEffect, useImperativeHandle, useRef, useState, type Ref } from "react";
 
-import type { LayerState, MapMode } from "@/components/dashboard/types";
+import type { LayerState, MapMode, Scope } from "@/components/dashboard/types";
 import type { CorridorData } from "@/contracts/corridor";
 import type { RoadAlert } from "@/contracts/road-alerts";
 import type { LngLat } from "@/domain/geo/measure";
 import type { RainSegment } from "@/domain/weather/rain";
 import type { CorridorAlert } from "@/domain/road-alerts/corridor-placement";
+import type { EvidencePoint } from "@/domain/research/evidence-state_christian";
 
 import { createBaseStyle, TERRAIN_SOURCE } from "./basemap-style";
 import { createCameraController, PERU_BOUNDS, type CameraController, type ScreenPadding } from "./map-camera";
@@ -23,12 +24,19 @@ import {
   startFlowAnimation,
 } from "./map-layers";
 import { cullMarkers, syncMarkers, type MarkerEntry } from "./map-markers";
+import { syncEvidenceMarkers } from "./evidence-markers_christian";
 
-export type MapViewHandle = Omit<CameraController, "stopAll" | "flyToAlert"> & { flyToAlert: (alert: RoadAlert) => void };
+export type MapViewHandle = Omit<CameraController, "stopAll" | "flyToAlert"> & {
+  flyToAlert: (alert: RoadAlert) => void;
+  flyToEvidence: (coordinates: [number, number]) => void;
+};
 
 export interface MapViewProps {
   ref?: Ref<MapViewHandle>;
   alerts: RoadAlert[];
+  evidence: EvidencePoint[];
+  selectedEvidenceId: string | null;
+  initialScope: Scope;
   hiddenIds: ReadonlySet<string>;
   selectedId: string | null;
   hoveredId: string | null;
@@ -43,6 +51,7 @@ export interface MapViewProps {
   /** Padding while an alert is selected, so the target stays clear of the selected-alert card. */
   focusPadding: ScreenPadding;
   onSelect: (id: string | null) => void;
+  onSelectEvidence: (id: string) => void;
   onHover: (id: string | null) => void;
   onReady: () => void;
   onError: (message: string) => void;
@@ -63,6 +72,7 @@ export function MapView(props: MapViewProps) {
   const markerClassRef = useRef<typeof import("maplibre-gl").Marker | null>(null);
   const cameraRef = useRef<CameraController | null>(null);
   const markersRef = useRef(new Map<string, MarkerEntry>());
+  const evidenceMarkersRef = useRef(new Map<string, MarkerEntry>());
   const readyRef = useRef(false);
   const [mapReady, setMapReady] = useState(false);
   const latest = useRef(props);
@@ -77,6 +87,7 @@ export function MapView(props: MapViewProps) {
     let stopFlow: (() => void) | null = null;
     let tooltip: Popup | null = null;
     const markers = markersRef.current;
+    const evidenceMarkers = evidenceMarkersRef.current;
 
     async function init() {
       const ml = await import("maplibre-gl");
@@ -135,6 +146,7 @@ export function MapView(props: MapViewProps) {
         cullFrame = requestAnimationFrame(() => {
           cullFrame = 0;
           cullMarkers(map, markers);
+          cullMarkers(map, evidenceMarkers);
         });
       });
       map.on("rotate", () => latest.current.onBearingChange(map.getBearing(), map.getPitch()));
@@ -186,6 +198,8 @@ export function MapView(props: MapViewProps) {
       cameraRef.current?.stopAll();
       markers.forEach(({ marker }) => marker.remove());
       markers.clear();
+      evidenceMarkers.forEach(({ marker }) => marker.remove());
+      evidenceMarkers.clear();
       mapRef.current?.remove();
       mapRef.current = null;
       readyRef.current = false;
@@ -232,6 +246,14 @@ export function MapView(props: MapViewProps) {
     if (mapRef.current && readyRef.current && corridor) setCorridorData(mapRef.current, corridor);
   }, [corridor, mapReady]);
 
+  const initialCameraApplied = useRef(false);
+  useEffect(() => {
+    if (!mapReady || !corridor || initialCameraApplied.current) return;
+    initialCameraApplied.current = true;
+    const hasEvidencePoint = props.evidence.some((point) => point.recordIds.includes(props.selectedEvidenceId ?? ""));
+    if (props.initialScope === "pe22" && !selectedId && !hasEvidencePoint) cameraRef.current?.flyToCorridor();
+  }, [mapReady, corridor, props.initialScope, selectedId, props.selectedEvidenceId, props.evidence]);
+
   useEffect(() => {
     if (mapRef.current && readyRef.current) setCorridorRain(mapRef.current, corridor, rainSegments);
   }, [corridor, rainSegments, mapReady]);
@@ -258,12 +280,24 @@ export function MapView(props: MapViewProps) {
     });
   }, [alerts, hiddenIds, selectedId, hoveredId, layers.alerts, mapReady]);
 
+  useEffect(() => {
+    const map = mapRef.current;
+    const MarkerClass = markerClassRef.current;
+    if (!map || !MarkerClass) return;
+    syncEvidenceMarkers(map, MarkerClass, evidenceMarkersRef.current, {
+      points: layers.environment ? props.evidence : [],
+      selectedId: props.selectedEvidenceId,
+      onSelect: (id) => latest.current.onSelectEvidence(id),
+    });
+  }, [props.evidence, props.selectedEvidenceId, layers.environment, mapReady]);
+
   useImperativeHandle(ref, (): MapViewHandle => {
     const camera = () => cameraRef.current;
     return {
       flyToPeru: () => camera()?.flyToPeru(),
       flyToCorridor: () => camera()?.flyToCorridor(),
       flyToAlert: (alert) => camera()?.flyToAlert([alert.lng, alert.lat]),
+      flyToEvidence: (coordinates) => camera()?.flyToAlert(coordinates),
       flyToBounds: (bbox) => camera()?.flyToBounds(bbox),
       flyToKm: (km) => camera()?.flyToKm(km),
       startTour: () => camera()?.startTour(),
@@ -274,5 +308,5 @@ export function MapView(props: MapViewProps) {
     };
   }, []);
 
-  return <div ref={containerRef} className="pr-map" role="region" aria-label="Mapa de alertas viales del Perú" />;
+  return <div ref={containerRef} className="pr-map" role="region" aria-label="Mapa de alertas viales y referencias ambientales del Perú" />;
 }

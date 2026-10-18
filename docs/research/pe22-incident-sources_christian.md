@@ -16,13 +16,13 @@ The corridor is PE-22 from Lima to La Oroya and PE-3S from La Oroya to Huancayo.
 | X, Facebook, Instagram, TikTok | Social media | Login needed | Local reports, often without a visible date | No |
 
 Tavily was used for the manual research note ([`pe22-incidents-2026-10-10_17_christian.md`](pe22-incidents-2026-10-10_17_christian.md)).
-The weekly job does not use Tavily or any API key.
+The weekly job does not use Tavily or any API key. The continuation's run instructions, JSON handoff, verification results and source-review limits are in [`collector-handoff_christian.md`](collector-handoff_christian.md).
 
 ## How the weekly job works
 
 1. `.github/workflows/weekly-incident-report_christian.yml` runs every day at 07:00 Lima time (12:00 UTC). Daily runs are
-   needed because SUTRAN lists only current alerts, so an alert that expires mid-week would otherwise be lost. Monday runs also
-   close the previous week.
+   needed because SUTRAN lists only current alerts. Daily polling can still miss short-lived alerts. Monday through Wednesday runs
+   also refresh the previous week to catch reports published within two calendar days after Sunday.
 2. `scripts/weekly-incident-report_christian.ts` reads the three sources. Each source can fail without stopping the others; the run
    log records each source's result, and nothing is written if all three fail.
 3. It keeps:
@@ -30,13 +30,15 @@ The weekly job does not use Tavily or any API key.
      whose event date is in the week.
    - INDECI reports for corridor districts (or the Huarochirí, Yauli, Jauja, Concepción and Huancayo provinces) about a hazard that
      can affect the road (huaico, landslide, rain, snow, road accident), whose event date is in the week. Reports without an
-     occurrence table count by their publication date.
+     occurrence table are retained by publication date only as unconfirmed evidence in a separate review section.
    - Google News titles that name a corridor place and an incident word. Titles about the Nueva Carretera Central project, crime,
      or places outside the corridor are left out. So are titles that name only "Carretera Central", since roads in Huánuco, Pasco
      and Tarma share that name; the run log counts them.
 4. Each run merges its results into `docs/research/weekly/pe22-incidents-<week>_christian.json` and rewrites the report next to it
    (`.md`). Missing fields say "no indicado". Alerts that SUTRAN stops listing stay in the report, marked "No longer listed".
 5. The workflow commits to `bot/weekly-incident-report-christian` and keeps one pull request open into the branch it ran from.
+   Tests and type checking run before collection; merge conflicts stop the job for review. Local collection uses a directory lock
+   and atomic file replacement. Schema-invalid SUTRAN reads preserve previous evidence instead of marking alerts absent.
 
 Run it locally with `npx tsx scripts/weekly-incident-report_christian.ts`. Add `--week-of 2026-10-12` to update another week, or
 `--out <dir>` to write elsewhere.

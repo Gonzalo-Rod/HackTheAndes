@@ -3,7 +3,7 @@ import type { StyleSpecification } from "maplibre-gl";
 // Warm, paper-like topographic basemap. Free sources without API keys:
 // - Vector tiles: OpenFreeMap (OpenMapTiles schema, OpenStreetMap data)
 // - Terrain: AWS Terrain Tiles (Terrarium encoding)
-// - Satellite: Sentinel-2 cloudless 2016 by EOX (CC BY 4.0)
+// - Satellite: Esri World Imagery (high-resolution aerial & satellite orthophotos)
 
 export const TERRAIN_SOURCE = "terrain-dem";
 export const HILLSHADE_SOURCE = "hillshade-dem";
@@ -17,23 +17,29 @@ const FONT_ITALIC = ["Noto Sans Italic"];
 const NAME: ["coalesce", ["get", string], ["get", string]] = ["coalesce", ["get", "name:es"], ["get", "name"]];
 
 export const PALETTE = {
-  background: "#ebe6db",
-  land: "#efeae0",
-  wood: "#b9cc9a",
-  grass: "#d2dba3",
-  sand: "#e8d9ae",
-  rock: "#d8cfbd",
-  ice: "#f8f8f5",
-  urban: "#e4ddd0",
-  water: "#9fc5d6",
-  waterLine: "#7fb0c6",
-  boundary: "#8f8371",
-  road: "#fbf8f1",
-  roadCasing: "#d9cfbd",
-  label: "#4a443a",
-  labelMuted: "#6f685c",
-  halo: "#f6f2ea",
-  waterLabel: "#5d7f8e",
+  background: "#5c873b", // Rich natural valley green background (eliminates white patches)
+  land: "#6e9948", // Natural soil / earth fallback
+  wood: "#1c4a20", // Deep forest understory green
+  scrub: "#436e2b", // Lush Andean shrubbery & bushes
+  grass: "#599933", // Fresh lively natural meadow / grass
+  crop: "#6aa137", // Fertile agricultural fields & valley crops
+  wetland: "#366e47", // Wetlands & riverbank vegetation
+  sand: "#c4ae85", // Natural riverbed gravel & sand / alluvial wash
+  rock: "#736757", // Rugged mountain rock & scree
+  ice: "#f2f6fa", // Glacier & perennial snow
+  urban: "#857a6c", // Warm earthen urban settlement tone (subtle & translucent)
+  urbanBorder: "#6e6355",
+  water: "#367591", // Clear mountain river blue
+  waterLine: "#245c73",
+  boundary: "#5c5344",
+  road: "#3a352f", // Asphalt highway / primary roads
+  roadMinor: "#4d4740", // Secondary roads
+  roadLocal: "#5e574d", // Local paved streets
+  roadCasing: "#1f1c18", // Road casing
+  label: "#26221c",
+  labelMuted: "#474035",
+  halo: "#fbf8f2",
+  waterLabel: "#1b4657",
 };
 
 const TERRARIUM_TILES = ["https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png"];
@@ -41,7 +47,7 @@ const TERRARIUM_TILES = ["https://s3.amazonaws.com/elevation-tiles-prod/terrariu
 export function createBaseStyle(): StyleSpecification {
   return {
     version: 8,
-    name: "PeruRoad warm topo",
+    name: "PeruRoad realistic topo",
     glyphs: "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf",
     sources: {
       omt: {
@@ -68,18 +74,18 @@ export function createBaseStyle(): StyleSpecification {
       },
       satellite: {
         type: "raster",
-        tiles: ["https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless_3857/default/g/{z}/{y}/{x}.jpg"],
+        tiles: ["https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"],
         tileSize: 256,
-        maxzoom: 14,
+        maxzoom: 17,
         attribution:
-          '<a href="https://s2maps.eu" target="_blank" rel="noopener">Sentinel-2 cloudless 2016</a> por EOX (datos Copernicus Sentinel modificados)',
+          'Imágenes satelitales: &copy; <a href="https://www.esri.com" target="_blank" rel="noopener">Esri</a>, Maxar, Earthstar Geographics',
       },
     },
     layers: [
       { id: "background", type: "background", paint: { "background-color": PALETTE.background } },
       {
-        // Elevation tint: khaki lowlands, green valleys, ochre highlands, grey-white summits.
-        // Transparent below sea level so the water layer keeps the ocean.
+        // Elevation tint: lush green lowlands & valleys (keeping other countries green),
+        // rich Andean mountain greens, transitioning to golden Puna and snow peaks.
         id: COLOR_RELIEF_LAYER,
         type: "color-relief",
         source: HILLSHADE_SOURCE,
@@ -90,29 +96,33 @@ export function createBaseStyle(): StyleSpecification {
             ["linear"],
             ["elevation"],
             -20,
-            "rgba(201, 185, 138, 0)",
+            "rgba(140, 176, 98, 0)",
             0,
-            "#c9b98a",
+            "#84aa5e", // Coast & lowlands: fresh, natural green
             150,
-            "#b9bd7c",
+            "#76a150", // River valleys & low foothills: lush green
             500,
-            "#93b25c",
+            "#659642", // Lower Andean valleys (Chosica, Santa Eulalia): vibrant green
             1000,
-            "#7fa655",
+            "#588c37", // Mountain valleys: rich verdant green
             1800,
-            "#6f9a4c",
+            "#528432", // Mid Andean slopes: lush mountain green
             2600,
-            "#97a052",
-            3500,
-            "#b19a58",
-            4200,
-            "#a07f52",
+            "#698c3c", // Quechua slopes & terraces: healthy green
+            3400,
+            "#8ba052", // High slopes: tawny mountain olive-green
+            4000,
+            "#ab9a5a", // High Puna grassland: golden ichu & earth
+            4400,
+            "#967f57", // High alpine slopes: rocky brown earth
             4800,
-            "#93786a",
-            5400,
-            "#cfcac4",
-            6200,
-            "#ffffff",
+            "#786b5e", // High mountain passes & crags: slate rock
+            5300,
+            "#9e9993", // High alpine rock
+            5800,
+            "#d8dcde", // Glacial moraine / snow line
+            6300,
+            "#ffffff", // High snowy summits
           ],
         },
       },
@@ -125,23 +135,74 @@ export function createBaseStyle(): StyleSpecification {
           "fill-color": [
             "match",
             ["get", "class"],
-            "wood",
-            PALETTE.wood,
-            "grass",
-            PALETTE.grass,
-            "farmland",
-            PALETTE.grass,
-            "wetland",
-            PALETTE.grass,
-            "sand",
-            PALETTE.sand,
-            "rock",
-            PALETTE.rock,
-            "ice",
+            ["wood", "forest"],
+            PALETTE.wood, // Lush dense tree foliage
+            ["scrub", "shrub", "bush"],
+            PALETTE.scrub, // Vibrant Andean shrubbery
+            ["grass", "meadow", "fell", "heath"],
+            PALETTE.grass, // Fresh meadow / grass
+            ["farmland", "crop", "orchard", "vineyard", "allotments"],
+            PALETTE.crop, // Fertile valley crops & fields
+            ["wetland", "marsh", "swamp", "bog"],
+            PALETTE.wetland,
+            ["sand", "desert", "shingle"],
+            PALETTE.sand, // Riverbed gravel / sand
+            ["rock", "bare_rock", "scree", "cliff"],
+            PALETTE.rock, // Mountain rock / scree
+            ["ice", "glacier"],
             PALETTE.ice,
             PALETTE.land,
           ],
-          "fill-opacity": ["interpolate", ["linear"], ["zoom"], 4, 0.4, 10, 0.55],
+          "fill-opacity": ["interpolate", ["linear"], ["zoom"], 4, 0.5, 10, 0.72, 14, 0.88],
+        },
+      },
+      {
+        id: "landuse-green",
+        type: "fill",
+        source: "omt",
+        "source-layer": "landuse",
+        filter: [
+          "in",
+          ["get", "class"],
+          [
+            "literal",
+            [
+              "park",
+              "meadow",
+              "allotments",
+              "cemetery",
+              "recreation_ground",
+              "pitch",
+              "forest",
+              "grass",
+              "orchard",
+              "vineyard",
+              "agriculture",
+            ],
+          ],
+        ],
+        paint: {
+          "fill-color": [
+            "match",
+            ["get", "class"],
+            ["forest", "wood"],
+            PALETTE.wood,
+            ["orchard", "vineyard", "allotments", "agriculture"],
+            PALETTE.crop,
+            PALETTE.grass,
+          ],
+          "fill-opacity": ["interpolate", ["linear"], ["zoom"], 7, 0.5, 11, 0.75],
+        },
+      },
+      {
+        id: "landuse-quarry",
+        type: "fill",
+        source: "omt",
+        "source-layer": "landuse",
+        filter: ["==", ["get", "class"], "quarry"],
+        paint: {
+          "fill-color": PALETTE.rock,
+          "fill-opacity": 0.6,
         },
       },
       {
@@ -149,8 +210,16 @@ export function createBaseStyle(): StyleSpecification {
         type: "fill",
         source: "omt",
         "source-layer": "landuse",
-        filter: ["in", ["get", "class"], ["literal", ["residential", "suburb", "neighbourhood", "commercial", "industrial"]]],
-        paint: { "fill-color": PALETTE.urban, "fill-opacity": ["interpolate", ["linear"], ["zoom"], 8, 0, 11, 0.7] },
+        filter: [
+          "in",
+          ["get", "class"],
+          ["literal", ["residential", "suburb", "neighbourhood", "commercial", "industrial", "hospital", "school", "railway"]],
+        ],
+        paint: {
+          "fill-color": PALETTE.urban,
+          // Subtle opacity so urban settlements blend into the landscape and never form a white sheet
+          "fill-opacity": ["interpolate", ["linear"], ["zoom"], 8, 0, 11, 0.18, 14, 0.26],
+        },
       },
       {
         id: "water",
@@ -163,18 +232,23 @@ export function createBaseStyle(): StyleSpecification {
         id: SATELLITE_LAYER,
         type: "raster",
         source: "satellite",
-        layout: { visibility: "none" },
-        paint: { "raster-opacity": 1, "raster-saturation": -0.15, "raster-contrast": 0.05, "raster-fade-duration": 200 },
+        layout: { visibility: "visible" },
+        paint: {
+          "raster-opacity": 1,
+          "raster-saturation": 0.08,
+          "raster-contrast": 0.08,
+          "raster-fade-duration": 200,
+        },
       },
       {
         id: HILLSHADE_LAYER,
         type: "hillshade",
         source: HILLSHADE_SOURCE,
         paint: {
-          "hillshade-shadow-color": "#5b4b39",
-          "hillshade-highlight-color": "#fffcf3",
-          "hillshade-accent-color": "#6e5c47",
-          "hillshade-exaggeration": 0.42,
+          "hillshade-shadow-color": "#181d14",
+          "hillshade-highlight-color": "#ffffff",
+          "hillshade-accent-color": "#2d3326",
+          "hillshade-exaggeration": 0.38,
           "hillshade-illumination-direction": 315,
         },
       },
@@ -192,9 +266,9 @@ export function createBaseStyle(): StyleSpecification {
             ["linear"],
             ["zoom"],
             8,
-            ["match", ["get", "class"], "river", 0.8, 0.3],
+            ["match", ["get", "class"], "river", 1, 0.4],
             14,
-            ["match", ["get", "class"], "river", 2.4, 1],
+            ["match", ["get", "class"], "river", 2.8, 1.2],
           ],
         },
       },
@@ -205,7 +279,7 @@ export function createBaseStyle(): StyleSpecification {
         "source-layer": "boundary",
         filter: ["all", ["==", ["get", "admin_level"], 4], ["!=", ["get", "maritime"], 1]],
         minzoom: 5,
-        paint: { "line-color": PALETTE.boundary, "line-opacity": 0.35, "line-width": 0.7, "line-dasharray": [3, 2] },
+        paint: { "line-color": PALETTE.boundary, "line-opacity": 0.4, "line-width": 0.7, "line-dasharray": [3, 2] },
       },
       {
         id: "boundary-country",
@@ -213,7 +287,11 @@ export function createBaseStyle(): StyleSpecification {
         source: "omt",
         "source-layer": "boundary",
         filter: ["all", ["==", ["get", "admin_level"], 2], ["!=", ["get", "maritime"], 1]],
-        paint: { "line-color": PALETTE.boundary, "line-opacity": 0.8, "line-width": ["interpolate", ["linear"], ["zoom"], 3, 0.8, 8, 1.6] },
+        paint: {
+          "line-color": PALETTE.boundary,
+          "line-opacity": 0.85,
+          "line-width": ["interpolate", ["linear"], ["zoom"], 3, 0.8, 8, 1.6],
+        },
       },
       {
         id: "road-casing",
@@ -225,8 +303,8 @@ export function createBaseStyle(): StyleSpecification {
         layout: { "line-cap": "round", "line-join": "round" },
         paint: {
           "line-color": PALETTE.roadCasing,
-          "line-width": ["interpolate", ["linear"], ["zoom"], 7, 0.6, 12, 4, 15, 9],
-          "line-opacity": 0.8,
+          "line-width": ["interpolate", ["linear"], ["zoom"], 7, 0.8, 12, 4.2, 15, 9.5],
+          "line-opacity": 0.85,
         },
       },
       {
@@ -238,25 +316,45 @@ export function createBaseStyle(): StyleSpecification {
         filter: ["in", ["get", "class"], ["literal", ["motorway", "trunk", "primary", "secondary", "tertiary", "minor"]]],
         layout: { "line-cap": "round", "line-join": "round" },
         paint: {
-          "line-color": PALETTE.road,
+          "line-color": [
+            "match",
+            ["get", "class"],
+            ["motorway", "trunk", "primary"],
+            PALETTE.road,
+            ["secondary", "tertiary"],
+            PALETTE.roadMinor,
+            PALETTE.roadLocal,
+          ],
           "line-width": [
             "interpolate",
             ["linear"],
             ["zoom"],
             7,
-            ["match", ["get", "class"], ["motorway", "trunk", "primary"], 0.5, 0],
+            ["match", ["get", "class"], ["motorway", "trunk", "primary"], 0.7, 0],
             12,
-            ["match", ["get", "class"], ["motorway", "trunk", "primary"], 2.6, ["secondary", "tertiary"], 1.6, 0.6],
+            ["match", ["get", "class"], ["motorway", "trunk", "primary"], 2.8, ["secondary", "tertiary"], 1.8, 0.8],
             15,
-            ["match", ["get", "class"], ["motorway", "trunk", "primary"], 7, ["secondary", "tertiary"], 5, 2.5],
+            ["match", ["get", "class"], ["motorway", "trunk", "primary"], 7.5, ["secondary", "tertiary"], 5.2, 2.6],
           ],
+        },
+      },
+      {
+        id: "building",
+        type: "fill",
+        source: "omt",
+        "source-layer": "building",
+        minzoom: 13,
+        paint: {
+          "fill-color": "#6c5f50",
+          "fill-opacity": ["interpolate", ["linear"], ["zoom"], 13, 0.35, 15, 0.65],
+          "fill-outline-color": "#4d4336",
         },
       },
     ],
     sky: {
-      "sky-color": "#aecbe0",
-      "horizon-color": "#f2e6cf",
-      "fog-color": "#ece6da",
+      "sky-color": "#9bc4de",
+      "horizon-color": "#eddcc2",
+      "fog-color": "#e6d7bf",
       "sky-horizon-blend": 0.6,
       "horizon-fog-blend": 0.5,
       // Terrain includes bathymetry: at national zoom ground fog would wash out the sea floor.

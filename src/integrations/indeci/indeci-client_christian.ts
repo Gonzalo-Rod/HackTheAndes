@@ -1,4 +1,4 @@
-import { type FeedItem, parseFeedItems } from "@/domain/weekly-incident-report/feed-items_christian";
+import { type FeedItem, parseFeedDocument } from "@/domain/weekly-incident-report/feed-items_christian";
 import { type IndeciReportPage, parseIndeciReportPage } from "@/domain/weekly-incident-report/indeci-reports_christian";
 import { type RequestOptions, UpstreamError } from "@/integrations/http/fetch-json";
 import { getText } from "@/integrations/http/get-text_christian";
@@ -71,7 +71,9 @@ export function createIndeciClient({
         const url = page === 1 ? FEED_URL : `${FEED_URL}?paged=${page}`;
         let pageItems: FeedItem[];
         try {
-          pageItems = parseFeedItems(await request(url, "indeci.feed.page", ctx, page === 1 ? undefined : SECONDARY_RETRIES));
+          const parsed = parseFeedDocument(await request(url, "indeci.feed.page", ctx, page === 1 ? undefined : SECONDARY_RETRIES));
+          if (!parsed.ok) throw new UpstreamError("Invalid INDECI RSS document", "invalid_body", PROVIDER);
+          pageItems = parsed.items;
         } catch (error) {
           // Past the last page the feed answers 404 (checked with ?paged=999999 on 2026-10-17).
           // Any other failure after page 1 keeps the pages already read.

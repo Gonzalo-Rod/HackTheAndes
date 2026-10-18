@@ -20,7 +20,17 @@ const CALLOUT_PADDING = { ...BASE_PADDING, bottom: 190 };
 
 type PassThrough = Pick<
   MapViewProps,
-  "alerts" | "hiddenIds" | "hoveredId" | "corridorAlerts" | "rainSegments" | "highlightRegionKey" | "onHover"
+  | "alerts"
+  | "evidence"
+  | "selectedEvidenceId"
+  | "initialScope"
+  | "onSelectEvidence"
+  | "hiddenIds"
+  | "hoveredId"
+  | "corridorAlerts"
+  | "rainSegments"
+  | "highlightRegionKey"
+  | "onHover"
 >;
 
 interface MapAreaProps extends PassThrough {
@@ -38,6 +48,7 @@ interface MapAreaProps extends PassThrough {
   onModeChange: (mode: MapMode) => void;
   onOpenDetail: () => void;
   onTourKm: (km: number | null) => void;
+  onMapReady: () => void;
 }
 
 export function MapArea({
@@ -49,6 +60,10 @@ export function MapArea({
   corridor,
   now,
   alerts,
+  evidence,
+  selectedEvidenceId,
+  initialScope,
+  onSelectEvidence,
   hiddenIds,
   hoveredId,
   corridorAlerts,
@@ -62,6 +77,7 @@ export function MapArea({
   onModeChange,
   onOpenDetail,
   onTourKm,
+  onMapReady,
 }: MapAreaProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const [mapReady, setMapReady] = useState(false);
@@ -76,6 +92,10 @@ export function MapArea({
       <MapView
         ref={mapRef}
         alerts={alerts}
+        evidence={evidence}
+        selectedEvidenceId={selectedEvidenceId}
+        initialScope={initialScope}
+        onSelectEvidence={onSelectEvidence}
         hiddenIds={hiddenIds}
         selectedId={selected?.id ?? null}
         hoveredId={hoveredId}
@@ -90,7 +110,10 @@ export function MapArea({
         focusPadding={CALLOUT_PADDING}
         onSelect={onSelect}
         onHover={onHover}
-        onReady={() => setMapReady(true)}
+        onReady={() => {
+          setMapReady(true);
+          onMapReady();
+        }}
         onError={setMapError}
         onBearingChange={(b) => setBearing(b)}
         onTourProgress={(km) => {

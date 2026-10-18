@@ -2,7 +2,24 @@ import { describe, expect, it } from "vitest";
 
 import { realGoogleNewsFeed, realIndeciFeedPage, realNonFeedPage } from "@/test/fixtures/weekly-report_christian";
 
-import { decodeEntities, parseFeedItems } from "./feed-items_christian";
+import { decodeEntities, parseFeedDocument, parseFeedItems } from "./feed-items_christian";
+
+describe("parseFeedDocument", () => {
+  it("accepts the real Google News and INDECI RSS documents", () => {
+    for (const xml of [realGoogleNewsFeed(6), realIndeciFeedPage(1)]) {
+      expect(parseFeedDocument(xml)).toEqual({ ok: true, items: parseFeedItems(xml) });
+    }
+  });
+
+  it("rejects an HTML error page even when a server returns HTTP 200", () => {
+    expect(parseFeedDocument(realNonFeedPage())).toEqual({ ok: false, error: "invalid_feed" });
+  });
+
+  it("rejects a real feed truncated during transport", () => {
+    const xml = realGoogleNewsFeed(6);
+    expect(parseFeedDocument(xml.slice(0, xml.indexOf("</channel>")))).toEqual({ ok: false, error: "invalid_feed" });
+  });
+});
 
 describe("parseFeedItems", () => {
   it("reads the title, link, date, source and description of Google News items", () => {

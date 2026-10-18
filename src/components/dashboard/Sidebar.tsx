@@ -7,23 +7,35 @@ import { Icon, type IconName } from "@/components/icons";
 import type { SidebarTab } from "./types";
 
 const TABS: { value: SidebarTab; label: string; icon: IconName }[] = [
+  { value: "ambiente", label: "Clima y territorio", icon: "environment" },
+  { value: "alertas", label: "Vías", icon: "pin" },
   { value: "capas", label: "Capas", icon: "layers" },
-  { value: "detalle", label: "Detalle", icon: "info" },
-  { value: "fuentes", label: "Fuentes", icon: "source" },
 ];
 
 interface SidebarProps {
   tab: SidebarTab;
+  alertsCount: number;
   hasSelection: boolean;
   onTabChange: (tab: SidebarTab) => void;
-  layersContent: ReactNode;
+  eventsContent: ReactNode;
+  environmentContent: ReactNode;
   detailContent: ReactNode;
-  sourcesContent: ReactNode;
+  layersContent: ReactNode;
 }
 
-export function Sidebar({ tab, hasSelection, onTabChange, layersContent, detailContent, sourcesContent }: SidebarProps) {
+export function Sidebar({
+  tab,
+  alertsCount,
+  hasSelection,
+  onTabChange,
+  eventsContent,
+  environmentContent,
+  detailContent,
+  layersContent,
+}: SidebarProps) {
+  const activeTab = tab === "detalle" ? "alertas" : tab;
   return (
-    <aside className="pr-sidebar" aria-label="Panel lateral">
+    <aside className="pr-sidebar" aria-label="Panel lateral de avisos y capas">
       <div className="pr-tabs" role="tablist" aria-label="Secciones del panel">
         {TABS.map((item) => (
           <button
@@ -31,21 +43,21 @@ export function Sidebar({ tab, hasSelection, onTabChange, layersContent, detailC
             type="button"
             role="tab"
             id={`tab-${item.value}`}
-            aria-selected={tab === item.value}
+            aria-selected={activeTab === item.value}
             aria-controls={`panel-${item.value}`}
             className="pr-tabs__item"
             onClick={() => onTabChange(item.value)}
           >
             <Icon name={item.icon} size={13} />
-            {item.label}
-            {item.value === "detalle" && hasSelection && <span className="pr-tabs__dot" aria-label="alerta seleccionada" />}
+            <span>{item.label}</span>
+            {item.value === "alertas" && <span className="pr-tabs__count">{alertsCount}</span>}
           </button>
         ))}
       </div>
-      <div className="pr-sidebar__body" role="tabpanel" id={`panel-${tab}`} aria-labelledby={`tab-${tab}`} tabIndex={0}>
-        {tab === "capas" && layersContent}
-        {tab === "detalle" && detailContent}
-        {tab === "fuentes" && sourcesContent}
+      <div className="pr-sidebar__body" role="tabpanel" id={`panel-${activeTab}`} aria-labelledby={`tab-${activeTab}`} tabIndex={0}>
+        {activeTab === "alertas" && (hasSelection ? detailContent : eventsContent)}
+        {activeTab === "ambiente" && environmentContent}
+        {activeTab === "capas" && layersContent}
       </div>
     </aside>
   );

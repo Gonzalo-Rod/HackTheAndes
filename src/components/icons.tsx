@@ -28,6 +28,7 @@ const ICONS = {
   external:
     '<path d="M14 4h6v6"/><path d="M10 14 20 4"/><path d="M19 14v5a1.5 1.5 0 0 1-1.5 1.5h-12A1.5 1.5 0 0 1 4 19V6.5A1.5 1.5 0 0 1 5.5 5H10"/>',
   chevronDown: '<path d="m6 9 6 6 6-6"/>',
+  chevronUp: '<path d="m18 15-6-6-6 6"/>',
   more: '<circle cx="12" cy="5" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/><circle cx="12" cy="19" r="1.3" fill="currentColor"/>',
   north: '<path d="M12 2.5 18.5 20 12 16.2 5.5 20z" fill="currentColor" stroke="none"/>',
   maximize:
@@ -47,9 +48,11 @@ const ICONS = {
   source:
     '<ellipse cx="12" cy="5.5" rx="7.5" ry="2.8"/><path d="M4.5 5.5v13c0 1.5 3.4 2.8 7.5 2.8s7.5-1.3 7.5-2.8v-13"/><path d="M4.5 12c0 1.5 3.4 2.8 7.5 2.8s7.5-1.3 7.5-2.8"/>',
   mountain: '<path d="m2.5 20 7-12.5 4 7 2.5-4 5.5 9.5z"/>',
+  environment: '<path d="M6 15a4 4 0 1 1 .8-7.9A5.5 5.5 0 0 1 17.5 8a3.5 3.5 0 0 1 .5 7H6"/><path d="m8 18-1 3m6-3-1 3m6-3-1 3"/>',
   clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 2"/>',
   pin: '<path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
   copy: '<rect x="8.5" y="8.5" width="12" height="12" rx="2"/><path d="M15.5 8.5V5A1.5 1.5 0 0 0 14 3.5H5A1.5 1.5 0 0 0 3.5 5v9A1.5 1.5 0 0 0 5 15.5h3.5"/>',
+  arrowLeft: '<path d="M19.5 12h-15M10.5 18l-6-6 6-6"/>',
   arrowRight: '<path d="M4.5 12h15M13.5 6l6 6-6 6"/>',
   globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',
   image: '<rect x="3.5" y="4.5" width="17" height="15" rx="1.5"/><circle cx="9" cy="10" r="1.8"/><path d="m20.5 16-4.5-4.5L6 19.5"/>',

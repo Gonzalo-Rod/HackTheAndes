@@ -6,7 +6,7 @@ the state file next to it. Official sources are listed as reported; news items n
 - **Window:** 12 Oct 2026 to 18 Oct 2026 (America/Lima), Monday to Sunday.
 - **Corridor:** PE-22 Lima–La Oroya (Lima, Huarochirí and Yauli provinces) and PE-3S La Oroya–Huancayo (Yauli, Jauja,
   Concepción and Huancayo provinces).
-- **Runs:** 3, first 17 Oct 2026, 16:48, last updated 17 Oct 2026, 17:47.
+- **Runs:** 5, first 17 Oct 2026, 16:48, last updated 17 Oct 2026, 21:02.
 - **Sources in the latest run:** SUTRAN: ok, 3 kept; INDECI: ok, 0 kept; Google News: ok, 3 kept (1 title(s) named only "Carretera Central" and were left out).
 
 ## Official: SUTRAN alerts on the corridor
@@ -18,7 +18,7 @@ changes come from each alert's `/historial`. Alerts are read every run, so ones 
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | 14 Oct 2026 | PE-3S KM 6, La Oroya (Yauli, Junín); direction Ambos sentidos | Accident: Accidente KM 06. Accidente de un vehiculode de carga pesada con posterior despiste y volcadura | Open (`normal`): "La Via se encuentra libre y transitable" | 14 Oct 2026, 17:42 published; 14 Oct 2026, 20:54 set to `normal` | [SUTRAN SIGEA-141026-01](https://api.sigea.sutran.gob.pe/public/alerts/a2bb3a6a-bb15-4f88-bc1d-aa35f36952e0), reported by CONCESIONARIA DEVIANDES | Yes, valid until 31 Oct 2026 |
 | 2 | 17 Oct 2026 | PE-22 KM 51, Santa Cruz de Cocachacra (Huarochiri, Lima); direction Norte → Sur | Accident: KM 51 - despiste y volcadura de una carreta de un tráiler | Open (`normal`): "Via normal" | 17 Oct 2026, 10:21 published; 17 Oct 2026, 14:36 set to `normal` | [SUTRAN SIGEA-171026-01](https://api.sigea.sutran.gob.pe/public/alerts/3e20237e-1aca-4f6a-879f-95333e74b131), reported by CONCESIONARIA DEVIANDES | Yes, valid until 17 Oct 2026 |
-| 3 | 17 Oct 2026 | PE-22 KM 88, San Mateo (Huarochiri, Lima); direction Oeste → Este | Accident: Falla mecanica de un trailer KM 88. Falla mecanica de un trailer - la vía se encuentra con el transito restringido. | Restricted (`restringido`): "Via restringida" | 17 Oct 2026, 15:12 published | [SUTRAN SIGEA-171026-02](https://api.sigea.sutran.gob.pe/public/alerts/c954d0b8-e9e3-4889-bb1b-46749a3fc60b), reported by CONCESIONARIA DEVIANDES | Yes, valid until 31 Oct 2026 |
+| 3 | 17 Oct 2026 | PE-22 KM 88, San Mateo (Huarochiri, Lima); direction Oeste → Este | Accident: Falla mecanica de un trailer KM 88. Via libre y transitable | Open (`normal`): "Via libre y transitable" | 17 Oct 2026, 15:12 published; 17 Oct 2026, 20:07 set to `normal` | [SUTRAN SIGEA-171026-02](https://api.sigea.sutran.gob.pe/public/alerts/c954d0b8-e9e3-4889-bb1b-46749a3fc60b), reported by CONCESIONARIA DEVIANDES | Yes, valid until 31 Oct 2026 |
 
 ## Official: INDECI emergency reports in corridor districts
 
@@ -26,6 +26,13 @@ COEN reports for districts along the corridor with a hazard that can affect the 
 road accidents). INDECI does not always say whether the road was affected; read the report.
 
 No INDECI emergency report in a corridor district with a road-related hazard this week.
+
+## INDECI reports to review: event date unconfirmed
+
+These official reports were published in this week, but their event date could not be read. Publication does not confirm
+when an incident occurred; these entries are excluded from the dated-event section above. Road impact also needs review.
+
+No undated INDECI report to review.
 
 ## News to review
 
@@ -41,4 +48,6 @@ to an older article that was re-indexed, so confirm the place and the event date
 ## Not covered by this job
 
 - Facebook, Instagram and X posts, which need a login to read. Deviandes publishes its alerts there; most reach SUTRAN.
-- Provías Nacional's emergency viewer, which covers the non-concessioned national network and has no public dated feed.
+- Provías Nacional's emergency viewer; its data freshness and API contract have not been verified for this collector.
+- Incidents that appear and disappear between daily reads; this collector is not a continuous road-status monitor.
+- Company delivery through n8n, paid reports, risk forecasts and closure-hour totals; this job collects source evidence only.

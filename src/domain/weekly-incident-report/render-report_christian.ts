@@ -84,7 +84,7 @@ function alertDetails(title: string, description: string): string {
   return `${title.replace(/\.$/, "")}. ${description}`;
 }
 
-function sutranTable(entries: SutranEntry[], options: RenderOptions): string {
+function sutranTable(entries: SutranEntry[], options: RenderOptions, latestSource?: SourceRun): string {
   if (entries.length === 0) return "No SUTRAN alert on the corridor has an event date in this week.";
   const endpoint = options.sutranAlertsEndpoint.replace(/\/+$/, "");
   const rows = entries.map((entry, i) => {
@@ -94,9 +94,12 @@ function sutranTable(entries: SutranEntry[], options: RenderOptions): string {
     const status = `${STATUS_LABELS[alert.roadStatus]} (\`${alert.roadStatus}\`): "${alert.currentSituation || MISSING}"`;
     const reporter = alert.source || alert.administrator;
     const source = `[SUTRAN ${alert.code || alert.id}](${endpoint}/${encodeURIComponent(alert.id)})${reporter ? `, reported by ${reporter}` : ""}`;
-    const listed = entry.listedInLatestRun
-      ? `Yes, valid until ${formatDate(alert.validUntil)}`
-      : `No longer listed (last seen ${formatLimaDateTime(entry.lastSeenAt)})`;
+    const listed =
+      latestSource?.ok === false
+        ? `Unavailable; retained observation from ${formatLimaDateTime(entry.lastSeenAt)}`
+        : entry.listedInLatestRun
+          ? `Yes, valid until ${formatDate(alert.validUntil)}`
+          : `No longer listed (last seen ${formatLimaDateTime(entry.lastSeenAt)})`;
     return `| ${i + 1} | ${formatDate(alert.eventDate)} | ${cell(place)} | ${cell(type)} | ${cell(status)} | ${cell(historyText(entry))} | ${source} | ${listed} |`;
   });
   return [
@@ -160,14 +163,23 @@ export function renderWeeklyReport(state: WeeklyState, options: RenderOptions): 
     "Alerts from SUTRAN's public API with an event date (`fechaEvento`) in this week. SUTRAN gives no event time; the status",
     "changes come from each alert's `/historial`. Alerts are read every run, so ones that expire mid-week are kept.",
     "",
-    sutranTable(state.sutran, options),
+    sutranTable(state.sutran, options, latest?.sources.sutran),
     "",
     "## Official: INDECI emergency reports in corridor districts",
     "",
     "COEN reports for districts along the corridor with a hazard that can affect the road (landslides, huaicos, rain, snow,",
     "road accidents). INDECI does not always say whether the road was affected; read the report.",
     "",
-    indeciTable(state.indeci),
+    indeciTable(state.indeci.filter((entry) => entry.occurredDate !== null)),
+    "",
+    "## INDECI reports to review: event date unconfirmed",
+    "",
+    "These official reports were published in this week, but their event date could not be read. Publication does not confirm",
+    "when an incident occurred; these entries are excluded from the dated-event section above. Road impact also needs review.",
+    "",
+    state.indeci.some((entry) => entry.occurredDate === null)
+      ? indeciTable(state.indeci.filter((entry) => entry.occurredDate === null))
+      : "No undated INDECI report to review.",
     "",
     "## News to review",
     "",
@@ -179,7 +191,9 @@ export function renderWeeklyReport(state: WeeklyState, options: RenderOptions): 
     "## Not covered by this job",
     "",
     "- Facebook, Instagram and X posts, which need a login to read. Deviandes publishes its alerts there; most reach SUTRAN.",
-    "- Provías Nacional's emergency viewer, which covers the non-concessioned national network and has no public dated feed.",
+    "- Provías Nacional's emergency viewer; its data freshness and API contract have not been verified for this collector.",
+    "- Incidents that appear and disappear between daily reads; this collector is not a continuous road-status monitor.",
+    "- Company delivery through n8n, paid reports, risk forecasts and closure-hour totals; this job collects source evidence only.",
     "",
   ].join("\n");
 }

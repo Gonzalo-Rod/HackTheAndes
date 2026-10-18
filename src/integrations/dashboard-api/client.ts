@@ -65,7 +65,7 @@ export function describeFetchError(error: unknown): string {
     if (error.kind === "network") return "Sin conexión con el servidor.";
     if (error.kind === "invalid_body") return "La respuesta llegó con un formato inesperado.";
     if (error.status === 404) return "El recurso ya no está disponible.";
-    if (error.status === 503 || error.status === 502) return "SUTRAN no está respondiendo.";
+    if (error.status === 503 || error.status === 502) return "La fuente de datos no está respondiendo.";
     return `Error del servidor (${error.status ?? "?"}).`;
   }
   return "Error inesperado.";

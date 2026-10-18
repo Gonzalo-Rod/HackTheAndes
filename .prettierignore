@@ -7,3 +7,5 @@ package-lock.json
 docs/
 getting-started/
 AGENTS.md
+# Preserve real upstream payloads verbatim for parser regression tests.
+src/test/fixtures/weekly-report-real_christian/

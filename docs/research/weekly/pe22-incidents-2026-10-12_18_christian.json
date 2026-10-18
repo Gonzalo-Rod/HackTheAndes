@@ -4,7 +4,7 @@
     "startDate": "2026-10-12",
     "endDate": "2026-10-18"
   },
-  "updatedAt": "2026-10-17T22:47:45.961Z",
+  "updatedAt": "2026-10-18T02:02:33.649Z",
   "runs": [
     {
       "at": "2026-10-17T21:48:12.916Z",
@@ -48,6 +48,46 @@
     },
     {
       "at": "2026-10-17T22:47:45.961Z",
+      "sources": {
+        "sutran": {
+          "ok": true,
+          "kept": 3,
+          "note": null
+        },
+        "indeci": {
+          "ok": true,
+          "kept": 0,
+          "note": null
+        },
+        "googleNews": {
+          "ok": true,
+          "kept": 3,
+          "note": "1 title(s) named only \"Carretera Central\" and were left out"
+        }
+      }
+    },
+    {
+      "at": "2026-10-17T23:17:56.903Z",
+      "sources": {
+        "sutran": {
+          "ok": true,
+          "kept": 3,
+          "note": null
+        },
+        "indeci": {
+          "ok": true,
+          "kept": 0,
+          "note": null
+        },
+        "googleNews": {
+          "ok": true,
+          "kept": 3,
+          "note": "1 title(s) named only \"Carretera Central\" and were left out"
+        }
+      }
+    },
+    {
+      "at": "2026-10-18T02:02:33.649Z",
       "sources": {
         "sutran": {
           "ok": true,
@@ -114,7 +154,7 @@
         }
       ],
       "firstSeenAt": "2026-10-17T21:48:12.916Z",
-      "lastSeenAt": "2026-10-17T22:47:45.961Z",
+      "lastSeenAt": "2026-10-18T02:02:33.649Z",
       "listedInLatestRun": true
     },
     {
@@ -163,7 +203,7 @@
         }
       ],
       "firstSeenAt": "2026-10-17T21:48:12.916Z",
-      "lastSeenAt": "2026-10-17T22:47:45.961Z",
+      "lastSeenAt": "2026-10-18T02:02:33.649Z",
       "listedInLatestRun": true
     },
     {
@@ -171,10 +211,10 @@
         "id": "c954d0b8-e9e3-4889-bb1b-46749a3fc60b",
         "code": "SIGEA-171026-02",
         "cause": "accidentes",
-        "roadStatus": "restringido",
+        "roadStatus": "normal",
         "title": "Falla mecanica de un trailer KM 88",
-        "description": "Falla mecanica de un trailer - la vía se encuentra con el transito restringido.",
-        "currentSituation": "Via restringida",
+        "description": "Via libre y transitable",
+        "currentSituation": "Via libre y transitable",
         "lat": -11.78803345,
         "lng": -76.31516242,
         "region": "Lima",
@@ -197,9 +237,14 @@
         "source": "CONCESIONARIA DEVIANDES",
         "sourceUrl": null,
         "reportCount": 1,
-        "lastActionAt": "2026-10-17T20:12:02.393Z"
+        "lastActionAt": "2026-10-18T01:07:14.304Z"
       },
       "history": [
+        {
+          "date": "2026-10-18T01:07:14.304Z",
+          "type": "cambio_estado_via",
+          "newStatus": "normal"
+        },
         {
           "date": "2026-10-17T20:12:02.393Z",
           "type": "publicacion",
@@ -207,7 +252,7 @@
         }
       ],
       "firstSeenAt": "2026-10-17T21:48:12.916Z",
-      "lastSeenAt": "2026-10-17T22:47:45.961Z",
+      "lastSeenAt": "2026-10-18T02:02:33.649Z",
       "listedInLatestRun": true
     }
   ],
@@ -229,7 +274,7 @@
         "(Chosica OR Matucana OR Ticlio OR \"La Oroya\" OR Huarochirí) (accidente OR huaico OR derrumbe OR bloqueo) when:7d"
       ],
       "firstSeenAt": "2026-10-17T21:48:12.916Z",
-      "lastSeenAt": "2026-10-17T22:47:45.961Z"
+      "lastSeenAt": "2026-10-18T02:02:33.649Z"
     },
     {
       "key": "CHOQUE MULTIPLE EN LA CARRETERA CENTRAL DEJA VARIOS HERIDOS EN CONCEPCION|DIARIO AHORA",
@@ -251,7 +296,7 @@
         "\"Carretera Central\" when:7d"
       ],
       "firstSeenAt": "2026-10-17T21:48:12.916Z",
-      "lastSeenAt": "2026-10-17T22:47:45.961Z"
+      "lastSeenAt": "2026-10-18T02:02:33.649Z"
     },
     {
       "key": "LA OROYA: DOS JOVENES RESULTAN HERIDOS TRAS CAER CON SU AUTO AL RIO MANTARO|DIARIO CORREO",
@@ -269,7 +314,7 @@
         "(Chosica OR Matucana OR Ticlio OR \"La Oroya\" OR Huarochirí) (accidente OR huaico OR derrumbe OR bloqueo) when:7d"
       ],
       "firstSeenAt": "2026-10-17T21:48:12.916Z",
-      "lastSeenAt": "2026-10-17T22:47:45.961Z"
+      "lastSeenAt": "2026-10-18T02:02:33.649Z"
     }
   ]
 }

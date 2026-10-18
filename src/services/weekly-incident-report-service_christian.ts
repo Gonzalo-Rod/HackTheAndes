@@ -80,18 +80,22 @@ const failed = <T>(error: unknown): SourceResult<T> => ({ observed: null, run: {
 async function collectSutran(deps: WeeklyIncidentReportDeps, window: ReportWindow): Promise<SourceResult<SutranObservation>> {
   const ctx = { requestId: deps.requestId };
   try {
-    const { records } = await deps.roadAlerts.listAlerts(ctx);
+    const { records, invalidCount } = await deps.roadAlerts.listAlerts(ctx);
+    // A partial schema failure cannot prove that previously seen alerts disappeared.
+    if (invalidCount > 0) throw new UpstreamError("Incomplete SUTRAN listing", "invalid_body", "sutran");
     const alerts = records
       .map(normalizeSutranAlert)
       .filter((alert) => alert !== null)
       .filter((alert) => isCorridorAlert(alert) && alert.eventDate !== null && isDateInWindow(window, alert.eventDate));
 
     const observed: SutranObservation[] = [];
+    let missingHistory = 0;
     for (const alert of alerts) {
       let history: AlertHistoryEntry[] | null = null;
       try {
         history = normalizeSutranHistory(await deps.roadAlerts.getAlertHistory(alert.id, ctx));
       } catch (error) {
+        missingHistory++;
         // The alert is still reported; its previous history (if any) is kept by the merge.
         logger.warn({
           operation: "weekly_report.sutran.history",
@@ -103,7 +107,14 @@ async function collectSutran(deps: WeeklyIncidentReportDeps, window: ReportWindo
       }
       observed.push({ alert, history });
     }
-    return { observed, run: { ok: true, kept: observed.length, note: null } };
+    return {
+      observed,
+      run: {
+        ok: true,
+        kept: observed.length,
+        note: missingHistory ? `${missingHistory} history request(s) failed; previous history kept` : null,
+      },
+    };
   } catch (error) {
     return failed(error);
   }
@@ -240,6 +251,16 @@ export function createWeeklyIncidentReportService(deps: WeeklyIncidentReportDeps
         at: new Date(deps.now()).toISOString(),
         sources: { sutran: sutran.run, indeci: indeci.run, googleNews: news.run },
       };
+      for (const [provider, source] of Object.entries(run.sources)) {
+        if (!source.ok || source.note)
+          logger.warn({
+            operation: "weekly_report.source",
+            provider,
+            requestId: deps.requestId,
+            result: source.ok ? "skipped" : "error",
+            note: source.note,
+          });
+      }
       const merged = mergeObservations(state, { sutran: sutran.observed, indeci: indeci.observed, news: news.observed }, run);
       return { state: merged, run };
     },

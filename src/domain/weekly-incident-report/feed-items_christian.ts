@@ -28,9 +28,13 @@ const CDATA_OPEN = "<![CDATA[";
 const CDATA_CLOSE = "]]>";
 
 function decodeCharacterReferences(value: string): string {
+  const character = (value: number): string =>
+    Number.isInteger(value) && value >= 0 && value <= 0x10ffff && !(value >= 0xd800 && value <= 0xdfff)
+      ? String.fromCodePoint(value)
+      : "\uFFFD";
   return value
-    .replace(/&#x([0-9a-f]+);/gi, (_, hex: string) => String.fromCodePoint(Number.parseInt(hex, 16)))
-    .replace(/&#(\d+);/g, (_, dec: string) => String.fromCodePoint(Number(dec)))
+    .replace(/&#x([0-9a-f]+);/gi, (_, hex: string) => character(Number.parseInt(hex, 16)))
+    .replace(/&#(\d+);/g, (_, dec: string) => character(Number(dec)))
     .replace(/&([a-z]+);/gi, (entity, name: string) => NAMED_ENTITIES[name.toLowerCase()] ?? entity);
 }
 
@@ -68,4 +72,17 @@ export function parseFeedItems(xml: string): FeedItem[] {
     if (parsed.success) items.push(parsed.data);
   }
   return items;
+}
+
+/** Rejects HTML error pages, truncated feeds and invalid items instead of reporting a successful empty read. */
+export function parseFeedDocument(xml: string): { ok: true; items: FeedItem[] } | { ok: false; error: "invalid_feed" } {
+  // Strip CDATA and comments before checking structure: descriptions may contain literal tags.
+  const structure = xml.replace(/<!\[CDATA\[[\s\S]*?\]\]>|<!--[\s\S]*?-->/g, "");
+  if (!/<rss\b[^>]*>\s*<channel\b[^>]*>[\s\S]*<\/channel>\s*<\/rss>\s*$/i.test(structure)) {
+    return { ok: false, error: "invalid_feed" };
+  }
+  const opened = [...structure.matchAll(/<item(?:\s[^>]*)?>/gi)].length;
+  const closed = [...structure.matchAll(/<\/item>/gi)].length;
+  const items = parseFeedItems(xml);
+  return opened === closed && opened === items.length ? { ok: true, items } : { ok: false, error: "invalid_feed" };
 }

@@ -8,6 +8,7 @@ import { AlertHistoryEntrySchema, RoadAlertSchema } from "@/contracts/road-alert
 
 const IsoDateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
 const IsoDateTimeSchema = z.iso.datetime({ offset: true });
+const WebUrlSchema = z.url().refine((value) => /^https?:\/\//i.test(value), "Expected an HTTP(S) URL");
 
 /** An ISO week in Lima time: Monday to Sunday, both inclusive. */
 export const ReportWindowSchema = z.object({
@@ -49,7 +50,7 @@ export const IndeciPlaceSchema = z.object({
 });
 
 export const IndeciEntrySchema = z.object({
-  url: z.url(),
+  url: WebUrlSchema,
   title: z.string(),
   hazard: z.string(),
   place: IndeciPlaceSchema,
@@ -69,7 +70,7 @@ export const NewsEntrySchema = z.object({
   key: z.string().min(1),
   title: z.string().min(1),
   outlet: z.string().nullable(),
-  url: z.url(),
+  url: WebUrlSchema,
   /** When Google News listed the item, which can be a re-index of an older article. */
   listedAt: IsoDateTimeSchema,
   placeTerms: z.array(z.string()),

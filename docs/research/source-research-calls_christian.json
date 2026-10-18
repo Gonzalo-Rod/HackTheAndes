@@ -1,0 +1,179 @@
+{
+    "schemaVersion":  1,
+    "sessionDateLima":  "2026-10-17",
+    "scope":  "Root research calls for all-six-category source investigation; agent ledgers live in each source JSON.",
+    "queries":  [
+                    {
+                        "query":  "site.gob.pe senamhi octubre de 2026 (Junín OR Lima) (heladas OR lluvias OR río Rímac)",
+                        "depth":  "advanced",
+                        "resultUrls":  [
+                                           "https://www.senamhi.gob.pe/load/file/02269SENA-112.pdf",
+                                           "https://www.senamhi.gob.pe/main.php?dp=junin\u0026p=aviso-24H",
+                                           "https://www.senamhi.gob.pe/main.php?dp=madre-de-dios\u0026p=pronostico-meteorologico",
+                                           "https://www.senamhi.gob.pe/main.php?dp=ancash\u0026p=pronostico-meteorologico",
+                                           "https://www.senamhi.gob.pe/main.php?dp=madre-de-dios\u0026p=aviso-24H"
+                                       ]
+                    },
+                    {
+                        "query":  "site.senamhi.gob.pe 17 octubre 2026 (hidrológico OR agrometeorológico OR heladas)",
+                        "depth":  "advanced",
+                        "resultUrls":  [
+                                           "https://www.senamhi.gob.pe?p=heladas-y-friajes-avisos",
+                                           "https://www.senamhi.gob.pe",
+                                           "https://www.senamhi.gob.pe?p=heladas-y-friajes",
+                                           "https://www.senamhi.gob.pe?p=monitoreo-regional",
+                                           "https://www.senamhi.gob.pe/main.php?dp=apurimac\u0026p=pronostico-meteorologico"
+                                       ]
+                    },
+                    {
+                        "query":  "site.gob.pe (Senasa OR Midagri) octubre de 2026 (Junín OR Huarochirí) (plagas OR alerta OR agricultura)",
+                        "depth":  "advanced",
+                        "resultUrls":  [
+                                           "https://www.senasa.gob.pe/senasacontigo/mapa-senasa/mapa-4",
+                                           "https://www.senasa.gob.pe/senasacontigo/author/senasacontigo/page/239",
+                                           "https://www.senasa.gob.pe/senasacontigo/author/senasacontigo/page/172",
+                                           "https://www.senasa.gob.pe/senasacontigo/tag/sanidad-vegetal/page/9",
+                                           "https://www.senasa.gob.pe/senasacontigo/tag/puesto-de-control-carpitas"
+                                       ]
+                    },
+                    {
+                        "query":  "site.sedapal.com.pe Rímac 2026 caudal boletín",
+                        "depth":  "advanced",
+                        "resultUrls":  [
+                                           "https://www.gob.pe/institucion/sedapal/noticias/1359537-sedapal-garantiza-abastecimiento-de-agua-potable-ante-incremento-del-caudal-del-rio-rimac",
+                                           "https://rpp.pe/noticias/rio-rimac",
+                                           "https://www.facebook.com/SedapalOficial/posts/sedapal-activ%C3%B3-sus-protocolos-de-contingencia-ante-el-incremento-del-caudal-del-/1379798897518745",
+                                           "https://www.tvperu.gob.pe/noticias/nacionales/senamhi-evalua-caudal-del-rio-rimac-para-reforzar-avisos-ante-posibles-crecidas"
+                                       ]
+                    },
+                    {
+                        "query":  "site.senamhi.gob.pe Rímac 17 octubre 2026 caudal",
+                        "depth":  "advanced",
+                        "resultUrls":  [
+                                           "https://www.senamhi.gob.pe/servicios?p=monitoreo-chirilu",
+                                           "https://www.tvperu.gob.pe/noticias/nacionales/senamhi-evalua-caudal-del-rio-rimac-para-reforzar-avisos-ante-posibles-crecidas",
+                                           "https://www.senamhi.gob.pe?p=monitoreo-regional",
+                                           "https://www.tvperu.gob.pe/taxonomy/term/5702/all/feed"
+                                       ]
+                    },
+                    {
+                        "query":  "site.ana.gob.pe Rímac Mantaro observatorio datos hidrologicos",
+                        "depth":  "advanced",
+                        "resultUrls":  [
+                                           "https://crhc.ana.gob.pe/mantaro/sites/default/files/Mantaro/Producto%207-La%20Cuenca%20q%20Podemos/HY5971-MA-Vol3-RP-HY-LP2030-D01V03.pdf",
+                                           "https://crhc.ana.gob.pe/mantaro/sites/default/files/Mantaro/Producto%208-Documento%20Ejecutivo/HY5971-MA-08-SR-HE-001-InformeFinal-Vol-I-D03.pdf",
+                                           "https://www.youtube.com/watch?v=HxgN0iSW7c8",
+                                           "https://www.youtube.com/watch?v=HxgN0iSW7c8\u0026xstg=CAMSBhUDzO3xHw%3D%3D"
+                                       ]
+                    }
+                ],
+    "extractCalls":  [
+                         {
+                             "urls":  [
+                                          "https://www.senamhi.gob.pe/main.php?dp=junin\u0026p=aviso-24H",
+                                          "https://www.senamhi.gob.pe/load/file/02269SENA-112.pdf",
+                                          "https://www.senamhi.gob.pe?p=heladas-y-friajes-avisos"
+                                      ],
+                             "extractDepth":  "advanced",
+                             "requestId":  "a82d1046-d0ac-4f80-873f-43e2ace2550f"
+                         },
+                         {
+                             "urls":  [
+                                          "https://www.senamhi.gob.pe/?p=aviso-meteorologico-detalle\u0026a=2026\u0026b=29256\u0026c=00\u0026d=SENA"
+                                      ],
+                             "extractDepth":  "advanced",
+                             "requestId":  "8c25499a-c2f4-4abf-a156-a84a808c8ecb"
+                         },
+                         {
+                             "urls":  [
+                                          "https://www.senamhi.gob.pe/servicios?p=monitoreo-chirilu",
+                                          "https://www.senamhi.gob.pe?p=monitoreo-regional"
+                                      ],
+                             "extractDepth":  "advanced",
+                             "requestId":  "f1ff65d6-96d2-4927-a464-7aca59cbcd4e"
+                         }
+                     ],
+    "estimatedCredits":  {
+                             "search":  12,
+                             "extract":  6,
+                             "total":  18,
+                             "actualBilledCredits":  null,
+                             "basis":  "Six advanced searches at 2 credits; three advanced extraction batches at approximately 2 credits. Provider did not expose billing."
+                         },
+    "followUpPasses":  [
+                           {
+                               "dateLima":  "2026-10-17",
+                               "searchCalls":  48,
+                               "advancedSearchCalls":  48,
+                               "extractCalls":  9,
+                               "requestedUrlExtractions":  23,
+                               "crawlCalls":  2,
+                               "estimatedCredits":  124,
+                               "actualBilledCredits":  null,
+                               "focus":  [
+                                             "SENAMHI October agrometeorological impacts, frost and town forecasts",
+                                             "SENAMHI CHIRILU rainfall and seasonal hydrological forecast",
+                                             "INDECI frost report and short-term quebrada notice",
+                                             "official station coordinates, SENASA surveillance and CENEPRED future risk"
+                                         ],
+                               "outcome":  "Verified crop frost damage at Huayao, station-level crop observations, dated September rainfall and river-flow observations, and official town forecasts. Local point coverage remains null where coordinates were not verified.",
+                               "ledgerFile":  "tavily-followup-2026-10-17_christian.json"
+                           },
+                           {
+                               "dateLima":  "2026-10-17",
+                               "searchCalls":  15,
+                               "advancedSearchCalls":  13,
+                               "basicSearchCalls":  2,
+                               "extractCalls":  5,
+                               "requestedUrlExtractions":  10,
+                               "crawlCalls":  0,
+                               "estimatedCredits":  38,
+                               "actualBilledCredits":  null,
+                               "focus":  [
+                                             "SENAMHI current notice cross-check and 24-hour rain notices 289/290",
+                                             "INDECI daily hazard bulletin and corridor emergency reports",
+                                             "SENASA dated local pest detection search",
+                                             "Published notice-polygon extraction feasibility"
+                                         ],
+                               "outcome":  "Verified 12.0 mm rainfall at Ingenio for 16-17 October 07:00; a 17 October forecast bulletin summarizes notice 422 for Lima and Junín; and a closed Ayas fire report records 45 ha crop impact and 25 ha natural-cover loss. No local pest outbreak was verified. Notice 1647 concerns Ucayali, and advertised warning polygons remained unavailable through Tavily extraction.",
+                               "ledgerFile":  "tavily-followup-2026-10-17_christian.json"
+                           },
+                           {
+                               "dateLima":  "2026-10-17",
+                               "searchCalls":  5,
+                               "advancedSearchCalls":  5,
+                               "basicSearchCalls":  0,
+                               "extractCalls":  1,
+                               "requestedUrlExtractions":  1,
+                               "crawlCalls":  0,
+                               "estimatedCredits":  12,
+                               "actualBilledCredits":  null,
+                               "focus":  [
+                                             "Current Huarochirí/Yauli landslide and flood reports",
+                                             "Rímac station alerts and PE-22 closures",
+                                             "Dated SENASA pest alerts in Junín",
+                                             "Official wildfire-condition advisory coverage"
+                                         ],
+                               "outcome":  "No new current corridor landslide, Rímac warning or PE-22 closure was verified. SENASA yielded no local pest alert. Expired October 5–8 rain notices and an October 11–16 wildfire-conditions bulletin were recorded as exclusions because current validity/local geometry was absent or unresolved.",
+                               "ledgerFile":  "tavily-followup-2026-10-17_christian.json"
+                           },
+                           {
+                               "dateLima":  "2026-10-17",
+                               "searchCalls":  73,
+                               "advancedSearchCalls":  73,
+                               "basicSearchCalls":  0,
+                               "extractCalls":  27,
+                               "requestedUrlExtractions":  29,
+                               "crawlCalls":  0,
+                               "estimatedCredits":  200,
+                               "actualBilledCredits":  null,
+                               "focus":  [
+                                             "Official and news review of user-supplied notices",
+                                             "CENEPRED seasonal rainfall and water-deficit scenarios",
+                                             "SENAMHI rain and crop forecasts, SENASA pest surveillance, and route status"
+                                         ],
+                               "outcome":  "Verified the official summer-2027 exposure update, a water-deficit scenario, current SENAMHI warning 422, crop-risk material and dated historical road impacts. National risk, media leads and old closures were kept separate from live PE-22 conditions.",
+                               "ledgerFile":  "tavily-followup-2026-10-17_christian.json"
+                           }
+                       ]
+}

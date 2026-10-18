@@ -7,14 +7,15 @@ import "@/styles/dashboard.css";
 import "@/styles/panels.css";
 import "@/styles/map.css";
 import "@/styles/responsive.css";
+import "@/styles/research_christian.css";
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"], display: "swap" });
 const jetbrains = JetBrains_Mono({ variable: "--font-jetbrains", subsets: ["latin"], display: "swap", weight: ["400", "500"] });
 
 export const metadata: Metadata = {
-  title: "PeruRoad Climate · Estado vial del Perú",
+  title: "PeruRoad Climate · Clima, territorio y accesos",
   description:
-    "Mapa 3D de las alertas viales vigentes de SUTRAN en el Perú, con foco en la Carretera Central (PE-22): estado de la vía, motivo, historial y perfil del corredor.",
+    "Estado vial de SUTRAN y evidencias oficiales de clima y territorio: agua, heladas, lluvias, laderas, agricultura y plagas, con fuentes, fechas y límites de cobertura.",
 };
 
 export const viewport: Viewport = {

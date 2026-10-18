@@ -1,5 +1,5 @@
-import { type FeedItem, parseFeedItems } from "@/domain/weekly-incident-report/feed-items_christian";
-import type { RequestOptions } from "@/integrations/http/fetch-json";
+import { type FeedItem, parseFeedDocument } from "@/domain/weekly-incident-report/feed-items_christian";
+import { type RequestOptions, UpstreamError } from "@/integrations/http/fetch-json";
 import { getText } from "@/integrations/http/get-text_christian";
 
 // Google News RSS search: each request returns items from many outlets with their listing
@@ -47,7 +47,9 @@ export function createGoogleNewsClient({ fetchImpl, sleep, timeoutMs }: GoogleNe
         sleep,
         timeoutMs,
       });
-      return parseFeedItems(xml);
+      const parsed = parseFeedDocument(xml);
+      if (!parsed.ok) throw new UpstreamError("Invalid Google News RSS document", "invalid_body", PROVIDER);
+      return parsed.items;
     },
   };
 }

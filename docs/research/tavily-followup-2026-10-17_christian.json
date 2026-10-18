@@ -1,0 +1,928 @@
+{
+    "schemaVersion":  1,
+    "dateLima":  "2026-10-17",
+    "tool":  "Tavily MCP search, extract and crawl",
+    "userCreditCap":  2000,
+    "thisPass":  {
+                     "searchCalls":  54,
+                     "advancedSearchCalls":  54,
+                     "extractCalls":  9,
+                     "requestedUrlExtractions":  23,
+                     "crawlCalls":  2,
+                     "conservativeEstimatedCredits":  136,
+                     "actualBilledCredits":  null,
+                     "creditBasis":  "54 advanced searches x 2 credits (108); 9 advanced extract calls x 2 estimate (18); 2 crawls estimated at 5 each (10). This is a conservative model, not billing returned by Tavily."
+                 },
+    "cumulativeEstimate":  {
+                               "earlierHandoffEstimate":  88,
+                               "initialSixTopicPassEstimate":  91,
+                               "intermediateContinuationEstimate":  135,
+                               "currentFollowUpEstimate":  136,
+                               "conservativeTotal":  700,
+                               "cap":  2000,
+                               "actualBilledCredits":  null
+                           },
+    "searches":  [
+                     {
+                         "query":  "SENAMHI latest 2026 October agrometeorological bulletin Sierra Central Junín Lima frost rain crop advisory weekly",
+                         "requestId":  "fff4745c-b638-4c22-89e6-0d0a67e7d430",
+                         "resultUrls":  [
+
+                                        ]
+                     },
+                     {
+                         "query":  "2026 octubre alerta fitosanitaria plaga Junín Huancayo Huarochirí Lima aviso",
+                         "requestId":  "ef1b6efb-bf12-4649-ada7-32aae6a47a16",
+                         "resultUrls":  [
+
+                                        ]
+                     },
+                     {
+                         "query":  "ANA 2026 October 17 hydrological bulletin Rio Rimac Mantaro discharge flow warning",
+                         "requestId":  "28a3b985-71b1-47e5-8687-3334e288a74f",
+                         "resultUrls":  [
+
+                                        ]
+                     },
+                     {
+                         "query":  "INDECI COEN octubre 2026 Huarochiri San Mateo Matucana huaico deslizamiento lluvias emergencia reporte",
+                         "requestId":  "ff51b441-7416-499e-9e56-a10737797e57",
+                         "resultUrls":  [
+
+                                        ]
+                     },
+                     {
+                         "query":  "SENAMHI boletín agrometeorológico octubre 2026 sierra central Junín Lima cultivos heladas",
+                         "requestId":  "af419b99-28d5-4107-805f-6f032bac4eb5",
+                         "resultUrls":  [
+                                            "https://www.gob.pe/institucion/senamhi/noticias/1451967-panorama-del-sector-agropecuario-de-la-sierra-central-y-sur-ante-las-bajas-temperaturas",
+                                            "https://www.senamhi.gob.pe/main.php?dp=junin\u0026p=heladas-y-friajes-avisos",
+                                            "https://www.senamhi.gob.pe?p=boletines",
+                                            "https://www.senamhi.gob.pe/main.php?dp=lima\u0026p=heladas-y-friajes-avisos",
+                                            "https://www.facebook.com/senamhiperu/posts/aprendeconelsenamhi-conoce-las-pruebas-que-atraviesa-la-papa-antes-las-bajas-tem/1144645781027167",
+                                            "https://www.senamhi.gob.pe/main.php?dp=junin\u0026p=aviso-meteorologico",
+                                            "https://www.gob.pe/institucion/senamhi/informes-publicaciones/8727498-reporte-agrometeorologico-de-impactos-sierra-06-al-12-de-octubre-del-2026",
+                                            "https://www.apnoticias.pe/senamhi-advierte-heladas-extremas-cuales-seran-las-regiones-afectadas-1342948"
+                                        ]
+                     },
+                     {
+                         "query":  "SENASA Junín octubre 2026 alerta fitosanitaria plaga aviso",
+                         "requestId":  "e0e209a9-6534-4a19-9b51-8ad5c4b5ecd4",
+                         "resultUrls":  [
+                                            "https://agroempresario.com/publicacion/122122/alerta-fitosanitaria-el-senasa-intensifica-los-controles-ante-el-riesgo-de-ingreso-de-una-plaga",
+                                            "https://www.facebook.com/senasaperu/posts/unidoscontralaxylellapara-evitar-la-propagaci%C3%B3n-de-la-plaga-xylella-fastidiosa-a/1106345234394744",
+                                            "https://www.boletinoficial.gob.ar/detalleAviso/primera/344112/20260707",
+                                            "https://www.infobae.com/revista-chacra/2026/10/12/lobesia-botrana-mendoza-activa-la-primera-alerta-y-fija-fechas-clave-para-los-tratamientos",
+                                            "https://www.estudiorodrigo.com/publicaciones/alerta-life-sciences-octubre-2026",
+                                            "https://www.agroperu.pe/junin-senasa-capacito-a-productores-de-cafe-para-el-manejo-de-la-plaga-xylella-fastidiosa",
+                                            "https://www.argentina.gob.ar/noticias/comunicar-la-deteccion-de-plagas-para-cuidar-el-estatus-fitosanitario-de-argentina",
+                                            "https://www.instagram.com/reel/DQevujGCUU6?hl=en"
+                                        ]
+                     },
+                     {
+                         "query":  "ANA boletín hidrológico octubre 2026 río Rímac Mantaro caudal alerta",
+                         "requestId":  "6c24e450-31cd-42bd-ab30-c0032de979ae",
+                         "resultUrls":  [
+                                            "https://hytimes.pe/caudal-del-rio-mantaro-aun-no-representa-riesgo-de-desbordes-pese-a-dias-lluviosos-segun-autoridad-del-agua",
+                                            "https://www.rcrperu.com/rio-rimac-incrementa-su-caudal-y-se-mantiene-bajo-control-gracias-a-permanente-trabajo",
+                                            "https://larazon.pe/ante-el-incremento-de-las-lluvias-este-es-el-comportamiento-del-rio-mantaro",
+                                            "https://www.gob.pe/institucion/ana/noticias/1359235-ana-rio-rimac-incrementa-su-caudal-y-se-mantiene-bajo-control-gracias-a-permanente-trabajo",
+                                            "https://www.rcrperu.com/caudal-del-rio-rimac-baja-a-umbral-amarillo-tras-varios-dias-en-nivel-rojo-informa-senamhi",
+                                            "https://www.elperuano.pe/noticia/291851-la-senda-del-agua-plan-para-restaurar-cuenca-del-rio-rimac",
+                                            "https://www.facebook.com/INEIpaginaOficial/posts/notadeprensa-en-octubre-del-presente-a%C3%B1o-el-caudal-del-r%C3%ADo-r%C3%ADmac-alcanz%C3%B3-2126-me/1008792014616434",
+                                            "https://www.facebook.com/canalnoficial/videos/contralor%C3%ADa-alert%C3%B3-a-la-autoridad-nacional-del-agua-ana-deficiencias-en-labores-/1142879871114757"
+                                        ]
+                     },
+                     {
+                         "query":  "INDECI reporte octubre 2026 Huarochirí San Mateo Matucana huaico deslizamiento lluvias",
+                         "requestId":  "897b2e83-6d58-4500-bc41-f4167abdf0a4",
+                         "resultUrls":  [
+                                            "https://reliefweb.int/report/peru/reporte-complementario-159-deslizamiento-en-la-provincia-de-huarochir-lima",
+                                            "https://www.facebook.com/100089205820405/posts/lluviasintensas-%F0%9D%97%98%F0%9D%97%A1-%F0%9D%97%98%F0%9D%97%A6%F0%9D%97%A7%F0%9D%97%98-%F0%9D%97%9C%F0%9D%97%A1%F0%9D%97%A9%F0%9D%97%9C%F0%9D%97%98%F0%9D%97%A5%F0%9D%97%A1%F0%9D%97%A2-%F0%9D%97%A1%F0%9D%97%A2%F0%9D%97%A6-%F0%9D%97%A3%F0%9D%97%A5%F0%9D%97%98%F0%9D%97%A3%F0%9D%97%94%F0%9D%97%A5%F0%9D%97%94%F0%9D%97%A0%F0%9D%97%A2%F0%9D%97%A6%EF%B8%8Fla-municipalidad-provincial-de-h/893227873660732",
+                                            "https://peru21.pe/peru/lluvias-en-peru-2026-12-muertos-y-527-distritos-en-emergencia",
+                                            "https://portal.indeci.gob.pe/emergencias/reporte-de-peligro-inminente-n-o-0084-9-10-2026-coen-indeci-2300-horas-reporte-n-o-1-por-lluvias-intensas-en-el-distrito-de-ocona-arequipa",
+                                            "https://www.facebook.com/canalnoficial/videos/hasta-el-momento-se-han-reportado-52-fallecidos-por-lluvias-seg%C3%BAn-cifra-de-indec/2265253907330685",
+                                            "https://portal.indeci.gob.pe/informe/reportes-preliminares-complementarios-emergencias",
+                                            "https://www.infobae.com/peru/2026/01/21/lluvias-en-peru-2026-lista-completa-de-los-516-distritos-en-estado-de-emergencia-por-huaicos-y-desbordes",
+                                            "https://portal.indeci.gob.pe/wp-content/uploads/2023/02/REPORTE-COMPLEMENTARIO-N%C2%BA-1955-24FEB2023-HUAICO-EN-LA-PROVINCIA-DE-HUAROCHIRI-LIMA-13.pdf"
+                                        ]
+                     },
+                     {
+                         "query":  "REPORTE AGROMETEOROLÓGICO DE IMPACTOS N°40-2026 PDF Sierra 06 12 octubre SENAMHI",
+                         "requestId":  "fd18aed9-9730-43a1-8e0a-109838c1df63",
+                         "resultUrls":  [
+                                            "https://www.gob.pe/institucion/senamhi/informes-publicaciones/8727498-reporte-agrometeorologico-de-impactos-sierra-06-al-12-de-octubre-del-2026",
+                                            "https://www.gob.pe/institucion/senamhi/colecciones/21808-reporte-agrometeorologico-de-impacto-sierra",
+                                            "https://www.gob.pe/institucion/senamhi/informes-publicaciones",
+                                            "https://www.senamhi.gob.pe?p=boletines",
+                                            "https://www.senamhi.gob.pe?p=aviso-meteorologico-vigente\u0026a=2026\u0026b=28567\u0026c=00\u0026d=SENA",
+                                            "https://www.senamhi.gob.pe?p=impacto-en-la-agricultura"
+                                        ]
+                     },
+                     {
+                         "query":  "Pronóstico de Riesgo Agroclimático papa octubre 2026 Junín Sierra central",
+                         "requestId":  "2ce8863f-adfe-4f96-9911-47438269170f",
+                         "resultUrls":  [
+                                            "https://www.senamhi.gob.pe/main.php?dp=junin\u0026p=boletines",
+                                            "https://www.senamhi.gob.pe?p=boletines",
+                                            "https://www.senamhi.gob.pe/load/file/02966SENA-62.pdf",
+                                            "https://www.senamhi.gob.pe/load/file/02262SENA-74.pdf",
+                                            "https://www.senamhi.gob.pe/load/file/02966SENA-74.pdf",
+                                            "https://www.senamhi.gob.pe/pdf/trans/informes-transparencia/informe-de-resultados-pei-poi-2024.pdf",
+                                            "https://www.senamhi.gob.pe/load/file/02966SENA-61.pdf"
+                                        ]
+                     },
+                     {
+                         "query":  "Pronóstico de condiciones favorables para insectos 12 Octubre 2026",
+                         "requestId":  "bda3df84-29e9-4026-9a7e-a190bccfc0bb",
+                         "resultUrls":  [
+                                            "https://www.senamhi.gob.pe?p=boletines",
+                                            "https://www.senamhi.gob.pe/load/file/03715SENA-117.pdf",
+                                            "https://www.senamhi.gob.pe/load/file/03708SENA-121.pdf",
+                                            "https://www.senamhi.gob.pe/pdf/trans/informes-transparencia/informe-de-resultados-pei-poi-2024.pdf",
+                                            "https://www.senamhi.gob.pe/load/file/02976SENA-778.pdf",
+                                            "https://www.senamhi.gob.pe/load/file/03708SENA-130.pdf"
+                                        ]
+                     },
+                     {
+                         "query":  "BOLETÍN INFORMATIVO DE AVISO DE CORTO PLAZO ANTE POSIBLE ACTIVACIÓN DE QUEBRADAS N°191 17-10-2026",
+                         "requestId":  "7088d8b8-a93a-4def-afaf-a46e16cf040d",
+                         "resultUrls":  [
+                                            "https://portal.indeci.gob.pe/wp-content/uploads/2026/10/BOLET%C3%8DN-INFORMATIVO-DE-AVISO-DE-CORTO-PLAZO-ANTE-POSIBLE-ACTIVACI%C3%93N-DE-QUEBRADAS-N%C2%B0191-17-10-2026.pdf",
+                                            "https://portal.indeci.gob.pe/emergencias/reporte-complementario-n-o-14380-17-10-2026-coen-indeci-1100-horas-reporte-n-o-1-incendio-forestal-en-el-distrito-de-san-antonio-san-martin",
+                                            "https://portal.indeci.gob.pe/emergencias/boletin-informativo-sismico-nacional-no-740-2026-del-17-de-octubre-de-2026",
+                                            "https://portal.indeci.gob.pe/fondes/reporte-de-transferencias",
+                                            "https://portal.indeci.gob.pe/informe/reportes-preliminares-complementarios-emergencias",
+                                            "https://portal.indeci.gob.pe/emergencias/reporte-preliminar-n-1059-17-10-2026-coen-indeci-1115-horas-incendio-forestal-en-el-distrito-de-toro-arequipa",
+                                            "https://portal.indeci.gob.pe/emergencias/reporte-complementario-n-o-14378-17-10-2026-coen-indeci-0720-horas-reporte-n-1-colapso-de-estructura-por-actividad-humana-en-el-distrito-de-la-perla-lima",
+                                            "https://portal.indeci.gob.pe/categoria_convocatoria/contrato-administrativo-de-servicios-cas"
+                                        ]
+                     },
+                     {
+                         "query":  "N° 191-2026-INDECI/COEN HUAROCHIRÍ OR YAULI OR HUANCAYO",
+                         "requestId":  "2f70f704-8f90-4721-970f-7d1bddc88b50",
+                         "resultUrls":  [
+                                            "https://portal.indeci.gob.pe/emergencias/boletin-informativo-de-aviso-de-corto-plazo-ante-posible-activacion-de-quebradas-n077-19-03-2026",
+                                            "https://portal.indeci.gob.pe/emergencias/reporte-complementario-n-8033-13-6-2026-coen-indeci-1830-horas-reporte-n-1-helada-en-el-distrito-de-yauli-junin",
+                                            "https://portal.indeci.gob.pe/wp-content/uploads/2026/07/BOLET%C3%8DN-INFORMATIVO-DE-AVISO-DE-CORTO-PLAZO-ANTE-LLUVIAS-INTENSAS-N%C2%B0191-2026-DEL-10-07-2026.pdf",
+                                            "https://portal.indeci.gob.pe/emergencias/page/4",
+                                            "https://portal.indeci.gob.pe/emergencias/reporte-complementario-n-11197-26-8-2026-coen-indeci-1750-horas-reporte-n-1-incendio-forestal-en-el-distrito-de-huaytara-huancavelica",
+                                            "https://portal.indeci.gob.pe/emergencias/boletin-informativo-sismico-nacional-n-561-2026-indeci-coen"
+                                        ]
+                     },
+                     {
+                         "query":  "Boletín Informativo de Aviso de Corto Plazo ante Lluvias Intensas N°289-2026 17 octubre 2026 INDECI Junín Lima",
+                         "requestId":  "d1fa25f1-d525-4c62-a8ef-b1852335e10f",
+                         "resultUrls":  [
+                                            "https://portal.indeci.gob.pe/coen/centros-de-operacion-de-emergencia",
+                                            "https://portal.indeci.gob.pe/coen/entidades-de-primera-respuesta",
+                                            "https://portal.indeci.gob.pe/emergencias/reporte-complementario-n-o-14380-17-10-2026-coen-indeci-1100-horas-reporte-n-o-1-incendio-forestal-en-el-distrito-de-san-antonio-san-martin",
+                                            "https://portal.indeci.gob.pe/respuesta/procesos-de-respuesta",
+                                            "https://portal.indeci.gob.pe/informe/reportes-preliminares-complementarios-emergencias",
+                                            "https://portal.indeci.gob.pe/informe/reportes-de-peligro"
+                                        ]
+                     },
+                     {
+                         "query":  "río Rímac caudal octubre 2026 Chosica nivel alerta",
+                         "requestId":  "0a012e21-f490-4ad7-95f2-ef432022079b",
+                         "resultUrls":  [
+                                            "https://www.ana.gob.pe/sites/default/files/normatividad/files/rimac_y_tributarios-2007_0_2.pdf",
+                                            "https://observatoriochirilu.ana.gob.pe/caracterizaci%C3%B3n-de-cuencas/sistema-hidraulico",
+                                            "https://www.ana.gob.pe/portal/gestion-del-conocimiento-girh/agua-y-poblacion",
+                                            "https://observatoriochirilu.ana.gob.pe/caracterizaci%C3%B3n-de-cuencas/hidrografia",
+                                            "https://www.ana.gob.pe/noticia/la-ana-coordina-elaboracion-del-plan-maestro-para-la-recuperacion-de-la-cuenca-del-rio-rimac",
+                                            "https://crhc.ana.gob.pe/mantaro/sites/default/files/Mantaro/Producto%208-Documento%20Ejecutivo/HY5971-MA-08-SR-HE-001-InformeFinal-Vol-I-D03.pdf",
+                                            "https://crhc.ana.gob.pe/sites/default/files/Archivos/Libro%20Plan%20Maestro%20Rimac%20-%20Final.pdf",
+                                            "https://www.ana.gob.pe/sites/default/files/publication/files/1_estudio_hidrologico_cuenca_rimac_-_volumen_i_-_texto_-_final_2010_0.pdf"
+                                        ]
+                     },
+                     {
+                         "query":  "río Mantaro octubre 2026 caudal Chulec La Oroya alerta",
+                         "requestId":  "c156e150-e1f2-4513-9b38-23d44db81e73",
+                         "resultUrls":  [
+                                            "https://prensaregional.pe/analizan-aguas-del-rio-osmore-y-rio-moquegua-para-verificar-presunta-afectacion-a-la-calidad-de-los-recursos-hidricos",
+                                            "https://confidencial.digital/analisis/centroamerica-en-alerta-por-el-nino-mientras-nicaragua-descarta-emergencia",
+                                            "https://www.diariobitcoin.com/analisis/pengu-rebota-pero-las-liquidaciones-mantienen-en-alerta-al-mercado-el-5-de-octubre-de-2026",
+                                            "https://www.spartanbrokers.com/analisis/crisis",
+                                            "https://www.facebook.com/anacondatours.com.pe/posts/as%C3%AD-es-la-pesca-en-el-rio-negro-yuracyacu-cuando-llegan-los-primeros-aumentos-de/1194311172904140",
+                                            "https://www.gob.pe/ana",
+                                            "https://proactivo.com.pe/ana-aprueba-plan-de-aprovechamiento-de-disponibilidad-hidrica-en-sistema-hidraulico-cunas",
+                                            "https://www.gov.br/ana/pt-br/sala-de-situacao/rio-amazonas/boletins/diario/boletim_01_amazonas_publica-1770401019.52.pdf"
+                                        ]
+                     },
+                     {
+                         "query":  "BOLETÍN INFORMativo DE AVISO DE CORTO PLAZO ANTE POSIBLE ACTIVACIÓN DE QUEBRADAS N° 191-2026-INDECI/COEN Junín Huarochirí",
+                         "requestId":  "cd7a85a5-8d30-45c5-889e-e2c72160c450",
+                         "resultUrls":  [
+                                            "https://www.senamhi.gob.pe?p=aviso-activacion-quebrada",
+                                            "https://portal.indeci.gob.pe/emergencias/boletin-informativo-de-aviso-de-corto-plazo-ante-lluvias-intensas-n191-2026-indeci-coen",
+                                            "https://www.facebook.com/Exitosanoticias/posts/atenci%C3%B3n-viajeros-indeci-advierte-posible-activaci%C3%B3n-de-quebradas-en-29-provinci/1391045806391807",
+                                            "https://portal.indeci.gob.pe/emergencias/boletin-informativo-de-aviso-de-corto-plazo-ante-posible-activacion-de-quebradas-n077-19-03-2026",
+                                            "https://www.facebook.com/indeci/videos/indeci-informaconoce-las-principales-noticias-en-gesti%C3%B3n-del-riesgo-de-desastres/3768688683261424"
+                                        ]
+                     },
+                     {
+                         "query":  "N° 191-2026-INDECI/COEN Huancayo Yauli octubre 17",
+                         "requestId":  "a8cc5408-9af4-461d-92ad-17542b097824",
+                         "resultUrls":  [
+                                            "https://portal.indeci.gob.pe/emergencias/reporte-complementario-n-8033-13-6-2026-coen-indeci-1830-horas-reporte-n-1-helada-en-el-distrito-de-yauli-junin",
+                                            "https://portal.indeci.gob.pe/emergencias/boletin-informativo-sismico-nacional-n-191-2024-indeci-coen",
+                                            "https://portal.indeci.gob.pe/emergencias/reporte-complementario-n-13770-9-10-2026-coen-indeci-0020-horas-reporte-n-o-1-incendio-forestal-en-el-distrito-de-aija-ancash",
+                                            "https://portal.indeci.gob.pe/emergencias/reporte-complementario-n-o-1159-28-1-2026-coen-indeci-2110-horas-reporte-n-o-1-huaico-en-el-distrto-de-perene-junin",
+                                            "https://portal.indeci.gob.pe/emergencias/reporte-complementario-n-11197-26-8-2026-coen-indeci-1750-horas-reporte-n-1-incendio-forestal-en-el-distrito-de-huaytara-huancavelica"
+                                        ]
+                     },
+                     {
+                         "query":  "BOLETÍN INFORMATIVO DE AVISO DE CORTO PLAZO ANTE LLUVIAS INTENSAS N°289-2026 pdf 17-10-2026",
+                         "requestId":  "64f48c54-9c8f-4394-a8a5-4ee4dc748745",
+                         "resultUrls":  [
+                                            "https://www.senamhi.gob.pe/servicios?p=aviso-24H",
+                                            "https://www.gob.pe/institucion/mimp/colecciones/66256-boletin-aviso-de-corto-plazo-ante-lluvias-intensas",
+                                            "https://portal.indeci.gob.pe/emergencias/boletin-informativo-de-aviso-de-corto-plazo-ante-lluvias-intensas-n017-2026-indeci-coen",
+                                            "https://es.scribd.com/document/1053006117/BOLETIN-INFORMATIVO-DE-AVISO-DE-CORTO-PLAZO-ANTE-LLUVIAS-INTENSAS-N-047-2026-DEL-16-02-2026",
+                                            "https://www.facebook.com/regiontacna.gob.pe/posts/%F0%9D%97%94%F0%9D%97%A9%F0%9D%97%9C%F0%9D%97%A6%F0%9D%97%A2-%F0%9D%97%97%F0%9D%97%98-%F0%9D%97%96%F0%9D%97%A2%F0%9D%97%A5%F0%9D%97%A7%F0%9D%97%A2-%F0%9D%97%A3%F0%9D%97%9F%F0%9D%97%94%F0%9D%97%AD%F0%9D%97%A2-%F0%9D%97%94%F0%9D%97%A1%F0%9D%97%A7%F0%9D%97%98-%F0%9D%97%9F%F0%9D%97%9F%F0%9D%97%A8%F0%9D%97%A9%F0%9D%97%9C%F0%9D%97%94%F0%9D%97%A6-%F0%9D%97%9C%F0%9D%97%A1%F0%9D%97%A7%F0%9D%97%98%F0%9D%97%A1%F0%9D%97%A6%F0%9D%97%94%F0%9D%97%A6%EF%B8%8F%EF%B8%8F-inicio-30092026fin-01102026estos-av/1445207171096215"
+                                        ]
+                     },
+                     {
+                         "query":  "289-2026 lluvia intensa boletín 17-10-2026",
+                         "requestId":  "aee563db-a084-4319-a00e-275274608d7a",
+                         "resultUrls":  [
+                                            "https://portal.indeci.gob.pe/wp-content/uploads/2026/10/BOLET%C3%8DN-INFORMATIVO-DE-CONDICIONES-ATMOSFERICAS-DE-INCENDIOS-FORESTALES-N%C2%B0010-09-10-2026.pdf",
+                                            "https://portal.indeci.gob.pe/wp-content/uploads/2026/10/REPORTE-PRELIMINAR-N.%C2%BA-1007-8OCT2026-INCENDIO-FORESTAL-EN-EL-DISTRITO-DE-MARANGANI-CUSCO.pdf",
+                                            "https://portal.indeci.gob.pe/wp-content/uploads/2026/10/REPORTE-COMPLEMENTARIO-N.%C2%BA-13342-2OCT2026-INCENDIO-FORESTAL-EN-EL-DISTRITO-DE-POCSI-AREQUIPA2.pdf",
+                                            "https://portal.indeci.gob.pe/wp-content/uploads/2026/10/REPORTE-COMPLEMENTARIO-N.%C2%BA-13710-8OCT2026-INCENDIO-URBANO-EN-EL-DISTRITO-DE-SAN-JUAN-DE-MIRAFLORES-LIMA-1.pdf",
+                                            "https://portal.indeci.gob.pe/wp-content/uploads/2026/10/REPORTE-COMPLEMENTARIO-N.%C2%BA-13400-3OCT2026-INCENDIO-FORESTAL-EN-EL-DISTRITO-DE-URUBAMBA-CUSCO-3.pdf"
+                                        ]
+                     },
+                     {
+                         "query":  "SENAMHI 17 octubre 2026 caudal río Rímac umbral amarillo Chosica boletín hidrológico",
+                         "requestId":  "108bfa0b-5b00-459b-87a5-da55af61edfa",
+                         "resultUrls":  [
+                                            "https://www.senamhi.gob.pe/main.php?dp=ucayali\u0026p=pronostico-caudales",
+                                            "https://www.senamhi.gob.pe/main.php?dp=madre-de-dios\u0026p=pronostico-hidrologico",
+                                            "https://www.senamhi.gob.pe?dp=lima\u0026p=monitoreo-regional",
+                                            "https://www.senamhi.gob.pe?p=prensa\u0026n=1544",
+                                            "https://www.senamhi.gob.pe?p=pronostico-hidrologico",
+                                            "https://www.senamhi.gob.pe?p=monitoreo-hidrologico",
+                                            "https://www.senamhi.gob.pe/main.php?dp=san-martin\u0026p=pronostico-hidrologico",
+                                            "https://www.senamhi.gob.pe/main.php?dp=san-martin\u0026p=pronostico-caudales"
+                                        ]
+                     },
+                     {
+                         "query":  "SENAMHI octubre 2026 reporte lluvia observada estación Chosica Matucana Casapalca San Mateo de Huanchor 16 17 octubre",
+                         "requestId":  "60c114e9-ec95-4711-8023-42d517656983",
+                         "resultUrls":  [
+                                            "https://www.senamhi.gob.pe/main.php?dp=madre-de-dios\u0026p=pronostico-hidrologico",
+                                            "https://www.senamhi.gob.pe?p=pronostico-meteorologico",
+                                            "https://www.senamhi.gob.pe/load/file/02262SENA-74.pdf",
+                                            "https://www.senamhi.gob.pe?p=pronostico-hidrologico",
+                                            "https://www.senamhi.gob.pe/main.php?dp=madre-de-dios\u0026p=pronostico-caudales",
+                                            "https://www.senamhi.gob.pe/main.php?dp=san-martin\u0026p=pronostico-hidrologico",
+                                            "https://www.senamhi.gob.pe/main.php?dp=san-martin\u0026p=pronostico-caudales",
+                                            "https://www.senamhi.gob.pe/load/file/02261SENA-20.pdf"
+                                        ]
+                     },
+                     {
+                         "query":  "SENAMHI aviso 420 descenso temperatura nocturna sierra sur departamentos provincias octubre 2026 17 18",
+                         "requestId":  "de2b667c-1748-47c5-82a0-59867fd34fcc",
+                         "resultUrls":  [
+                                            "https://www.senamhi.gob.pe/servicios?p=aviso-meteorologico-vigente\u0026a=2026\u0026b=27862\u0026c=00\u0026d=SENA",
+                                            "https://www.senamhi.gob.pe?p=aviso-meteorologico-vigente\u0026a=2026\u0026b=28567\u0026c=00\u0026d=SENA",
+                                            "https://www.senamhi.gob.pe/main.php?dp=ayacucho\u0026p=aviso-meteorologico",
+                                            "https://www.senamhi.gob.pe/main.php?dp=huancavelica\u0026p=aviso-meteorologico",
+                                            "https://www.senamhi.gob.pe?p=aviso-meteorologico-vigente\u0026a=2025\u0026b=24485\u0026c=00\u0026d=SENA",
+                                            "https://www.senamhi.gob.pe?p=aviso-meteorologico-vigente\u0026a=2026\u0026b=26942\u0026c=00\u0026d=SENA"
+                                        ]
+                     },
+                     {
+                         "query":  "SENASA Perú alerta plagas Junín Huancayo octubre 2026 comunicado Xylella fastidiosa",
+                         "requestId":  "1f4a40af-20cf-42ca-8d9d-9cba9afa9c0b",
+                         "resultUrls":  [
+                                            "https://www.senasa.gob.pe/senasacontigo/junin-vigilancia-fitosanitaria-de-plagas-cuarentenarias-no-presentes-en-el-peru",
+                                            "https://www.senasa.gob.pe/senasacontigo/junin-senasa-promueve-uso-de-controladores-biologicos-para-contrarrestar-plagas-en-cultivos-de-importancia-economica",
+                                            "https://www.senasa.gob.pe/senasacontigo/junin-vigilancia-fitosanitaria-previene-el-establecimiento-de-plagas-forestales-en-bosque-dorado",
+                                            "https://www.senasa.gob.pe/senasacontigo/ancash-senasa-evalua-incidencia-de-plagas-en-cultivos-de-papa",
+                                            "https://www.senasa.gob.pe/senasacontigo/junin-senasa-controla-incidencia-de-mosca-de-la-fruta-mediante-sistema-de-trampeo",
+                                            "https://www.senasa.gob.pe/senasacontigo/junin-senasa-resguarda-sanidad-en-cultivos-de-granadilla-con-uso-de-controladores-biologicos",
+                                            "https://www.senasa.gob.pe/senasacontigo/junin-taller-manejo-tecnificado-mercado-y-comercializacion-en-el-cultivo-de-citricos",
+                                            "https://www.senasa.gob.pe/senasacontigo/viveros-comunales-implementan-uso-de-controladores-biologicos-en-junin"
+                                        ]
+                     },
+                     {
+                         "query":  "pronóstico hidrológico octubre 2026 Río Rímac Estación Chosica informe mensual PDF caudal",
+                         "requestId":  "c2234d4e-33df-453b-892f-86785dec4c42",
+                         "resultUrls":  [
+                                            "https://www.senamhi.gob.pe/load/file/02694SENA-74.pdf",
+                                            "https://www.senamhi.gob.pe/load/file/02273SENA-56.pdf",
+                                            "https://www.senamhi.gob.pe/load/file/01401SENA-38.pdf",
+                                            "https://www.senamhi.gob.pe/load/file/02694SENA-71.pdf",
+                                            "https://www.senamhi.gob.pe/load/file/02694SENA-72.pdf",
+                                            "https://www.senamhi.gob.pe/load/file/02273SENA-53.pdf",
+                                            "https://www.senamhi.gob.pe/load/file/02694SENA-62.pdf",
+                                            "https://www.senamhi.gob.pe/load/file/02273SENA-52.pdf"
+                                        ]
+                     },
+                     {
+                         "query":  "helada Yauli Junín junio 2026 11/6/2026 sectores Yauli reporte emergencia",
+                         "requestId":  "37f7f8b9-5cfb-465a-9be7-7a6694f00ce6",
+                         "resultUrls":  [
+                                            "https://portal.indeci.gob.pe/emergencias/reporte-complementario-n-8033-13-6-2026-coen-indeci-1830-horas-reporte-n-1-helada-en-el-distrito-de-yauli-junin",
+                                            "https://portal.indeci.gob.pe/emergencias/reporte-complementario-n-7602-2-6-2026-coen-indeci-0615-horas-reporte-n-o-1-helada-en-el-distrito-de-huay-huay-junin",
+                                            "https://portal.indeci.gob.pe/emergencias/informe-de-emergencia-no-644-8-5-2021-coen-indeci-2130-horas-informe-n-1-heladas-en-el-departamento-de-junin",
+                                            "https://portal.indeci.gob.pe/emergencias/reporte-complementario-n-5098-10-6-2024-coen-indeci-1730-horas-reporte-n-1-vientos-fuertes-en-el-distrito-de-ramon-castilla-loreto"
+                                        ]
+                     },
+                     {
+                         "query":  "Pronóstico de Riesgo Agroclimático papa Junín octubre 2026 Huancayo",
+                         "requestId":  "996bb1c2-8919-4b04-ab88-9676d7329bcb",
+                         "resultUrls":  [
+                                            "https://www.senamhi.gob.pe/load/file/04728SENA-72.pdf",
+                                            "https://www.senamhi.gob.pe/load/file/04415SENA-14.pdf",
+                                            "https://www.senamhi.gob.pe/load/file/03811SENA-67.pdf",
+                                            "https://www.senamhi.gob.pe/load/file/02965SENA-60.pdf",
+                                            "https://www.senamhi.gob.pe/load/file/02947SENA-7.pdf",
+                                            "https://www.senamhi.gob.pe/load/file/03811SENA-88.pdf",
+                                            "https://www.senamhi.gob.pe/load/file/02963SENA-28.pdf",
+                                            "https://www.senamhi.gob.pe/load/file/02956SENA-79.pdf"
+                                        ]
+                     },
+                     {
+                         "query":  "Pronóstico de Riesgo Agroclimático quinua Junín octubre 2026",
+                         "requestId":  "98eb1a08-7d32-4c03-b35f-1e2da788da05",
+                         "resultUrls":  [
+                                            "https://www.senamhi.gob.pe/load/file/04728SENA-74.pdf",
+                                            "https://www.senamhi.gob.pe/load/file/02966SENA-74.pdf",
+                                            "https://www.senamhi.gob.pe/load/file/02966SENA-62.pdf",
+                                            "https://www.senamhi.gob.pe/load/file/02262SENA-74.pdf",
+                                            "https://www.senamhi.gob.pe/load/file/02966SENA-61.pdf"
+                                        ]
+                     },
+                     {
+                         "query":  "batch 8 query 1",
+                         "requestId":  null,
+                         "resultUrls":  [
+
+                                        ]
+                     },
+                     {
+                         "query":  "batch 8 query 2",
+                         "requestId":  null,
+                         "resultUrls":  [
+
+                                        ]
+                     },
+                     {
+                         "query":  "batch 8 query 3",
+                         "requestId":  null,
+                         "resultUrls":  [
+
+                                        ]
+                     },
+                     {
+                         "query":  "batch 8 query 4",
+                         "requestId":  null,
+                         "resultUrls":  [
+
+                                        ]
+                     },
+                     {
+                         "query":  "SENAMHI estación La Oroya coordenadas geográficas",
+                         "requestId":  "fc39afc8-3258-4bfa-b008-e1318045f7f8",
+                         "resultUrls":  [
+                                            "https://www.researchgate.net/figure/Ubicacion-geografica-de-las-estaciones-meteorologicas-SENAMHI-en-las-zonas-de_fig1_250917319",
+                                            "https://es.scribd.com/doc/315197407/Lista-Oficial-de-Estaciones-Senamhi",
+                                            "https://www.senamhi.gob.pe/pdf/anexos-atlas-climatico.pdf",
+                                            "https://www.geogpsperu.com/2018/07/mapa-de-estaciones-hidrometeorologicas.html",
+                                            "https://www.facebook.com/MinamPeru/posts/-qu%C3%A9-es-el-observatorio-nacional-del-tiempo-agua-y-clima-del-senamhi-con-datos-d/1422136243423453",
+                                            "https://www.youtube.com/watch?v=IgobooP0dFE"
+                                        ]
+                     },
+                     {
+                         "query":  "SENAMHI estación Huancayo coordenadas geográficas",
+                         "requestId":  "55890183-dfed-4f0a-b91d-23a334bb92bd",
+                         "resultUrls":  [
+                                            "https://www.researchgate.net/figure/Ubicacion-geografica-de-las-estaciones-meteorologicas-SENAMHI-en-las-zonas-de_fig1_250917319",
+                                            "https://es.scribd.com/doc/315197407/Lista-Oficial-de-Estaciones-Senamhi",
+                                            "https://www.senamhi.gob.pe/site/descarga-datos",
+                                            "https://www.senamhi.gob.pe/pdf/anexos-atlas-climatico.pdf",
+                                            "https://www.senamhi.gob.pe?p=mapa-climatico-del-peru",
+                                            "https://www.geogpsperu.com/2018/07/estaciones-meteorologicas-ana-senamhi.html"
+                                        ]
+                     },
+                     {
+                         "query":  "SENAMHI estación hidrológica Rímac San Mateo coordenadas geográficas",
+                         "requestId":  "21c307d3-3c23-4ab6-82f1-c10386c67368",
+                         "resultUrls":  [
+                                            "https://es.scribd.com/presentation/541594105/Cuenca-Rimac-2",
+                                            "https://www.senamhi.gob.pe?p=avisos-detalle-hidrologicos\u0026ca=66619\u0026ce=212605",
+                                            "https://www.senamhi.gob.pe?p=avisos-detalle-hidrologicos\u0026ca=23582\u0026ce=212605",
+                                            "https://www.facebook.com/senamhiperu/posts/reporte-senamhi-minam-en-lima-los-tramos-del-r%C3%ADo-r%C3%ADmac-que-atraviesan-los-distri/1338525214972555",
+                                            "https://x.com/Senamhiperu/status/1634730958657028096",
+                                            "https://www.senamhi.gob.pe?p=avisos-detalle-hidrologicos\u0026ca=66165\u0026ce=212605"
+                                        ]
+                     },
+                     {
+                         "query":  "SENAMHI inventario estaciones meteorológicas Junín coordenadas lista",
+                         "requestId":  "f227a280-7e0a-44ba-b1cc-54123a7f850c",
+                         "resultUrls":  [
+                                            "https://www.scribd.com/document/858717719/SENAMHI",
+                                            "https://es.scribd.com/document/700258028/3-1-Estaciones-Meteorologicas-1",
+                                            "https://www.senamhi.gob.pe/main.php?dp=junin\u0026p=mapa-climatico-del-peru",
+                                            "https://www.senamhi.gob.pe/site/descarga-datos",
+                                            "https://www.scribd.com/document/770179188/062-Senamhi-Data-Estaciones",
+                                            "https://es.scribd.com/document/655935350/SENAMHi-Junin"
+                                        ]
+                     },
+                     {
+                         "query":  "batch 10 query 1",
+                         "requestId":  null,
+                         "resultUrls":  [
+
+                                        ]
+                     },
+                     {
+                         "query":  "batch 10 query 2",
+                         "requestId":  null,
+                         "resultUrls":  [
+
+                                        ]
+                     },
+                     {
+                         "query":  "batch 10 query 3",
+                         "requestId":  null,
+                         "resultUrls":  [
+
+                                        ]
+                     },
+                     {
+                         "query":  "batch 10 query 4",
+                         "requestId":  null,
+                         "resultUrls":  [
+
+                                        ]
+                     },
+                     {
+                         "query":  "02694SENA-74 Rímac Chosica Octubre 2026 pronóstico caudales tabla",
+                         "requestId":  "843fd638-641d-406c-bf71-cab744c7198f",
+                         "resultUrls":  [
+                                            "https://www.facebook.com/INEIpaginaOficial/posts/notadeprensa-en-octubre-del-presente-a%C3%B1o-el-caudal-del-r%C3%ADo-r%C3%ADmac-alcanz%C3%B3-2126-me/1008792014616434",
+                                            "https://www.senamhi.gob.pe/load/file/02694SENA-74.pdf",
+                                            "https://larepublica.pe/sociedad/2026/10/17/lima-frente-a-el-nino-rimac-chillon-y-lurin-tendrian-caudales-sobre-lo-normal-desde-diciembre-1137249",
+                                            "https://www.senamhi.gob.pe/mapas/mapa-pronosticohidro/include/prono-grafica.php?id=47278214\u0026fecha=2026-10-13\u0026nom_estacion=CHOSICA\u0026nom_cuerpo_agua=R%C3%8DO+R%C3%8DMAC",
+                                            "https://www.msn.com/es-us/el-tiempo/pronosticomensual/in-Rimac,Per%C3%BA",
+                                            "https://www.tiempo3.com/south-america/peru/lima/chosica?page=month\u0026month=October"
+                                        ]
+                     },
+                     {
+                         "query":  "Río Rímac Estación Chosica octubre 2026 caudal pronóstico SENAMHI",
+                         "requestId":  "451b8548-0f3b-407b-9898-20a6599effa3",
+                         "resultUrls":  [
+                                            "https://www.senamhi.gob.pe?p=avisos-detalle-hidrologicos\u0026ca=66789\u0026ce=47278214",
+                                            "https://www.senamhi.gob.pe?p=avisos-detalle-hidrologicos\u0026ca=67412\u0026ce=47278214",
+                                            "https://www.gob.pe/institucion/senamhi/noticias/1351948-senamhi-evalua-caudal-del-rio-rimac-en-chosica-para-reforzar-avisos-ante-posibles-crecidas",
+                                            "https://www.facebook.com/senamhiperu/posts/r%C3%ADo-r%C3%ADmac-en-lima-se-ubica-en-umbral-hidrol%C3%B3gico-rojo-estaci%C3%B3n-chosica-registr%C3%B3-/1072193041605775",
+                                            "https://www.senamhi.gob.pe?p=monitoreo-hidrologico",
+                                            "https://www.senamhi.gob.pe?p=monitoreo-chirilu"
+                                        ]
+                     },
+                     {
+                         "query":  "SAN MATEO 17 de octubre de 2026 caudal río Rímac",
+                         "requestId":  "ad36b00c-2e2d-4008-a14c-a3428c69e930",
+                         "resultUrls":  [
+                                            "https://www.senamhi.gob.pe?p=avisos-detalle-hidrologicos\u0026ca=69117\u0026ce=240111",
+                                            "https://www.senamhi.gob.pe/load/file/01401SENA-38.pdf",
+                                            "https://www.senamhi.gob.pe?p=monitoreo-hidrologico",
+                                            "https://www.senamhi.gob.pe/load/file/02273SENA-42.pdf",
+                                            "https://www.senamhi.gob.pe/load/file/02273SENA-52.pdf",
+                                            "https://www.senamhi.gob.pe/load/file/02605SENA-4463.pdf"
+                                        ]
+                     },
+                     {
+                         "query":  "Casapalca septiembre 2026 precipitación anomalía",
+                         "requestId":  "5a276724-0268-4f79-b207-455f5ccb5585",
+                         "resultUrls":  [
+                                            "https://www.senamhi.gob.pe/load/file/02231SENA-94.pdf"
+                                        ]
+                     },
+                     {
+                         "query":  "INDECI 191 2026 activación quebradas 17 octubre Junín Huarochirí Yauli Huancayo provincias expuestas",
+                         "requestId":  "89e54f8b-89d1-4bdd-9618-0f2eab10330c",
+                         "resultUrls":  [
+                                            "https://portal.indeci.gob.pe/emergencias/boletin-informativo-de-aviso-de-corto-plazo-ante-posible-activacion-de-quebradas-n077-19-03-2026",
+                                            "https://www.rcrperu.com/atencion-mas-de-40-provincias-del-peru-en-riesgo-extremo-de-activacion-de-quebradas-por-lluvias-intensas",
+                                            "https://portal.indeci.gob.pe/wp-content/uploads/2026/10/BOLET%C3%8DN-INFORMATIVO-DE-AVISO-DE-CORTO-PLAZO-ANTE-POSIBLE-ACTIVACI%C3%93N-DE-QUEBRADAS-N%C2%B0191-17-10-2026.pdf",
+                                            "https://www.facebook.com/Exitosanoticias/posts/alerta-roja-indeci-advierte-posible-activaci%C3%B3n-de-quebradas-en-25-provincias-de-/1386041080225613",
+                                            "https://www.facebook.com/indeci/posts/indecienlosmedios%EF%B8%8Findeci-realiza-monitoreo-ante-posible-activaciones-de-quebrada/1402791538560946?locale=et_EE",
+                                            "https://www.instagram.com/reel/DTlU7WtkvHB?hl=en"
+                                        ]
+                     },
+                     {
+                         "query":  "17-10-2026 (13:00 h) quebradas INDECI Junín",
+                         "requestId":  "975e7641-d84e-45b6-a15e-b1309a080def",
+                         "resultUrls":  [
+                                            "https://portal.indeci.gob.pe/emergencias/reporte-complementario-n-9558-23-7-2026-coen-indeci-1720-horas-reporte-n-24-sismo-de-magnitud-5-4-con-epicentro-en-el-distrito-de-chongos-bajo-junin",
+                                            "https://www.senamhi.gob.pe?p=aviso-activacion-quebrada",
+                                            "https://www.facebook.com/indeci/videos/-tras-el-sismo-de-magnitud-50-en-chupaca-el-indeci-contin%C3%BAa-desplegando-acciones/808091529060837",
+                                            "https://www.youtube.com/watch?v=MEhVagkLdok",
+                                            "https://www.instagram.com/p/DbDkoS-Dzph"
+                                        ]
+                     },
+                     {
+                         "query":  "191-2026-INDECI/COEN provincias expuestas octubre",
+                         "requestId":  "12f47fd6-44df-453c-a959-e702b486f38a",
+                         "resultUrls":  [
+                                            "https://portal.indeci.gob.pe/emergencias/boletin-informativo-sismico-nacional-n-191-2026-indeci-coen",
+                                            "https://www.infobae.com/peru/2026/08/26/fenomeno-el-nino-afectaria-principalmente-a-estas-diez-regiones-indeci-alerta-sobre-mas-de-un-millon-de-personas-en-riesgo",
+                                            "https://portal.indeci.gob.pe/wp-content/uploads/2026/07/BOLET%C3%8DN-INFORMATIVO-DE-AVISO-DE-CORTO-PLAZO-ANTE-LLUVIAS-INTENSAS-N%C2%B0191-2026-DEL-10-07-2026.pdf",
+                                            "https://www.gob.pe/es/indeci",
+                                            "https://www.gob.pe/indeci"
+                                        ]
+                     },
+                     {
+                         "query":  "Aviso N°290 BOLETÍN INFORMATIVO INDECI 17-10-2026 activación quebradas",
+                         "requestId":  "388657c9-8932-4d0c-a595-70e967140f64",
+                         "resultUrls":  [
+                                            "https://portal.indeci.gob.pe/emergencias/boletin-informativo-de-aviso-de-corto-plazo-ante-posible-activacion-de-quebradas-n-190-2026-indeci-coen",
+                                            "https://www.senamhi.gob.pe?p=aviso-activacion-quebrada",
+                                            "https://www.facebook.com/indeci/videos/indeci-informaconoce-las-principales-noticias-en-gesti%C3%B3n-del-riesgo-de-desastres/1944394959835604",
+                                            "https://www.facebook.com/Exitosanoticias/posts/atenci%C3%B3n-viajeros-indeci-advierte-posible-activaci%C3%B3n-de-quebradas-en-29-provinci/1391045806391807",
+                                            "https://www.gob.pe/institucion/indeci/informes-publicaciones/8599134-boletin-informativo-indeci-noticias-n-17-2026"
+                                        ]
+                     },
+                     {
+                         "query":  "OUTAMINA Perú minería empresa; Outamina mining company Peru operations; OUTAMINA mining companies climate territory Peru; OUTAMINA empresa minera sitio oficial Peru",
+                         "requestId":  null,
+                         "searchCalls":  4,
+                         "resultUrls":  [],
+                         "outcome":  "Four advanced search calls were made in an earlier pass, but their combined output was truncated. Exact-name verification was repeated below; no authoritative Outamina mine or corridor was confirmed."
+                     },
+                     {
+                         "query":  "OUTAMINA Perú minería empresa operaciones sitio oficial",
+                         "requestId":  null,
+                         "searchCalls":  1,
+                         "resultUrls":  [
+                                            "https://x.com/Antamina_Peru?lang=es",
+                                            "https://es.wikipedia.org/wiki/Antamina",
+                                            "https://pe.linkedin.com/company/antamina"
+                                        ],
+                         "outcome":  "Returned Antamina-related matches rather than an authoritative exact-name Outamina record; do not treat Outamina as Antamina."
+                     },
+                     {
+                         "query":  "Outamina mining Peru company mine operations",
+                         "requestId":  null,
+                         "searchCalls":  1,
+                         "resultUrls":  [
+                                            "https://www.bnamericas.com/en/company-profile/compania-minera-antamina-sa",
+                                            "https://wateractionhub.org/organizations/275/d/compania-minera-antamina",
+                                            "https://www.teck.com/operations/peru/operations/antamina"
+                                        ],
+                         "outcome":  "Search results again centered on Antamina. No Outamina-specific corporate or operating-site source was verified."
+                     }
+                 ],
+    "extractions":  [
+                        {
+                            "label":  "tavily_more_extract1",
+                            "requestId":  "8ee841e7-5eca-4e80-8877-3a3fc2516ce2",
+                            "returnedUrls":  [
+                                                 "https://www.gob.pe/institucion/senamhi/informes-publicaciones/8727498-reporte-agrometeorologico-de-impactos-sierra-06-al-12-de-octubre-del-2026",
+                                                 "https://www.gob.pe/institucion/senamhi/noticias/1451967-panorama-del-sector-agropecuario-de-la-sierra-central-y-sur-ante-las-bajas-temperaturas",
+                                                 "https://www.senamhi.gob.pe?p=boletines",
+                                                 "https://www.gob.pe/institucion/ana/noticias/1359235-ana-rio-rimac-incrementa-su-caudal-y-se-mantiene-bajo-control-gracias-a-permanente-trabajo",
+                                                 "https://portal.indeci.gob.pe/informe/reportes-preliminares-complementarios-emergencias"
+                                             ],
+                            "failedCount":  0
+                        },
+                        {
+                            "label":  "tavily_more_extract2",
+                            "requestId":  "3f24503f-65e9-45f1-83b8-2fa99a585484",
+                            "returnedUrls":  [
+                                                 "https://portal.indeci.gob.pe/wp-content/uploads/2026/10/BOLET%C3%8DN-INFORMATIVO-DE-AVISO-DE-CORTO-PLAZO-ANTE-POSIBLE-ACTIVACI%C3%93N-DE-QUEBRADAS-N%C2%B0191-17-10-2026.pdf",
+                                                 "https://www.gob.pe/institucion/senamhi/informes-publicaciones/8727498-reporte-agrometeorologico-de-impactos-sierra-06-al-12-de-octubre-del-2026"
+                                             ],
+                            "failedCount":  0
+                        },
+                        {
+                            "label":  "tavily_more_extract3",
+                            "requestId":  "e0612ffb-c6b2-439c-84ce-3ff12743cc23",
+                            "returnedUrls":  [
+                                                 "https://www.senamhi.gob.pe/load/file/02694SENA-74.pdf",
+                                                 "https://www.senasa.gob.pe/senasacontigo/junin-vigilancia-fitosanitaria-de-plagas-cuarentenarias-no-presentes-en-el-peru",
+                                                 "https://portal.indeci.gob.pe/emergencias/reporte-complementario-n-8033-13-6-2026-coen-indeci-1830-horas-reporte-n-1-helada-en-el-distrito-de-yauli-junin",
+                                                 "https://www.senamhi.gob.pe?p=pronostico-hidrologico",
+                                                 "https://www.senasa.gob.pe/senasacontigo/junin-senasa-controla-incidencia-de-mosca-de-la-fruta-mediante-sistema-de-trampeo"
+                                             ],
+                            "failedCount":  0
+                        },
+                        {
+                            "label":  "tavily_more_extract4",
+                            "requestId":  "2c2ed99c-0d66-435d-a6db-8c5e50ab6595",
+                            "returnedUrls":  [
+                                                 "https://www.senamhi.gob.pe/pdf/anexos-atlas-climatico.pdf"
+                                             ],
+                            "failedCount":  0
+                        },
+                        {
+                            "label":  "tavily_more_extract5",
+                            "requestId":  "3fa1c0ff-2fc2-4411-8afe-f654055e7d5b",
+                            "returnedUrls":  [
+                                                 "https://cdn.www.gob.pe/uploads/document/file/10804979/8727498-reporte-agrometeorologico-de-impactos-n-40-2026_region-sierra.pdf?v=1792162365",
+                                                 "https://www.senasa.gob.pe/senasacontigo/junin-senasa-controla-incidencia-de-mosca-de-la-fruta-mediante-sistema-de-trampeo",
+                                                 "https://www.senasa.gob.pe/senasacontigo/junin-vigilancia-fitosanitaria-de-plagas-cuarentenarias-no-presentes-en-el-peru"
+                                             ],
+                            "failedCount":  0
+                        },
+                        {
+                            "label":  "tavily_more_extract6_crop",
+                            "requestId":  "55f8c6ea-6b9e-4fdb-8834-e5bfd2ba3ad4",
+                            "returnedUrls":  [
+                                                 "https://cdn.www.gob.pe/uploads/document/file/10804979/8727498-reporte-agrometeorologico-de-impactos-n-40-2026_region-sierra.pdf?v=1792162365"
+                                             ],
+                            "failedCount":  0
+                        },
+                        {
+                            "label":  "tavily_more_extract7_stations",
+                            "requestId":  "f11a742a-7cf6-4581-9f63-36ae9b63e131",
+                            "returnedUrls":  [
+                                                 "https://www.senamhi.gob.pe/pdf/anexos-atlas-climatico.pdf"
+                                             ],
+                            "failedCount":  0
+                        },
+                        {
+                            "label":  "tavily_more_extract8",
+                            "requestId":  "7d46e4d4-26c4-4bd3-95ed-4e8f33110c1d",
+                            "returnedUrls":  [
+                                                 "https://www.senamhi.gob.pe/load/file/02273SENA-56.pdf",
+                                                 "https://www.senamhi.gob.pe/load/file/02231SENA-94.pdf",
+                                                 "https://www.senamhi.gob.pe/load/file/02694SENA-74.pdf"
+                                             ],
+                            "failedCount":  0
+                        },
+                        {
+                            "label":  "tavily_more_extract9_city_forecast",
+                            "requestId":  "64d65a8e-4d54-4e05-bfe4-36a3906b091c",
+                            "returnedUrls":  [
+                                                 "https://www.senamhi.gob.pe/main.php?dp=lima\u0026p=pronostico-meteorologico",
+                                                 "https://www.senamhi.gob.pe?dp=junin\u0026p=pronostico-meteorologico"
+                                             ],
+                            "failedCount":  0
+                        }
+                    ],
+    "crawls":  [
+                   {
+                       "label":  "tavily_more_crawl_hydro",
+                       "baseUrl":  "https://www.senamhi.gob.pe?p=pronostico-hidrologico",
+                       "requestId":  "6c83038a-6e92-47e6-88f3-9848a83e28c2",
+                       "returnedUrls":  [
+                                            "https://www.senamhi.gob.pe/load/file/02694SENA-74.pdf"
+                                        ]
+                   },
+                   {
+                       "label":  "tavily_more_crawl_agri",
+                       "baseUrl":  "https://www.gob.pe/institucion/senamhi/informes-publicaciones/8727498-reporte-agrometeorologico-de-impactos-sierra-06-al-12-de-octubre-del-2026",
+                       "requestId":  "e7210fdc-72ac-4f7b-a8a8-4cf124456df9",
+                       "returnedUrls":  [
+                                            "https://www.gob.pe/institucion/senamhi/informes-publicaciones/8727498-reporte-agrometeorologico-de-impactos-sierra-06-al-12-de-octubre-del-2026",
+                                            "https://cdn.www.gob.pe/uploads/document/file/10804979/8727498-reporte-agrometeorologico-de-impactos-n-40-2026_region-sierra.pdf?v=1792162365"
+                                        ]
+                   }
+               ],
+    "additionalNoticeSweep":  {
+                                  "dateLima":  "2026-10-17",
+                                  "searchCalls":  15,
+                                  "advancedSearchCalls":  13,
+                                  "basicSearchCalls":  2,
+                                  "extractCalls":  5,
+                                  "requestedUrlExtractions":  10,
+                                  "crawlCalls":  0,
+                                  "conservativeEstimatedCredits":  38,
+                                  "actualBilledCredits":  null,
+                                  "creditBasis":  "13 advanced searches x 2 credits (26), two basic searches x 1 credit (2), and five advanced extraction calls x 2 estimated credits (10). Estimate only; Tavily did not expose billing.",
+                                  "searches":  [
+                                                   {
+                                                       "query":  "SENAMHI aviso meteorológico vigente 17 octubre 2026 lluvias heladas Lima Huarochirí Yauli Junín aviso oficial",
+                                                       "requestId":  "11202277-b924-4fa6-9ced-f099a3642c5b",
+                                                       "outcome":  "Found archived warning summaries; no new current local alert beyond notice 422 was admitted."
+                                                   },
+                                                   {
+                                                       "query":  "INDECI COEN reporte emergencia octubre 2026 carretera central PE-22 Huarochirí Matucana San Mateo Yauli Junín",
+                                                       "requestId":  null,
+                                                       "outcome":  "Initial output was truncated; the query was rechecked as a basic search under request b57ce4b6-8bc1-401a-823b-aa2f915ebf5a."
+                                                   },
+                                                   {
+                                                       "query":  "SENAMHI boletín hidrológico aviso caudales octubre 2026 río Rímac Mantaro Chosica La Oroya oficial",
+                                                       "requestId":  "d4cd8602-586c-418c-bbb5-cad99d92aea0",
+                                                       "outcome":  "A hydrology bulletin for SENAMHI Dirección Zonal 7 (Tacna/Moquegua) was out of corridor."
+                                                   },
+                                                   {
+                                                       "query":  "SENASA alerta fitosanitaria octubre 2026 Junín Lima mosca fruta plaga notificación oficial",
+                                                       "requestId":  "2fcf3816-d203-4d4f-acd5-13d3b798c541",
+                                                       "outcome":  "Search returned a fruit-fly production job announcement, not a pest detection."
+                                                   },
+                                                   {
+                                                       "query":  "site:portal.indeci.gob.pe/wp-content/uploads/2026/10/ 17-10-2026 MONITOREO DE PELIGROS",
+                                                       "requestId":  "6a768edd-5e20-49ab-8124-bf975c576888",
+                                                       "outcome":  "Found the 17 October INDECI archive and daily bulletin listings."
+                                                   },
+                                                   {
+                                                       "query":  "site:portal.indeci.gob.pe/emergencias/ octubre 2026 Junín emergencia Huarochirí",
+                                                       "requestId":  "1966df6a-c3a9-46e7-bc8e-89ad1c7f7654",
+                                                       "outcome":  "Found an official Surco forest-fire report with agricultural damage."
+                                                   },
+                                                   {
+                                                       "query":  "site:senamhi.gob.pe/?p=aviso-meteorologico-vigente 17 octubre 2026 Lima Junín lluvias granizo nieve aviso",
+                                                       "requestId":  "763f06c6-d732-4148-a459-6d0dbc20010c",
+                                                       "outcome":  "Reconfirmed the exact notice 422 panel and SENAMHI notice pages."
+                                                   },
+                                                   {
+                                                       "query":  "INDECI boletín aviso hidrológico N°1647-2026 17 octubre 2026 Rímac Chosica Lima Junín",
+                                                       "requestId":  "29a893eb-12bd-4802-84f5-74370e2b6c7f",
+                                                       "outcome":  "Search returned no result; direct official bulletin was subsequently extracted and excluded because it concerns the Ucayali River at Atalaya."
+                                                   },
+                                                   {
+                                                       "query":  "INDECI N°290 del 17-10-2026 hidrológico aviso meteorológico Lima Junín",
+                                                       "requestId":  "6f66ddae-09a2-4a1c-a1d7-e91b2e178d7f",
+                                                       "outcome":  "Search returned no result; the official bulletin page was found through the INDECI archive and extracted."
+                                                   },
+                                                   {
+                                                       "query":  "INDECI reporte complementario 14162 Surco Huarochirí incendio forestal 45 hectareas agricultura 30 septiembre 2026",
+                                                       "requestId":  "2ab3c25b-6d54-4099-8a41-931ba43d799b",
+                                                       "outcome":  "Search did not surface the matching PDF; official archive result and PDF were later extracted."
+                                                   },
+                                                   {
+                                                       "query":  "site:senasa.gob.pe OR site:gob.pe/senasa 2026 Junín alerta plaga mosca fruta brote detección octubre",
+                                                       "requestId":  "c60f8510-10c0-4204-a13c-f10ab190f8ac",
+                                                       "outcome":  "No dated Junín/Lima pest detection verified; returned unrelated national/annual surveillance references."
+                                                   },
+                                                   {
+                                                       "query":  "INDECI COEN reporte emergencia octubre 2026 carretera central PE-22 Huarochirí Matucana San Mateo Yauli Junín",
+                                                       "requestId":  "b57ce4b6-8bc1-401a-823b-aa2f915ebf5a",
+                                                       "outcome":  "Basic rerun found the INDECI index with bulletin 289, bulletin 191 and active COEN reports; the matched Ayas report remains historical and closed."
+                                                   },
+                                                   {
+                                                       "query":  "Ayas anexo distrito Surco Huarochirí Peru coordenadas ubicación",
+                                                       "requestId":  "2527cdd8-c4c4-4fd2-83a9-0f3e5aed80ed",
+                                                       "outcome":  "Secondary results gave district or town coordinates, not the Ayas annex event point; geometry was rejected."
+                                                   },
+                                                   {
+                                                       "query":  "INDECI Boletín informativo aviso de corto plazo ante lluvias intensas N°289-2026 17 octubre 2026",
+                                                       "requestId":  "579d028a-a6f8-45b3-aff4-1246d60be546",
+                                                       "outcome":  "Found the official archive\u0027s short-term rainfall notice 289 and the active 290 page; 289 had expired by retrieval."
+                                                   },
+                                                   {
+                                                       "query":  "site:portal.indeci.gob.pe 289-2026 lluvias intensas 17-10-2026",
+                                                       "requestId":  "ee5e4068-3448-4c0f-8534-299eae04232c",
+                                                       "outcome":  "Reconfirmed notice 289\u0027s 16 October issue, and the current notice 290\u0027s 17 October 13:00 start."
+                                                   }
+                                               ],
+                                  "extractions":  [
+                                                      {
+                                                          "requestId":  "59fa5ffa-5dcc-45ac-af35-9df4d8307d8c",
+                                                          "urls":  [
+                                                                       "https://portal.indeci.gob.pe/wp-content/uploads/2026/10/REPORTE-COMPLEMENTARIO-N.%C2%BA-14162-14OCT2026-INCENDIO-FORESTAL-EN-EL-DISTRITO-DE-SURCO-LIMA-5.pdf",
+                                                                       "https://portal.indeci.gob.pe/emergencias/page/3333"
+                                                                   ],
+                                                          "status":  "success",
+                                                          "finding":  "COEN reports 45 ha crop impact and 25 ha natural-cover loss at Ayas, Surco; event closed."
+                                                      },
+                                                      {
+                                                          "requestId":  "a4eea9d0-dcaf-4df9-a84b-f05a612cd543",
+                                                          "urls":  [
+                                                                       "https://portal.indeci.gob.pe/emergencias/boletin-informativo-de-aviso-hidrologico-n1647-2026-del-17-10-2026/",
+                                                                       "https://portal.indeci.gob.pe/emergencias/boletin-informativo-monitoreo-de-peligros-y-perspectivas-n290-del-17-10-2026/"
+                                                                   ],
+                                                          "status":  "success",
+                                                          "finding":  "Confirmed direct bulletin PDF links."
+                                                      },
+                                                      {
+                                                          "requestId":  "37337ec1-1e2a-4def-bbc4-c6736eafb796",
+                                                          "urls":  [
+                                                                       "https://portal.indeci.gob.pe/wp-content/uploads/2026/10/BOLET%C3%8DN-INFORMATIVO-DE-AVISO-HIDROL%C3%93GICO-N%C2%B01647-2026-Del-17-10-2026.pdf",
+                                                                       "https://portal.indeci.gob.pe/wp-content/uploads/2026/10/BOLET%C3%8DN-INFORMATIVO-MONITOREO-DE-PELIGROS-Y-PERSPECTIVAS-N%C2%B0290-del-17-10-2026.pdf"
+                                                                   ],
+                                                          "status":  "success",
+                                                          "finding":  "Verified Ingenio rainfall 12.0 mm for 16-17 October 07:00, notice 422 summary, and Ucayali-only hydrological warning 1647."
+                                                      },
+                                                      {
+                                                          "requestId":  "7cc7529e-d57a-4c1d-aaa7-493cb0dc3565",
+                                                          "urls":  [
+                                                                       "SENAMHI notice 422 published WFS SHAPE-ZIP day 1",
+                                                                       "SENAMHI notice 422 published WFS SHAPE-ZIP day 2",
+                                                                       "SENAMHI notice 290 published SHAPE ZIP"
+                                                                   ],
+                                                          "status":  "no parsed results",
+                                                          "finding":  "Tavily returned no extractable content from the published GIS archive URLs."
+                                                      },
+                                                      {
+                                                          "requestId":  "538220e8-0e4a-47f2-89d1-4718f57bee02",
+                                                          "urls":  [
+                                                                       "SENAMHI notice 422 published WFS SHAPE-ZIP day 1"
+                                                                   ],
+                                                          "status":  "failed fetch",
+                                                          "finding":  "Retry returned Failed to fetch url; warning geometry remains unresolved."
+                                                      }
+                                                  ],
+                                  "exclusions":  [
+                                                     "INDECI hydrological bulletin 1647-2026 is real but concerns the Ucayali at Lagarto Ird, Atalaya, outside the PE-22/Mantaro scope.",
+                                                     "The Ayas forest-fire report contains no exact coordinates; secondary district-centre geocoding was rejected.",
+                                                     "SENASA search results did not establish a dated local pest occurrence or outbreak."
+                                                 ]
+                              },
+    "finalCoverageAudit":  {
+                               "dateLima":  "2026-10-17",
+                               "searchCalls":  5,
+                               "advancedSearchCalls":  5,
+                               "basicSearchCalls":  0,
+                               "extractCalls":  1,
+                               "requestedUrlExtractions":  1,
+                               "crawlCalls":  0,
+                               "conservativeEstimatedCredits":  12,
+                               "actualBilledCredits":  null,
+                               "creditBasis":  "Five advanced searches x 2 credits (10) plus one advanced extraction x 2 estimated credits (2). Estimate only; Tavily did not expose billing.",
+                               "searches":  [
+                                                {
+                                                    "query":  "site:portal.indeci.gob.pe/emergencias Huarochirí OR Yauli deslizamiento huaico lluvia octubre 2026",
+                                                    "requestId":  "14c61278-87f5-4443-b549-78d2196c990e",
+                                                    "outcome":  "Found expired short-term rainfall notices and a forest-fire conditions bulletin; no new current corridor landslide report was verified."
+                                                },
+                                                {
+                                                    "query":  "SENAMHI aviso hidrológico río Rímac Chosica caudal 16 17 octubre 2026 Lima",
+                                                    "requestId":  "235b29c5-9ce3-408b-a820-34ae22eac8e8",
+                                                    "outcome":  "Returned the already-registered September ENFEN observations; no new dated October Rímac measurement."
+                                                },
+                                                {
+                                                    "query":  "Carretera Central PE-22 transitabilidad cierre huaico Huarochirí octubre 2026 site:gob.pe OR site:sutran.gob.pe",
+                                                    "requestId":  "cc9783b9-3903-4382-9f1c-125e0b2a9bde",
+                                                    "outcome":  "No new verified October PE-22 closure or weather-caused disruption surfaced."
+                                                },
+                                                {
+                                                    "query":  "SENASA Junín alerta detección plaga fitosanitaria octubre 2026 aviso",
+                                                    "requestId":  "0d8886f1-5c84-4b4e-979e-1991857a5239",
+                                                    "outcome":  "No results; no dated local pest notice verified."
+                                                },
+                                                {
+                                                    "query":  "site:portal.indeci.gob.pe/wp-content/uploads/2026/10/BOLETÍN-INFORMATIVO-DE-CONDICIONES-ATMOSFERICAS-DE-INCENDIOS-FORESTALES-N°010-09-10-2026.pdf Junín OR Lima OR Huarochirí provincias expuestas nivel",
+                                                    "requestId":  "f01be91b-5441-49a3-b6ea-daf43b0d94a8",
+                                                    "outcome":  "Search returned no result; the bulletin was extracted directly but its exact local exposure table remained unresolved."
+                                                }
+                                            ],
+                               "extractions":  [
+                                                   {
+                                                       "requestId":  "9733e046-c9b2-4d8d-96f7-75d36c317d85",
+                                                       "urls":  [
+                                                                    "https://portal.indeci.gob.pe/wp-content/uploads/2026/10/BOLET%C3%8DN-INFORMATIVO-DE-CONDICIONES-ATMOSFERICAS-DE-INCENDIOS-FORESTALES-N%C2%B0010-09-10-2026.pdf"
+                                                                ],
+                                                       "status":  "partial extraction",
+                                                       "finding":  "Official bulletin 010 was valid 11–16 October and described moderate-to-extreme atmospheric conditions favorable to wildfire occurrence/spread mainly over the southern Andes. Exact Lima/Junín exposure could not be confirmed from extracted table text; it was expired and excluded from map alerts."
+                                                   }
+                                               ],
+                               "exclusions":  [
+                                                  "INDECI rainfall bulletins 277 and 279 surfaced with October 5–8 validity; they are expired and no warning geometry or corridor intersection was checked.",
+                                                  "INDECI forest-fire conditions bulletin 010 expired on October 16 and its exact Huarochirí/Junín exposure could not be verified from the extracted table."
+                                              ]
+                           },
+    "evidenceFiles":  [
+                          "environment-map-evidence-2026-10-17_christian.json",
+                          "environment-sources_christian.json",
+                          "problem-definition-and-notice-audit_christian.md"
+                      ],
+    "headlineAndProblemReview":  {
+                                     "dateLima":  "2026-10-17",
+                                     "searchCalls":  73,
+                                     "advancedSearchCalls":  73,
+                                     "basicSearchCalls":  0,
+                                     "extractCalls":  27,
+                                     "requestedUrlExtractions":  29,
+                                     "crawlCalls":  0,
+                                     "conservativeEstimatedCredits":  200,
+                                     "actualBilledCredits":  null,
+                                     "creditBasis":  "73 advanced searches x 2 estimated credits plus 27 advanced extraction calls x 2 estimated credits; Tavily did not return actual billing.",
+                                     "focus":  [
+                                                   "Fact-check supplied notice headlines against primary official records",
+                                                   "Refresh CENEPRED summer 2027 and water-deficit scenarios",
+                                                   "Check rainfall, frost, agriculture, pest surveillance and road restrictions",
+                                                   "Define a source-grounded problem for PE-22 and the Mantaro extension"
+                                               ],
+                                     "keyVerifiedSources":  [
+                                                                "CENEPRED summer 2027 risk scenario update",
+                                                                "CENEPRED water-deficit risk report, September 2026",
+                                                                "SENAMHI Junin October crop-risk reports",
+                                                                "Provias first-half road-emergency summary and Atico-Ocona status",
+                                                                "INDECI Huarochiri historical huaico report",
+                                                                "SENAMHI notice 422, valid 18-19 October"
+                                                            ],
+                                     "outcome":  "Added two national no-geometry scenario records. No additional current PE-22 weather closure, localized pest outbreak or defensible map point was verified.",
+                                     "memoFile":  "problem-definition-and-notice-audit_christian.md"
+                                 },
+    "outaminaClientScopeCheck":  {
+                                     "dateLima":  "2026-10-17",
+                                     "searchCalls":  6,
+                                     "advancedSearchCalls":  6,
+                                     "conservativeEstimatedCredits":  12,
+                                     "actualBilledCredits":  null,
+                                     "creditBasis":  "Six advanced searches x 2 estimated credits; Tavily did not return billing.",
+                                     "clientName":  "Outamina (provided by project owner)",
+                                     "customerSector":  "Mining companies",
+                                     "outcome":  "No authoritative exact-name Outamina corporate page, mine, or corridor was verified. Search results centered on Antamina, so no identity or geography is inferred.",
+                                     "memoFile":  "problem-definition-and-notice-audit_christian.md"
+                                 }
+}

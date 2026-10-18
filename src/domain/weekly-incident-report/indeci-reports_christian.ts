@@ -2,7 +2,7 @@ import type { IndeciPlace, ReportWindow } from "@/contracts/weekly-incident-repo
 import { parseSutranDate, regionLabel, titleCase, toSentenceCase } from "@/domain/road-alerts/parsing";
 
 import { decodeEntities } from "./feed-items_christian";
-import { isDateInWindow, windowEndMs } from "./week-window_christian";
+import { isDateInWindow, windowEndMs, windowStartMs } from "./week-window_christian";
 
 // Parsers for INDECI's COEN emergency reports (portal.indeci.gob.pe/emergencias). Titles look
 // like "REPORTE COMPLEMENTARIO N.º 14162 – 14/10/2026 / COEN – INDECI / 22:10 HORAS
@@ -76,7 +76,7 @@ export function parseIndeciReportPage(html: string): IndeciReportPage {
   if (!match || occurredDate === null) return none;
 
   const hours = match[2] === undefined ? null : Number(match[2]);
-  const occurredTime = hours !== null && hours < 24 ? `${String(hours).padStart(2, "0")}:${match[3]}` : null;
+  const occurredTime = hours !== null && hours < 24 && Number(match[3]) < 60 ? `${String(hours).padStart(2, "0")}:${match[3]}` : null;
   const afterDate = section
     .slice((match.index ?? 0) + match[0].length)
     .replace(/^\s*horas\b/i, "")
@@ -93,5 +93,9 @@ export function parseIndeciReportPage(html: string): IndeciReportPage {
  */
 export function isReportInWeek(window: ReportWindow, report: { occurredDate: string | null; publishedAt: string | null }): boolean {
   if (report.occurredDate !== null) return isDateInWindow(window, report.occurredDate);
-  return report.publishedAt !== null && Date.parse(report.publishedAt) < windowEndMs(window);
+  return (
+    report.publishedAt !== null &&
+    Date.parse(report.publishedAt) >= windowStartMs(window) &&
+    Date.parse(report.publishedAt) < windowEndMs(window)
+  );
 }

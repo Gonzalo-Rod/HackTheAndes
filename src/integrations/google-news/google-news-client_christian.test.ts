@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { MAX_RETRIES, UpstreamError } from "@/integrations/http/fetch-json";
-import { realGoogleNewsFeed } from "@/test/fixtures/weekly-report_christian";
+import { realGoogleNewsFeed, realNonFeedPage } from "@/test/fixtures/weekly-report_christian";
 
 import { createGoogleNewsClient, googleNewsSearchUrl } from "./google-news-client_christian";
 
@@ -31,6 +31,14 @@ describe("googleNewsSearchUrl", () => {
 });
 
 describe("createGoogleNewsClient", () => {
+  it("rejects HTML served with HTTP 200 instead of claiming there are no news items", async () => {
+    const fetchImpl = vi.fn(async () => xmlResponse(realNonFeedPage()));
+    await expect(createGoogleNewsClient({ fetchImpl, sleep: noSleep }).search(QUERY, ctx)).rejects.toMatchObject({
+      kind: "invalid_body",
+      provider: "google-news",
+    });
+  });
+
   it("parses the feed and identifies the job with its user agent", async () => {
     const fetchImpl = vi.fn<typeof fetch>(async () => xmlResponse(FEED));
     const items = await createGoogleNewsClient({ fetchImpl, sleep: noSleep }).search(QUERY, ctx);

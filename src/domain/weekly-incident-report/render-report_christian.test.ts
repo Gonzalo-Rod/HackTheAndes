@@ -65,13 +65,17 @@ describe("renderWeeklyReport", () => {
     expect(markdown).toContain('| Restricted (`restringido`): "Via restringida" | no indicado |');
   });
 
-  it("dates an INDECI report without occurrence data by its publication", () => {
+  it("keeps an INDECI report without an event date in the separate unconfirmed section", () => {
     const [item] = parseFeedItems(realIndeciSearchFeed());
     const { hazard, place } = parseIndeciTitle(item.title);
     if (!place) throw new Error("The 2020 report has no place");
     const report = { url: item.link, title: item.title, hazard, place, publishedAt: item.publishedAt };
     const unread = { ...report, occurredDate: null, occurredTime: null, description: null };
     const markdown = renderWeeklyReport(stateWith({ indeci: [unread] }, WEEK_2020_06), options);
+    const [dated, undated] = markdown.split("## INDECI reports to review: event date unconfirmed");
+    expect(dated).not.toContain(item.link);
+    expect(undated).toContain(item.link);
+    expect(undated).toContain("Publication does not confirm");
     expect(markdown).toContain(
       `| 1 | no indicado (published 6 Feb 2020, 19:52) | District of Lurigancho Chosica (Lima) | Huaico | no indicado | [INDECI COEN](${item.link}) |`,
     );
@@ -110,6 +114,11 @@ describe("renderWeeklyReport", () => {
     expect(renderWeeklyReport(state, options)).toContain(
       "SUTRAN: failed (timeout); INDECI: failed (http 503); Google News: failed (http 429)",
     );
+    const cached = stateWith({ sutran: corridorAlerts() });
+    const afterFailure = mergeObservations(cached, { sutran: null, indeci: null, news: null }, failedRun);
+    const markdown = renderWeeklyReport(afterFailure, options);
+    expect(markdown).toContain("Unavailable; retained observation from");
+    expect(markdown).not.toContain("Yes, valid until");
   });
 
   it("produces state that still matches the schema", () => {

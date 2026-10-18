@@ -126,6 +126,18 @@ describe("weekly incident report service, on the captures of 17 Oct 2026", () =>
     const { state, run } = await update(providers);
     expect(state.sutran.map((entry) => entry.history)).toEqual([[], [], []]);
     expect(run.sources.sutran.ok).toBe(true);
+    expect(run.sources.sutran.note).toBe("3 history request(s) failed; previous history kept");
+  });
+
+  it("preserves listed flags and evidence if SUTRAN rejects records after a schema change", async () => {
+    const earlier = realEarlierState();
+    const providers = realProviders();
+    // Simulates schema rejection, carrying no invented incident data.
+    providers.roadAlerts.listAlerts = vi.fn(async () => ({ records: [], invalidCount: realSutranListing().records.length }));
+    const { state, run } = await update(providers, earlier);
+    expect(run.sources.sutran).toEqual({ ok: false, kept: 0, note: "invalid_body" });
+    expect(state.sutran).toEqual(earlier.sutran);
+    expect(state.news).toHaveLength(3);
   });
 
   it("records a failed source and still updates the others", async () => {
