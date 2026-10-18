@@ -100,7 +100,7 @@ authorization adds a [Qatom weekly alert pass](docs/integration/qatom-alert-pass
 `SUSCRIBIR 7 DIAS`, a one-time USD 0.001 checkout through OpenAI Responses and
 Qatom MCP, verified payment activation, and expiry 168 hours from the request
 without renewal. This implementation requires the migration, seller item and
-server-only configuration before live payments; no paid launch is claimed.
+server-only configuration (including separate MCP-agent and seller-API credentials) before live payments; no paid launch is claimed.
 
 ## WhatsApp integration
 

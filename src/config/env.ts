@@ -166,3 +166,18 @@ export function loadQatomConfiguration() {
   return parsed.data;
 }
 export type QatomConfiguration = ReturnType<typeof loadQatomConfiguration>;
+
+const QatomApiConfigurationSchema = z.object({
+  QATOM_API_CLIENT_ID: z
+    .string()
+    .min(1)
+    .refine((value) => !value.startsWith("agent_")),
+  QATOM_API_CLIENT_SECRET: z.string().min(1),
+});
+export function loadQatomApiConfiguration() {
+  const result = QatomApiConfigurationSchema.safeParse(process.env);
+  if (!result.success)
+    throw new Error(`Invalid Qatom API configuration: ${result.error.issues.map((issue) => issue.path.join(".")).join(", ")}`);
+  return result.data;
+}
+export type QatomApiConfiguration = ReturnType<typeof loadQatomApiConfiguration>;

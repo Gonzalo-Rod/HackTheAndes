@@ -44,7 +44,7 @@ still require separate consent and are never automatically enrolled.
 
 ## Deployment and seller setup
 
-Implementation is local until deployed. Apply the new migration together with
+Apply the new migration together with
 the new application version. **Existing subscriptions have no paid grant and
 become ineligible under the new delivery checks**; they must request a new pass.
 No existing subscriber is billed or enrolled automatically. Coordinate the rollout
@@ -71,8 +71,9 @@ before applying this to the shared database. Never modify an applied migration.
    Save the headers separately and reload to verify they are listed.
 5. Configure a dedicated managed-agent client for the seller's own MCP server.
    Use its provided `agent_...` client ID, secret, resource and MCP URL. The
-   documented managed-agent credential acts as the account on the payment API,
-   and is accepted only by that MCP server. The runtime exchanges client
+   managed-agent credential is accepted by that MCP server. Its token is rejected
+   by the REST payment API with `token_exchange_required`; never use it for sale
+   verification. The runtime exchanges client
    credentials at `https://pay.m.todaq.net/v4/oidc/token`, with HTTP Basic,
    `grant_type=client_credentials` and `resource=<MCP origin>`. It caches tokens,
    coalesces concurrent exchanges, and obtains a fresh one before expiry. Codex's
@@ -85,7 +86,13 @@ before applying this to the shared database. Never modify an applied migration.
    never recovers a secret. Do not detach an existing agent to obtain a new secret
    without reviewing the service that uses it. Ordinary account credentials from
    Settings are not a substitute for this server-bound `agent_...` credential.
-6. Set `QATOM_CATALOG_ITEM_ID`, `QATOM_USD_TDN_DQ` (the seller's USD-TDN digital
+6. For settled-sale verification, add the seller account API credentials as
+   `QATOM_API_CLIENT_ID` and `QATOM_API_CLIENT_SECRET`. The verifier exchanges
+   these at `POST /v4/account/oauth/token`, with HTTP Basic, and caches the
+   account token until one minute before its absolute `expires_at` timestamp.
+   Do not put `agent_...` credentials in these variables, copy interactive Codex
+   tokens, or weaken the settled-sale check to bypass an authentication failure.
+   Set `QATOM_CATALOG_ITEM_ID`, `QATOM_USD_TDN_DQ` (the seller's USD-TDN digital
    quantity hash), `QATOM_MCP_URL`, `QATOM_CLIENT_ID`, `QATOM_CLIENT_SECRET`, and
    `QATOM_FULFILMENT_TOKEN` server-side. Use the existing `OPENAI_API_KEY`; the
    optional `OPENAI_QATOM_MODEL` defaults to the established GPT-4.1 mini snapshot.
@@ -93,13 +100,18 @@ before applying this to the shared database. Never modify an applied migration.
 7. Read the item back, activate it only after endpoint/header configuration, then
    test a real paid purchase with the driver's explicit approval. Check the real
    ledger, expiry, WhatsApp delivery and STOP. Free coverage can be checked first.
-   Record a launch report before claiming the service is live. Qatom account
+   A sender listed in `TEST_PHONE_KEYS` currently receives the DEMO flow even
+   without typing PRUEBA; use a consenting non-test sender to exercise checkout.
+   Team membership must remain in `TEAM_PHONE_KEYS` so this test does not count as
+   external-user traction. Record a launch report before claiming the service is
+   live. Qatom account
    changes require the approval links returned by its MCP tools; never approve
    on the account holder's behalf.
 
 The authenticated MCP was verified against the running server
-`https://hack-base-un45ktzl.mcp.m.todaq.net`. No new item, credential, deployment,
-shared migration or paid transaction is implied by this implementation document.
+`https://hack-base-un45ktzl.mcp.m.todaq.net`. Deployment and migration evidence is
+recorded in the local progress log; neither
+this document nor a successful build establishes a real paid purchase.
 
 ## Failure and verification boundaries
 

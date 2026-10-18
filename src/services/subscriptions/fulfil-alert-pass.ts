@@ -1,10 +1,10 @@
 import { createHash, randomUUID, timingSafeEqual } from "node:crypto";
 import { z } from "zod";
 import { alertPassInputSchema, type SettledPurchase } from "@/contracts/alert-passes";
-import { loadPlatformConfiguration, loadQatomConfiguration } from "@/config/env";
+import { loadPlatformConfiguration, loadQatomConfiguration, loadQatomApiConfiguration } from "@/config/env";
 import { createAlertPassFulfilment } from "@/db/alert-pass-fulfilment";
 import { database } from "@/db/pool";
-import { createQatomClient } from "@/integrations/qatom/client";
+import { createQatomPurchaseVerifier } from "@/integrations/qatom/purchase-verifier";
 import { failure, platformRoute, readJson } from "@/services/platform/http";
 
 export function createAlertPassHandler(deps: {
@@ -30,7 +30,7 @@ export const fulfilAlertPass = platformRoute("qatom.configure_fulfilment", async
   if (!handler) {
     const qatom = loadQatomConfiguration(),
       platform = loadPlatformConfiguration();
-    const client = createQatomClient(qatom);
+    const client = createQatomPurchaseVerifier(loadQatomApiConfiguration());
     handler = createAlertPassHandler({
       token: qatom.QATOM_FULFILMENT_TOKEN,
       purchase: (id, traceId) => client.purchase(id, traceId),

@@ -1,7 +1,6 @@
 import { z } from "zod";
 import type { QatomConfiguration } from "@/config/env";
-import { settledPurchaseSchema } from "@/contracts/alert-passes";
-import { getJson, postUrlEncoded, type RequestOptions } from "@/integrations/http/fetch-json";
+import { postUrlEncoded, type RequestOptions } from "@/integrations/http/fetch-json";
 
 const tokenSchema = z.object({
   access_token: z.string().min(1),
@@ -42,19 +41,6 @@ export function createQatomClient(
           exchange = null;
         });
       return exchange;
-    },
-    async purchase(transactionId: string, traceId: string) {
-      const id = z.uuid().parse(transactionId);
-      const token = await this.accessToken(traceId);
-      const body = await getJson(`https://pay.m.todaq.net/v4/catalog/purchases/${id}`, {
-        ...options,
-        provider: "qatom",
-        operation: "qatom.verify_purchase",
-        requestId: traceId,
-        headers: { Authorization: `Bearer ${token}` },
-        logTarget: "qatom/catalog/purchases",
-      });
-      return z.object({ purchase: settledPurchaseSchema }).parse(body).purchase;
     },
   };
 }
