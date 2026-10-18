@@ -17,8 +17,9 @@ Live manual executions `4` and `5`, plus automatic execution `6`, returned
 complete outcomes and their finished Supabase audit rows were verified.
 The MCP connection can attach existing credentials but provides no
 credential-creation tool, so credential entry is performed through n8n's UI.
-Weather ingestion, risk recalculation, incident promotion, alert
-evaluation, and the weekly report are separate pending integrations.
+Hourly rainfall refresh, climate recalculation and conditional driver alerts now
+run in the separate workflows documented below. Incident promotion and the weekly
+report remain pending.
 
 - `sutran-ingestion.sdk.js`: source for n8n's Workflow SDK/MCP builder. It is
   interpreted by n8n, not executed by the road-data package.
@@ -183,9 +184,9 @@ workflow's execution history and `private.ingestion_runs`.
 
 MCP validation and pinned-response workflow tests verify the graph and failure
 branch without calling the backend. They do not establish live deployed behavior.
-The standard trial's 1,000-execution allowance covers approximately 210 baseline
-scheduled runs over 30 hours for SUTRAN plus a future combined hourly weather/risk
-workflow, before tests and other workflows; actual remaining account quota should
+The standard trial's 1,000-execution allowance covers approximately 270 baseline
+scheduled runs over 30 hours: 180 SUTRAN polls, 30 climate refreshes and 60 alert
+evaluations, before tests and other workflows; actual remaining account quota should
 be checked in n8n. See [n8n's current trial limits](https://n8n.io/pricing/).
 
 ## Consolidated backend branch
@@ -213,3 +214,10 @@ The backend owns consent, leases, duplicate suppression and source validation.
 A schedule run is not proof that a subscriber received a message; record actual
 provider acceptance and the consenting phone's result separately. See the
 [notification guide](../../docs/integration/driver-notifications.md).
+
+Published on October 17, 2026 at 21:48 Lima time; both schedules were read back as
+active with the intended intervals and saved credential. Manual alert execution
+`41` checked one consenting DEMO subscription and sent one message; immediate
+repeat `42` sent none. Hourly refresh execution `43` returned the fresh stored
+assessment. These manual checks do not establish scheduled delivery cadence or
+real-driver impact. The utility template remains pending approval.
