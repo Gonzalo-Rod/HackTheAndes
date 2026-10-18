@@ -40,7 +40,8 @@ PE-22 subscription per identity is supported; a newly confirmed range replaces i
 
 Alert evaluation runs after a community publication transaction commits (Next.js
 `after`), after a confirmed complete SUTRAN poll, and after an hourly climate job.
-The source workflows call the same authenticated `/api/jobs/alerts` endpoint;
+The source workflows enqueue the same internal alert sub-workflow without waiting
+for it; that worker calls the authenticated `/api/jobs/alerts` endpoint;
 background publication invokes the shared server service directly. Source detection
 still follows SUTRAN's ten-minute polling and the weather capture's hourly cadence;
 this is not an instantaneous upstream feed or the dashboard's browser polling rate.
@@ -192,10 +193,14 @@ stale concurrent endpoint updates. Completed routes reuse the existing subscript
 range and delivery outbox, so no new credential or routing provider is required.
 Expired encrypted proposals follow the same pruning policy as subscription drafts.
 
-The n8n SUTRAN and climate workflows append an authenticated alert-evaluation node;
-the original alert workflow becomes recovery every five minutes. Reuse the existing
-Header Auth credential. Workflow timeouts are 330 seconds for SUTRAN plus delivery,
-300 for climate plus delivery, and 180 for recovery, below their schedule intervals.
+The n8n SUTRAN and climate workflows append a non-blocking sub-workflow invocation;
+the original alert workflow accepts those source changes plus recovery every five
+minutes. Caller access is limited to those two source workflows. Reuse the existing
+Header Auth credential inside the worker. This instance caps workflows at 180
+seconds, so ingestion keeps its 150-second budget, climate refresh keeps 130
+seconds, and alert delivery gets its own 180-second run; all are below their
+schedule intervals. A successfully queued child is not proof that a message sent;
+inspect the child execution and delivery outbox separately.
 Webhook processing allows up to 180 seconds including background notification work.
 Weekly PDF schedules and consent remain separate. Outside-window delivery still
 requires a provider-approved alert template; lack of approval leaves work pending.

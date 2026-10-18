@@ -129,36 +129,23 @@
     },
     {
       "id": "source-change-route-alerts",
-      "name": "Deliver newly detected route alerts",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.5,
+      "name": "Queue newly detected route alerts",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4,
       "position": [960, 80],
       "executeOnce": true,
       "retryOnFail": false,
       "onError": "stopWorkflow",
-      "credentials": {
-        "httpHeaderAuth": {
-          "id": "lQd0aYS0zCckQKI7",
-          "name": "PeruRoad ingestion job"
-        }
-      },
       "parameters": {
-        "method": "POST",
-        "url": "https://peruroad-climate-git-feat-data-model-gozlie.vercel.app/api/jobs/alerts",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
+        "mode": "once",
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "uUJ6gjv8kXsK5KdR"
+        },
         "options": {
-          "timeout": 170000,
-          "redirect": {
-            "redirect": {
-              "followRedirects": false
-            }
-          },
-          "response": {
-            "response": {
-              "responseFormat": "json"
-            }
-          }
+          "waitForSubWorkflow": false
         }
       }
     }
@@ -190,7 +177,7 @@
       "main": [
         [
           {
-            "node": "Deliver newly detected route alerts",
+            "node": "Queue newly detected route alerts",
             "type": "main",
             "index": 0
           }
@@ -224,7 +211,7 @@
     "saveManualExecutions": true,
     "saveDataErrorExecution": "all",
     "saveDataSuccessExecution": "all",
-    "executionTimeout": 330
+    "executionTimeout": 150
   },
   "active": false,
   "nodeGroups": [
@@ -235,7 +222,7 @@
         "Archive SUTRAN through backend",
         "Backend confirmed completion",
         "Fail unconfirmed ingestion",
-        "Deliver newly detected route alerts"
+        "Queue newly detected route alerts"
       ],
       "description": "Calls the authenticated backend and marks any unconfirmed ingestion as failed."
     }

@@ -15,6 +15,16 @@ const manual = trigger({
   config: { name: "Manual verification", position: [0, 200] },
   output: [{}],
 });
+const sourceChange = trigger({
+  type: "n8n-nodes-base.executeWorkflowTrigger",
+  version: 1.3,
+  config: {
+    name: "Source changes",
+    parameters: { inputSource: "passthrough" },
+    position: [0, 400],
+  },
+  output: [{ state: "source-change-example-only" }],
+});
 const request = node({
   type: "n8n-nodes-base.httpRequest",
   version: 4.5,
@@ -43,4 +53,6 @@ export default workflow("peruroad-driver-alerts", "PeruRoad — alert delivery r
   .add(schedule)
   .to(request)
   .add(manual)
+  .to(request)
+  .add(sourceChange)
   .to(request);

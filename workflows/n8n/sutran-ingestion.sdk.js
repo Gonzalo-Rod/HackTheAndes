@@ -123,28 +123,22 @@ const failed = node({
 });
 
 const notify = node({
-  type: "n8n-nodes-base.httpRequest",
-  version: 4.5,
+  type: "n8n-nodes-base.executeWorkflow",
+  version: 1.4,
   config: {
-    name: "Deliver newly detected route alerts",
+    name: "Queue newly detected route alerts",
     position: [960, 80],
     executeOnce: true,
     retryOnFail: false,
     onError: "stopWorkflow",
-    credentials: { httpHeaderAuth: { id: "lQd0aYS0zCckQKI7", name: "PeruRoad ingestion job" } },
     parameters: {
-      method: "POST",
-      url: "https://peruroad-climate-git-feat-data-model-gozlie.vercel.app/api/jobs/alerts",
-      authentication: "genericCredentialType",
-      genericAuthType: "httpHeaderAuth",
-      options: {
-        timeout: 170000,
-        redirect: { redirect: { followRedirects: false } },
-        response: { response: { responseFormat: "json" } },
-      },
+      mode: "once",
+      source: "database",
+      workflowId: { __rl: true, mode: "id", value: "uUJ6gjv8kXsK5KdR" },
+      options: { waitForSubWorkflow: false },
     },
   },
-  output: [{ checked: 0, sent: 0, pending: 0, failed: 0 }],
+  output: [{ state: "queued-example-only" }],
 });
 
 const setup = sticky(
