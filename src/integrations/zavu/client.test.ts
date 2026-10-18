@@ -29,6 +29,7 @@ describe("createZavuClient().sendText", () => {
       to: "+51900000000",
       text: "Hola",
       channel: "whatsapp",
+      fallbackEnabled: false,
       messageType: "text",
       idempotencyKey: "ack:msg_1",
     });

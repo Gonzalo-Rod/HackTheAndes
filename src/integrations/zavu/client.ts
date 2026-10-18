@@ -46,6 +46,8 @@ export function createZavuClient(options: ZavuClientOptions): MessagingProvider 
             to: message.to,
             text: message.text.slice(0, MAX_TEXT_LENGTH),
             channel: message.channel,
+            // The provider defaults to SMS fallback; alternate-channel consent is not implemented.
+            fallbackEnabled: false,
             messageType: "text",
             idempotencyKey: message.idempotencyKey,
           },
