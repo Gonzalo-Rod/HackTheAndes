@@ -10,7 +10,7 @@ import { DAY_MS } from "@/lib/time";
 import { ChartCard, ChartTooltip } from "./ChartCard";
 
 const PAD = { top: 8, right: 10, bottom: 18, left: 26 };
-const SERIES_COLOR = "#2a78d6"; // categorical slot 1 (single series)
+const SERIES_COLOR = "var(--chart-1)"; // categorical slot 1 (single series)
 
 interface CumulativeChartProps {
   points: CumulativePoint[];

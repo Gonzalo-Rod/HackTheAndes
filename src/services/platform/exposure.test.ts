@@ -76,14 +76,14 @@ it("rejects an incompatible geometry rather than displaying another revision", a
   expect((await readExposure(request())).status).toBe(503);
 });
 it("serves a registered road from its own geometry revision", async () => {
-  const road = await readBundledExposure("PE-16A");
+  const road = await readBundledExposure("PE-32");
   mocks.read.mockResolvedValueOnce(road);
   vi.setSystemTime(new Date(Date.parse(road.assessment.assessedAt) + 1000));
-  const response = await readExposure(request("?road=PE-16A"));
+  const response = await readExposure(request("?road=PE-32"));
   expect(response.status).toBe(200);
   expect(mocks.read).toHaveBeenCalledWith(road.assessment.geometryRevision);
   const value = ExposureLayerSchema.parse(await response.json());
-  expect(value.data.segments.every((segment) => segment.segmentId.startsWith("PE-16A:"))).toBe(true);
+  expect(value.data.segments.every((segment) => segment.segmentId.startsWith("PE-32:"))).toBe(true);
 });
 it("answers that an unprepared road has no estimate instead of implying low risk", async () => {
   const response = await readExposure(request("?road=PE-99"));
@@ -95,5 +95,5 @@ it("lists the forecast roads with the pilot first", async () => {
   const response = await readForecastRoads(new Request("https://example.test/api/exposure/roads"));
   const value = ForecastRoadsResponseSchema.parse(await response.json());
   expect(value.roads[0]).toMatchObject({ roadCode: "PE-22", pilot: true, geometryRevision: record.assessment.geometryRevision });
-  expect(value.roads.map((road) => road.roadCode)).toContain("PE-16A");
+  expect(value.roads.map((road) => road.roadCode)).toContain("PE-32");
 });

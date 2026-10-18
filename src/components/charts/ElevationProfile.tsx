@@ -15,7 +15,7 @@ const PAD = { top: 16, right: 12, bottom: 18, left: 38 };
 const ELEVATION_CEILING_M = 5000; // Ticlio is ~4,800 m; a round ceiling keeps ticks clean
 const MIN_PLACE_LABEL_GAP_PX = 58;
 const RAIN_BAND_PX = 7;
-const TERRAIN_INK = "#6f685c";
+const TERRAIN_INK = "var(--muted-foreground)";
 
 interface ElevationProfileProps {
   corridor: CorridorData | null;
@@ -174,7 +174,7 @@ export function ElevationProfile({
                   cx={x(shownKm)}
                   cy={y(elevationAtKm(corridor.profile, shownKm))}
                   r={4}
-                  fill="#1f1c17"
+                  fill="var(--foreground)"
                   stroke="var(--surface)"
                   strokeWidth={2}
                 />
@@ -194,7 +194,7 @@ export function ElevationProfile({
                 >
                   <title>{`${STATUS_META[alert.roadStatus].label}: ${alert.title}`}</title>
                   <circle r={12} fill="transparent" />
-                  <line y1={4} y2={10} stroke="#1f1c17" strokeWidth={1} opacity={0.5} />
+                  <line y1={4} y2={10} stroke="var(--foreground)" strokeWidth={1} opacity={0.5} />
                   <circle r={selected ? 6.5 : 5} fill={STATUS_META[alert.roadStatus].color} stroke="var(--surface)" strokeWidth={2} />
                 </g>
               );

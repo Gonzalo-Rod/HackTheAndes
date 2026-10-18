@@ -115,3 +115,20 @@ it("treats an incomplete forecast and missing susceptibility as unknown instead 
   expect(a.catchments.every((c) => c.windows.next24h.category === null)).toBe(true);
   expect(a.catchments[0]?.windows.next24h.reasons).toContain("missing_susceptibility");
 });
+it("keeps susceptibility fractions within [0, 1] when sample weights overshoot by rounding", () => {
+  const input = structuredClone(fixture.record.input);
+  const first = input.susceptibility[0];
+  if (!first) throw new Error("Fixture needs susceptibility");
+  // Observed on PE-3N: class weights summing to 1.0000000000000002.
+  first.classWeights = { "1": 0, "2": 0, "3": 0, "4": 0.1741456795546789, "5": 0.8258543204453213 };
+  first.unknownWeight = 0;
+  const policy = exposurePolicySchema.parse(fixture.record.assessment.policy);
+  const assessment = calculateExposure(input, policy, {
+    assessmentId: exposureIdentity(input, policy),
+    policySha256: exposureHash(policy),
+    assessedAt: fixture.at,
+  });
+  const catchment = assessment.catchments.find((c) => c.catchmentId === first.catchmentId);
+  expect(catchment?.highSusceptibilityFraction).toBe(1);
+  expect(catchment?.susceptibilityCoverageFraction).toBe(1);
+});

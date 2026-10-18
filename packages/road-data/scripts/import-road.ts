@@ -1,22 +1,15 @@
-// Imports prepared road files into the shared database: geometry, catchments, hazard layers,
-// the live weather capture and the exposure assessment. Every write is idempotent by content key.
+// Imports a registered road's forecast into the shared database: its segments and exposure
+// assessment, which is all the app and the hourly climate job read for non-pilot roads. Catchment
+// and hazard files stay in git for audit; storing their raw polygons per road would multiply the
+// database size. Every write is idempotent by content key.
 // Usage: npm run road:import -- PE-5N [PE-3N ...]
 import { loadDatabaseConfiguration } from "../src/config/env.ts";
 import { createDatabasePool } from "../src/db/pool.ts";
-import { persistCatchments } from "../src/db/catchments.ts";
-import { persistHazards } from "../src/db/spatial-inputs.ts";
-import { createDataSnapshotRepository } from "../src/db/data-snapshots.ts";
 import { createExposureRepository } from "../src/db/exposure.ts";
-import { weatherCaptureSchema } from "../src/contracts/catchment-weather.ts";
 import { roadCodeSchema } from "../src/contracts/road-geometry.ts";
 import { importRoadGeometry } from "../src/services/import-road-geometry.ts";
 import { readRoadJson, readRoadRegistry, roadFiles } from "../src/integrations/road-files.ts";
-import { readWeatherFile } from "../src/integrations/open-meteo/weather-files.ts";
 import { readBundledExposure } from "../src/integrations/exposure/files.ts";
-import {
-  readBundledHazardSource,
-  readBundledHazards,
-} from "../src/integrations/hydrobasins/model-input-files.ts";
 
 const codes = process.argv.slice(2);
 if (!codes.length || codes.some((code) => !roadCodeSchema.safeParse(code).success)) {
@@ -39,23 +32,6 @@ try {
       if (!geometry.ok) throw new Error(`Geometry rejected: ${geometry.error.code}`);
       if (geometry.value.geometryRevision !== entry.geometryRevision)
         throw new Error("Prepared geometry differs from the registered revision");
-      step = "catchments";
-      const catchments = await persistCatchments(pool, await readRoadJson(files.catchments));
-      step = "hazards";
-      const hazards = await persistHazards(
-        pool,
-        await readBundledHazards(code),
-        await readBundledHazardSource(code),
-      );
-      step = "weather";
-      const weather = await readWeatherFile(files.weatherLive);
-      await createDataSnapshotRepository(pool, weatherCaptureSchema).save({
-        dataset: "weather-operational",
-        key: `prepared-${files.roadCode}.json.gz`,
-        geometryRevision: weather.geometryRevision,
-        capturedAt: weather.capturedAt,
-        payload: weather,
-      });
       step = "exposure";
       const exposure = await createExposureRepository(pool).save(await readBundledExposure(code));
       results.push({
@@ -63,8 +39,6 @@ try {
         state: "imported",
         geometryRevision: entry.geometryRevision,
         segments: geometry.value.segmentCount,
-        catchments,
-        hazards,
         exposure: { state: exposure.state, assessmentId: exposure.record.assessment.assessmentId },
       });
     } catch (error) {

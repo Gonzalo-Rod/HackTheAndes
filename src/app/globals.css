@@ -1,30 +1,113 @@
-/* Design tokens and base controls. Warm "paper" palette; status colors are reserved for road status. */
+/* Design tokens (shadcn-style names) and base controls. Status colors stay reserved for road status. */
 :root {
   color-scheme: light;
-  --page: #ece8df;
-  --surface: #fbfaf6;
-  --surface-2: #f5f2eb;
-  --surface-3: #efebe2;
-  --line: #e2dccf;
-  --line-strong: #cfc7b8;
-  --ink: #1f1c17;
-  --ink-2: #4f4940;
-  --ink-3: #6f685c;
-  --ink-4: #9a9285;
-  --accent: #c2512c;
-  --accent-ink: #ffffff;
-  --focus: #2a78d6;
-  --chip-dark: rgba(28, 25, 21, 0.9);
+  --background: oklch(0.9764 0.0013 286.3755);
+  --foreground: oklch(0.2593 0.0259 248.858);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.2593 0.0259 248.858);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.2593 0.0259 248.858);
+  --primary: oklch(0.4721 0.0927 237.7893);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.948 0.0063 255.4758);
+  --secondary-foreground: oklch(0.2593 0.0259 248.858);
+  --muted: oklch(0.948 0.0063 255.4758);
+  --muted-foreground: oklch(0.5025 0.0261 254.5164);
+  --accent: oklch(0.9175 0.0177 234.5132);
+  --accent-foreground: oklch(0.3818 0.0757 237.4085);
+  --destructive: oklch(0.5413 0.155 26.0539);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.9046 0.0098 252.8166);
+  --input: oklch(0.9046 0.0098 252.8166);
+  --ring: oklch(0.5051 0.0989 237.3787);
+  --chart-1: oklch(0.5051 0.0989 237.3787);
+  --chart-2: oklch(0.7893 0.0828 232.7839);
+  --chart-3: oklch(0.389 0.0736 237.0031);
+  --chart-4: oklch(0.5239 0.0887 163.8679);
+  --chart-5: oklch(0.7479 0.1214 76.0688);
+  --sidebar: oklch(0.9635 0.0045 258.3247);
+  --sidebar-foreground: oklch(0.2593 0.0259 248.858);
+  --sidebar-primary: oklch(0.4721 0.0927 237.7893);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.9175 0.0177 234.5132);
+  --sidebar-accent-foreground: oklch(0.3818 0.0757 237.4085);
+  --sidebar-border: oklch(0.9046 0.0098 252.8166);
+  --sidebar-ring: oklch(0.5051 0.0989 237.3787);
+  --font-sans: var(--font-geist), Geist, ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
+  --font-mono: var(--font-jetbrains), "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --radius: 0.625rem;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --shadow-color: #1a2530;
+  --shadow-sm: 0px 1px 4px -1px hsl(210 29.7297% 14.5098% / 0.05), 0px 1px 2px -2px hsl(210 29.7297% 14.5098% / 0.05);
+  --shadow-lg: 0px 1px 4px -1px hsl(210 29.7297% 14.5098% / 0.05), 0px 4px 6px -2px hsl(210 29.7297% 14.5098% / 0.05);
+  --shadow-xl: 0px 1px 4px -1px hsl(210 29.7297% 14.5098% / 0.05), 0px 8px 10px -2px hsl(210 29.7297% 14.5098% / 0.05);
+  --tracking-normal: 0em;
+
+  /* Legacy names used across src/styles, derived from the tokens above so they follow the theme. */
+  --page: var(--background);
+  --surface: var(--card);
+  --surface-2: var(--sidebar);
+  --surface-3: var(--muted);
+  --line: var(--border);
+  --line-strong: color-mix(in oklch, var(--border), var(--foreground) 12%);
+  --ink: var(--foreground);
+  --ink-2: color-mix(in oklch, var(--foreground) 55%, var(--muted-foreground));
+  --ink-3: var(--muted-foreground);
+  --ink-4: color-mix(in oklch, var(--muted-foreground) 65%, var(--border));
+  --chip-dark: color-mix(in oklch, var(--foreground) 90%, transparent);
   --status-critical: #d03b3b;
   --status-warning: #fab219;
   --status-good: #0ca30c;
-  --radius: 8px;
-  --radius-sm: 6px;
-  --shadow-1: 0 1px 2px rgba(31, 28, 23, 0.06), 0 1px 1px rgba(31, 28, 23, 0.04);
-  --shadow-2: 0 10px 28px rgba(31, 28, 23, 0.16), 0 2px 6px rgba(31, 28, 23, 0.08);
-  --font-sans: var(--font-inter), system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono: var(--font-jetbrains), ui-monospace, "SFMono-Regular", Consolas, monospace;
+  --shadow-1: var(--shadow-sm);
+  /* Floating panels over the map need more lift than the palette's subtle shadow scale. */
+  --shadow-2: 0 10px 28px hsl(210 29.7297% 14.5098% / 0.16), 0 2px 6px hsl(210 29.7297% 14.5098% / 0.08);
   --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Dark tokens, applied by adding the `dark` class to <html>. Not toggled yet: several map overlays still use light literals. */
+.dark {
+  color-scheme: dark;
+  --background: oklch(0.1884 0.0128 248.5103);
+  --foreground: oklch(0.9324 0.008 253.8552);
+  --card: oklch(0.2241 0.0181 255.71);
+  --card-foreground: oklch(0.9324 0.008 253.8552);
+  --popover: oklch(0.2539 0.0216 257.2811);
+  --popover-foreground: oklch(0.9324 0.008 253.8552);
+  --primary: oklch(0.7313 0.0733 235.1459);
+  --primary-foreground: oklch(0.1884 0.0128 248.5103);
+  --secondary: oklch(0.2654 0.022 254.2034);
+  --secondary-foreground: oklch(0.9324 0.008 253.8552);
+  --muted: oklch(0.2654 0.022 254.2034);
+  --muted-foreground: oklch(0.6498 0.0271 257.6665);
+  --accent: oklch(0.2654 0.022 254.2034);
+  --accent-foreground: oklch(0.833 0.0499 230.3705);
+  --destructive: oklch(0.6657 0.1387 24.1829);
+  --destructive-foreground: oklch(0.1562 0.0257 25.5104);
+  --border: oklch(0.31 0.025 255.71);
+  --input: oklch(0.31 0.025 255.71);
+  --ring: oklch(0.7313 0.0733 235.1459);
+  --chart-1: oklch(0.7313 0.0733 235.1459);
+  --chart-2: oklch(0.833 0.0499 230.3705);
+  --chart-3: oklch(0.6848 0.0943 235.3912);
+  --chart-4: oklch(0.682 0.105 161.3021);
+  --chart-5: oklch(0.7963 0.121 77.1414);
+  --sidebar: oklch(0.1665 0.0124 254.1679);
+  --sidebar-foreground: oklch(0.9324 0.008 253.8552);
+  --sidebar-primary: oklch(0.7313 0.0733 235.1459);
+  --sidebar-primary-foreground: oklch(0.1884 0.0128 248.5103);
+  --sidebar-accent: oklch(0.2654 0.022 254.2034);
+  --sidebar-accent-foreground: oklch(0.833 0.0499 230.3705);
+  --sidebar-border: oklch(0.2654 0.022 254.2034);
+  --sidebar-ring: oklch(0.7313 0.0733 235.1459);
+  --shadow-color: #000000;
+  --shadow-sm: 0px 1px 3px 0px hsl(0 0% 0% / 0.3), 0px 1px 2px -1px hsl(0 0% 0% / 0.3);
+  --shadow-lg: 0px 1px 3px 0px hsl(0 0% 0% / 0.3), 0px 4px 6px -1px hsl(0 0% 0% / 0.3);
+  --shadow-xl: 0px 1px 3px 0px hsl(0 0% 0% / 0.3), 0px 8px 10px -1px hsl(0 0% 0% / 0.3);
+  --shadow-2: var(--shadow-xl);
 }
 
 *,
@@ -37,8 +120,8 @@ html,
 body {
   margin: 0;
   padding: 0;
-  background: var(--page);
-  color: var(--ink);
+  background: var(--background);
+  color: var(--foreground);
   font-family: var(--font-sans);
   font-size: 13px;
   line-height: 1.4;
@@ -64,7 +147,7 @@ select {
 }
 
 :focus-visible {
-  outline: 2px solid var(--focus);
+  outline: 2px solid var(--ring);
   outline-offset: 2px;
 }
 
@@ -116,13 +199,13 @@ select {
   background: transparent;
 }
 .pr-btn--accent {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--accent-ink);
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--primary-foreground);
 }
 .pr-btn--accent:hover:not(:disabled) {
-  background: #a9431f;
-  border-color: #a9431f;
+  background: color-mix(in oklch, var(--primary), black 14%);
+  border-color: color-mix(in oklch, var(--primary), black 14%);
 }
 .pr-btn--dark {
   background: rgba(255, 255, 255, 0.08);
@@ -138,7 +221,7 @@ select {
   padding: 0;
   border: 0;
   background: none;
-  color: var(--focus);
+  color: var(--ring);
   font-weight: 500;
 }
 .pr-btn--link:hover:not(:disabled) {
@@ -194,7 +277,7 @@ select {
   color: #fff;
 }
 .pr-icon-btn--primary:hover:not(:disabled) {
-  background: #3a352d;
+  background: color-mix(in oklch, var(--foreground) 85%, white);
   color: #fff;
 }
 
@@ -262,7 +345,7 @@ select {
 }
 .pr-segmented__item[aria-pressed="true"] .pr-count,
 .pr-count--strong {
-  background: var(--accent);
+  background: var(--primary);
   color: #fff;
 }
 
@@ -330,8 +413,8 @@ select {
   color: var(--ink-3);
 }
 .pr-search:focus-within {
-  border-color: var(--focus);
-  box-shadow: 0 0 0 3px rgba(42, 120, 214, 0.15);
+  border-color: var(--ring);
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--ring) 15%, transparent);
 }
 .pr-search input {
   flex: 1;

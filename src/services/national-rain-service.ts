@@ -6,8 +6,9 @@ import type { RainProvider } from "@/integrations/open-meteo/open-meteo-client";
 import { logger } from "@/lib/logger";
 import { err, ok, type Result } from "@/lib/result";
 
-/** Open-Meteo models refresh hourly; one fetch per hour per instance bounds free-tier use. */
-export const NATIONAL_RAIN_CACHE_TTL_MS = 60 * 60_000;
+// Display context only; three hours keeps its 188 cells at ~1,500 Open-Meteo calls a day, leaving the
+// free tier's ~10,000 for the hourly road forecasts (see packages/road-data forecast-budget.ts).
+export const NATIONAL_RAIN_CACHE_TTL_MS = 3 * 60 * 60_000;
 /** Locations per request; keeps URLs short and lets one failing batch be retried alone. */
 const BATCH_SIZE = 100;
 

@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "roadCode": "PE-32",
+  "geometryRevision": "4aa4e3ae964f56907aef2fd81a8bd9edb178eb8724a576db3cdf1800cc402d99",
+  "measuredLengthKm": 291.7940166702608,
+  "segmentCount": 292,
+  "kilometerCalibration": "unverified",
+  "files": {
+    "source.json": "63c798e95f0e05047eb7fb110edcdfe23cf846656acd4f29dddc9c63e47b3419",
+    "corridor.geojson": "309153aa5323813327bd7185a6a1871537d329092facb344de2fb8b780d2a17c",
+    "segments-1km.geojson": "964de145a3456e23c1444b227f21b37a8c95920e054bc9489412c20de059be18",
+    "diagnostics.json": "81c9186c16b17be07777a4475ee14c0f947d139fad7d24492f7a8591e5af7721"
+  }
+}

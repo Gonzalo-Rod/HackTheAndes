@@ -8,6 +8,9 @@ import { summarizeOperationalWeather } from "../weather/aggregate.ts";
 import { assessWindow, capByLocalSusceptibility, combineWindows, includePeak } from "./window.ts";
 
 /** Pure calculation over captured inputs; time and content identities are supplied by the service. */
+function toFraction(value: number): number {
+  return Math.min(1, Math.max(0, value));
+}
 export function calculateExposure(
   input: ExposureInput,
   policy: ExposurePolicy,
@@ -27,8 +30,11 @@ export function calculateExposure(
   const catchments = input.catchments.map((catchment) => {
     const weather = rain.get(catchment.id);
     const geology = susceptibility.get(catchment.id);
-    const coverageFraction = geology ? 1 - geology.unknownWeight : null;
-    const highFraction = geology ? geology.classWeights["4"] + geology.classWeights["5"] : 0;
+    // Sample weights sum to one only up to floating-point error (PE-3N reached 1.0000000000000002).
+    const coverageFraction = geology ? toFraction(1 - geology.unknownWeight) : null;
+    const highFraction = geology
+      ? toFraction(geology.classWeights["4"] + geology.classWeights["5"])
+      : 0;
     const past72h = weather?.rainMm72hPast ?? missingRain;
     const past168h = weather?.rainMm168hPast ?? missingRain;
     const create = (

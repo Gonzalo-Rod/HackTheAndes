@@ -1,0 +1,566 @@
+[
+  {
+    "sourceId": "PE-5NA#0#5.023",
+    "sourceLengthKm": 5.023,
+    "measuredLengthKm": 4.926580868987175,
+    "lengthDifferenceKm": -0.09641913101282462
+  },
+  {
+    "sourceId": "PE-5NA#5.023#10.026",
+    "sourceLengthKm": 5.003,
+    "measuredLengthKm": 5.171831649721569,
+    "lengthDifferenceKm": 0.16883164972156894
+  },
+  {
+    "sourceId": "PE-5NA#10.026#25.073",
+    "sourceLengthKm": 15.047,
+    "measuredLengthKm": 14.67891148169839,
+    "lengthDifferenceKm": -0.3680885183016098
+  },
+  {
+    "sourceId": "PE-5NA#25.073#35.072",
+    "sourceLengthKm": 9.999,
+    "measuredLengthKm": 9.940816366854127,
+    "lengthDifferenceKm": -0.05818363314587316
+  },
+  {
+    "sourceId": "PE-5NA#35.072#43.196",
+    "sourceLengthKm": 8.124,
+    "measuredLengthKm": 8.140003984640778,
+    "lengthDifferenceKm": 0.016003984640777347
+  },
+  {
+    "sourceId": "PE-5NA#43.196#43.953",
+    "sourceLengthKm": 0.757,
+    "measuredLengthKm": 0.7828499723312963,
+    "lengthDifferenceKm": 0.025849972331296267
+  },
+  {
+    "sourceId": "PE-5NA#43.953#45.192",
+    "sourceLengthKm": 1.239,
+    "measuredLengthKm": 1.539469655660279,
+    "lengthDifferenceKm": 0.30046965566027883
+  },
+  {
+    "sourceId": "PE-5NA#45.192#46.407",
+    "sourceLengthKm": 1.215,
+    "measuredLengthKm": 1.5069815476862574,
+    "lengthDifferenceKm": 0.2919815476862573
+  },
+  {
+    "sourceId": "PE-5NA#46.407#46.411",
+    "sourceLengthKm": 0.004,
+    "measuredLengthKm": 0.0059251736400142835,
+    "lengthDifferenceKm": 0.0019251736400142834
+  },
+  {
+    "sourceId": "PE-5NA#46.411#47.474",
+    "sourceLengthKm": 1.063,
+    "measuredLengthKm": 1.0650459966097867,
+    "lengthDifferenceKm": 0.002045996609786771
+  },
+  {
+    "sourceId": "PE-5NA#47.474#57.407",
+    "sourceLengthKm": 9.933,
+    "measuredLengthKm": 9.877865201066008,
+    "lengthDifferenceKm": -0.05513479893399165
+  },
+  {
+    "sourceId": "PE-5NA#57.407#58.407",
+    "sourceLengthKm": 1,
+    "measuredLengthKm": 0.9993997859648465,
+    "lengthDifferenceKm": -0.0006002140351535346
+  },
+  {
+    "sourceId": "PE-5NA#58.407#66.407",
+    "sourceLengthKm": 8,
+    "measuredLengthKm": 7.950908982910045,
+    "lengthDifferenceKm": -0.049091017089955
+  },
+  {
+    "sourceId": "PE-5NA#66.407#67.407",
+    "sourceLengthKm": 1,
+    "measuredLengthKm": 0.9954241552915826,
+    "lengthDifferenceKm": -0.004575844708417431
+  },
+  {
+    "sourceId": "PE-5NA#67.407#69.192",
+    "sourceLengthKm": 1.785,
+    "measuredLengthKm": 1.8321886126526634,
+    "lengthDifferenceKm": 0.0471886126526635
+  },
+  {
+    "sourceId": "PE-5NA#69.192#69.407",
+    "sourceLengthKm": 0.215,
+    "measuredLengthKm": 0.2123617199272034,
+    "lengthDifferenceKm": -0.002638280072796595
+  },
+  {
+    "sourceId": "PE-5NA#69.407#70.407",
+    "sourceLengthKm": 1,
+    "measuredLengthKm": 0.9855871915120615,
+    "lengthDifferenceKm": -0.014412808487938467
+  },
+  {
+    "sourceId": "PE-5NA#70.407#72.442",
+    "sourceLengthKm": 2.035,
+    "measuredLengthKm": 2.1915082972517226,
+    "lengthDifferenceKm": 0.15650829725172244
+  },
+  {
+    "sourceId": "PE-5NA#72.442#73.442",
+    "sourceLengthKm": 1,
+    "measuredLengthKm": 0.9954629390349443,
+    "lengthDifferenceKm": -0.004537060965055684
+  },
+  {
+    "sourceId": "PE-5NA#73.442#76.909",
+    "sourceLengthKm": 3.467,
+    "measuredLengthKm": 3.4018474125569877,
+    "lengthDifferenceKm": -0.06515258744301233
+  },
+  {
+    "sourceId": "PE-5NA#76.909#77.962",
+    "sourceLengthKm": 1.053,
+    "measuredLengthKm": 0.7325373292653079,
+    "lengthDifferenceKm": -0.32046267073469203
+  },
+  {
+    "sourceId": "PE-5NA#77.962#78.442",
+    "sourceLengthKm": 0.48,
+    "measuredLengthKm": 0.47768757974435117,
+    "lengthDifferenceKm": -0.002312420255648817
+  },
+  {
+    "sourceId": "PE-5NA#78.442#81.581",
+    "sourceLengthKm": 3.139,
+    "measuredLengthKm": 3.070702034338603,
+    "lengthDifferenceKm": -0.0682979656613969
+  },
+  {
+    "sourceId": "PE-5NA#81.581#81.6",
+    "sourceLengthKm": 0.019,
+    "measuredLengthKm": 0.019116032386645478,
+    "lengthDifferenceKm": 0.00011603238664547808
+  },
+  {
+    "sourceId": "PE-5NA#81.6#85.617",
+    "sourceLengthKm": 4.017,
+    "measuredLengthKm": 3.9352226515547586,
+    "lengthDifferenceKm": -0.08177734844524176
+  },
+  {
+    "sourceId": "PE-5NA#85.617#89.837",
+    "sourceLengthKm": 4.22,
+    "measuredLengthKm": 4.189190721922925,
+    "lengthDifferenceKm": -0.030809278077074786
+  },
+  {
+    "sourceId": "PE-5NA#89.837#103.697",
+    "sourceLengthKm": 13.86,
+    "measuredLengthKm": 13.761680651154393,
+    "lengthDifferenceKm": -0.09831934884560667
+  },
+  {
+    "sourceId": "PE-5NA#103.697#104.839",
+    "sourceLengthKm": 1.142,
+    "measuredLengthKm": 1.0913453543538896,
+    "lengthDifferenceKm": -0.05065464564611033
+  },
+  {
+    "sourceId": "PE-5NA#104.839#106.399",
+    "sourceLengthKm": 1.56,
+    "measuredLengthKm": 1.541184192369084,
+    "lengthDifferenceKm": -0.01881580763091595
+  },
+  {
+    "sourceId": "PE-5NA#106.399#109.399",
+    "sourceLengthKm": 3,
+    "measuredLengthKm": 3.0125687386630564,
+    "lengthDifferenceKm": 0.012568738663056411
+  },
+  {
+    "sourceId": "PE-5NA#109.399#109.539",
+    "sourceLengthKm": 0.14,
+    "measuredLengthKm": 0.13741999988550777,
+    "lengthDifferenceKm": -0.002580000114492248
+  },
+  {
+    "sourceId": "PE-5NA#109.539#114.539",
+    "sourceLengthKm": 5,
+    "measuredLengthKm": 4.8959898661030765,
+    "lengthDifferenceKm": -0.10401013389692348
+  },
+  {
+    "sourceId": "PE-5NA#114.539#116.105",
+    "sourceLengthKm": 1.566,
+    "measuredLengthKm": 1.5553141368673915,
+    "lengthDifferenceKm": -0.010685863132608553
+  },
+  {
+    "sourceId": "PE-5NA#116.105#119.149",
+    "sourceLengthKm": 3.044,
+    "measuredLengthKm": 3.0371219113218406,
+    "lengthDifferenceKm": -0.006878088678159422
+  },
+  {
+    "sourceId": "PE-5NA#119.149#119.529",
+    "sourceLengthKm": 0.38,
+    "measuredLengthKm": 0.37742942506205734,
+    "lengthDifferenceKm": -0.00257057493794266
+  },
+  {
+    "sourceId": "PE-5NA#119.529#119.92",
+    "sourceLengthKm": 0.391,
+    "measuredLengthKm": 0.3872126419310401,
+    "lengthDifferenceKm": -0.003787358068959912
+  },
+  {
+    "sourceId": "PE-5NA#119.92#121.828",
+    "sourceLengthKm": 1.908,
+    "measuredLengthKm": 1.9147826251709843,
+    "lengthDifferenceKm": 0.00678262517098438
+  },
+  {
+    "sourceId": "PE-5NA#121.828#121.973",
+    "sourceLengthKm": 0.145,
+    "measuredLengthKm": 0.14691219951370954,
+    "lengthDifferenceKm": 0.0019121995137095504
+  },
+  {
+    "sourceId": "PE-5NA#121.973#122.423",
+    "sourceLengthKm": 0.45,
+    "measuredLengthKm": 0.453346435566777,
+    "lengthDifferenceKm": 0.003346435566776995
+  },
+  {
+    "sourceId": "PE-5NA#122.423#123.038",
+    "sourceLengthKm": 0.615,
+    "measuredLengthKm": 0.6290331802993467,
+    "lengthDifferenceKm": 0.014033180299346748
+  },
+  {
+    "sourceId": "PE-5NA#123.038#123.457",
+    "sourceLengthKm": 0.419,
+    "measuredLengthKm": 0.4080819673296727,
+    "lengthDifferenceKm": -0.01091803267032726
+  },
+  {
+    "sourceId": "PE-5NA#123.457#124.153",
+    "sourceLengthKm": 0.696,
+    "measuredLengthKm": 0.6930409362322464,
+    "lengthDifferenceKm": -0.002959063767753567
+  },
+  {
+    "sourceId": "PE-5NA#124.153#124.304",
+    "sourceLengthKm": 0.151,
+    "measuredLengthKm": 0.1532461240166058,
+    "lengthDifferenceKm": 0.002246124016605816
+  },
+  {
+    "sourceId": "PE-5NA#124.304#125.457",
+    "sourceLengthKm": 1.153,
+    "measuredLengthKm": 1.1469313181248677,
+    "lengthDifferenceKm": -0.00606868187513232
+  },
+  {
+    "sourceId": "PE-5NA#125.457#125.727",
+    "sourceLengthKm": 0.27,
+    "measuredLengthKm": 0.27023533628344987,
+    "lengthDifferenceKm": 0.00023533628344984958
+  },
+  {
+    "sourceId": "PE-5NA#125.727#126.907",
+    "sourceLengthKm": 1.18,
+    "measuredLengthKm": 1.1486176242212818,
+    "lengthDifferenceKm": -0.03138237577871816
+  },
+  {
+    "sourceId": "PE-5NA#126.907#127.96",
+    "sourceLengthKm": 1.053,
+    "measuredLengthKm": 1.0418790879568998,
+    "lengthDifferenceKm": -0.011120912043100173
+  },
+  {
+    "sourceId": "PE-5NA#127.96#129.907",
+    "sourceLengthKm": 1.947,
+    "measuredLengthKm": 1.9743836021191723,
+    "lengthDifferenceKm": 0.027383602119172235
+  },
+  {
+    "sourceId": "PE-5NA#129.907#131.907",
+    "sourceLengthKm": 2,
+    "measuredLengthKm": 1.9938659371686989,
+    "lengthDifferenceKm": -0.006134062831301135
+  },
+  {
+    "sourceId": "PE-5NA#131.907#134.907",
+    "sourceLengthKm": 3,
+    "measuredLengthKm": 2.982682357594651,
+    "lengthDifferenceKm": -0.017317642405349165
+  },
+  {
+    "sourceId": "PE-5NA#134.907#135.907",
+    "sourceLengthKm": 1,
+    "measuredLengthKm": 0.9998899247213053,
+    "lengthDifferenceKm": -0.00011007527869466571
+  },
+  {
+    "sourceId": "PE-5NA#135.907#136.597",
+    "sourceLengthKm": 0.69,
+    "measuredLengthKm": 0.611331971982317,
+    "lengthDifferenceKm": -0.07866802801768291
+  },
+  {
+    "sourceId": "PE-5NA#136.597#138.436",
+    "sourceLengthKm": 1.839,
+    "measuredLengthKm": 1.8193435259246848,
+    "lengthDifferenceKm": -0.019656474075315122
+  },
+  {
+    "sourceId": "PE-5NA#138.436#140.907",
+    "sourceLengthKm": 2.471,
+    "measuredLengthKm": 2.4454914702341926,
+    "lengthDifferenceKm": -0.02550852976580753
+  },
+  {
+    "sourceId": "PE-5NA#140.907#149.907",
+    "sourceLengthKm": 9,
+    "measuredLengthKm": 8.888331564077847,
+    "lengthDifferenceKm": -0.11166843592215336
+  },
+  {
+    "sourceId": "PE-5NA#149.907#150.907",
+    "sourceLengthKm": 1,
+    "measuredLengthKm": 0.9971640592910911,
+    "lengthDifferenceKm": -0.002835940708908913
+  },
+  {
+    "sourceId": "PE-5NA#150.907#151.907",
+    "sourceLengthKm": 1,
+    "measuredLengthKm": 0.9994057173925585,
+    "lengthDifferenceKm": -0.000594282607441543
+  },
+  {
+    "sourceId": "PE-5NA#151.907#152.907",
+    "sourceLengthKm": 1,
+    "measuredLengthKm": 0.9979201777962076,
+    "lengthDifferenceKm": -0.0020798222037924363
+  },
+  {
+    "sourceId": "PE-5NA#152.907#154.907",
+    "sourceLengthKm": 2,
+    "measuredLengthKm": 1.9801801613705943,
+    "lengthDifferenceKm": -0.01981983862940573
+  },
+  {
+    "sourceId": "PE-5NA#154.907#157.907",
+    "sourceLengthKm": 3,
+    "measuredLengthKm": 3.002436269878598,
+    "lengthDifferenceKm": 0.0024362698785980186
+  },
+  {
+    "sourceId": "PE-5NA#157.907#159.907",
+    "sourceLengthKm": 2,
+    "measuredLengthKm": 1.9885310282960078,
+    "lengthDifferenceKm": -0.011468971703992192
+  },
+  {
+    "sourceId": "PE-5NA#159.907#160.907",
+    "sourceLengthKm": 1,
+    "measuredLengthKm": 0.9962824798239227,
+    "lengthDifferenceKm": -0.0037175201760772936
+  },
+  {
+    "sourceId": "PE-5NA#160.907#161.907",
+    "sourceLengthKm": 1,
+    "measuredLengthKm": 0.9757421388977702,
+    "lengthDifferenceKm": -0.024257861102229827
+  },
+  {
+    "sourceId": "PE-5NA#161.907#163.907",
+    "sourceLengthKm": 2,
+    "measuredLengthKm": 2.0219356360840814,
+    "lengthDifferenceKm": 0.021935636084081445
+  },
+  {
+    "sourceId": "PE-5NA#163.907#164.907",
+    "sourceLengthKm": 1,
+    "measuredLengthKm": 0.9854334655217278,
+    "lengthDifferenceKm": -0.014566534478272164
+  },
+  {
+    "sourceId": "PE-5NA#164.907#169.907",
+    "sourceLengthKm": 5,
+    "measuredLengthKm": 4.964556148666455,
+    "lengthDifferenceKm": -0.035443851333544885
+  },
+  {
+    "sourceId": "PE-5NA#169.907#170.276",
+    "sourceLengthKm": 0.369,
+    "measuredLengthKm": 0.4921744760280335,
+    "lengthDifferenceKm": 0.1231744760280335
+  },
+  {
+    "sourceId": "PE-5NA#170.276#171.907",
+    "sourceLengthKm": 1.631,
+    "measuredLengthKm": 1.624113205535784,
+    "lengthDifferenceKm": -0.006886794464215917
+  },
+  {
+    "sourceId": "PE-5NA#171.907#174.907",
+    "sourceLengthKm": 3,
+    "measuredLengthKm": 2.985363821411611,
+    "lengthDifferenceKm": -0.014636178588388837
+  },
+  {
+    "sourceId": "PE-5NA#174.907#176.73",
+    "sourceLengthKm": 1.823,
+    "measuredLengthKm": 1.6895316296230236,
+    "lengthDifferenceKm": -0.13346837037697634
+  },
+  {
+    "sourceId": "PE-5NA#176.73#177.907",
+    "sourceLengthKm": 1.177,
+    "measuredLengthKm": 1.1744745963101004,
+    "lengthDifferenceKm": -0.002525403689899619
+  },
+  {
+    "sourceId": "PE-5NA#177.907#178.032",
+    "sourceLengthKm": 0.125,
+    "measuredLengthKm": 0.12489293169977855,
+    "lengthDifferenceKm": -0.00010706830022144675
+  },
+  {
+    "sourceId": "PE-5NA#178.032#181.207",
+    "sourceLengthKm": 3.175,
+    "measuredLengthKm": 3.1712311915796425,
+    "lengthDifferenceKm": -0.003768808420357317
+  },
+  {
+    "sourceId": "PE-5NA#181.207#182.508",
+    "sourceLengthKm": 1.301,
+    "measuredLengthKm": 1.297625990130722,
+    "lengthDifferenceKm": -0.0033740098692778275
+  },
+  {
+    "sourceId": "PE-5NA#182.508#189.508",
+    "sourceLengthKm": 7,
+    "measuredLengthKm": 6.988175890752889,
+    "lengthDifferenceKm": -0.011824109247110748
+  },
+  {
+    "sourceId": "PE-5NA#189.508#192.508",
+    "sourceLengthKm": 3,
+    "measuredLengthKm": 2.995152599463148,
+    "lengthDifferenceKm": -0.0048474005368519535
+  },
+  {
+    "sourceId": "PE-5NA#192.508#201.348",
+    "sourceLengthKm": 8.84,
+    "measuredLengthKm": 8.337566129391346,
+    "lengthDifferenceKm": -0.5024338706086535
+  },
+  {
+    "sourceId": "PE-5NA#201.348#203.348",
+    "sourceLengthKm": 2,
+    "measuredLengthKm": 2.003908590081561,
+    "lengthDifferenceKm": 0.00390859008156097
+  },
+  {
+    "sourceId": "PE-5NA#203.348#204.36",
+    "sourceLengthKm": 1.012,
+    "measuredLengthKm": 1.0074875150730382,
+    "lengthDifferenceKm": -0.004512484926961768
+  },
+  {
+    "sourceId": "PE-5NA#204.36#208.448",
+    "sourceLengthKm": 4.088,
+    "measuredLengthKm": 4.142178714477565,
+    "lengthDifferenceKm": 0.054178714477564505
+  },
+  {
+    "sourceId": "PE-5NA#208.448#214.448",
+    "sourceLengthKm": 6,
+    "measuredLengthKm": 6.034358015685572,
+    "lengthDifferenceKm": 0.03435801568557206
+  },
+  {
+    "sourceId": "PE-5NA#214.448#215.009",
+    "sourceLengthKm": 0.561,
+    "measuredLengthKm": 0.5631999047600382,
+    "lengthDifferenceKm": 0.002199904760038174
+  },
+  {
+    "sourceId": "PE-5NA#215.009#220.009",
+    "sourceLengthKm": 5,
+    "measuredLengthKm": 4.979627927745943,
+    "lengthDifferenceKm": -0.020372072254057016
+  },
+  {
+    "sourceId": "PE-5NA#220.009#220.34",
+    "sourceLengthKm": 0.331,
+    "measuredLengthKm": 0.3279291509575727,
+    "lengthDifferenceKm": -0.003070849042427326
+  },
+  {
+    "sourceId": "PE-5NA#220.34#226.009",
+    "sourceLengthKm": 5.669,
+    "measuredLengthKm": 5.628898800716448,
+    "lengthDifferenceKm": -0.04010119928355138
+  },
+  {
+    "sourceId": "PE-5NA#226.009#226.469",
+    "sourceLengthKm": 0.46,
+    "measuredLengthKm": 0.4555897825957351,
+    "lengthDifferenceKm": -0.004410217404264893
+  },
+  {
+    "sourceId": "PE-5NA#226.469#227.009",
+    "sourceLengthKm": 0.54,
+    "measuredLengthKm": 0.5371862929931945,
+    "lengthDifferenceKm": -0.0028137070068054992
+  },
+  {
+    "sourceId": "PE-5NA#227.009#228.509",
+    "sourceLengthKm": 1.5,
+    "measuredLengthKm": 1.4854043441873765,
+    "lengthDifferenceKm": -0.014595655812623454
+  },
+  {
+    "sourceId": "PE-5NA#228.509#229.509",
+    "sourceLengthKm": 1,
+    "measuredLengthKm": 0.97791656334979,
+    "lengthDifferenceKm": -0.022083436650209953
+  },
+  {
+    "sourceId": "PE-5NA#229.509#234.509",
+    "sourceLengthKm": 5,
+    "measuredLengthKm": 4.903470700745367,
+    "lengthDifferenceKm": -0.09652929925463294
+  },
+  {
+    "sourceId": "PE-5NA#234.509#238.567",
+    "sourceLengthKm": 4.058,
+    "measuredLengthKm": 4.0290674033720375,
+    "lengthDifferenceKm": -0.028932596627962326
+  },
+  {
+    "sourceId": "PE-5NA#238.567#243",
+    "sourceLengthKm": 4.433,
+    "measuredLengthKm": 4.415943999553471,
+    "lengthDifferenceKm": -0.017056000446529218
+  },
+  {
+    "sourceId": "PE-5NA#243#246.089",
+    "sourceLengthKm": 3.089,
+    "measuredLengthKm": 3.0637282377567545,
+    "lengthDifferenceKm": -0.025271762243245455
+  },
+  {
+    "sourceId": "PE-5NA#246.089#247.077",
+    "sourceLengthKm": 0.988,
+    "measuredLengthKm": 0.9142659809856212,
+    "lengthDifferenceKm": -0.07373401901437882
+  }
+]

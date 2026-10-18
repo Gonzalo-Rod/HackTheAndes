@@ -38,18 +38,21 @@ import { hazardCaptureSchema, preparedHazardsSchema } from "../src/contracts/spa
 import { prepareRoadGeometry } from "../src/services/prepare-road-geometry.ts";
 import { prepareCatchmentWeather } from "../src/services/prepare-catchment-weather.ts";
 import { prepareExposure } from "../src/services/prepare-exposure.ts";
+import { admitForecastRoad } from "../src/domain/road-data/forecast-budget.ts";
 
 const PACKAGE_ROOT = new URL("../", import.meta.url);
 const PYTHON = fileURLToPath(new URL(".venv/bin/python", PACKAGE_ROOT));
 const OFFLINE_GEOMETRY = "--offline-geometry";
 const REGISTER_ONLY = "--register-only";
 const FLAGS = new Set([OFFLINE_GEOMETRY, REGISTER_ONLY]);
-// Static GIS layers are slow to serve; live weather keeps the shared 8 s operator default.
+// Static GIS layers are slow to serve.
 const GIS_TIMEOUT_MS = 120_000;
 // ECMWF IFS 0.25° cells sit on exact 0.25° multiples in Open-Meteo responses.
 const MODEL_GRID_DEGREES = 0.25;
 // Twenty locations per batch every 2.5 s stays below the free tier's ~600 calls a minute.
 const WEATHER_BATCH_INTERVAL_MS = 2_500;
+// Offline captures are not user-facing; 20-location batches have taken ~8 s under load.
+const WEATHER_TIMEOUT_MS = 30_000;
 
 const args = process.argv.slice(2);
 const codes = args.filter((arg) => !arg.startsWith("--"));
@@ -257,9 +260,12 @@ async function captureHazards(
 async function captureWeather(files: RoadFiles, catchments: unknown) {
   const capture = await prepareCatchmentWeather({
     catchments,
-    provider: createPrecipitationProvider(createFetchJsonTransport(), {
-      batchIntervalMs: WEATHER_BATCH_INTERVAL_MS,
-    }),
+    provider: createPrecipitationProvider(
+      createFetchJsonTransport({ timeoutMs: WEATHER_TIMEOUT_MS }),
+      {
+        batchIntervalMs: WEATHER_BATCH_INTERVAL_MS,
+      },
+    ),
     query: { kind: "operational" },
     requestId,
     now: new Date(),
@@ -277,15 +283,22 @@ async function assess(files: RoadFiles, sources: Parameters<typeof prepareExposu
   return result.value.assessment;
 }
 
+/** Admits roads in the given order while they fit the forecast budget; returns the rejected ones. */
 async function updateRegistry(entries: RoadRegistryEntry[]) {
   const registry = await readRoadRegistry();
   const roads = new Map(registry.roads.map((road) => [road.roadCode, road]));
-  for (const entry of entries) roads.set(entry.roadCode, entry);
+  const rejected: { roadCode: string; step: string; message: string }[] = [];
+  for (const entry of entries) {
+    const admission = admitForecastRoad(entry, [...roads.values()]);
+    if (admission.ok) roads.set(entry.roadCode, entry);
+    else rejected.push({ roadCode: entry.roadCode, step: "budget", message: admission.message });
+  }
   const sorted = [...roads.values()].sort((a, b) => a.roadCode.localeCompare(b.roadCode));
   await writeAtomic(
     ROAD_REGISTRY_URL,
     JSON.stringify({ schemaVersion: 1, roads: sorted }, null, 2) + "\n",
   );
+  return rejected;
 }
 
 const started = performance.now();
@@ -346,13 +359,17 @@ for (const code of codes) {
     });
   }
 }
-await updateRegistry(prepared);
+const rejected = await updateRegistry(prepared);
+failed.push(...rejected);
+const admitted = prepared.filter(
+  (road) => !rejected.some((item) => item.roadCode === road.roadCode),
+);
 console.log(
   JSON.stringify(
     {
-      state: failed.length ? (prepared.length ? "partial" : "failed") : "prepared",
+      state: failed.length ? (admitted.length ? "partial" : "failed") : "prepared",
       durationS: Math.round((performance.now() - started) / 1000),
-      prepared: prepared.map((road) => road.roadCode),
+      prepared: admitted.map((road) => road.roadCode),
       failed,
     },
     null,

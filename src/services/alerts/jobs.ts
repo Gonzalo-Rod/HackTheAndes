@@ -21,10 +21,10 @@ export const evaluateAlerts = platformRoute("alerts.job", async (request) => {
 /** Weather is refreshed hourly; a newer capture is reused so overlapping calls stay cheap. */
 const CLIMATE_FRESH_MS = 55 * 60_000;
 /**
- * Only the latest assessment is read; a day is kept for audit. Each record is ~1 MB of JSON per
- * 200 km road, so unbounded hourly history would fill the database within days once roads are added.
+ * Only the latest assessment is read; six hours are kept for audit. Each record holds its full
+ * inputs (~1 MB of JSON per 200 km road), so unbounded hourly history would fill the database.
  */
-const EXPOSURE_RETENTION_MS = 24 * 60 * 60_000;
+const EXPOSURE_RETENTION_MS = 6 * 60 * 60_000;
 type ClimateOutcome =
   | { roadCode: string; state: "fresh" | "stored" | "preserved"; assessmentId: string; capturedAt: string; pruned?: number }
   | { roadCode: string; state: "unavailable" | "failed"; errorType?: string };

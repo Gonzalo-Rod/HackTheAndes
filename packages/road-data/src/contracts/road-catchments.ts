@@ -78,7 +78,8 @@ export const catchmentSnapshotSchema = z
       })
       .strict(),
     diagnostics: z.object({
-      crossingCount: z.number().int().positive(),
+      // Zero when the road crosses no mapped ANA river (PE-3ND): every link is a containing basin.
+      crossingCount: z.number().int().nonnegative(),
       containingBasinCount: z.number().int().nonnegative().optional(),
       // Crossings whose upstream union exceeded the area cap and use only their local basin.
       localOnlyLargeRiverCount: z.number().int().positive().optional(),

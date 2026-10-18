@@ -39,6 +39,16 @@ class HazardTests(unittest.TestCase):
         self.assertAlmostEqual(value["classWeights"]["5"], 0.6)
         self.assertAlmostEqual(value["unknownWeight"], 0.4)
 
+    def test_rounding_overshoot_never_exceeds_one(self):
+        # Weights observed on PE-3N; their floating-point sum is 1.0000000000000002.
+        samples = [
+            {"longitude": 0.5, "latitude": 0.5, "weight": weight}
+            for weight in (0.1741456795546789, 0.8258543204453213)
+        ]
+        value = weighted_susceptibility(samples, [box(0, 0, 1, 1)], [5])
+        self.assertLessEqual(value["classWeights"]["5"], 1.0)
+        self.assertAlmostEqual(value["classWeights"]["5"], 1.0)
+
     def test_unit_overlap_never_claims_uncovered_area_is_validated(self):
         value = unit_overlap(
             box(-77, -12, -76, -11), [("reference", box(-77, -12, -76.5, -11))]

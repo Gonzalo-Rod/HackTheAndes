@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "roadCode": "PE-3ND",
+  "geometryRevision": "06d5baafb508a455b542e76c42722a2fec975bc080dab686d38e099019cf428d",
+  "measuredLengthKm": 134.56391938989705,
+  "segmentCount": 135,
+  "kilometerCalibration": "unverified",
+  "files": {
+    "source.json": "2db4b5cf18a6297ba597193fb88057d16efb31f875bf512acff62c25a487905b",
+    "corridor.geojson": "1e6e93a0f9dd2467e0d4857db36aaed8b5d4a5fd6e8bf7c580b6551808e9bcf8",
+    "segments-1km.geojson": "9bf04ba8c4c6260ea2df152f7ceba675aadf1e4ac749cfe3056adaae62b3a5fa",
+    "diagnostics.json": "3fb44db9171c6c39a12243b741e873cc77124e36331db15ff40a2440e63b6b77"
+  }
+}

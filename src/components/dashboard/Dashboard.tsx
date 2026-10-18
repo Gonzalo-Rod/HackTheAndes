@@ -217,28 +217,6 @@ export function Dashboard({ initialResearch = null }: { initialResearch?: Resear
           status={{
             loading,
             dataError: alertsState.status === "error" ? alertsState.error : null,
-            staleMessage:
-              [
-                alertsState.data && alertsState.error ? alertsState.error : null,
-                corridor?.metadata.state === "snapshot" ? corridor.metadata.message : null,
-                community.error,
-                catchments.error,
-                modelInputs.hazards.error,
-                modelInputs.weather.error,
-                modelInputs.warnings.error,
-                nationalRain.error,
-                roadNetwork.error,
-                nationalRain.data?.stale ? "Lluvia nacional en caché; Open-Meteo no respondió." : null,
-                modelInputs.warnings.data && modelInputs.warnings.data.meta.state !== "live"
-                  ? modelInputs.warnings.data.meta.message
-                  : null,
-                evidence.state.error,
-                modelInputs.weather.data?.meta.stale ? "Lluvia por cuenca en caché; revisar la fecha del pronóstico." : null,
-                modelInputs.hazards.data?.meta.stale ? "Avisos oficiales en caché; revisar su vigencia." : null,
-                catchments.data?.meta.state === "snapshot" ? catchments.data.meta.message : null,
-              ]
-                .filter(Boolean)
-                .join(" ") || null,
             refreshing: alertsState.refreshing,
             partialData: evidence.records.length > 0,
             onRetry: alertsState.refresh,

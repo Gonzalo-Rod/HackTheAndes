@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "roadCode": "PE-12A",
+  "geometryRevision": "05b3d4b08646a948998dff930011600e3744a06a8a2139ff4327e00de6f23ad3",
+  "measuredLengthKm": 336.96930040203705,
+  "segmentCount": 337,
+  "kilometerCalibration": "unverified",
+  "files": {
+    "source.json": "d67fded63f252f90a9620a880f2efaefe78279297a2fa9b82d2f88b4454f478a",
+    "corridor.geojson": "2752cdfbff18565fe11192e4cb042a033549082ff1550a9db6d67b79c5716ca0",
+    "segments-1km.geojson": "fab06687482e1640d00b2b0f5e94103c1bf774ab3a70e5da87c3aa798314b06a",
+    "diagnostics.json": "b14464bab0fbddb736a463e7f4a12a71fb45774d200a5d6dbaca6da5cd893305"
+  }
+}

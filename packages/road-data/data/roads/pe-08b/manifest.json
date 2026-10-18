@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "roadCode": "PE-08B",
+  "geometryRevision": "aebbcb443fd23af5c70bbdc1a0411c9e3f4d363f2debf7f1d7c038a962c5008c",
+  "measuredLengthKm": 549.1862848606395,
+  "segmentCount": 550,
+  "kilometerCalibration": "unverified",
+  "files": {
+    "source.json": "78b5f5417071007771e365b8844bc67199aa12f85aefcdccb96963f1a74a9f17",
+    "corridor.geojson": "8f6938f73dea5d2aae73fb5af6e2d5a9cab783790dd0944ba59b7c93876f68ee",
+    "segments-1km.geojson": "ff73d5d1583f9d796f25e3ccc7af0600902640bcaab6ca096da629b58bde8b89",
+    "diagnostics.json": "471ccdd6e81f270437a2ccd8ff80281c74813b5d9b207ed8617a52138445b2a3"
+  }
+}

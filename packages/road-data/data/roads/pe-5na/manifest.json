@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "roadCode": "PE-5NA",
+  "geometryRevision": "328570a8bf292bd1f59f46c0e0addf780b4ff9e077d16af43cc0264c0bf03faf",
+  "measuredLengthKm": 245.40417312144262,
+  "segmentCount": 246,
+  "kilometerCalibration": "unverified",
+  "files": {
+    "source.json": "99a0968824d7b3d0685f14ccf49ac2e06d16ad3eaea80833ac5ec753aa886113",
+    "corridor.geojson": "0a6e17699a8b4d1660b49293c0abb9a88ede7fcc1d80cee6432782757564aabe",
+    "segments-1km.geojson": "b3fb37a4fc75cf6be21644391118386b94c5cac054c36aa10346997b7795ceee",
+    "diagnostics.json": "c6eb1df9c9d6c02221d3573a69baa201827f22f435e3c53a87b6c81df4b7f2e3"
+  }
+}
