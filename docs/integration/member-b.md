@@ -131,7 +131,9 @@ The shared application now wires the signed WhatsApp webhook, messaging provider
 intent parser and road/exposure queries. B still needs extraction/grouping, report
 storage and follow-ups, dedupe/confidence/clearing, and subscription/alert delivery. This interface
 makes C's existing location and official-source inputs available for that work;
-no real WhatsApp conversation has been verified through it yet.
+the participant has confirmed both shared query replies in the
+[phone check](zavu-messaging.md#recorded-verification). Report and subscription
+flows still need their own delivery tests.
 
 The participant-approved [climate-exposure direction](../data/climate-exposure.md)
 retains **driver WhatsApp alerts and live conditions**. Weather, catchment and

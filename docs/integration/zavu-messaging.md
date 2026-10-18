@@ -31,6 +31,19 @@ quiet hours, approved templates and media transcription remain B's next work.
 No free-form LLM answer can enable those actions. `automatedAlertUse` stays false.
 The existing SUTRAN scheduler and independent API deployment remain unchanged.
 
+## Recorded verification
+
+On October 17, 2026, the participant confirmed receiving replies to `ESTADO` and
+`EXPOSICION` after the receiving sender was pointed at the shared Preview running
+`e429b61`. The runtime-log query returned two `inbound.reply` entries. All nine
+CI/deployment checks passed for that runtime commit; 218 application tests and
+38 application/data-package database checks passed locally.
+
+This verifies the participant's query-delivery test. It does not establish
+external-user traction, forecast accuracy, report publication or automatic alerts.
+B's test project is retained. The setup below also documents how to repeat the
+cutover when changing environments.
+
 ## Configuration and webhook cutover
 
 Use ignored root `.env.local`, the database migrations and sensitive Vercel
