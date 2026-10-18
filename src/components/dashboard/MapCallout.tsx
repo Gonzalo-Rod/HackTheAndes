@@ -18,6 +18,7 @@ interface MapCalloutProps {
 /** Dark card for the selected alert, anchored to the bottom of the map. */
 export function MapCallout({ alert, now, orbiting, is3d, onOpenDetail, onToggleOrbit, onClose }: MapCalloutProps) {
   const status = STATUS_META[alert.roadStatus];
+  const isCommunity = alert.id.startsWith("community:");
   return (
     <section className="pr-callout" aria-label="Alerta seleccionada">
       <header className="pr-callout__head">
@@ -45,7 +46,7 @@ export function MapCallout({ alert, now, orbiting, is3d, onOpenDetail, onToggleO
           <dd>{alert.km !== null ? alert.km.toLocaleString("es-PE") : "—"}</dd>
         </div>
         <div>
-          <dt>Evento</dt>
+          <dt>{isCommunity ? "Reporte" : "Evento"}</dt>
           <dd>{formatCalendarDate(alert.eventDate).replace(/ \d{4}$/, "")}</dd>
         </div>
         <div>
@@ -63,10 +64,12 @@ export function MapCallout({ alert, now, orbiting, is3d, onOpenDetail, onToggleO
             {orbiting ? "Detener" : "Orbitar"}
           </button>
         )}
-        <a className="pr-btn pr-btn--dark" href={sutranAlertUrl(alert.id)} target="_blank" rel="noopener noreferrer">
-          SUTRAN
-          <Icon name="external" size={12} />
-        </a>
+        {!isCommunity && (
+          <a className="pr-btn pr-btn--dark" href={sutranAlertUrl(alert.id)} target="_blank" rel="noopener noreferrer">
+            SUTRAN
+            <Icon name="external" size={12} />
+          </a>
+        )}
       </footer>
     </section>
   );
