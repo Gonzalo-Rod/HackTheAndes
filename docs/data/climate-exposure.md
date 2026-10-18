@@ -197,6 +197,8 @@ have been relabeled as verified negatives. Weather-focused ML would need its own
 target, baseline and evaluation design; it is not a dependency for this pivot.
 
 Completed: **assessment rules/contracts and offline tests → storage and read API**.
-The next checkpoint is **dashboard and B handoff**, followed by hourly refresh,
+B's transport snapshot is now connected to source-grounded WhatsApp queries; see
+[the integration guide](../integration/zavu-messaging.md). No automatic alerts or
+real-user delivery are established. The next checkpoint includes **dashboard wiring**, followed by hourly refresh,
 alert evaluation and consenting-driver end-to-end verification. This continues the
 participant's step-by-step workflow. Payments, Qatom and Yape remain outside scope.

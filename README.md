@@ -97,3 +97,12 @@ in the [training handoff](docs/data/logistic-pipeline.md). No real-data model ha
 been trained or evaluated in this integration, and no real
 WhatsApp report or real user validation is claimed. Payments and Qatom are outside
 the participant-authorized implementation scope for this step.
+
+## WhatsApp integration
+
+B's Zavu snapshot is integrated on `feat/data-model`. The signed webhook answers
+road-status and estimated-exposure queries using the existing validated data
+services; a narrow OpenAI intent parser supports natural-language questions.
+See [setup, supported behavior and cutover checks](docs/integration/zavu-messaging.md).
+Report publication, media transcription and automatic subscriptions remain pending;
+the data pipeline's automated-alert flags remain disabled.

@@ -1,0 +1,129 @@
+# Shared WhatsApp integration
+
+Member B's `feat/zavu-messaging` snapshot `47c8547` is integrated into
+`feat/data-model`. Keep reviewing through PR #10; `main` still requires teammate
+review and green CI. The branch contains the Zavu transport and acknowledgment
+skeleton. It contained no LLM invocation; this integration adds a narrow OpenAI
+intent parser and source-grounded query handlers.
+
+## Supported behavior
+
+- `ESTADO`: SUTRAN PE-22 records from the latest complete ingestion poll, with
+  source time, stale/unavailable states and the no-clearance notice.
+- `EXPOSICION` or `CLIMA`: the estimated 24-hour exposure summary, including
+  assessed/unknown coverage, actual weather age and experimental-policy limits.
+- `EXPOSICION <place>` or a native WhatsApp pin: resolve C's road context and
+  show the matched segment's estimated exposure, rainfall window and terrain
+  susceptibility, or request a clearer pin. Town names are not a complete
+  gazetteer. Pins over 500 m from the captured road are rejected. Approximate
+  matches are labeled and must be confirmed before future report/subscription use.
+- Natural-language questions: the OpenAI adapter classifies intent and extracts
+  a literal place reference. It never produces a road status, risk probability,
+  coordinates or advisory. Deterministic services compose the answer from validated
+  data. A missing key, timeout, refusal or invalid output offers explicit commands.
+- Text reports, media and subscription requests receive an honest unavailable
+  response. No incident/report is stored, no subscription is created, and no
+  automated alert, SMS fallback or call is sent by these query handlers.
+
+This integration does not complete all of Role B. Report extraction/grouping,
+confirmation and storage, confidence/dedupe, opt-in/out persistence, alert policy,
+quiet hours, approved templates and media transcription remain B's next work.
+No free-form LLM answer can enable those actions. `automatedAlertUse` stays false.
+The existing SUTRAN scheduler and independent API deployment remain unchanged.
+
+## Configuration and webhook cutover
+
+Use ignored root `.env.local`, the database migrations and sensitive Vercel
+variables for the **root `peruroad-climate` project**:
+
+| Variable | Requirement |
+| --- | --- |
+| `ZAVU_API_KEY` | Server-only Zavu API credential. |
+| `ZAVU_WEBHOOK_SECRET` | Signing secret of the **receiving WhatsApp sender**, `kd76yyks36tsq7jvdnfsnazjv58gfrc1`. The default outbound sender's earlier secret is not interchangeable. |
+| `ZAVU_SENDER_ID` | Outbound sender, currently `kd7e0vxeb5xj78mwgbyeqwfae58gea42`. |
+| `OPENAI_API_KEY` | Optional intent parser; explicit commands work without it. |
+| `OPENAI_INTENT_MODEL` | Optional snapshot; defaults to `gpt-4.1-mini-2025-04-14`. |
+| `PUBLIC_APP_URL` | HTTPS dashboard origin used in replies. Defaults to the shared feature Preview; set Production's origin before activating a Production webhook. |
+| `DATABASE_URL`, `DATABASE_SSL_MODE` | Scoped server-only Postgres configuration. Required; there is no deployed in-memory completion fallback. |
+
+The existing feature Preview already had the four provider variables configured;
+this alone does not verify that the signing secret is the latest receiving secret.
+The Zavu sender API does not return that secret for comparison.
+
+After deploying and checking the unsigned request, the sender owner can change
+**the receiving sender's** webhook URL to:
+
+`https://peruroad-climate-git-feat-data-model-gozlie.vercel.app/api/webhooks/zavu`
+
+Keep `message.inbound` and `message.failed`, signature **v2**, active. Do not delete
+B's test deployment until a consenting phone verifies the shared deployment.
+Provider webhook cutover and a real-user conversation are separate from mocked
+transport tests; record their actual outcome before claiming delivery works.
+Never copy secrets into chat or this document.
+
+## Delivery and privacy
+
+The handler bounds the streamed body to 256 KiB, verifies the raw-body v2 HMAC
+with constant-time comparison and a five-minute timestamp window, then validates
+Zavu JSON. SMS and unknown event types are ignored. `message.failed` is logged as
+an error without the provider payload. Text is bounded to 4,096 characters;
+unknown types and invalid coordinates are handled explicitly.
+
+`private.messaging_deliveries` stores only provider, SHA-256 message key, lease
+identity and timestamps. Browser roles have no access. An atomic 90-second lease
+serializes inbound message IDs across instances and envelopes. No database client
+is held during a provider call. Failed work releases its lease and returns 503;
+a terminated invocation's lease becomes retryable after expiry. A completed row
+survives restarts. Outbound replies carry stable Zavu idempotency keys, also
+covering a send that succeeded before completion storage failed. Final delivery
+still depends on provider retries and idempotency retention; this is not a queue
+or a claim of exactly-once delivery across providers.
+
+The HTTP response waits for the bounded query/send pipeline rather than returning
+200 before volatile background work. This can exceed the sender's response timeout;
+concurrent retries receive a retryable failure while the lease is active. A
+future durable inbox/worker can shorten acknowledgment latency. Route duration is
+60 seconds; the 90-second lease includes termination margin. Provider calls use
+the shared eight-second wrapper. Zavu sends retry at most twice with a stable
+idempotency key; OpenAI's billable POST is not retried automatically.
+
+No phone, inbound content, media URL, provider error body or arbitrary exception
+message enters logs or operational tables. Text sent to OpenAI has obvious phone
+and email details redacted, carries no sender identifier, and uses `store:false`.
+Media is not downloaded. Logs contain request IDs, operation, provider, duration
+and safe result/error types. Synthetic tests do not count as user traction.
+
+| Failure | Visible behavior |
+| --- | --- |
+| OpenAI absent, timeout, 429/5xx, refusal or invalid JSON | Spanish command help; no guessed intent or fabricated hazard answer. |
+| SUTRAN storage/poll unavailable | Source unavailable; no inference of a clear road. Stale polls are explicitly dated. |
+| Exposure database unavailable | Validated dated bundle with the same freshness projection. Missing/stale/unsupported exposure stays unavailable. |
+| Zavu send timeout, rate limit, rejected send or closed WhatsApp window | Safe error log and retryable webhook failure; no silent success or unapproved alternate channel. Template fallback remains pending B. |
+| Database lease storage unavailable | HTTP 503 and provider redelivery; never a cross-instance memory fallback. |
+
+## Reproduce and verify
+
+```sh
+npm --prefix packages/road-data ci
+npm --prefix packages/road-data run build
+npm ci
+npm --prefix packages/road-data run db:migrate -- --dry-run
+npm --prefix packages/road-data run db:migrate
+npm run lint
+npm run format:check
+npm run typecheck
+npm test
+npm run test:db
+npm run build -- --webpack
+```
+
+Database tests use synthetic keys and clean them afterward. Offline tests cover
+signature failures/replay, duplicate envelopes, failed-send redelivery, intent
+refusal/invalid output, source outages, unknown coverage and stale exposure.
+A live synthetic intent check confirms API connectivity only. Real message
+acceptance, replies and source content must be checked on a consenting phone after
+cutover. Keep any phone details out of logs, screenshots and committed fixtures.
+
+Protocol references: [Zavu webhook security](https://docs.zavu.dev/guides/receiving-messages/security),
+[Zavu sending](https://docs.zavu.dev/api-reference/send-a-message),
+[OpenAI Structured Outputs](https://developers.openai.com/api/docs/guides/structured-outputs?api-mode=responses).

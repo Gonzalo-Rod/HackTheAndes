@@ -74,3 +74,38 @@ export function loadDemoSeedConfiguration(): { code: string } {
   if (!result.success) throw new Error("Invalid DEMO_ACCESS_CODE configuration");
   return { code: result.data.DEMO_ACCESS_CODE };
 }
+
+export interface ZavuConfiguration {
+  apiKey: string;
+  webhookSecret: string;
+  senderId: string;
+  publicAppUrl: string;
+}
+export function loadZavuConfiguration(): ZavuConfiguration {
+  const result = z
+    .object({
+      ZAVU_API_KEY: z.string().min(1),
+      ZAVU_WEBHOOK_SECRET: z.string().min(1),
+      ZAVU_SENDER_ID: z.string().min(1),
+      PUBLIC_APP_URL: z.url().startsWith("https://").default("https://peruroad-climate-git-feat-data-model-gozlie.vercel.app"),
+    })
+    .safeParse({ ...process.env, PUBLIC_APP_URL: process.env.PUBLIC_APP_URL || undefined });
+  if (!result.success)
+    throw new Error(`Invalid Zavu configuration: ${result.error.issues.map((issue) => issue.path.join(".")).join(", ")}`);
+  return {
+    apiKey: result.data.ZAVU_API_KEY,
+    webhookSecret: result.data.ZAVU_WEBHOOK_SECRET,
+    senderId: result.data.ZAVU_SENDER_ID,
+    publicAppUrl: new URL(result.data.PUBLIC_APP_URL).origin,
+  };
+}
+
+export function loadIntentConfiguration(): { apiKey: string; model: string } | null {
+  if (!process.env.OPENAI_API_KEY) return null;
+  const result = z
+    .object({ OPENAI_API_KEY: z.string().min(1), OPENAI_INTENT_MODEL: z.string().min(1).default("gpt-4.1-mini-2025-04-14") })
+    .safeParse({ ...process.env, OPENAI_INTENT_MODEL: process.env.OPENAI_INTENT_MODEL || undefined });
+  if (!result.success)
+    throw new Error(`Invalid intent configuration: ${result.error.issues.map((issue) => issue.path.join(".")).join(", ")}`);
+  return { apiKey: result.data.OPENAI_API_KEY, model: result.data.OPENAI_INTENT_MODEL };
+}

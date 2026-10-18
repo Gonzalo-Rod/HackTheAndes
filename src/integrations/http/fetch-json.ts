@@ -2,7 +2,8 @@ import { logger } from "@/lib/logger";
 
 // Shared wrapper for every external HTTP call (AGENTS.md, "External calls"):
 // explicit timeout, at most two retries with exponential backoff and jitter, retries only
-// for network errors, timeouts, 429 and 5xx, GET only (idempotent), structured logging.
+// for network errors, timeouts, 429 and 5xx, and only for idempotent requests (GET, or a POST
+// the caller marks idempotent because it carries a provider idempotency key), structured logging.
 
 /** Per-attempt timeout required by the repository rules. */
 export const DEFAULT_TIMEOUT_MS = 8_000;
@@ -14,15 +15,19 @@ const BASE_BACKOFF_MS = 400;
 export type UpstreamErrorKind = "timeout" | "network" | "http" | "invalid_body";
 
 export class UpstreamError extends Error {
+  /** Parsed error body of an HTTP failure, for adapters that map provider error codes. Never logged. */
+  readonly responseBody?: unknown;
+
   constructor(
     message: string,
     readonly kind: UpstreamErrorKind,
     readonly provider: string,
     readonly status?: number,
-    options?: { cause?: unknown },
+    options?: { cause?: unknown; responseBody?: unknown },
   ) {
     super(message, options);
     this.name = "UpstreamError";
+    this.responseBody = options?.responseBody;
   }
 }
 
@@ -37,7 +42,11 @@ export interface RequestOptions {
   fetchImpl?: typeof fetch;
   sleep?: (ms: number) => Promise<void>;
   random?: () => number;
+  /** Non-2xx statuses the caller treats as a normal answer (e.g. 409 replaying an idempotent send). */
+  acceptStatuses?: readonly number[];
 }
+
+type HttpMethod = { method: "GET" } | { method: "POST"; body: unknown };
 
 type Attempt<T> = { ok: true; value: T } | { ok: false; error: UpstreamError };
 
@@ -62,15 +71,45 @@ function describeTarget(url: string): string {
   }
 }
 
-async function attemptOnce<T>(url: string, options: RequestOptions, parse: (response: Response) => Promise<T>): Promise<Attempt<T>> {
+async function readErrorBody(response: Response): Promise<unknown> {
+  try {
+    return (await response.json()) as unknown;
+  } catch {
+    // Error pages are not always JSON; the status alone still describes the failure.
+    return undefined;
+  }
+}
+
+function buildInit(request: HttpMethod, options: RequestOptions, signal: AbortSignal): RequestInit {
+  if (request.method === "GET") return { method: "GET", headers: options.headers, signal, cache: "no-store" };
+  return {
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options.headers },
+    body: JSON.stringify(request.body),
+    signal,
+    cache: "no-store",
+  };
+}
+
+async function attemptOnce<T>(
+  url: string,
+  request: HttpMethod,
+  options: RequestOptions,
+  parse: (response: Response) => Promise<T>,
+): Promise<Attempt<T>> {
   const fetchImpl = options.fetchImpl ?? fetch;
   const timeoutMs = options.timeoutMs ?? DEFAULT_TIMEOUT_MS;
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const response = await fetchImpl(url, { method: "GET", headers: options.headers, signal: controller.signal, cache: "no-store" });
-    if (!response.ok) {
-      return { ok: false, error: new UpstreamError(`HTTP ${response.status}`, "http", options.provider, response.status) };
+    const response = await fetchImpl(url, buildInit(request, options, controller.signal));
+    const accepted = response.ok || (options.acceptStatuses ?? []).includes(response.status);
+    if (!accepted) {
+      const responseBody = await readErrorBody(response);
+      return {
+        ok: false,
+        error: new UpstreamError(`HTTP ${response.status}`, "http", options.provider, response.status, { responseBody }),
+      };
     }
     try {
       return { ok: true, value: await parse(response) };
@@ -90,7 +129,12 @@ async function attemptOnce<T>(url: string, options: RequestOptions, parse: (resp
   }
 }
 
-async function requestWithRetry<T>(url: string, options: RequestOptions, parse: (response: Response) => Promise<T>): Promise<T> {
+async function requestWithRetry<T>(
+  url: string,
+  request: HttpMethod,
+  options: RequestOptions,
+  parse: (response: Response) => Promise<T>,
+): Promise<T> {
   const retries = Math.min(options.retries ?? MAX_RETRIES, MAX_RETRIES);
   const sleep = options.sleep ?? defaultSleep;
   const started = Date.now();
@@ -100,7 +144,7 @@ async function requestWithRetry<T>(url: string, options: RequestOptions, parse: 
   for (let retry = 0; retry <= retries; retry++) {
     if (retry > 0) await sleep(backoffDelayMs(retry, options.random));
     attempts++;
-    const attempt = await attemptOnce(url, options, parse);
+    const attempt = await attemptOnce(url, request, options, parse);
     if (attempt.ok) {
       logger.info({
         operation: options.operation,
@@ -135,10 +179,28 @@ async function requestWithRetry<T>(url: string, options: RequestOptions, parse: 
 
 /** GET a JSON document. Throws UpstreamError after the retry budget is spent. */
 export function getJson(url: string, options: RequestOptions): Promise<unknown> {
-  return requestWithRetry(url, options, (response) => response.json() as Promise<unknown>);
+  return requestWithRetry(url, { method: "GET" }, options, (response) => response.json() as Promise<unknown>);
 }
 
 /** GET a binary document (used by the offline data build for terrain tiles). */
 export function getArrayBuffer(url: string, options: RequestOptions): Promise<ArrayBuffer> {
-  return requestWithRetry(url, options, (response) => response.arrayBuffer());
+  return requestWithRetry(url, { method: "GET" }, options, (response) => response.arrayBuffer());
+}
+
+export interface JsonResponse {
+  status: number;
+  body: unknown;
+}
+
+/**
+ * POST a JSON body. Retries only when `idempotent` is true, i.e. the provider deduplicates
+ * the request (for example through an idempotency key); otherwise a timeout could send twice.
+ * Throws UpstreamError after the retry budget is spent.
+ */
+export function postJson(url: string, body: unknown, options: RequestOptions & { idempotent: boolean }): Promise<JsonResponse> {
+  const retries = options.idempotent ? options.retries : 0;
+  return requestWithRetry(url, { method: "POST", body }, { ...options, retries }, async (response) => {
+    const text = await response.text();
+    return { status: response.status, body: text ? (JSON.parse(text) as unknown) : null };
+  });
 }

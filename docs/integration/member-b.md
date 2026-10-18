@@ -2,8 +2,10 @@
 
 Use `feat/data-model` and [PR #10](https://github.com/Gonzalo-Rod/HackTheAndes/pull/10),
 which preserve every previous Role C commit and its required API/database work.
-PRs #1–9 are superseded. Continue C's work on this branch; keep B's bot and D's
-visualization on their own team branches until integration through review.
+PRs #1–9 are superseded. B's `47c8547` snapshot is now integrated here; its
+branch stays unchanged. See the [shared WhatsApp integration](zavu-messaging.md)
+for implemented source-grounded queries, delivery behavior and webhook cutover.
+The independent HTTP interface below remains available for a separately hosted bot.
 
 ## Connection and credentials
 
@@ -125,8 +127,9 @@ facts to community incidents.
 
 ## Remaining team connection
 
-B must wire the signed WhatsApp webhook, extraction/grouping, report storage,
-follow-ups, dedupe/confidence/clearing, and messaging provider. This interface
+The shared application now wires the signed WhatsApp webhook, messaging provider,
+intent parser and road/exposure queries. B still needs extraction/grouping, report
+storage and follow-ups, dedupe/confidence/clearing, and subscription/alert delivery. This interface
 makes C's existing location and official-source inputs available for that work;
 no real WhatsApp conversation has been verified through it yet.
 
@@ -135,7 +138,7 @@ retains **driver WhatsApp alerts and live conditions**. Weather, catchment and
 susceptibility inputs and the assessment service are prepared. The root application
 now exposes `GET /api/exposure?horizonHours=24|72`; see the [assessment contract](../data/climate-exposure.md).
 The existing road-context endpoint remains unchanged. Its alert-change contract,
-departure planning and messaging integration are the next checkpoint; the public
+departure planning and automatic alert integration remain later checkpoints; the public
 exposure read keeps `automatedAlertUse: false` until that integration is designed.
 
 B will consume C's versioned assessments for the driver's confirmed subscription
@@ -148,4 +151,4 @@ exposure escalation. No exposure decrease or missing incident clears a road.
 
 Shared contracts and every consumer must be updated together before wiring those
 messages. The logistic pipeline remains deferred research rather than a delivery
-dependency. No new messaging capability or real delivery is claimed by this handoff.
+dependency. The query integration does not establish real-user delivery or complete automatic alerts; see its separate cutover checklist.

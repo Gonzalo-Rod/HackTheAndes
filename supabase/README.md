@@ -11,7 +11,7 @@ Project: [HackTheAndes](https://supabase.com/dashboard/project/cdqnintcqryfbfjjl
 region `us-west-2`. Existing project API keys were retrieved; no additional
 project, subscription, API key, or administrator-password reset was created.
 
-Eleven migrations have been applied after rollback-only dry runs. They create
+Twelve migrations have been applied after rollback-only dry runs. They create
 PostGIS and the application tables. Operational tables have RLS and no browser
 grants; `incident_updates` is the explicitly browser-readable revision signal. A scoped `peruroad_backend` login has application
 table permissions and its own RLS policies, without superuser, database/role
@@ -198,3 +198,8 @@ Browser roles have no access and the backend has no update privilege.
 Run `npm --prefix packages/road-data run db:import-exposure` after preparing the
 validated bundle. See the [assessment guide](../docs/data/climate-exposure.md) for
 manual refresh, public API projection, freshness masking and the B/D checkpoint.
+
+The messaging integration adds `private.messaging_deliveries`: server-only,
+atomic expiring leases and durable completion keys for WhatsApp replies. Provider
+calls run outside database transactions; no phone or inbound message content is
+stored there. See [messaging integration](../docs/integration/zavu-messaging.md).

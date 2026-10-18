@@ -1,6 +1,7 @@
-import { randomBytes, randomUUID } from "node:crypto";
+import { createHash, randomBytes, randomUUID } from "node:crypto";
 import { afterAll, expect, it } from "vitest";
 import { database } from "./pool";
+import { createPostgresWebhookProcessor } from "./webhook-processor";
 import { recordUsageEvent } from "./usage";
 import { createDashboardRepository } from "./dashboard";
 import { createRateLimiter, createWebhookDeduplicator } from "./request-limits";
@@ -13,11 +14,20 @@ const key = randomBytes(32).toString("base64url");
 const requestId = randomUUID();
 const bucketKey = randomBytes(32).toString("hex");
 const eventId = randomUUID();
+const deliveryKeys: string[] = [];
+function deliveryKey() {
+  const key = randomUUID();
+  deliveryKeys.push(createHash("sha256").update(key).digest("hex"));
+  return key;
+}
 const syntheticPhone = "9".repeat(9);
 const contactKey = phoneKey(syntheticPhone, key) ?? "";
 const repository = createDashboardRepository(pool, loadGeometryRevision());
 afterAll(async () => {
   try {
+    await pool.query("delete from private.messaging_deliveries where provider='integration-test' and message_key=any($1::text[])", [
+      deliveryKeys,
+    ]);
     await pool.query("delete from public.waitlist where request_id=$1", [requestId]);
     await pool.query("delete from private.delivery_contacts where phone_key=$1", [contactKey]);
     await pool.query("delete from private.request_buckets where bucket_key=$1", [bucketKey]);
@@ -116,4 +126,68 @@ it("counts real answered queries once and excludes team, test, automation and co
     await client.query("rollback");
     client.release();
   }
+});
+
+it("makes failed sends retryable and completed messages durable across processor instances", async () => {
+  const key = deliveryKey();
+  const processor = createPostgresWebhookProcessor(pool);
+  await expect(
+    processor.processOnce("integration-test", key, async () => {
+      throw new Error("synthetic provider failure");
+    }),
+  ).rejects.toThrow();
+  let executions = 0;
+  expect(
+    await processor.processOnce("integration-test", key, async () => {
+      executions++;
+    }),
+  ).toBe(true);
+  expect(
+    await createPostgresWebhookProcessor(pool).processOnce("integration-test", key, async () => {
+      executions++;
+    }),
+  ).toBe(false);
+  expect(executions).toBe(1);
+});
+it("does not acknowledge an active lease as completed or retain a database connection during work", async () => {
+  const key = deliveryKey();
+  const processor = createPostgresWebhookProcessor(pool);
+  let releaseWork = () => {};
+  let startWork = () => {};
+  const started = new Promise<void>((resolve) => {
+    startWork = resolve;
+  });
+  const released = new Promise<void>((resolve) => {
+    releaseWork = resolve;
+  });
+  const first = processor.processOnce("integration-test", key, async () => {
+    startWork();
+    await released;
+  });
+  try {
+    await started;
+    await expect(
+      processor.processOnce("integration-test", key, async () => {
+        throw new Error("must not execute");
+      }),
+    ).rejects.toThrow("already in progress");
+    // No checked-out client survives across the async provider callback.
+    expect(pool.idleCount).toBe(pool.totalCount);
+  } finally {
+    releaseWork();
+    await first;
+  }
+});
+it("reclaims an expired lease after a simulated serverless crash", async () => {
+  const key = deliveryKey();
+  const messageKey = createHash("sha256").update(key).digest("hex");
+  await pool.query(
+    "insert into private.messaging_deliveries(provider,message_key,lease_id,lease_until) values('integration-test',$1,$2,clock_timestamp()-interval '1 second')",
+    [messageKey, randomUUID()],
+  );
+  expect(await createPostgresWebhookProcessor(pool).processOnce("integration-test", key, async () => undefined)).toBe(true);
+  const grants = await pool.query(
+    "select has_table_privilege('anon','private.messaging_deliveries','select') as browser_read, has_table_privilege('authenticated','private.messaging_deliveries','insert') as browser_write",
+  );
+  expect(grants.rows[0]).toEqual({ browser_read: false, browser_write: false });
 });

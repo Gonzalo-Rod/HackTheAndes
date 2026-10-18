@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { backoffDelayMs, getJson, MAX_RETRIES, UpstreamError } from "./fetch-json";
+import { backoffDelayMs, getJson, MAX_RETRIES, postJson, UpstreamError } from "./fetch-json";
 
 const noSleep = vi.fn(async () => undefined);
 const base = { provider: "test", operation: "test.get", sleep: noSleep, random: () => 0 };
@@ -76,5 +76,51 @@ describe("backoffDelayMs", () => {
     expect(backoffDelayMs(1, () => 0)).toBe(400);
     expect(backoffDelayMs(2, () => 0)).toBe(800);
     expect(backoffDelayMs(2, () => 0.999)).toBeLessThan(1600);
+  });
+});
+
+describe("postJson", () => {
+  const post = { ...base, operation: "test.post" };
+
+  it("sends a JSON body and returns status and parsed body", async () => {
+    const fetchImpl = vi.fn(async () => jsonResponse({ id: "m1" }, 202));
+    await expect(postJson("https://x.test/m", { a: 1 }, { ...post, idempotent: true, fetchImpl })).resolves.toEqual({
+      status: 202,
+      body: { id: "m1" },
+    });
+    const [, init] = fetchImpl.mock.calls[0] as unknown as [string, RequestInit];
+    expect(init.method).toBe("POST");
+    expect(init.body).toBe('{"a":1}');
+    expect(init.headers).toMatchObject({ "Content-Type": "application/json" });
+  });
+
+  it("retries a 503 when the request is idempotent", async () => {
+    const fetchImpl = vi
+      .fn()
+      .mockResolvedValueOnce(jsonResponse({}, 503))
+      .mockResolvedValueOnce(jsonResponse({ id: "m1" }, 202));
+    await expect(postJson("https://x.test/m", {}, { ...post, idempotent: true, fetchImpl })).resolves.toMatchObject({ status: 202 });
+    expect(fetchImpl).toHaveBeenCalledTimes(2);
+  });
+
+  it("never retries a request that is not idempotent", async () => {
+    const fetchImpl = vi.fn(async () => jsonResponse({}, 503));
+    await expect(postJson("https://x.test/m", {}, { ...post, idempotent: false, fetchImpl })).rejects.toBeInstanceOf(UpstreamError);
+    expect(fetchImpl).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps the provider error body for the adapter to map", async () => {
+    const fetchImpl = vi.fn(async () => jsonResponse({ code: "whatsapp_window_closed" }, 400));
+    const error = await postJson("https://x.test/m", {}, { ...post, idempotent: true, fetchImpl }).catch((e: unknown) => e);
+    expect(error).toMatchObject({ kind: "http", status: 400, responseBody: { code: "whatsapp_window_closed" } });
+    expect(fetchImpl).toHaveBeenCalledTimes(1);
+  });
+
+  it("treats accepted statuses as a normal answer", async () => {
+    const fetchImpl = vi.fn(async () => jsonResponse({ id: "m1" }, 409));
+    await expect(postJson("https://x.test/m", {}, { ...post, idempotent: true, acceptStatuses: [409], fetchImpl })).resolves.toEqual({
+      status: 409,
+      body: { id: "m1" },
+    });
   });
 });

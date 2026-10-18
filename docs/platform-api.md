@@ -53,20 +53,23 @@ other hosts use one conservative shared bucket. See [Vercel's request headers](h
 
 ## B's integration points
 
-B's branch is not available yet. Its existing deployed, read-only road-context
-contract is documented separately in [the road-data package](../packages/road-data/README.md).
-After B's code is integrated, use these application helpers:
+B's `47c8547` snapshot is integrated into the shared application; see the
+[WhatsApp integration](integration/zavu-messaging.md). Its independent read-only
+road-context contract remains documented in [the data package](../packages/road-data/README.md).
+Use these application helpers for the remaining report/subscription work:
 
 - `src/integrations/security/contacts.ts`: normalize/HMAC a phone, encrypt a delivery
   reference with a random 12-byte IV and authenticate it with a 16-byte GCM tag.
   Keep encryption keys, pepper and provider webhook secrets independent.
 - `src/integrations/security/webhook.ts`: constant-time raw-byte HMAC verification
   and a bounded timestamp check. Supply the provider's documented canonical bytes
-  and signature format; no Zavu-specific signature behavior has been assumed.
+  and signature format. The integrated Zavu adapter requires timestamp-bound v2 signatures.
 - `src/db/request-limits.ts`: persistent provider/event-ID claim. Couple the claim
   to the business write in the **same database transaction**; a standalone claim
   before fallible processing can lose a retry. Queue/outbox behavior belongs to B's
   processing flow and has not been implemented here.
+- `src/db/webhook-processor.ts`: expiring delivery leases plus durable completion,
+  without holding a transaction open during provider calls. Used by the query webhook.
 - `src/db/usage.ts` + `src/contracts/usage.ts`: record `query_answered` only after a
   successful response to a user. Provider event ID makes retries idempotent.
   Set team, test and automation flags explicitly; never send message text or phones.
@@ -74,8 +77,9 @@ After B's code is integrated, use these application helpers:
   subjects and a requested feature. Routes must recheck server-side.
 
 Cryptographic choices follow [Node.js crypto](https://nodejs.org/docs/latest-v24.x/api/crypto.html).
-No incoming B webhook, transcription, confidence calculation or alert delivery is
-claimed until B's code is connected and exercised.
+The signed webhook and source-grounded query handlers are implemented and tested.
+Transcription, report publication, confidence and automatic alert delivery remain
+pending; a real conversation still requires webhook cutover and a consenting phone.
 
 ## Realtime and metrics
 
@@ -118,6 +122,11 @@ patterns, and revisit the dependency when a compatible upstream patch is availab
 
 ## Messaging and LLM credentials
 
+`POST /api/webhooks/zavu` requires a valid v2 raw-body signature and timestamp.
+Unsigned requests return 401; invalid/oversized data returns 400/413, duplicate
+completed messages return 200, and unavailable processing/delivery returns 503
+for provider retry. Only WhatsApp inbound messages run the query handlers.
+
 The root `.env.example` lists `ZAVU_API_KEY`, `ZAVU_WEBHOOK_SECRET`,
 `ZAVU_SENDER_ID` and `OPENAI_API_KEY`. Actual values belong in ignored root
 `.env.local` and Vercel sensitive environment variables, never browser-prefixed
@@ -125,6 +134,7 @@ variables, source code or documentation. They are intended for the root
 `peruroad-climate` application; the independent `peruroad-api` ingestion project
 does not currently consume these providers. On October 17, 2026, all four were
 configured as sensitive variables for the `feat/data-model` Preview only.
-Provider adapters, validated runtime
-configuration and a signed Zavu webhook must be implemented before claiming a
-working messaging/LLM integration.
+The [shared WhatsApp integration](integration/zavu-messaging.md) implements the
+signed webhook, durable delivery leases, Zavu replies and a structured OpenAI
+intent parser backed by C's source services. Report/media processing and automatic
+subscriptions remain pending B; no consenting-phone test has been recorded yet.
