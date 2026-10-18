@@ -15,9 +15,10 @@ beforeAll(async () => {
 });
 it("builds all captured segments and catchments with traceable unknown links", () => {
   const a = fixture.record.assessment;
-  expect(a.catchments).toHaveLength(11);
+  // River crossings plus containing basins link every captured PE-22 segment.
+  expect(a.catchments).toHaveLength(13);
   expect(a.segments).toHaveLength(174);
-  expect(a.segments.filter((s) => s.catchmentIds.length > 0)).toHaveLength(38);
+  expect(a.segments.filter((s) => s.catchmentIds.length > 0)).toHaveLength(174);
   expect(
     a.segments
       .filter((s) => !s.catchmentIds.length)

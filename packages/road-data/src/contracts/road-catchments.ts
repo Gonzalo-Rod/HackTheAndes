@@ -38,10 +38,12 @@ export const catchmentFeatureSchema = z.object({
       areaKm2: z.number().positive(),
       meanSlopeDegrees: z.null(),
       method: z.literal("hydrobasins"),
+      // Snapshots prepared before containing-basin links only had river crossings.
+      association: z.enum(["river_crossing", "containing_basin"]).default("river_crossing"),
       lowConfidence: z.literal(true),
       samplePoints: z.array(sampleSchema).min(1).max(10_000),
       pourPoint: positionSchema,
-      crossings: z.array(crossingSchema).min(1),
+      crossings: z.array(crossingSchema),
       segmentIds: z.array(z.string().min(1)).min(1),
     })
     .strict()
@@ -49,6 +51,10 @@ export const catchmentFeatureSchema = z.object({
       (value) =>
         Math.abs(value.samplePoints.reduce((sum, item) => sum + item.weight, 0) - 1) < 1e-8,
       "Sample weights must sum to one",
+    )
+    .refine(
+      (value) => (value.association === "river_crossing") === value.crossings.length > 0,
+      "River-crossing links need crossings; containing-basin links have none",
     ),
 });
 export const catchmentSnapshotSchema = z
@@ -73,6 +79,7 @@ export const catchmentSnapshotSchema = z
       .strict(),
     diagnostics: z.object({
       crossingCount: z.number().int().positive(),
+      containingBasinCount: z.number().int().nonnegative().optional(),
       coarseBasinCount: z.number().int().positive(),
       linkedSegments: z.number().int().positive(),
     }),
@@ -118,9 +125,9 @@ export const catchmentSnapshotSchema = z
       const crossingSegments = new Set(
         feature.properties.crossings.flatMap((crossing) => crossing.segmentIds),
       );
+      // Every crossing segment is linked; extra segments lie inside the basin without a mapped crossing.
       if (
         segmentIds.size !== feature.properties.segmentIds.length ||
-        segmentIds.size !== crossingSegments.size ||
         [...crossingSegments].some((identifier) => !segmentIds.has(identifier))
       )
         context.addIssue({

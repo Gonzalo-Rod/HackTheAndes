@@ -25,3 +25,24 @@ export const CorridorRainResponseSchema = z.object({
 
 export type RainSample = z.infer<typeof RainSampleSchema>;
 export type CorridorRainResponse = z.infer<typeof CorridorRainResponseSchema>;
+
+// Contract for GET /api/weather/national: model rain on a coarse grid over all of Peru.
+export const NationalRainCellSchema = z.object({
+  lng: z.number(),
+  lat: z.number(),
+  pastMm: z.number().nonnegative(),
+  nextMm: z.number().nonnegative(),
+});
+export const NationalRainResponseSchema = z.object({
+  cells: z.array(NationalRainCellSchema),
+  /** Cell edge in degrees; values are model estimates at the cell center, not area averages. */
+  stepDeg: z.number().positive(),
+  /** Finer cells interpolated from `cells` for display only; not additional model output. */
+  display: z.object({ stepDeg: z.number().positive(), cells: z.array(NationalRainCellSchema) }),
+  /** Grid cells without complete hourly data are omitted, never shown as dry. */
+  missingCells: z.number().int().nonnegative(),
+  fetchedAt: z.string(),
+  source: z.literal("open-meteo"),
+  stale: z.boolean(),
+});
+export type NationalRainResponse = z.infer<typeof NationalRainResponseSchema>;

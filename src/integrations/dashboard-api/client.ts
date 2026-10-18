@@ -9,7 +9,12 @@ import {
 } from "@/contracts/platform";
 import { CorridorDataSchema, type CorridorData } from "@/contracts/corridor";
 import { AlertDetailResponseSchema, AlertsResponseSchema, type AlertDetailResponse, type AlertsResponse } from "@/contracts/road-alerts";
-import { CorridorRainResponseSchema, type CorridorRainResponse } from "@/contracts/weather";
+import {
+  CorridorRainResponseSchema,
+  NationalRainResponseSchema,
+  type CorridorRainResponse,
+  type NationalRainResponse,
+} from "@/contracts/weather";
 import { getJson, UpstreamError } from "@/integrations/http/fetch-json";
 
 // Browser adapter for this app's own API and static data. Responses are validated
@@ -71,6 +76,25 @@ export async function fetchCorridorRain(): Promise<CorridorRainResponse> {
 }
 
 /** User-facing (Spanish) explanation of a failed request. */
+export async function fetchNationalRain(): Promise<NationalRainResponse> {
+  const body = await getJson("/api/weather/national", {
+    provider: PROVIDER,
+    operation: "dashboard.nationalRain",
+    retries: 0,
+    timeoutMs: API_TIMEOUT_MS,
+  });
+  return parseOrThrow(NationalRainResponseSchema, body, "lluvia nacional");
+}
+
+export async function fetchRoadNetwork() {
+  const { RoadNetworkSchema } = await import("@/contracts/road-network");
+  return parseOrThrow(
+    RoadNetworkSchema,
+    await getJson("/data/red-vial-nacional.geojson", { provider: PROVIDER, operation: "dashboard.roadNetwork", retries: 1 }),
+    "red vial nacional",
+  );
+}
+
 export function describeFetchError(error: unknown): string {
   if (error instanceof UpstreamError) {
     if (error.kind === "timeout") return "La consulta tardó demasiado.";
@@ -121,6 +145,14 @@ export async function fetchHazardLayer() {
     "capas oficiales",
   );
 }
+export async function fetchNationalWarnings() {
+  const { NationalWarningsSchema } = await import("@/contracts/model-inputs");
+  return parseOrThrow(
+    NationalWarningsSchema,
+    await getJson("/api/hazards/warnings", { provider: PROVIDER, operation: "dashboard.nationalWarnings", retries: 0 }),
+    "avisos SENAMHI",
+  );
+}
 export async function fetchCatchmentWeather() {
   const { CatchmentWeatherLayerSchema } = await import("@/contracts/model-inputs");
   return parseOrThrow(
@@ -136,5 +168,14 @@ export async function fetchExposure() {
     ExposureLayerSchema,
     await getJson("/api/exposure?horizonHours=72", { provider: PROVIDER, operation: "dashboard.exposure", retries: 0 }),
     "exposición climática",
+  );
+}
+
+export async function fetchRoadHistory() {
+  const { RoadHistoryResponseSchema } = await import("@/contracts/road-history");
+  return parseOrThrow(
+    RoadHistoryResponseSchema,
+    await getJson("/api/history/road-events", { provider: PROVIDER, operation: "dashboard.roadHistory", retries: 1 }),
+    "emergencias históricas",
   );
 }

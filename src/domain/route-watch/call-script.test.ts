@@ -61,4 +61,18 @@ describe("composeRouteWatchCall", () => {
     const here = first(prioritizeRouteIncidents(trip, [{ ...base, startKm: 49, endKm: 51 }], NOW));
     expect(composeRouteWatchCall(here, context).spokenText).toContain("en el tramo donde estimamos que está el camión");
   });
+
+  it("speaks about the watched stretch, without truck estimates, for a route watch", () => {
+    const watch = { ...trip, isTest: false, watchUntil: new Date(NOW + 86_400_000).toISOString() };
+    const onRoute = first(prioritizeRouteIncidents(watch, [base], NOW));
+    const call = composeRouteWatchCall(onRoute, context);
+    expect(call.spokenText).toContain("Se reportó un huaico según SUTRAN, dentro del tramo que vigilas, cerca del puente MATUCANA.");
+    expect(call.spokenText).not.toContain("camión");
+    expect(call.followUpText).toContain("Dentro del tramo vigilado.");
+    expect(call.followUpText).not.toContain("GPS");
+
+    const near = first(prioritizeRouteIncidents(watch, [{ ...base, startKm: 172.6, endKm: 172.6 }], NOW));
+    expect(composeRouteWatchCall(near, context).spokenText).toContain("a unos 3 kilómetros de un extremo del tramo que vigilas");
+    expect(composeRouteWatchCall(near, context).followUpText).toContain("Fuera del tramo vigilado, a 2.6 km de un extremo.");
+  });
 });

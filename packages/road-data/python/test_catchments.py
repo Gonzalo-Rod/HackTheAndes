@@ -10,6 +10,7 @@ from shapely.geometry import (
 )
 from road_data.domain.catchments import (
     area_km2,
+    containing_basin_segments,
     crossing_segment_ids,
     point_intersections,
     sampling_points,
@@ -63,6 +64,20 @@ class CatchmentDomainTests(unittest.TestCase):
         ]
         self.assertEqual(crossing_segment_ids(Point(-76.99, -12), segments), ["a", "b"])
         self.assertEqual(crossing_segment_ids(Point(-76, -12), segments), [])
+
+
+    def test_groups_unlinked_segments_by_the_basin_covering_their_midpoint(self):
+        basins = {7: box(0, 0, 1, 1), 3: box(1, 0, 2, 1)}
+        segments = [
+            ("s1", LineString([(0.1, 0.5), (0.3, 0.5)])),
+            ("s2", LineString([(0.9, 0.5), (1.5, 0.5)])),
+            # Midpoint exactly on the shared edge: the lowest basin id wins deterministically.
+            ("s3", LineString([(0.9, 0.2), (1.1, 0.2)])),
+            ("s4", LineString([(5, 5), (6, 5)])),
+        ]
+        self.assertEqual(
+            containing_basin_segments(segments, basins), {7: ["s1"], 3: ["s2", "s3"]}
+        )
 
 
 if __name__ == "__main__":

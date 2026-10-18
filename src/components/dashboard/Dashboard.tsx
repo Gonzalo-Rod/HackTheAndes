@@ -20,6 +20,11 @@ import { useIncidentDashboard } from "@/hooks/use-incident-dashboard";
 import { useModelInputs } from "@/hooks/use-model-inputs";
 import { useNow } from "@/hooks/use-now";
 import { useRoadAlerts } from "@/hooks/use-road-alerts";
+import { useRoadHistory } from "@/hooks/use-road-history";
+import { useNationalRain } from "@/hooks/use-national-rain";
+import { useRoadNetwork } from "@/hooks/use-road-network";
+import { massMovementKind } from "@/domain/road-alerts/mass-movement";
+import { historyForAlert, mappableHistoryEvents } from "@/domain/road-history/nearby";
 
 import { AlertDetail } from "./AlertDetail";
 import { ClimateForecastPanel } from "./ClimateForecastPanel";
@@ -42,6 +47,8 @@ export function Dashboard({ initialResearch = null }: { initialResearch?: Resear
   const rainState = useCorridorRain();
   const catchments = useCatchments();
   const modelInputs = useModelInputs();
+  const roadHistory = useRoadHistory();
+  const nationalRain = useNationalRain();
   const now = useNow();
   const forecast = useClimateForecast(now);
   const mapRef = useRef<MapViewHandle>(null);
@@ -70,10 +77,20 @@ export function Dashboard({ initialResearch = null }: { initialResearch?: Resear
   }, [setSelectedId]);
   const evidence = useEvidenceMap({ initialData: initialResearch, mapRef, mapReady, onActivate: activateResearch, scope });
   const { clearSelection: clearEvidenceSelection } = evidence;
+  const roadNetwork = useRoadNetwork(useMemo(() => filtered.some((alert) => massMovementKind(alert) !== null), [filtered]));
+  const historyEvents = useMemo(
+    () => (roadHistory.data ? mappableHistoryEvents(roadHistory.data.data.events, scope === "pe22" ? "PE-22" : null) : []),
+    [roadHistory.data, scope],
+  );
+  const selectedHistory = useMemo(
+    () => (selected && roadHistory.data ? historyForAlert(roadHistory.data.data.events, selected) : null),
+    [selected, roadHistory.data],
+  );
 
   const { select: selectIncident } = incident;
   const { select: selectForecast } = forecast;
-  const tab: SidebarTab = tabChoice ?? (selected ? "detalle" : "pronostico");
+  // National incidents lead; the climate estimate covers only the PE-22 pilot corridor.
+  const tab: SidebarTab = tabChoice ?? (selected ? "detalle" : "alertas");
   const select = useCallback(
     (id: string | null) => {
       selectIncident(id);
@@ -180,6 +197,10 @@ export function Dashboard({ initialResearch = null }: { initialResearch?: Resear
           rainSegments={incident.rainBands}
           catchments={catchments.data}
           hazards={modelInputs.hazards.data}
+          historyEvents={historyEvents}
+          nationalWarnings={modelInputs.warnings.data}
+          nationalRain={nationalRain.data}
+          roadNetwork={roadNetwork.network}
           forecastData={forecast.map.data}
           forecastLabel={forecast.window ? formatForecastWindow(forecast.window) : null}
           onForecastOpen={() => setTabChoice("pronostico")}
@@ -202,6 +223,13 @@ export function Dashboard({ initialResearch = null }: { initialResearch?: Resear
                 catchments.error,
                 modelInputs.hazards.error,
                 modelInputs.weather.error,
+                modelInputs.warnings.error,
+                nationalRain.error,
+                roadNetwork.error,
+                nationalRain.data?.stale ? "Lluvia nacional en caché; Open-Meteo no respondió." : null,
+                modelInputs.warnings.data && modelInputs.warnings.data.meta.state !== "live"
+                  ? modelInputs.warnings.data.meta.message
+                  : null,
                 evidence.state.error,
                 modelInputs.weather.data?.meta.stale ? "Lluvia por cuenca en caché; revisar la fecha del pronóstico." : null,
                 modelInputs.hazards.data?.meta.stale ? "Avisos oficiales en caché; revisar su vigencia." : null,
@@ -271,6 +299,7 @@ export function Dashboard({ initialResearch = null }: { initialResearch?: Resear
                 detail={incident.detail}
                 corridorContext={incident.corridorContext}
                 roadAlertCount={incident.roadCounts.get(selected.roadCode) ?? 0}
+                roadHistory={{ history: selectedHistory, loading: !roadHistory.data && !roadHistory.error, error: roadHistory.error }}
                 now={now}
                 onRetryDetail={() => incident.setDetailReload((n) => n + 1)}
                 onCenter={() => mapRef.current?.flyToAlert(selected)}
@@ -297,6 +326,9 @@ export function Dashboard({ initialResearch = null }: { initialResearch?: Resear
                 rainError={rainState.error}
                 environmentalCount={evidence.records.length}
                 environmentalRetrievedAt={evidence.state.data?.retrievedAt ?? null}
+                historyCount={roadHistory.data ? historyEvents.length : null}
+                nationalRain={nationalRain.data}
+                historyError={roadHistory.error}
                 now={now}
                 onChange={setLayers}
               />

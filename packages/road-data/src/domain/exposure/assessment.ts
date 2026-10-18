@@ -5,7 +5,7 @@ import type {
   ExposureWindow,
 } from "../../contracts/exposure.ts";
 import { summarizeOperationalWeather } from "../weather/aggregate.ts";
-import { assessWindow, combineWindows, includePeak } from "./window.ts";
+import { assessWindow, capByLocalSusceptibility, combineWindows, includePeak } from "./window.ts";
 
 /** Pure calculation over captured inputs; time and content identities are supplied by the service. */
 export function calculateExposure(
@@ -74,8 +74,12 @@ export function calculateExposure(
       },
     };
   });
+  const localClasses = new Map(
+    (input.segmentSusceptibility ?? []).map((s) => [s.segmentId, s.susceptibilityClasses]),
+  );
   const segmentAssessments = input.segments.map((segment) => {
     const linked = catchments.filter((c) => c.segmentIds.includes(segment.segmentId));
+    const local = localClasses.get(segment.segmentId);
     const aggregate = (horizon: 6 | 24 | 72, index?: number): ExposureWindow => {
       const from = new Date(anchorMs + (index ?? 0) * 6 * 3_600_000).toISOString();
       const sourceWindows = linked
@@ -87,7 +91,7 @@ export function calculateExposure(
               : c.windows.next72h,
         )
         .filter((w): w is ExposureWindow => w !== undefined);
-      return combineWindows(sourceWindows, {
+      const combined = combineWindows(sourceWindows, {
         validFrom: from,
         validUntil: new Date(Date.parse(from) + horizon * 3_600_000).toISOString(),
         horizonHours: horizon,
@@ -96,6 +100,9 @@ export function calculateExposure(
         forecastRain: missingRain,
         reasons: ["no_catchment_link"],
       });
+      return policy.minimumLocalSusceptibilityClass === undefined
+        ? combined
+        : capByLocalSusceptibility(combined, local, policy.minimumLocalSusceptibilityClass);
     };
     return {
       segmentId: segment.segmentId,

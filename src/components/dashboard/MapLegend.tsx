@@ -92,6 +92,24 @@ export function MapLegend({ layers }: { layers: LayerState }) {
               </span>
             ))}
           </div>
+          {layers.alerts && (
+            <div className="pr-legend__group pr-legend__group--wide">
+              <span className="pr-legend__title">Huaicos y deslizamientos</span>
+              <span className="pr-legend__row">
+                <span
+                  className="pr-legend__line"
+                  style={{ background: "radial-gradient(circle, #c1121f 0 30%, #f3722c 30% 60%, #f9c74f 60%)", height: 10 }}
+                />
+                <span>
+                  Zona resaltada (5 km huaico, 3,5 km deslizamiento) <span className="pr-muted">· énfasis visual, no área de impacto</span>
+                </span>
+              </span>
+              <span className="pr-legend__row">
+                <span className="pr-legend__line" style={{ background: "#c1121f", boxShadow: "0 0 0 2px #fffdf7" }} />
+                Vías dentro de la zona (más gruesa: vía del aviso)
+              </span>
+            </div>
+          )}
           {layers.corridor && (
             <div className="pr-legend__group pr-legend__group--wide">
               <span className="pr-legend__title">Corredor Carretera Central</span>
@@ -111,8 +129,17 @@ export function MapLegend({ layers }: { layers: LayerState }) {
             <div className="pr-legend__group pr-legend__group--wide">
               <span className="pr-legend__title">Pronóstico · ventana seleccionada</span>
               <span className="pr-legend__row">
-                <span className="pr-legend__line pr-legend__line--forecast" />
-                Posible huaico · estimación
+                <span className="pr-legend__line" style={{ background: "#9456ad", boxShadow: "0 0 0 2px #ffffff" }} />
+                Vía en tramo con posible huaico · estimación
+              </span>
+              <span className="pr-legend__row">
+                <span
+                  className="pr-legend__line"
+                  style={{ background: "linear-gradient(90deg, #9456ad33, #682583aa, #9456ad33)", height: 10 }}
+                />
+                <span>
+                  Banda violeta (~8 km) <span className="pr-muted">· laderas con lluvia prevista; no es un evento reportado</span>
+                </span>
               </span>
               <span className="pr-legend__row">
                 <span className="pr-legend__line" style={{ background: "#8b8680" }} />

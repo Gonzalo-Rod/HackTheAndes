@@ -53,6 +53,7 @@ async function main(): Promise<void> {
     destinationKm: DESTINATION_KM,
     departAt: new Date(now - DEPARTED_MINUTES_AGO * 60_000).toISOString(),
     avgSpeedKmh: TRUCK_SPEED_KMH,
+    watchUntil: null,
     now: new Date(now).toISOString(),
   });
   console.log(

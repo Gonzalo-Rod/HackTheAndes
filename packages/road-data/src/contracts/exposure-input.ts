@@ -11,6 +11,8 @@ export const exposureInputSchema = z
     catchmentsPreparedAt: z.iso.datetime({ offset: true }),
     susceptibilitySourceUrls: z.array(z.url()).min(1),
     susceptibility: preparedHazardsSchema.shape.catchmentExposure,
+    // Classes the road itself crosses; v1 inputs were captured without them.
+    segmentSusceptibility: preparedHazardsSchema.shape.segmentExposure.optional(),
     catchments: z
       .array(
         z.object({ id: z.string().min(1), segmentIds: z.array(z.string().min(1)).min(1) }).strict(),

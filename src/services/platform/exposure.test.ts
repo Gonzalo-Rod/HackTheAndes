@@ -28,7 +28,8 @@ it("returns a validated public assessment with no writes or raw input bundle, wi
   const value = ExposureLayerSchema.parse(await response.json());
   expect(value.meta).toMatchObject({ storage: "database", state: "ready", selectedHorizonHours: 72, automatedAlertUse: true });
   expect(value.data.segments).toHaveLength(174);
-  expect(value.data.segments.some((s) => !s.catchmentIds.length && s.windows.next72h.category === null)).toBe(true);
+  // Since the containing-basin links every PE-22 segment has catchments and an assessed category.
+  expect(value.data.segments.every((s) => s.catchmentIds.length > 0 && s.windows.next72h.state === "assessed")).toBe(true);
   expect(Object.keys(value)).toEqual(["data", "meta"]);
   expect(response.headers.get("Cache-Control")).toBe("no-store");
   expect(value.data.sources.forecastIssuedAt).toBeNull();

@@ -36,7 +36,8 @@ it("reviews all eight candidates without converting mixed causes or missing even
   expect(audit.counts).toMatchObject({
     positiveEvents: 6,
     unknownEvents: 2,
-    mappedPositiveEvents: 2,
+    // Containing-basin links (low confidence) map three more positives than river crossings alone.
+    mappedPositiveEvents: 5,
     excludedTrafficCrashes: 2,
   });
   expect(audit.records.find((r) => r.eventId === "provias:20934")?.decision).toBe("unknown");

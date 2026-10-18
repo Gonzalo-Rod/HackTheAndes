@@ -5,13 +5,15 @@ const timestamp = z.iso.datetime();
 export const exposureCategorySchema = z.enum(["routine", "watch", "priority", "high_attention"]);
 export const exposurePolicySchema = z
   .object({
-    version: z.literal("climate-exposure-v1"),
+    // v1 records remain valid; v2 also requires the road itself to cross susceptible terrain.
+    version: z.enum(["climate-exposure-v1", "climate-exposure-v2"]),
     interpretation: z.literal("experimental_attention_criteria_not_hazard_thresholds"),
     weatherMaxAgeMs: z.number().int().positive(),
     minimumSusceptibilityCoverage: z.number().positive().max(1),
     susceptibleAreaFraction: z.number().positive().max(1),
     antecedentRainMm72h: z.number().positive(),
     antecedentRainMm168h: z.number().positive(),
+    minimumLocalSusceptibilityClass: z.number().int().min(1).max(5).optional(),
     thresholds: z
       .object({
         "6": z.tuple([z.number().positive(), z.number().positive(), z.number().positive()]),
@@ -25,6 +27,11 @@ export const exposurePolicySchema = z
     for (const values of Object.values(v.thresholds))
       if (values[0] >= values[1] || values[1] >= values[2])
         c.addIssue({ code: "custom", message: "Rainfall attention thresholds must increase" });
+    if ((v.version === "climate-exposure-v2") !== (v.minimumLocalSusceptibilityClass !== undefined))
+      c.addIssue({
+        code: "custom",
+        message: "Only v2 policies define a local susceptibility class",
+      });
   });
 export const exposureWindowSchema = z
   .object({
@@ -40,6 +47,8 @@ export const exposureWindowSchema = z
           "rain_below_attention_threshold",
           "rain_attention_threshold",
           "high_susceptibility_overlap",
+          "low_local_susceptibility",
+          "missing_local_susceptibility",
           "antecedent_wet_weather",
           "missing_rainfall",
           "missing_susceptibility",

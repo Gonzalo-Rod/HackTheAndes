@@ -135,3 +135,18 @@ def crossing_segment_ids(
         for identifier, distance in distances
         if abs(distance - minimum) < 0.01
     )
+
+
+def containing_basin_segments(
+    segments: list[tuple[str, BaseGeometry]], basins: dict[int, BaseGeometry]
+) -> dict[int, list[str]]:
+    """Group segments by the basin that covers their midpoint; boundary ties pick the lowest id."""
+    grouped: dict[int, list[str]] = defaultdict(list)
+    for identifier, line in segments:
+        midpoint = line.interpolate(0.5, normalized=True)
+        matches = sorted(basin for basin, geometry in basins.items() if geometry.covers(midpoint))
+        if not matches:
+            # A midpoint in a basin gap or offshore stays unlinked rather than guessed.
+            continue
+        grouped[matches[0]].append(identifier)
+    return {basin: sorted(ids) for basin, ids in grouped.items()}

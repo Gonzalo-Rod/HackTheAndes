@@ -52,3 +52,38 @@ def natural_hazard(raw_type: str, raw_hazard: str) -> str | None:
     if "INUNDACION" in text:
         return "flood"
     return None
+
+
+# National road-event categories for display; they describe the reported damage, not a cause.
+_CATEGORY_RULES = (
+    (("HUAICO", "HUAYCO"), "debris_flow"),
+    (("DERRUMBE",), "rockfall_or_slope_failure"),
+    (("DESLIZAMIENTO",), "landslide"),
+    (("INUNDACION",), "flood"),
+    (("PUENTE", "ALCANTARILLA", "OBRA DE ARTE", "MURO", "TUNEL", "ESTRUCTURA"), "structure_damage"),
+    (
+        ("EROSION", "SOCAVACION", "PLATAFORMA", "ASENTAMIENTO", "DEFORMACION", "ARENAMIENTO"),
+        "road_damage",
+    ),
+    (("DISTURBIO", "HUELGA", "PARO", "VANDALISMO", "NEGLIGENCIA"), "social"),
+    (("ACCIDENTE", "SINIESTRO"), "traffic"),
+)
+_ROAD_STATUSES = {"INTERRUMPIDO": "interrumpido", "RESTRINGIDO": "restringido", "NORMAL": "normal"}
+
+
+def road_event_category(raw_type: str) -> str:
+    text = normalized(raw_type)
+    for keywords, category in _CATEGORY_RULES:
+        if any(keyword in text for keyword in keywords):
+            return category
+    return "other"
+
+
+def rainfall_reported(*texts: str) -> bool:
+    """True when the source text mentions rain; this is a source claim, not verified causation."""
+    text = normalized(" ".join(texts))
+    return "LLUVIA" in text or "PRECIPITACION" in text
+
+
+def road_status(value: str) -> str:
+    return _ROAD_STATUSES.get(normalized(value), "desconocido")

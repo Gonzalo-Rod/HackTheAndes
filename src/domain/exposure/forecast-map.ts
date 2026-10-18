@@ -44,3 +44,28 @@ export function projectForecastMap(view: ExposureLayer | null, segments: Segment
   }
   return { data, bounds, message: missing ? `${missing} tramos sin geometría disponible; ubicaciones omitidas.` : null };
 }
+
+export interface ForecastAnchor {
+  eventId: string;
+  category: string;
+  position: [number, number];
+}
+
+/**
+ * One label point per forecast event: the middle vertex of its stretch, ordered as the segments
+ * appear (the projection keeps road order). Segments without an event are not labeled.
+ */
+export function forecastEventAnchors(data: ForecastMapData): ForecastAnchor[] {
+  const byEvent = new Map<string, { category: string; points: [number, number][] }>();
+  for (const feature of data.features) {
+    const { eventId, category } = feature.properties;
+    if (!eventId) continue;
+    const entry = byEvent.get(eventId) ?? { category, points: [] };
+    entry.points.push(...feature.geometry.coordinates);
+    byEvent.set(eventId, entry);
+  }
+  return [...byEvent].flatMap(([eventId, { category, points }]) => {
+    const position = points[Math.floor(points.length / 2)];
+    return position ? [{ eventId, category, position }] : [];
+  });
+}

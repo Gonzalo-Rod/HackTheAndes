@@ -40,7 +40,7 @@ export const environmentalReportSchema = z
     outlook: z
       .object({
         assessmentId: z.string().min(1),
-        policyVersion: z.literal("climate-exposure-v1"),
+        policyVersion: z.enum(["climate-exposure-v1", "climate-exposure-v2"]),
         capturedAt: timestamp,
         validFrom: timestamp,
         validUntil: timestamp,

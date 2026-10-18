@@ -20,9 +20,11 @@ export interface LayerState {
   networkColorBy: NetworkColorBy;
   corridor: boolean;
   rain: boolean;
+  nationalRain: boolean;
   catchments: boolean;
   susceptibility: boolean;
   officialWarnings: boolean;
+  history: boolean;
   rivers: boolean;
   riversOpacity: number;
   regions: boolean;
@@ -43,9 +45,11 @@ export const DEFAULT_LAYERS: LayerState = {
   networkColorBy: "neutral",
   corridor: true,
   rain: true,
+  nationalRain: true,
   catchments: true,
   susceptibility: false,
   officialWarnings: true,
+  history: false,
   rivers: true,
   riversOpacity: 0.8,
   regions: true,

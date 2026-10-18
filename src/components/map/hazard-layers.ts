@@ -1,7 +1,25 @@
 import type { Map as MLMap, GeoJSONSource } from "maplibre-gl";
-import type { HazardLayer } from "@/contracts/model-inputs";
+import type { HazardLayer, NationalWarnings } from "@/contracts/model-inputs";
 import { warningValidity } from "@/domain/road-alerts/warning-validity";
+// INGEMMET's national ArcGIS export, drawn with its official class colors; display only.
+const NATIONAL_SUSCEPTIBILITY_TILES =
+  "https://geocatminnube.ingemmet.gob.pe/arcgis/rest/services/SERV_SUSCEPTIBLE_MOV_MASA_REGIONAL/MapServer/export" +
+  "?bbox={bbox-epsg-3857}&bboxSR=3857&imageSR=3857&size=256,256&format=png32&transparent=true&layers=show:1&f=image";
+
 export function addHazardLayers(map: MLMap) {
+  map.addSource("susceptibility-national", {
+    type: "raster",
+    tiles: [NATIONAL_SUSCEPTIBILITY_TILES],
+    tileSize: 256,
+    attribution: "INGEMMET · susceptibilidad a movimientos en masa (nacional)",
+  });
+  map.addLayer({
+    id: "susceptibility-national-raster",
+    type: "raster",
+    source: "susceptibility-national",
+    layout: { visibility: "none" },
+    paint: { "raster-opacity": 0.45 },
+  });
   for (const id of ["susceptibility", "official-warnings"]) {
     map.addSource(id, {
       type: "geojson",
@@ -48,11 +66,14 @@ export function addHazardLayers(map: MLMap) {
   });
 }
 export function setHazardVisibility(map: MLMap, susceptibility: boolean, warnings: boolean) {
-  map.setLayoutProperty("susceptibility-fill", "visibility", susceptibility ? "visible" : "none");
+  // The national raster replaces the corridor-only vector polygons, which stay as a data source.
+  map.setLayoutProperty("susceptibility-national-raster", "visibility", susceptibility ? "visible" : "none");
+  map.setLayoutProperty("susceptibility-fill", "visibility", "none");
   for (const id of ["official-warning-fill", "official-warning-outline"])
     map.setLayoutProperty(id, "visibility", warnings ? "visible" : "none");
 }
-export function setHazardData(map: MLMap, layer: HazardLayer | null) {
+/** National SENAMHI warnings replace the corridor-clipped copy when they are available. */
+export function setHazardData(map: MLMap, layer: HazardLayer | null, national: NationalWarnings | null) {
   const susceptibility = map.getSource("susceptibility") as GeoJSONSource | undefined;
   const warnings = map.getSource("official-warnings") as GeoJSONSource | undefined;
   susceptibility?.setData({ type: "FeatureCollection", features: layer?.data.susceptibility.features ?? [] });
@@ -60,7 +81,7 @@ export function setHazardData(map: MLMap, layer: HazardLayer | null) {
   warnings?.setData({
     type: "FeatureCollection",
     features:
-      layer?.data.warnings.features.filter(
+      (national?.data.features ?? layer?.data.warnings.features)?.filter(
         (feature) => warningValidity(feature.properties.validFrom, feature.properties.validUntil, now) === "active",
       ) ?? [],
   });

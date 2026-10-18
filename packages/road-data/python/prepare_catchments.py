@@ -9,6 +9,7 @@ from shapely.geometry import shape, mapping, box
 from shapely.ops import unary_union
 from road_data.domain.catchments import (
     area_km2,
+    containing_basin_segments,
     crossing_segment_ids,
     point_intersections,
     sampling_points,
@@ -53,20 +54,34 @@ def prepare(root: Path) -> dict:
                     {"sourceIndex": index, "point": point, "segmentIds": links}
                 )
     containing: dict[int, list[dict]] = {}
+    corridor_basins: dict[int, object] = {}
     candidate_bounds = box(*road.bounds)
     for identifier, index in indexes.items():
         bounds = reader.shape(index).bbox
         if not box(*bounds).intersects(candidate_bounds):
             continue
         geometry = valid_polygon(read_geometry(reader, index))
+        if geometry.intersects(road):
+            corridor_basins[identifier] = geometry
         selected = [
             crossing for crossing in crossings if geometry.covers(crossing["point"])
         ]
         if selected:
             containing[identifier] = selected
-    geometry_cache: dict[int, object] = {}
+    crossing_segments = {
+        segment for item in crossings for segment in item["segmentIds"]
+    }
+    # Segments without a mapped river crossing still drain through the basin they lie in.
+    local = containing_basin_segments(
+        [(i, line) for i, line in segments if i not in crossing_segments],
+        corridor_basins,
+    )
+    geometry_cache: dict[int, object] = dict(corridor_basins)
     features = []
-    for outlet_id, local_crossings in sorted(containing.items()):
+    outlets = sorted(set(containing) | set(local))
+    for outlet_id in outlets:
+        local_crossings = containing.get(outlet_id, [])
+        local_segments = local.get(outlet_id, [])
         ancestors = upstream_ids([outlet_id], downstream)
         for identifier in ancestors:
             if identifier not in geometry_cache:
@@ -77,6 +92,13 @@ def prepare(root: Path) -> dict:
             unary_union([geometry_cache[identifier] for identifier in ancestors])
         )
         points = sampling_points(geometry)
+        pour_point = (
+            local_crossings[0]["point"]
+            if local_crossings
+            else next(line for i, line in segments if i == local_segments[0]).interpolate(
+                0.5, normalized=True
+            )
+        )
         features.append(
             {
                 "type": "Feature",
@@ -88,9 +110,12 @@ def prepare(root: Path) -> dict:
                     "areaKm2": area_km2(geometry),
                     "meanSlopeDegrees": None,
                     "method": "hydrobasins",
+                    "association": (
+                        "river_crossing" if local_crossings else "containing_basin"
+                    ),
                     "lowConfidence": True,
                     "samplePoints": points,
-                    "pourPoint": list(local_crossings[0]["point"].coords[0]),
+                    "pourPoint": list(pour_point.coords[0]),
                     "crossings": [
                         {
                             "point": list(item["point"].coords[0]),
@@ -105,6 +130,7 @@ def prepare(root: Path) -> dict:
                             for item in local_crossings
                             for segment in item["segmentIds"]
                         }
+                        | set(local_segments)
                     ),
                 },
             }
@@ -136,10 +162,16 @@ def prepare(root: Path) -> dict:
                 "Small tributaries and road drainage works are unresolved.",
                 "Mean slope and susceptibility are not inferred from elevation samples.",
                 "Mapped river intersections are candidate crossings, not field-verified structures.",
+                "Segments without a mapped crossing use the level-12 basin containing their midpoint and its upstream basins; the pour point is a road point, not an outlet.",
             ],
         },
         "diagnostics": {
             "crossingCount": len(crossings),
+            "containingBasinCount": sum(
+                1
+                for feature in features
+                if feature["properties"]["association"] == "containing_basin"
+            ),
             "coarseBasinCount": len(features),
             "linkedSegments": len(
                 {

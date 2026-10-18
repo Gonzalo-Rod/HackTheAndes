@@ -83,18 +83,18 @@ export function TopBar(props: TopBarProps) {
       <div className="pr-topbar__sep" aria-hidden="true" />
       <div className="pr-topbar__scope-wrapper">
         <nav className="pr-segmented pr-scope" aria-label="Cobertura geográfica">
-          <button type="button" aria-pressed={scope === "pe22"} className="pr-segmented__item" onClick={() => onScopeChange("pe22")}>
-            <Icon name="route" size={14} />
-            <span>PE-22 y Mantaro</span>
-            <span className="pr-count" title={`${counts.pe22.roads} viales + ${counts.pe22.environment} ambientales`}>
-              {counts.pe22.roads + counts.pe22.environment}
-            </span>
-          </button>
           <button type="button" aria-pressed={scope === "pais"} className="pr-segmented__item" onClick={() => onScopeChange("pais")}>
             <Icon name="globe" size={14} />
             <span>Todo el Perú</span>
             <span className="pr-count" title={`${counts.pais.roads} viales + ${counts.pais.environment} ambientales`}>
               {counts.pais.roads + counts.pais.environment}
+            </span>
+          </button>
+          <button type="button" aria-pressed={scope === "pe22"} className="pr-segmented__item" onClick={() => onScopeChange("pe22")}>
+            <Icon name="route" size={14} />
+            <span title="Corredor piloto con estimación climática">Piloto PE-22</span>
+            <span className="pr-count" title={`${counts.pe22.roads} viales + ${counts.pe22.environment} ambientales`}>
+              {counts.pe22.roads + counts.pe22.environment}
             </span>
           </button>
         </nav>

@@ -1,6 +1,7 @@
 import { after } from "next/server";
 import { runAlertEvaluation } from "./runtime";
 import { logger } from "@/lib/logger";
+import { evaluateRouteWatchSafely } from "@/services/route-watch/source-change";
 /** The persisted source state and recovery job survive a lost background invocation. */
 export function evaluateAlertsAfterChange(requestId: string): void {
   const failed = (error: unknown) =>
@@ -19,6 +20,8 @@ export function evaluateAlertsAfterChange(requestId: string): void {
       } catch (error) {
         failed(error);
       }
+      // Independent of WhatsApp delivery: a new huaico report can also warrant a monitor call.
+      await evaluateRouteWatchSafely(requestId);
     });
   } catch (error) {
     failed(error);

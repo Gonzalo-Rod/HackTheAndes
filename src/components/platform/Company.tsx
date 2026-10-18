@@ -5,6 +5,7 @@ import { z } from "zod";
 import { WeeklyReportDataSchema } from "@/contracts/platform";
 import { getJson } from "@/integrations/http/fetch-json";
 import { postDashboard } from "@/integrations/dashboard-api/write";
+import { RouteWatchPanel } from "./RouteWatchPanel";
 
 const SessionSchema = z.object({ organizationId: z.uuid(), expiresAt: z.iso.datetime() });
 const ReportsSchema = z.object({
@@ -82,6 +83,7 @@ export function Company() {
       ) : (
         <>
           <p>Acceso activo hasta {new Date(session.expiresAt).toLocaleString("es-PE", { timeZone: "America/Lima" })}.</p>
+          <RouteWatchPanel />
           <section>
             <h2>Planificación de salida</h2>
             <p>

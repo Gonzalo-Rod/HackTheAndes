@@ -27,6 +27,7 @@ export function ClimateForecastPanel({ forecast, visible, onToggle, onFocus, sup
         <h2 id="forecast-title">Posibles huaicos</h2>
         <span className="pr-forecast__tag">ESTIMACIÓN</span>
       </header>
+      <p className="pr-forecast__note">Corredor piloto: Carretera Central (PE-22). El resto del país aún no tiene esta estimación.</p>
       {projection.capturedAt && <p className="pr-forecast__note">Lluvia actualizada: {formatDateTime(projection.capturedAt)} (Perú).</p>}
       <p className="pr-forecast__intro">
         Lluvia prevista sobre terreno susceptible. No son huaicos reportados ni probabilidades calculadas.

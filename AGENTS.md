@@ -30,6 +30,13 @@ on the captured PE-22 axis; static pins are not continuous phone tracking. Keep
 estimated possible-huaico alerts, duplicate suppression, five-minute recovery,
 typed activation and STOP/BAJA cancellation. Do not reintroduce the 30-minute
 delivery cooldown; see `docs/integration/driver-notifications.md`.
+**Latest scope update (2026-10-18):** the incident dashboard covers all of Peru:
+national SUTRAN alerts lead, community reports carry an explicit "No confirmado" source
+filter, and nationwide Provías emergencies give display-only history (see
+`docs/data/national-road-events.md`). Climate exposure, WhatsApp routes and database
+ingestion remain on the PE-22 pilot corridor. Company monitors can register continuous
+route watches or truck trips that trigger urgent calls; see
+`docs/integration/route-watch.md`.
 Payments, Qatom and Yape remain outside the participant-authorized implementation
 scope. Do not treat proposed
 integrations, metrics, or predictions as verified results. Before writing code,

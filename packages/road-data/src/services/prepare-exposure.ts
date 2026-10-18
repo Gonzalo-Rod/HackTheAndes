@@ -41,6 +41,7 @@ export function prepareExposure(
     catchmentsPreparedAt: catchments.data.preparedAt,
     susceptibilitySourceUrls: hazards.data.susceptibility.sourceUrls,
     susceptibility: hazards.data.catchmentExposure,
+    segmentSusceptibility: hazards.data.segmentExposure,
     catchments: catchments.data.features.map((c) => ({
       id: c.id,
       segmentIds: c.properties.segmentIds,

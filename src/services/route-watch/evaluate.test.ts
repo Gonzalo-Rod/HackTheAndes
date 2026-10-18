@@ -16,6 +16,7 @@ const trip: StoredTrip = {
   avgSpeedKmh: 40,
   status: "active",
   isTest: false,
+  watchUntil: null,
 };
 const huaico: WatchIncident = {
   key: "community:11111111-1111-4111-8111-111111111111",
@@ -120,6 +121,28 @@ describe("route watch evaluation", () => {
     // 160 km at 40 km/h is 4 h; add the grace period and a minute.
     const late = { ...trip, departAt: new Date(NOW - 4 * 3_600_000 - TRIP_COMPLETION_GRACE_MS - 60_000).toISOString() };
     const { evaluate, trips, voice } = setup({ trips: [late] });
+    expect((await evaluate("req-1")).trips[0]?.state).toBe("completed");
+    expect(trips.setStatus).toHaveBeenCalledWith("trip-1", "completed");
+    expect(voice.placeTextToSpeechCall).not.toHaveBeenCalled();
+  });
+
+  it("keeps a continuous route watch alive past a trip's arrival and calls about incidents anywhere on it", async () => {
+    // Registered 10 h ago for 24 h: a truck trip on the same stretch would have completed.
+    const watch = { ...trip, departAt: minutesAgo(600), watchUntil: new Date(NOW + 14 * 3_600_000).toISOString() };
+    const nearOrigin = { ...huaico, startKm: 12, endKm: 12 };
+    const { evaluate, voice } = setup({ trips: [watch], incidents: [nearOrigin] });
+    expect((await evaluate("req-1")).trips[0]).toMatchObject({
+      state: "called",
+      ranked: [expect.objectContaining({ placement: "on_route" })],
+    });
+    const text = vi.mocked(voice.placeTextToSpeechCall).mock.calls[0]?.[0].text ?? "";
+    expect(text).toContain("dentro del tramo que vigilas");
+    expect(text).not.toContain("camión");
+  });
+
+  it("completes a route watch at its deadline", async () => {
+    const expired = { ...trip, departAt: minutesAgo(120), watchUntil: minutesAgo(1) };
+    const { evaluate, trips, voice } = setup({ trips: [expired] });
     expect((await evaluate("req-1")).trips[0]?.state).toBe("completed");
     expect(trips.setStatus).toHaveBeenCalledWith("trip-1", "completed");
     expect(voice.placeTextToSpeechCall).not.toHaveBeenCalled();

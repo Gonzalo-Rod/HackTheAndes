@@ -1,14 +1,14 @@
 import type { AlertLandmark } from "@/domain/alerts/messages";
 import { alertLocation } from "@/domain/alerts/messages";
 import { composeRouteWatchCall } from "@/domain/route-watch/call-script";
-import { estimatedArrival, prioritizeRouteIncidents } from "@/domain/route-watch/prioritize";
+import { prioritizeRouteIncidents, watchEndsAt } from "@/domain/route-watch/prioritize";
 import type { TripRepository } from "@/db/trips";
 import type { MessagingProvider, VoiceCaller } from "@/integrations/messaging/types";
 import { logger } from "@/lib/logger";
 import type { OfficialState, WatchIncident } from "./collect-incidents";
 
-// Route watch evaluation (F4). Runs from a scheduled job: for each consenting trip it ranks the
-// incidents on and just beyond the remaining route and calls the monitor about the most
+// Route watch evaluation (F4). Runs from a scheduled job: for each consenting truck trip or
+// continuous route watch it ranks the incidents on and near the remaining route and calls the monitor about the most
 // relevant urgent one that has not been called about yet.
 
 /** A trip keeps being watched for a while after its estimated arrival, since trucks run late. */
@@ -62,7 +62,7 @@ export function createRouteWatchEvaluator(deps: RouteWatchDeps) {
         outcomes.push({ tripId: trip.id, state: "not_departed", ranked: [] });
         continue;
       }
-      if (nowMs > Date.parse(estimatedArrival(trip)) + TRIP_COMPLETION_GRACE_MS) {
+      if (nowMs > Date.parse(watchEndsAt(trip, TRIP_COMPLETION_GRACE_MS))) {
         if (!options.rankOnly) await deps.trips.setStatus(trip.id, "completed");
         outcomes.push({ tripId: trip.id, state: "completed", ranked: [] });
         continue;

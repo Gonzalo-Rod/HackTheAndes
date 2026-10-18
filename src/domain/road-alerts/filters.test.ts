@@ -42,6 +42,16 @@ describe("filterAlerts", () => {
     expect(filterAlerts(all, { ...EMPTY_FILTERS, roadCode: "PE-22", statuses: ["interrumpido"] }).map((a) => a.id)).toEqual(["c"]);
   });
 
+  it("filters by source origin, keeping community reports separate from SUTRAN", () => {
+    const report = alert({ id: "community:7f0c", roadStatus: "desconocido" });
+    const withReport = [...all, report];
+    expect(filterAlerts(withReport, { ...EMPTY_FILTERS, origins: ["comunidad"] }).map((a) => a.id)).toEqual([report.id]);
+    expect(filterAlerts(withReport, { ...EMPTY_FILTERS, origins: ["oficial"] })).toHaveLength(3);
+    expect(filterAlerts(withReport, { ...EMPTY_FILTERS, origins: ["oficial", "comunidad"] })).toHaveLength(4);
+    expect(facetCounts(withReport, { ...EMPTY_FILTERS, origins: ["comunidad"] }).origins).toEqual({ oficial: 3, comunidad: 1 });
+    expect(facetCounts(withReport, { ...EMPTY_FILTERS, statuses: ["interrumpido"] }).origins).toEqual({ oficial: 1, comunidad: 0 });
+  });
+
   it("searches without accents or case", () => {
     expect(matchesQuery(pe22, "cocachacra")).toBe(true);
     expect(matchesQuery(pe22, "TRAILER pe-22")).toBe(true);
@@ -82,6 +92,7 @@ describe("facets and summaries", () => {
   it("detects active filters and toggles values", () => {
     expect(hasActiveFilters(EMPTY_FILTERS)).toBe(false);
     expect(hasActiveFilters({ ...EMPTY_FILTERS, query: "km" })).toBe(true);
+    expect(hasActiveFilters({ ...EMPTY_FILTERS, origins: ["comunidad"] })).toBe(true);
     expect(toggleValue(["a"], "b")).toEqual(["a", "b"]);
     expect(toggleValue(["a", "b"], "a")).toEqual(["b"]);
   });

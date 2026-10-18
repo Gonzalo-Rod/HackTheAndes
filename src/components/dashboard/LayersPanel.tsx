@@ -4,8 +4,9 @@ import type { ReactNode } from "react";
 
 import type { CorridorData } from "@/contracts/corridor";
 import type { AlertsMeta } from "@/contracts/road-alerts";
-import type { CorridorRainResponse } from "@/contracts/weather";
+import type { CorridorRainResponse, NationalRainResponse } from "@/contracts/weather";
 import { RAIN_LEVELS } from "@/domain/weather/rain";
+import { HISTORY_GROUP_COLORS } from "@/components/road-history-meta";
 import { formatDateTime, formatRelative } from "@/lib/format";
 
 import type { LayerState } from "./types";
@@ -96,6 +97,10 @@ interface LayersPanelProps {
   rainError: string | null;
   environmentalCount: number;
   environmentalRetrievedAt: string | null;
+  /** Past emergencies drawn for the current scope; null while loading or unavailable. */
+  historyCount: number | null;
+  historyError: string | null;
+  nationalRain: NationalRainResponse | null;
   now: number | null;
   onChange: (layers: LayerState) => void;
 }
@@ -108,6 +113,9 @@ export function LayersPanel({
   rain,
   rainError,
   environmentalCount,
+  historyCount,
+  historyError,
+  nationalRain,
   environmentalRetrievedAt,
   now,
   onChange,
@@ -191,17 +199,51 @@ export function LayersPanel({
       />
       <LayerRow
         label="Susceptibilidad · INGEMMET"
-        hint="Estática · marrón claro a oscuro: muy baja a muy alta; gris: sin clasificar. No es pronóstico."
-        swatch={<span style={{ display: "inline-block", width: 14, height: 10, background: "#ae8966" }} />}
+        hint="Todo el Perú · colores oficiales: verde (muy baja) a rojo (muy alta). Estática; no es pronóstico."
+        swatch={
+          <span style={{ display: "inline-block", width: 14, height: 10, background: "linear-gradient(90deg,#006100,#ffff00,#ff2200)" }} />
+        }
         checked={layers.susceptibility}
         onToggle={(susceptibility) => set({ susceptibility })}
       />
       <LayerRow
         label="Avisos · SENAMHI"
-        hint="Quebradas · vigencia según boletín; no son niveles de nuestro modelo."
+        hint="Quebradas en todo el Perú · vigencia según boletín; no son niveles de nuestro modelo."
         swatch={<span style={{ display: "inline-block", width: 14, height: 10, border: "1px dashed #72558a" }} />}
         checked={layers.officialWarnings}
         onToggle={(officialWarnings) => set({ officialWarnings })}
+      />
+      <LayerRow
+        label="Lluvia · todo el Perú"
+        hint={`Modelo Open-Meteo (celdas de ~80 km) interpolado a ~28 km; mayor valor entre últimas y próximas 24 h. Sin color: seca o sin dato.${nationalRain?.missingCells ? ` ${nationalRain.missingCells} celdas sin datos.` : ""}`}
+        freshness={
+          nationalRain && now
+            ? {
+                text: `${nationalRain.stale ? "Caché" : "Open-Meteo"} · consultado ${formatRelative(nationalRain.fetchedAt, now)}`,
+                warn: nationalRain.stale,
+              }
+            : undefined
+        }
+        swatch={
+          <span style={{ display: "inline-block", width: 14, height: 10, background: "linear-gradient(90deg,#79b4e3,#2f7bd1,#1b3a9e)" }} />
+        }
+        checked={layers.nationalRain}
+        disabled={!nationalRain}
+        onToggle={(nationalRain) => set({ nationalRain })}
+      />
+      <LayerRow
+        label="Emergencias pasadas · Provías"
+        hint={`${historyCount === null ? "" : `${historyCount} registros · `}ene–abr 2024 y 2025. Marrón: huaico, derrumbe o inundación; azul: daño de vía o puente. No son alertas vigentes.`}
+        freshness={historyError ? { text: historyError, warn: true } : undefined}
+        swatch={
+          <span style={{ display: "inline-flex", gap: 2 }}>
+            <span style={{ width: 7, height: 7, borderRadius: "50%", background: HISTORY_GROUP_COLORS.natural }} />
+            <span style={{ width: 7, height: 7, borderRadius: "50%", background: HISTORY_GROUP_COLORS.infrastructure }} />
+          </span>
+        }
+        checked={layers.history}
+        disabled={historyCount === null}
+        onToggle={(history) => set({ history })}
       />
       <LayerRow
         label="Ríos y quebradas"

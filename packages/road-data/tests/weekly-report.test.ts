@@ -34,7 +34,18 @@ describe("weekly environmental reporting", () => {
     };
   }
   it("clips fractional geometry endpoints and preserves unknown kilometers", async () => {
-    const report = buildEnvironmentalReport(await inputs());
+    const input = await inputs();
+    // Every PE-22 segment is now linked, so simulate one without an assessment (km 0–1).
+    const [first, ...rest] = input.exposure.data.segments;
+    if (!first) throw new Error("Expected exposure segments");
+    input.exposure.data.segments = [
+      {
+        ...first,
+        windows: { ...first.windows, next72h: { ...first.windows.next72h, category: null } },
+      },
+      ...rest,
+    ];
+    const report = buildEnvironmentalReport(input);
     expect(Object.values(report.outlook.kilometers).reduce((a, b) => a + b, 0)).toBeCloseTo(
       10.25,
       1,

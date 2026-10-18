@@ -2,7 +2,7 @@ import { beforeAll, describe, it, expect } from "vitest";
 import { createExposureView, readBundledExposure } from "@peruroad/road-data/exposure";
 import type { ExposureLayer } from "@/contracts/exposure";
 import type { SegmentCollection } from "@/contracts/platform";
-import { chooseForecastWindow, formatForecastWindow, projectForecastEvents } from "./forecast-events";
+import { chooseForecastWindow, formatForecastWindow, MAX_FORECAST_EVENT_KM, projectForecastEvents } from "./forecast-events";
 import { projectForecastMap } from "./forecast-map";
 let original: ExposureLayer;
 let now: number;
@@ -81,6 +81,31 @@ describe("dated possible-huaico estimates, separate from reported incidents", ()
     view.data.segments[1].distanceFromOriginEndKm = 21;
     window = projectForecastEvents(view, now, 24).windows[1];
     expect(window.events).toHaveLength(3);
+  });
+  it("starts a new item where the linked catchments change", () => {
+    const view = fixture();
+    view.data.segments[2].catchmentIds = ["hydrobasins-v1c-sa12-999"];
+    const window = projectForecastEvents(view, now, 24).windows[0];
+    expect(window.events.map((e) => [e.startKm, e.endKm])).toEqual([
+      [10, 12],
+      [12, 13],
+    ]);
+  });
+  it("caps each item at the maximum stretch length", () => {
+    const view = fixture();
+    const template = view.data.segments[0];
+    view.data.segments = Array.from({ length: 23 }, (_, i) => ({
+      ...structuredClone(template),
+      segmentId: `synthetic:${i}`,
+      distanceFromOriginStartKm: i,
+      distanceFromOriginEndKm: i + 1,
+    }));
+    const events = projectForecastEvents(view, now, 24).windows[0].events;
+    expect(events.map((e) => [e.startKm, e.endKm])).toEqual([
+      [0, MAX_FORECAST_EVENT_KM],
+      [MAX_FORECAST_EVENT_KM, 2 * MAX_FORECAST_EVENT_KM],
+      [2 * MAX_FORECAST_EVENT_KM, 23],
+    ]);
   });
   it("keeps distinct attention levels separate and does not create events for routine/watch", () => {
     const view = fixture();

@@ -66,6 +66,31 @@ export function assessWindow(input: {
     reasons,
   };
 }
+/**
+ * Above "watch" only where the road itself crosses terrain of at least `minimumClass`; a segment
+ * without local classes cannot be confirmed and is capped the same way, with its own reason.
+ */
+export function capByLocalSusceptibility(
+  window: ExposureWindow,
+  localClasses: readonly number[] | undefined,
+  minimumClass: number,
+): ExposureWindow {
+  if (window.state !== "assessed" || window.category === null) return window;
+  if (CATEGORY_ORDER.indexOf(window.category) <= CATEGORY_ORDER.indexOf("watch")) return window;
+  const known = localClasses !== undefined && localClasses.length > 0;
+  if (known && Math.max(...localClasses) >= minimumClass) return window;
+  return {
+    ...window,
+    category: "watch",
+    reasons: [
+      ...window.reasons.filter(
+        (r) => r !== "high_susceptibility_overlap" && r !== "antecedent_wet_weather",
+      ),
+      known ? "low_local_susceptibility" : "missing_local_susceptibility",
+    ],
+  };
+}
+
 export function combineWindows(
   windows: ExposureWindow[],
   fallback: ExposureWindow,

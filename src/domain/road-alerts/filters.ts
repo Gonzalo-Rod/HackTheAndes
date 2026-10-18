@@ -1,17 +1,19 @@
 import type { AlertCause, RoadAlert, RoadStatus } from "@/contracts/road-alerts";
 import { ALERT_CAUSES, ROAD_STATUSES } from "@/contracts/road-alerts";
 
+import { ALERT_ORIGINS, alertOrigin, type AlertOrigin } from "./origin";
 import { stripAccents } from "./parsing";
 
 export interface AlertFilters {
   statuses: readonly RoadStatus[]; // empty = all
   causes: readonly AlertCause[]; // empty = all
+  origins: readonly AlertOrigin[]; // empty = all
   regionKey: string | null;
   roadCode: string | null; // e.g. "PE-22" for the Carretera Central scope
   query: string;
 }
 
-export const EMPTY_FILTERS: AlertFilters = { statuses: [], causes: [], regionKey: null, roadCode: null, query: "" };
+export const EMPTY_FILTERS: AlertFilters = { statuses: [], causes: [], origins: [], regionKey: null, roadCode: null, query: "" };
 
 const STATUS_RANK: Record<RoadStatus, number> = { interrumpido: 0, restringido: 1, normal: 2, desconocido: 3 };
 
@@ -36,11 +38,12 @@ export function matchesQuery(alert: RoadAlert, query: string): boolean {
   return terms.every((term) => haystack.includes(term));
 }
 
-type Dimension = "statuses" | "causes";
+type Dimension = "statuses" | "causes" | "origins";
 
 function matches(alert: RoadAlert, filters: AlertFilters, ignore?: Dimension): boolean {
   if (ignore !== "statuses" && filters.statuses.length && !filters.statuses.includes(alert.roadStatus)) return false;
   if (ignore !== "causes" && filters.causes.length && !filters.causes.includes(alert.cause)) return false;
+  if (ignore !== "origins" && filters.origins.length && !filters.origins.includes(alertOrigin(alert))) return false;
   if (filters.regionKey && alert.regionKey !== filters.regionKey) return false;
   if (filters.roadCode && alert.roadCode !== filters.roadCode) return false;
   return matchesQuery(alert, filters.query);
@@ -54,11 +57,13 @@ export function filterAlerts(alerts: readonly RoadAlert[], filters: AlertFilters
 export function facetCounts(alerts: readonly RoadAlert[], filters: AlertFilters) {
   const statuses = Object.fromEntries(ROAD_STATUSES.map((s) => [s, 0])) as Record<RoadStatus, number>;
   const causes = Object.fromEntries(ALERT_CAUSES.map((c) => [c, 0])) as Record<AlertCause, number>;
+  const origins = Object.fromEntries(ALERT_ORIGINS.map((o) => [o, 0])) as Record<AlertOrigin, number>;
   for (const alert of alerts) {
     if (matches(alert, filters, "statuses")) statuses[alert.roadStatus]++;
     if (matches(alert, filters, "causes")) causes[alert.cause]++;
+    if (matches(alert, filters, "origins")) origins[alertOrigin(alert)]++;
   }
-  return { statuses, causes };
+  return { statuses, causes, origins };
 }
 
 export function regionOptions(alerts: readonly RoadAlert[]): { key: string; label: string; count: number }[] {
@@ -73,7 +78,13 @@ export function regionOptions(alerts: readonly RoadAlert[]): { key: string; labe
 }
 
 export function hasActiveFilters(filters: AlertFilters): boolean {
-  return filters.statuses.length > 0 || filters.causes.length > 0 || filters.regionKey !== null || filters.query.trim() !== "";
+  return (
+    filters.statuses.length > 0 ||
+    filters.causes.length > 0 ||
+    filters.origins.length > 0 ||
+    filters.regionKey !== null ||
+    filters.query.trim() !== ""
+  );
 }
 
 export function toggleValue<T>(values: readonly T[], value: T): T[] {

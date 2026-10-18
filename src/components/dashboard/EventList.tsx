@@ -1,8 +1,9 @@
 "use client";
 
-import { CAUSE_META, STATUS_META } from "@/components/alert-meta";
+import { CAUSE_META, ORIGIN_META, STATUS_META } from "@/components/alert-meta";
 import { Icon } from "@/components/icons";
 import type { RoadAlert } from "@/contracts/road-alerts";
+import { alertOrigin } from "@/domain/road-alerts/origin";
 import { isStaleAlert, STALE_ALERT_AFTER_HOURS } from "@/domain/road-alerts/staleness";
 import { formatCalendarDate, formatListTime, formatRelative } from "@/lib/format";
 
@@ -134,7 +135,12 @@ export function EventList({
                   <div className="pr-event-card__footer">
                     <span className="pr-event-card__validity">Vigente hasta: {formatCalendarDate(alert.validUntil)}</span>
                     <span className="pr-event-card__source">
-                      {alert.id.startsWith("community:") ? "Comunidad · sin confirmar" : "SUTRAN"} ·{" "}
+                      <span
+                        className={`pr-origin-badge pr-origin-badge--${alertOrigin(alert)}`}
+                        title={ORIGIN_META[alertOrigin(alert)].hint}
+                      >
+                        {ORIGIN_META[alertOrigin(alert)].badge}
+                      </span>{" "}
                       {now ? formatRelative(alert.lastActionAt, now) : formatListTime(alert.lastActionAt, now ?? 0)}
                     </span>
                   </div>

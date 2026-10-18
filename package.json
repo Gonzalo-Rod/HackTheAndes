@@ -10,6 +10,7 @@
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "data:build": "tsx scripts/build-static-layers.ts",
+    "data:rain-grid": "tsx scripts/build-national-rain-grid.ts && prettier --write src/integrations/local-data/national-rain-grid.json",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "predev": "node scripts/copy-maplibre-worker.mjs",

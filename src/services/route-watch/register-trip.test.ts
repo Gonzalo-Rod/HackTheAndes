@@ -81,4 +81,29 @@ describe("trip registration", () => {
     expect((await failureOf(setup().register(request({ ...valid, departAt: at(-13 * 3_600_000) })))).code).toBe("invalid_departure");
     expect((await failureOf(setup().register(request({ ...valid, departAt: at(8 * 24 * 3_600_000) })))).code).toBe("invalid_departure");
   });
+
+  it("keeps trip-mode clients working and stores no watch deadline for them", async () => {
+    const { register, trips } = setup();
+    const body = await (await register(request({ ...valid, mode: "trip" }))).json();
+    expect(body).toMatchObject({ mode: "trip", estimatedArrival: expect.any(String) });
+    expect(body).not.toHaveProperty("watchUntil");
+    expect(trips.create).toHaveBeenCalledWith(expect.objectContaining({ watchUntil: null }));
+  });
+
+  it("registers a continuous route watch from now until the chosen period ends", async () => {
+    const { register, trips } = setup();
+    const response = await register(request({ ...valid, mode: "route", watchHours: 72 }));
+    expect(response.status).toBe(201);
+    const watchUntil = new Date(NOW + 72 * 3_600_000).toISOString();
+    expect(await response.json()).toMatchObject({ mode: "route", watchUntil });
+    expect(trips.create).toHaveBeenCalledWith(expect.objectContaining({ departAt: new Date(NOW).toISOString(), watchUntil }));
+  });
+
+  it("bounds the watch period and rejects trip-only fields on a route watch", async () => {
+    const route = { ...valid, mode: "route" };
+    for (const watchHours of [0, 169, 1.5])
+      expect((await failureOf(setup().register(request({ ...route, watchHours })))).code).toBe("invalid_input");
+    expect((await failureOf(setup().register(request({ ...route, watchHours: 24, avgSpeedKmh: 40 })))).code).toBe("invalid_input");
+    expect((await failureOf(setup().register(request({ ...route, watchHours: 24, destinationKm: 400 })))).code).toBe("outside_corridor");
+  });
 });

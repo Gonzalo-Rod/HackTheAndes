@@ -6,10 +6,14 @@ import { database } from "@/db/pool";
 import { getJson } from "@/integrations/http/fetch-json";
 import { platformRoute, failure } from "@/services/platform/http";
 import { loadGeometryRevision } from "@/config/env";
+import { evaluateRouteWatchSafely } from "@/services/route-watch/source-change";
 import { runAlertEvaluation } from "./runtime";
+/** Source changes and the 5-minute recovery both land here, so monitor calls share the same triggers. */
 export const evaluateAlerts = platformRoute("alerts.job", async (request) => {
   authorizeJob(request);
-  return Response.json(await runAlertEvaluation());
+  const alerts = await runAlertEvaluation();
+  const routeWatch = await evaluateRouteWatchSafely(alerts.requestId);
+  return Response.json({ ...alerts, routeWatch: routeWatch.ok ? routeWatch.value : { error: routeWatch.error } });
 });
 export const refreshClimate = platformRoute("climate.refresh", async (request) => {
   authorizeJob(request);

@@ -11,6 +11,30 @@ beforeEach(() => {
 });
 afterEach(() => vi.restoreAllMocks());
 const publicUrl = "https://example.test";
+type Assessment = typeof record.assessment;
+/** Every bundled segment is linked now; recreate an unlinked one to keep unknown coverage tested. */
+function withUnlinkedSegment(assessment: Assessment): Assessment {
+  const copy = structuredClone(assessment);
+  // A catchment must keep at least one segment, so unlink one from a shared catchment.
+  const target = copy.segments.find((segment) =>
+    segment.catchmentIds.every((id) => (copy.catchments.find((c) => c.catchmentId === id)?.segmentIds.length ?? 0) > 1),
+  );
+  if (!target) throw new Error("Fixture needs a segment in a shared catchment");
+  const unknown = <T extends { state: string; category: unknown; reasons: unknown }>(window: T): T => ({
+    ...window,
+    state: "unknown",
+    category: null,
+    reasons: ["no_catchment_link"],
+  });
+  for (const catchment of copy.catchments) catchment.segmentIds = catchment.segmentIds.filter((id) => id !== target.segmentId);
+  target.catchmentIds = [];
+  target.windows = {
+    next24h: unknown(target.windows.next24h),
+    next72h: unknown(target.windows.next72h),
+    sixHourly: target.windows.sixHourly.map(unknown),
+  };
+  return copy;
+}
 function setup() {
   const context = vi.fn<(input: unknown, requestId: string) => Promise<RoadContextResponse>>(async () => ({
     kind: "official_alerts",
@@ -37,10 +61,12 @@ it("keeps an empty official feed distinct from clearance and exposure", async ()
   expect(reply).toContain("Exposición estimada");
 });
 it("renders known coverage without counting unknown segments as routine", async () => {
-  const { service } = setup();
+  const { service, exposure } = setup();
+  const assessment = withUnlinkedSegment(record.assessment);
+  exposure.mockResolvedValue(createExposureView(assessment, Date.parse(assessment.assessedAt), "database", 24));
   const reply = await service.exposure(null, "req");
-  expect(reply).toContain("38/174");
-  expect(reply).toContain("136 sin evaluación");
+  expect(reply).toContain("173/174");
+  expect(reply).toContain("1 sin evaluación");
   expect(reply).toContain("no probabilidad");
 });
 it("suppresses stale exposure categories at the exact freshness boundary", async () => {
@@ -93,8 +119,10 @@ it("uses only the matched segment, forecast window, rainfall and uncertainty", a
   expect(reply).not.toContain("km oficial");
 });
 it("keeps an unlinked segment unknown", async () => {
-  const { service, context } = setup();
-  const segment = record.assessment.segments.find((item) => !item.catchmentIds.length);
+  const { service, context, exposure } = setup();
+  const assessment = withUnlinkedSegment(record.assessment);
+  exposure.mockResolvedValue(createExposureView(assessment, Date.parse(assessment.assessedAt), "database", 24));
+  const segment = assessment.segments.find((item) => !item.catchmentIds.length);
   if (!segment) throw new Error("Fixture must contain unknown coverage");
   context.mockResolvedValue(located(segment.segmentId));
   expect(await service.exposure({ place: "Matucana" }, "req")).toContain("sin evaluación utilizable");

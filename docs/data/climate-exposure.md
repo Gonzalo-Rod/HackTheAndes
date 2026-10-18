@@ -29,7 +29,7 @@ location or time of a future landslide, or certify that a route is safe.
 | --- | --- | --- |
 | Forecast and recent model-estimated rainfall | Catchment weather captures and `/api/weather/catchments` | Next 24/72-hour totals and six-hour windows; retain model, grid, timestamps and missing hours. Recent modeled rain is not a gauge observation. |
 | INGEMMET susceptibility | Validated source polygons, spatial summaries and `/api/hazards` | Official static classes retained with source attribution; map coverage and regional precision remain explicit. |
-| Catchments and terrain | `/api/catchments`, geometry and slope captures | Coarse associations and sampled slopes, with low-confidence notices; 38 of 174 road segments currently have catchment links. |
+| Catchments and terrain | `/api/catchments`, geometry and slope captures | Coarse associations and sampled slopes, with low-confidence notices; all 174 road segments have catchment links since October 18 (river crossings plus containing basins). |
 | SENAMHI activation advisories | Official-product capture and `/api/hazards` | Keep official severity, affected area and validity separate from PeruRoad exposure. Current captures have `automatedRiskUse: false`. |
 | Current road conditions | SUTRAN ingestion/history and incident APIs | Confirmed source-reported impacts and dated status changes. An absent alert does not establish clearance. |
 | Environmental field reports | B text-report flow after location confirmation; media/verification pending | Rain, debris, rising water, drainage obstruction and slope failures; retain verification status and source. |
@@ -64,7 +64,7 @@ new exposure endpoint does not silently change their meaning.
 
 ### Versioned attention policy
 
-`climate-exposure-v1` is an **experimental engineering policy**. Its numeric bins
+`climate-exposure-v2` (current since October 18, 2026) is an **experimental engineering policy**. Its numeric bins
 are initial attention criteria, not SENAMHI thresholds, climatological percentiles
 or fitted hazard thresholds. Official station thresholds vary geographically and
 are not directly transferable to our coarse, area-averaged weather grids. See
@@ -77,6 +77,7 @@ are not directly transferable to our coarse, area-averaged weather grids. See
 | Forecast-rain bins, 72 h | 12 / 60 / 120 mm; same average-rate bins; summaries also retain any higher six-hour attention category |
 | Required known susceptibility weight | At least 90%; remaining weight stays unknown and is never redistributed |
 | High-susceptibility overlap | At least 20% of total sampled catchment weight in official classes 4/5; an explicit initial overlap gate |
+| Local road susceptibility (v2) | The segment's own road line must cross official class 4 or 5 terrain to rise above `watch`. On PE-22 every catchment exceeded the 20% overlap gate, so v1 categories followed rain alone; segments crossing only classes 1–3 now stop at `watch` (`low_local_susceptibility`), and segments without local classes at `watch` (`missing_local_susceptibility`) |
 | Wet antecedents | At least 30 mm in 72 h or 70 mm in 168 h; an initial wet-weather attention modifier, not measured soil moisture |
 | Weather freshness | Less than 90 minutes from capture; allows an hourly refresh with a 30-minute margin. Capture freshness does not establish model issuance time. |
 

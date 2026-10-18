@@ -605,3 +605,48 @@
 .pr-mapwrap .maplibregl-ctrl-attrib.maplibregl-compact {
   background: rgba(251, 250, 246, 0.9);
 }
+
+/* Huaicos and other mass movements: larger, labeled and pulsing at every road status. */
+.pr-marker[data-hazard] {
+  width: 48px;
+  height: 48px;
+}
+.pr-marker[data-hazard] .pr-marker__dot {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--hazard-color, #e76f51);
+  color: #fff;
+  box-shadow:
+    0 0 0 3px #fffdf7,
+    0 0 0 6px var(--hazard-color, #e76f51),
+    0 6px 16px rgba(31, 28, 23, 0.45);
+}
+.pr-marker[data-hazard="huaico"] {
+  --hazard-color: #c1121f;
+  width: 56px;
+  height: 56px;
+}
+.pr-marker[data-hazard="huaico"] .pr-marker__dot {
+  width: 44px;
+  height: 44px;
+}
+.pr-marker[data-hazard] .pr-marker__pulse {
+  inset: 4px;
+  border-radius: 50%;
+  background: var(--hazard-color, #e76f51);
+  animation: pr-pulse 1.8s ease-out infinite;
+}
+.pr-marker[data-hazard] .pr-marker__chip {
+  background: var(--hazard-color, #e76f51);
+  font-size: 12px;
+  font-weight: 750;
+  letter-spacing: 0.03em;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pr-marker[data-hazard] .pr-marker__pulse {
+    animation: none;
+    opacity: 0.25;
+    transform: scale(1.6);
+  }
+}

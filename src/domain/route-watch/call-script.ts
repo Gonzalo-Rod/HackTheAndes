@@ -1,8 +1,8 @@
 import type { IncidentType, PrioritizedIncident, RoadStatus } from "./prioritize";
 
 // What the transport monitor hears when route watch calls. The script keeps the evidence level
-// explicit (official, unconfirmed community report or demonstration) and states that the truck
-// position is an estimate, because GPS is not integrated.
+// explicit (official, unconfirmed community report or demonstration). For a truck trip it states
+// that the truck position is an estimate, because GPS is not integrated; a route watch has no truck.
 
 const TYPE_LABELS: Record<IncidentType, string> = {
   huaico: "un huaico",
@@ -33,10 +33,26 @@ function evidenceText(item: PrioritizedIncident): string {
 }
 
 function placementText(item: PrioritizedIncident): string {
+  if (item.placement === "on_route") return "dentro del tramo que vigilas";
+  if (item.placement === "near_route")
+    return `a unos ${Math.max(1, Math.round(item.distanceAheadKm))} kilómetros de un extremo del tramo que vigilas`;
   if (item.placement === "beyond_destination")
     return `a unos ${Math.round(item.distanceAheadKm)} kilómetros, poco después del destino de la ruta`;
   if (item.distanceAheadKm < 1) return "en el tramo donde estimamos que está el camión";
   return `a unos ${Math.round(item.distanceAheadKm)} kilómetros por delante del camión, unos ${item.etaMinutes} minutos de viaje`;
+}
+
+function followUpPlacement(item: PrioritizedIncident): string {
+  switch (item.placement) {
+    case "ahead":
+      return `Distancia estimada desde el camión: ${item.distanceAheadKm.toFixed(1)} km (~${item.etaMinutes} min).`;
+    case "beyond_destination":
+      return `Fuera del tramo, ${item.distanceAheadKm.toFixed(1)} km después del destino.`;
+    case "on_route":
+      return "Dentro del tramo vigilado.";
+    case "near_route":
+      return `Fuera del tramo vigilado, a ${item.distanceAheadKm.toFixed(1)} km de un extremo.`;
+  }
 }
 
 export function composeRouteWatchCall(
@@ -51,7 +67,9 @@ export function composeRouteWatchCall(
     `Se reportó ${what}, ${placementText(item)}, ${context.location}.`,
     STATUS_LABELS[item.incident.roadStatus],
     `Último reporte ${age}.`,
-    "La posición del camión es estimada por la hora de salida y la velocidad promedio. Te enviamos el detalle por WhatsApp.",
+    item.etaMinutes === null
+      ? "Te enviamos el detalle por WhatsApp."
+      : "La posición del camión es estimada por la hora de salida y la velocidad promedio. Te enviamos el detalle por WhatsApp.",
   ]
     .filter((part): part is string => part !== null)
     .join(" ");
@@ -59,10 +77,10 @@ export function composeRouteWatchCall(
     `${item.incident.isTest ? "PRUEBA · " : ""}PeruRoad Clima · vigilancia de ruta ${context.routeLabel}`,
     `${TYPE_LABELS[item.incident.type]} ${evidenceText(item)}, ${context.location}.`,
     `${STATUS_LABELS[item.incident.roadStatus]} Último reporte ${age}.`,
-    item.placement === "ahead"
-      ? `Distancia estimada desde el camión: ${item.distanceAheadKm.toFixed(1)} km (~${item.etaMinutes} min).`
-      : `Fuera del tramo, ${item.distanceAheadKm.toFixed(1)} km después del destino.`,
-    "Posición estimada sin GPS. Una alerta no confirma que el resto de la ruta esté libre.",
+    followUpPlacement(item),
+    item.etaMinutes === null
+      ? "Una alerta no confirma que el resto de la ruta esté libre."
+      : "Posición estimada sin GPS. Una alerta no confirma que el resto de la ruta esté libre.",
   ].join("\n");
   return { spokenText, followUpText };
 }

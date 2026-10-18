@@ -18,6 +18,8 @@ export interface NewTrip {
   destinationKm: number;
   departAt: string;
   avgSpeedKmh: number;
+  /** Continuous route watch deadline; null for a single truck trip. */
+  watchUntil: string | null;
   now: string;
 }
 
@@ -30,6 +32,20 @@ export interface StoredTrip {
   avgSpeedKmh: number;
   status: "planned" | "active";
   isTest: boolean;
+  watchUntil: string | null;
+}
+
+/** What the company dashboard lists; the monitor's phone is never returned. */
+export interface OrganizationWatch {
+  id: string;
+  originKm: number;
+  destinationKm: number;
+  departAt: string;
+  avgSpeedKmh: number;
+  watchUntil: string | null;
+  status: "planned" | "active";
+  callCount: number;
+  lastCallAt: string | null;
 }
 
 export interface CommunityIncidentRow {
@@ -51,6 +67,7 @@ const tripRowSchema = z.object({
   avgSpeedKmh: z.number().positive(),
   status: z.enum(["planned", "active"]),
   isTest: z.boolean(),
+  watchUntil: z.date().nullable(),
   ciphertext: z.instanceof(Buffer),
   iv: z.instanceof(Buffer),
   authTag: z.instanceof(Buffer),
@@ -76,8 +93,8 @@ export function createTripRepository(pool: Pool, encryption: { key: string; vers
         );
         const status = Date.parse(trip.departAt) <= Date.parse(trip.now) ? "active" : "planned";
         const inserted = await client.query(
-          `insert into public.trips(organization_id,contact_ref,phone_key,origin_km,destination_km,distance_reference,depart_at,avg_speed_kmh,status,call_consent_at)
-           values($1,$2,$3,$4,$5,'geometry_distance',$6,$7,$8,$9) returning id`,
+          `insert into public.trips(organization_id,contact_ref,phone_key,origin_km,destination_km,distance_reference,depart_at,avg_speed_kmh,status,call_consent_at,watch_until)
+           values($1,$2,$3,$4,$5,'geometry_distance',$6,$7,$8,$9,$10) returning id`,
           [
             trip.organizationId,
             z.uuid().parse(contact.rows[0]?.id),
@@ -88,6 +105,7 @@ export function createTripRepository(pool: Pool, encryption: { key: string; vers
             trip.avgSpeedKmh,
             status,
             trip.now,
+            trip.watchUntil,
           ],
         );
         return { id: z.uuid().parse(inserted.rows[0]?.id), status };
@@ -98,7 +116,7 @@ export function createTripRepository(pool: Pool, encryption: { key: string; vers
     async watched(testPhoneKeys: readonly string[]): Promise<StoredTrip[]> {
       const result = await pool.query(
         `select t.id,t.origin_km::float8 as "originKm",t.destination_km::float8 as "destinationKm",t.depart_at as "departAt",
-                t.avg_speed_kmh::float8 as "avgSpeedKmh",t.status,(coalesce(o.is_test,false) or t.phone_key=any($1::text[])) as "isTest",
+                t.avg_speed_kmh::float8 as "avgSpeedKmh",t.status,t.watch_until as "watchUntil",(coalesce(o.is_test,false) or t.phone_key=any($1::text[])) as "isTest",
                 c.ciphertext,c.iv,c.auth_tag as "authTag",c.key_version as "keyVersion"
            from public.trips t join private.delivery_contacts c on c.id=t.contact_ref
            left join public.organizations o on o.id=t.organization_id
@@ -121,8 +139,52 @@ export function createTripRepository(pool: Pool, encryption: { key: string; vers
             avgSpeedKmh: row.avgSpeedKmh,
             status: row.status,
             isTest: row.isTest,
+            watchUntil: row.watchUntil?.toISOString() ?? null,
           };
         });
+    },
+
+    /** Planned and active watches of one organization, newest first, with how often they called. */
+    async listForOrganization(organizationId: string): Promise<OrganizationWatch[]> {
+      const result = await pool.query(
+        `select t.id,t.origin_km::float8 as "originKm",t.destination_km::float8 as "destinationKm",t.depart_at as "departAt",
+                t.avg_speed_kmh::float8 as "avgSpeedKmh",t.watch_until as "watchUntil",t.status,
+                count(c.id)::int as "callCount",max(c.created_at) as "lastCallAt"
+           from public.trips t left join public.calls c on c.trip_id=t.id and c.purpose='alert'
+          where t.organization_id=$1 and t.status in ('planned','active')
+          group by t.id order by t.created_at desc limit 50`,
+        [organizationId],
+      );
+      return z
+        .array(
+          z.object({
+            id: z.uuid(),
+            originKm: z.number(),
+            destinationKm: z.number(),
+            departAt: z.date().transform((value) => value.toISOString()),
+            avgSpeedKmh: z.number().positive(),
+            watchUntil: z
+              .date()
+              .nullable()
+              .transform((value) => value?.toISOString() ?? null),
+            status: z.enum(["planned", "active"]),
+            callCount: z.number().int().nonnegative(),
+            lastCallAt: z
+              .date()
+              .nullable()
+              .transform((value) => value?.toISOString() ?? null),
+          }),
+        )
+        .parse(result.rows);
+    },
+
+    /** Organization-scoped: another company's trip id cancels nothing. Returns whether a watch stopped. */
+    async cancelForOrganization(organizationId: string, id: string): Promise<boolean> {
+      const result = await pool.query(
+        "update public.trips set status='cancelled' where id=$1 and organization_id=$2 and status in ('planned','active')",
+        [id, organizationId],
+      );
+      return (result.rowCount ?? 0) > 0;
     },
 
     async setStatus(id: string, status: "active" | "completed" | "cancelled") {

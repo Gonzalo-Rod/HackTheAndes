@@ -15,7 +15,7 @@
     "format:check": "prettier --check src tests scripts package.json package-lock.json tsconfig.json tsconfig.build.json vitest*.config.ts eslint.config.mjs .prettierrc.json README.md ../../workflows/n8n",
     "build": "tsc --project tsconfig.build.json",
     "prepack": "npm run build",
-    "test:exports": "node --input-type=module -e \"await import('@peruroad/road-data'); await import('@peruroad/road-data/contracts'); await import('@peruroad/road-data/ingestion'); await import('@peruroad/road-data/geometry'); await import('@peruroad/road-data/geometry/contracts'); await import('@peruroad/road-data/database'); await import('@peruroad/road-data/jobs'); await import('@peruroad/road-data/elevation'); await import('@peruroad/road-data/elevation/contracts'); await import('@peruroad/road-data/locations'); await import('@peruroad/road-data/locations/contracts'); await import('@peruroad/road-data/context'); await import('@peruroad/road-data/context/contracts'); await import('@peruroad/road-data/catchments'); await import('@peruroad/road-data/catchments/contracts'); await import('@peruroad/road-data/weather'); await import('@peruroad/road-data/weather/contracts'); await import('@peruroad/road-data/model-inputs'); await import('@peruroad/road-data/model-inputs/spatial-contracts'); await import('@peruroad/road-data/model-inputs/event-contracts'); await import('@peruroad/road-data/training'); await import('@peruroad/road-data/training/contracts'); await import('@peruroad/road-data/exposure'); await import('@peruroad/road-data/exposure/contracts');\"",
+    "test:exports": "node --input-type=module -e \"await import('@peruroad/road-data'); await import('@peruroad/road-data/contracts'); await import('@peruroad/road-data/ingestion'); await import('@peruroad/road-data/geometry'); await import('@peruroad/road-data/geometry/contracts'); await import('@peruroad/road-data/database'); await import('@peruroad/road-data/jobs'); await import('@peruroad/road-data/elevation'); await import('@peruroad/road-data/elevation/contracts'); await import('@peruroad/road-data/locations'); await import('@peruroad/road-data/locations/contracts'); await import('@peruroad/road-data/context'); await import('@peruroad/road-data/context/contracts'); await import('@peruroad/road-data/catchments'); await import('@peruroad/road-data/catchments/contracts'); await import('@peruroad/road-data/weather'); await import('@peruroad/road-data/weather/contracts'); await import('@peruroad/road-data/model-inputs'); await import('@peruroad/road-data/model-inputs/spatial-contracts'); await import('@peruroad/road-data/model-inputs/event-contracts'); await import('@peruroad/road-data/training'); await import('@peruroad/road-data/training/contracts'); await import('@peruroad/road-data/exposure'); await import('@peruroad/road-data/exposure/contracts'); await import('@peruroad/road-data/road-history'); await import('@peruroad/road-data/road-history/contracts'); await import('@peruroad/road-data/official-warnings');\"",
     "pe22:prepare": "node scripts/prepare-pe22.ts",
     "senamhi:check": "node scripts/check-senamhi.ts",
     "db:migrate": "node --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/migrate-database.ts",
@@ -41,6 +41,7 @@
     "hazards:prepare": ".venv/bin/python python/prepare_hazards.py && node scripts/validate-hazards.ts",
     "events:capture": "node scripts/capture-historical-events.ts",
     "events:prepare": ".venv/bin/python python/prepare_historical_events.py && node scripts/validate-historical-events.ts",
+    "events:prepare-national": "python3 python/prepare_national_events.py && node scripts/validate-national-events.ts",
     "db:import-model-inputs": "node --env-file-if-exists=.env.local scripts/import-model-inputs.ts",
     "model-inputs:check": "node scripts/check-model-inputs.ts",
     "ml:labels:check": "node scripts/check-training-labels.ts",
@@ -169,6 +170,18 @@
     "./reports": {
       "types": "./dist/reports.d.ts",
       "default": "./dist/reports.js"
+    },
+    "./road-history": {
+      "types": "./dist/road-history.d.ts",
+      "default": "./dist/road-history.js"
+    },
+    "./road-history/contracts": {
+      "types": "./dist/contracts/national-road-events.d.ts",
+      "default": "./dist/contracts/national-road-events.js"
+    },
+    "./official-warnings": {
+      "types": "./dist/official-warnings.d.ts",
+      "default": "./dist/official-warnings.js"
     }
   },
   "files": [

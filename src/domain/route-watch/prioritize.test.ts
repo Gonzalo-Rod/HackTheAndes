@@ -5,6 +5,7 @@ import {
   estimatePositionKm,
   NEARBY_BUFFER_KM,
   prioritizeRouteIncidents,
+  watchEndsAt,
   type RouteIncident,
   type WatchedTrip,
 } from "./prioritize";
@@ -111,6 +112,48 @@ describe("prioritizeRouteIncidents", () => {
   it("skips incidents with future or invalid timestamps", () => {
     expect(prioritizeRouteIncidents(trip, [incident({ observedAt: new Date(NOW + 60_000).toISOString() })], NOW)).toEqual([]);
     expect(prioritizeRouteIncidents(trip, [incident({ observedAt: "not a date" })], NOW)).toEqual([]);
+  });
+});
+
+describe("continuous route watch", () => {
+  // Same stretch watched for 24 h; incidents behind a would-be truck still matter.
+  const watch: WatchedTrip = { ...trip, watchUntil: new Date(NOW + 24 * 3_600_000).toISOString() };
+
+  it("watches the whole stretch with no truck position or ETA", () => {
+    const [behindTruck] = prioritizeRouteIncidents(watch, [incident({ startKm: 20, endKm: 21 })], NOW);
+    expect(behindTruck).toMatchObject({ placement: "on_route", distanceAheadKm: 0, etaMinutes: null, callWorthy: true });
+    expect(behindTruck?.reasons.map((item) => item.reason)).not.toContain("arrival_within_1h");
+  });
+
+  it("includes incidents within the buffer before the origin and after the destination", () => {
+    const ranked = prioritizeRouteIncidents(
+      watch,
+      [
+        incident({ key: "before", startKm: 6, endKm: 7 }),
+        incident({ key: "after", startKm: 170 + NEARBY_BUFFER_KM, endKm: 176 }),
+        incident({ key: "far", startKm: 170 + NEARBY_BUFFER_KM + 0.5, endKm: 180 }),
+      ],
+      NOW,
+    );
+    expect(ranked.map((item) => [item.incident.key, item.placement, item.distanceAheadKm])).toEqual([
+      ["before", "near_route", 3],
+      ["after", "near_route", NEARBY_BUFFER_KM],
+    ]);
+  });
+
+  it("treats a return route and reversed incident edges the same way", () => {
+    const reversed = { ...watch, originKm: 170, destinationKm: 10 };
+    expect(prioritizeRouteIncidents(reversed, [incident({ startKm: 100, endKm: 90 })], NOW)[0]?.placement).toBe("on_route");
+  });
+
+  it("keeps the same call rules as trips", () => {
+    expect(prioritizeRouteIncidents(watch, [incident({ type: "accidente", roadStatus: "restringido" })], NOW)[0]?.callWorthy).toBe(false);
+    expect(prioritizeRouteIncidents(watch, [incident({ observedAt: minutesAgo(13 * 60) })], NOW)[0]?.callWorthy).toBe(false);
+  });
+
+  it("ends at the watch deadline, while trips end after arrival plus grace", () => {
+    expect(watchEndsAt(watch, 7_200_000)).toBe(watch.watchUntil);
+    expect(watchEndsAt(trip, 7_200_000)).toBe(new Date(Date.parse(estimatedArrival(trip)) + 7_200_000).toISOString());
   });
 });
 

@@ -1,8 +1,10 @@
 import { afterEach, expect, it, vi } from "vitest";
 vi.mock("next/server", () => ({ after: vi.fn() }));
 vi.mock("./runtime", () => ({ runAlertEvaluation: vi.fn() }));
+vi.mock("@/services/route-watch/source-change", () => ({ evaluateRouteWatchSafely: vi.fn() }));
 import { after } from "next/server";
 import { runAlertEvaluation } from "./runtime";
+import { evaluateRouteWatchSafely } from "@/services/route-watch/source-change";
 import { evaluateAlertsAfterChange } from "./after-change";
 afterEach(() => vi.resetAllMocks());
 it("starts a source-change evaluation after the response and lets failures fall back to reconciliation", async () => {
@@ -16,6 +18,8 @@ it("starts a source-change evaluation after the response and lets failures fall 
   expect(work).toBeDefined();
   await work?.();
   expect(runAlertEvaluation).toHaveBeenCalledWith("synthetic-request");
+  // A failed driver-alert run still lets route watch call the monitor.
+  expect(evaluateRouteWatchSafely).toHaveBeenCalledWith("synthetic-request");
 });
 it("preserves an accepted publication if background scheduling is unavailable", () => {
   vi.mocked(after).mockImplementation(() => {
