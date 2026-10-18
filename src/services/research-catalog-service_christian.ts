@@ -5,7 +5,6 @@ import {
   SourceFileSchema,
 } from "@/contracts/research-input_christian";
 import { EnvironmentalRecordSchema, ResearchCatalogSchema, type ResearchCatalog } from "@/contracts/research_christian";
-import { WeeklyStateSchema } from "@/contracts/weekly-incident-report_christian";
 import { normalizeEvidence } from "@/domain/research/normalize-evidence_christian";
 import { isVerifiedMapRecord } from "@/domain/research/map-evidence_christian";
 import type { ResearchFiles } from "@/integrations/research-files/research-files_christian";
@@ -22,7 +21,6 @@ export function createResearchCatalogService(dependencies: { loadFiles: () => Pr
         scope: "PE-22 y extensión del Mantaro",
         records: [],
         sources: [],
-        weeklyReports: [],
         documents: files.documents,
         warnings,
         archivedRecordCount: 0,
@@ -58,15 +56,6 @@ export function createResearchCatalogService(dependencies: { loadFiles: () => Pr
           else rejected++;
         }
       } else warnings.push("El catálogo de fuentes no está disponible.");
-      for (const weekly of files.weekly) {
-        const parsed = WeeklyStateSchema.safeParse(weekly.data);
-        if (parsed.success) catalog.weeklyReports.push(parsed.data);
-        else {
-          rejected++;
-          warnings.push("Un archivo semanal tiene un formato inválido y no se muestra.");
-        }
-      }
-      catalog.weeklyReports.sort((a, b) => b.window.startDate.localeCompare(a.window.startDate));
       if (rejected) warnings.push(`${rejected} registros inválidos, duplicados o sin un tipo reconocido fueron excluidos.`);
       logger.info({
         operation: "research.catalog",
@@ -75,7 +64,6 @@ export function createResearchCatalogService(dependencies: { loadFiles: () => Pr
         result: "ok",
         records: catalog.records.length,
         sources: catalog.sources.length,
-        weeklyReports: catalog.weeklyReports.length,
         rejected,
         archived: catalog.archivedRecordCount,
       });

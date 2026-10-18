@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-import { WeeklyStateSchema } from "./weekly-incident-report_christian";
 import { EvidenceCoordinatesSchema, EvidenceGeometrySchema } from "./evidence-geometry_christian";
 
 export const RESEARCH_TOPICS = ["water", "frost", "landslides", "rain", "agriculture", "pests"] as const;
@@ -75,7 +74,6 @@ export const ResearchCatalogSchema = z.object({
   scope: z.string(),
   records: z.array(EnvironmentalRecordSchema),
   sources: z.array(ResearchSourceSchema),
-  weeklyReports: z.array(WeeklyStateSchema),
   documents: z.array(ResearchDocumentSchema),
   warnings: z.array(z.string()),
   archivedRecordCount: z.number().int().nonnegative(),

@@ -10,7 +10,6 @@ import type { ResearchCatalogState } from "@/hooks/use-research-catalog_christia
 import { formatDateTime } from "@/lib/format";
 
 import { EvidenceDetail, evidencePeriod } from "./EvidenceDetail_christian";
-import { ResearchArchive } from "./ResearchArchive_christian";
 import { ResearchSources } from "./ResearchSources_christian";
 
 const INITIAL_RECORDS = 12;
@@ -142,20 +141,13 @@ export function ResearchPanel({
         con la fecha actual.
       </p>
       <details className="pr-research__disclosure">
-        <summary>Archivo vial y noticias · {data.weeklyReports.length} semana(s)</summary>
-        <ResearchArchive reports={data.weeklyReports} />
-      </details>
-      <details className="pr-research__disclosure">
         <summary>Fuentes y verificación · {sources.length} referencias</summary>
         <ResearchSources sources={sources} />
         {liveSources}
       </details>
       <details className="pr-research__disclosure">
         <summary>Documentos y reportes de la investigación · {data.documents.length}</summary>
-        <p>
-          {data.archivedRecordCount} referencias sin fecha o geometría verificadas quedan solo en los documentos originales. Las noticias
-          pendientes tampoco generan pines.
-        </p>
+        <p>{data.archivedRecordCount} referencias sin fecha o geometría verificadas quedan solo en los documentos originales.</p>
         <ul className="pr-research__documents">
           {data.documents.map((document) => (
             <li key={document.name}>

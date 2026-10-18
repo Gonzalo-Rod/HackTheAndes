@@ -19,8 +19,7 @@
     "test:db": "node --env-file-if-exists=.env.local --import tsx node_modules/vitest/vitest.mjs run --config vitest.database.config.mts",
     "zavu:send-test": "node --env-file-if-exists=.env.local --import tsx scripts/zavu-send-test.ts",
     "zavu:call-incident": "node --env-file-if-exists=.env.local --import tsx scripts/zavu-call-incident.ts",
-    "route-watch:simulate": "node --env-file-if-exists=.env.local --import tsx scripts/route-watch-simulate.ts",
-    "data:collect": "tsx scripts/weekly-incident-report_christian.ts"
+    "route-watch:simulate": "node --env-file-if-exists=.env.local --import tsx scripts/route-watch-simulate.ts"
   },
   "dependencies": {
     "@peruroad/road-data": "file:packages/road-data",

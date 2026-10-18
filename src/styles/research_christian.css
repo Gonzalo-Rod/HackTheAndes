@@ -342,51 +342,13 @@
   font-size: 11px;
   color: var(--ink-3);
 }
-.pr-research-archive,
 .pr-research-sources {
   font-size: 11px;
   line-height: 1.6;
 }
-.pr-research-archive h3 {
-  font-size: 12px;
-}
-.pr-research-archive h4 {
-  margin: 14px 0 4px;
-  font-size: 11px;
-}
-.pr-research-archive p,
 .pr-research-sources p {
   color: var(--ink-3);
   margin-bottom: 8px;
-}
-.pr-research-archive ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-.pr-research-archive li {
-  display: flex;
-  flex-direction: column;
-  padding: 9px 0;
-  border-bottom: 1px solid var(--line);
-  gap: 3px;
-}
-.pr-research-archive li span {
-  color: var(--ink-3);
-  font-size: 10px;
-}
-.pr-research-archive__health {
-  display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
-}
-.pr-research-archive__health span {
-  padding: 2px 5px;
-  border-radius: 3px;
-  background: var(--surface-3);
-}
-.pr-research-archive__health span[data-ok="false"] {
-  background: #f9ebcd;
 }
 .pr-research-source {
   border-top: 1px solid var(--line);

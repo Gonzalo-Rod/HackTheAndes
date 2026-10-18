@@ -10,5 +10,3 @@ AGENTS.md
 apps/
 packages/
 workflows/
-# Preserve real upstream payloads verbatim for parser regression tests.
-src/test/fixtures/weekly-report-real_christian/

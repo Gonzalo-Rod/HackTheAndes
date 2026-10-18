@@ -11,7 +11,7 @@ import { ResearchPanel } from "./ResearchPanel_christian";
 const now = () => Date.parse("2026-10-18T00:40:00Z");
 
 describe("research evidence presentation", () => {
-  it("shows scope, official-notice provenance, dated snapshots, source catalog and weekly leads", async () => {
+  it("shows scope, official-notice provenance, dated snapshots, and source catalog", async () => {
     const data = await createResearchCatalogService({ loadFiles: loadResearchFiles, now }).getCatalog("render-test");
     const html = renderToStaticMarkup(
       createElement(ResearchPanel, {
@@ -31,8 +31,6 @@ describe("research evidence presentation", () => {
     expect(html).toContain("Aviso 422");
     expect(html).toContain("Pronóstico próximo");
     expect(html).toContain("Fuentes y verificación · 41 referencias");
-    expect(html).toContain("noticias por verificar");
-    expect(html).toContain("no se cuentan como alertas ni generan pines");
   });
   it("uses the official forecast polygon and its daily validity instead of a fabricated point", async () => {
     const data = await createResearchCatalogService({ loadFiles: loadResearchFiles, now }).getCatalog("render-test");
