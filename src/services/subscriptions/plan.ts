@@ -14,8 +14,7 @@ export function alertPlan() {
       command: "SUSCRIBIR 7 DIAS",
       activation: "Typed ACTIVAR consent, followed by a verified settled Qatom payment",
       cancel_commands: ["STOP", "BAJA"],
-      summary:
-        `Pago único de ${passPrice()} por alertas hasta 7 días desde la solicitud, sin renovación automática. Reportar y consultar ESTADO o EXPOSICION sigue siendo gratuito.`,
+      summary: `Pago único de ${passPrice()} por alertas hasta 7 días desde la solicitud, sin renovación automática. Reportar y consultar ESTADO o EXPOSICION sigue siendo gratuito.`,
     },
     { headers: { "Cache-Control": "public, max-age=300" } },
   );
