@@ -15,7 +15,7 @@ const repository = {
   finish: vi.fn(),
   pdf: vi.fn(),
 } satisfies WeeklyPdfRepository;
-const preferences = { act: vi.fn(), bounds: vi.fn(), touch: vi.fn() } satisfies SubscriptionRepository;
+const preferences = { routeState: vi.fn(), act: vi.fn(), bounds: vi.fn(), touch: vi.fn() } satisfies SubscriptionRepository;
 const dispatch = vi.fn(),
   limiter = { consume: vi.fn() };
 const commands = createWeeklyCommands({

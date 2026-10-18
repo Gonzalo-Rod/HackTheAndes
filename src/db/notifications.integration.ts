@@ -77,13 +77,12 @@ describe("durable subscription and notification delivery", () => {
     if (!retry) throw new Error("Missing retry");
     await delivery.finish(retry, true, null, now);
   });
-  it("enforces the 30-minute cooldown and suppresses unchanged conditions afterward", async () => {
-    expect(await delivery.claim(subscriptionId, [candidate("changed")], now + 1800000 - 1)).toBeNull();
-    expect(await delivery.claim(subscriptionId, [candidate()], now + 1800000)).toBeNull();
-    const changed = await delivery.claim(subscriptionId, [candidate("changed")], now + 1800000);
+  it("sends a new condition immediately after a delivery but suppresses the unchanged one", async () => {
+    expect(await delivery.claim(subscriptionId, [candidate()], now + 1)).toBeNull();
+    const changed = await delivery.claim(subscriptionId, [candidate("changed")], now + 1);
     expect(changed).not.toBeNull();
     if (!changed) throw new Error("Missing changed event");
-    await delivery.finish(changed, false, "unavailable", now + 1800000);
+    await delivery.finish(changed, false, "unavailable", now + 1);
   });
   it("BAJA cancels pending deliveries and prevents new sends", async () => {
     expect(await act({ kind: "stop" })).toContain("canceladas");

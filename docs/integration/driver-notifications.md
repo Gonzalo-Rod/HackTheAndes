@@ -1,20 +1,33 @@
 # Voice input, subscriptions and driver alerts
 
-The participant's current policy is **evaluate every 30 minutes, send only material
-updates, and use no quiet hours**. This supersedes the earlier 22:00–05:00 rule.
+The participant's current policy is **notify on newly detected route events and
+material changes, retain estimated possible-huaico alerts, and use no quiet hours**.
+This supersedes the former 30-minute evaluation/delivery cooldown. Public community
+reports now qualify without a confidence threshold, always labeled **SIN CONFIRMAR**;
+the score is not evidence of verification. Team/DEMO isolation remains in force.
 Photos, video, voice replies and calls are outside this implementation.
 
 ## Driver flow
 
 1. Send a text or Spanish voice note. Voice input becomes text before the existing
    query/report router; publication still requires the typed `CONFIRMAR <code>`.
-2. Send `SUSCRIBIR` for the available PE-22 axis, or
-   `SUSCRIBIR Chosica–La Oroya` for two uniquely resolvable catalog endpoints.
-   Distances follow the captured geometry; official kilometer calibration remains
-   unavailable. An unresolved stretch never becomes the whole corridor silently.
+2. Send `RUTA` (or `RUTA PRUEBA` for DEMO) and provide the **origin**, then the
+   **destination**. Each endpoint can be a static WhatsApp pin within 500 m of the
+   captured PE-22 axis, a uniquely resolved catalog landmark, or `KM 50.5` using
+   approximate **map distance**, never an official road marker. Unknown places ask
+   for a pin; no fallback silently expands the route. Coordinates are snapped once,
+   not tracked continuously, and raw pins are not stored in the route proposal.
+   Forward/reverse travel uses the same interval on the single captured road axis;
+   this does not calculate alternative roads, departure recommendations or an ETA.
+   `SUSCRIBIR` retains the whole-corridor option and named-endpoint compatibility.
 3. Review the proposed range and delivery terms, then type `ACTIVAR <code>`.
    The proposal expires in 30 minutes. A natural-language request alone does not
-   create a subscription. `SUSCRIBIR PRUEBA` creates an explicit test subscription.
+   create a subscription. Existing alerts continue while a replacement is drafted.
+   `RUTA CANCELAR` discards either the endpoint draft or final activation proposal;
+   bare `CANCELAR` discards an active endpoint draft. Queries work during setup;
+   a new `REPORTE` asks the driver to finish/cancel the route to avoid pin ambiguity.
+   Route replacement clears the old route's weekly PDF authorization; authorize
+   `SEMANAL` separately for the new range.
 4. `BAJA` or `STOP` cancels consent, pending requests and queued alerts, and disables
    the encrypted delivery reference. New consent can reactivate it. An already
    accepted in-flight provider message cannot be recalled.
@@ -25,10 +38,23 @@ PE-22 subscription per identity is supported; a newly confirmed range replaces i
 
 ## Alert eligibility and noise control
 
-The authenticated job checks every 30 minutes. There is no "everything is fine"
-message and no heartbeat to the driver. Successful deliveries have a rolling
-30-minute minimum interval. Up to three material updates are bundled; overflow
-remains eligible on a later evaluation. Retries reuse the delivery's provider key.
+Alert evaluation runs after a community publication transaction commits (Next.js
+`after`), after a confirmed complete SUTRAN poll, and after an hourly climate job.
+The source workflows call the same authenticated `/api/jobs/alerts` endpoint;
+background publication invokes the shared server service directly. Source detection
+still follows SUTRAN's ten-minute polling and the weather capture's hourly cadence;
+this is not an instantaneous upstream feed or the dashboard's browser polling rate.
+
+The former alert timer is now a **five-minute recovery/reconciliation job** for
+missed background work, retryable provider delivery and overflow. It sends no
+heartbeat or unchanged-condition message. A failed background call logs a visible
+recovery reason without undoing the committed report. Successful delivery has no
+30-minute cooldown; fingerprints and transactional leases suppress duplicates.
+Up to three newly reported events are bundled before climate-only backlog. Changed
+climate segments share one short notice (first three ranges plus an explicit count
+of additional ranges); their full delivered baseline is checkpointed. Unsent
+reported-event overflow stays eligible for the next evaluation. Retries reuse the
+same provider key and recheck current source eligibility and consent.
 
 - **SUTRAN:** a fresh complete source poll, a mapped location inside the captured
   corridor, and an explicit changed condition. Initial normal status is a baseline;
@@ -40,11 +66,12 @@ remains eligible on a later evaluation. Retries reuse the delivery's provider ke
   driver notice gives approximate kilometer ranges and the forecast end time in Peru time,
   with a short estimated/not-confirmed warning. `EXPOSICION` supplies rainfall, source
   times, susceptibility and experimental association details. It is not a probability.
-- **Community:** initial unconfirmed reports have confidence 0.2 and do not trigger
-  production alerts. The release's conservative notification gate is 0.7; the full
-  confidence/clearing model is still pending. Explicit DEMO incidents can exercise
-  delivery only to explicitly consenting test subscriptions; team/test traffic stays
-  out of impact counters. Community messages retain `NO CONFIRMADO` attribution.
+- **Community:** active public reports are eligible as **unconfirmed reports**,
+  even at the initial 0.2 score. The full confidence/clearing model remains pending;
+  alerts never upgrade that score to verified evidence. Non-test team incidents
+  remain excluded, and explicit DEMO incidents only reach test subscriptions.
+  Test/team traffic stays out of impact counters. Dedupe means another report for
+  the same unchanged incident does not send a duplicate alert.
 - **SENAMHI:** automated advisories remain disabled until the captured products have
   verified temporal eligibility. They remain visible as separate official context.
 
@@ -154,3 +181,21 @@ unlocked proposals/transcript and response caches under the documented operator
 retention policy (initial cache policy: seven days), while retaining completed
 webhook and delivery keys needed to prevent replay. Historical consent and delivery
 state is server-only and never returned to browser roles.
+
+## Route storage and operational setup
+
+Apply `20261018044500_route_alert_intake.sql` with the existing database operator.
+Route proposals live in `private.route_intake`, with authenticated encryption,
+30-minute expiry, server-only RLS and no browser privileges. Commands reuse encrypted
+replay results and the per-sender transaction lock. A proposal ID/origin check rejects
+stale concurrent endpoint updates. Completed routes reuse the existing subscription
+range and delivery outbox, so no new credential or routing provider is required.
+Expired encrypted proposals follow the same pruning policy as subscription drafts.
+
+The n8n SUTRAN and climate workflows append an authenticated alert-evaluation node;
+the original alert workflow becomes recovery every five minutes. Reuse the existing
+Header Auth credential. Workflow timeouts are 330 seconds for SUTRAN plus delivery,
+300 for climate plus delivery, and 180 for recovery, below their schedule intervals.
+Webhook processing allows up to 180 seconds including background notification work.
+Weekly PDF schedules and consent remain separate. Outside-window delivery still
+requires a provider-approved alert template; lack of approval leaves work pending.

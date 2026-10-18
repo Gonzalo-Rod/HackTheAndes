@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import type { Pool } from "pg";
 import { z } from "zod";
 import { alertCandidateSchema, checkpointSchema, type AlertCandidate } from "@/contracts/notifications";
-import { ALERT_INTERVAL_MS, ALERT_LEASE_MS, planAlerts } from "@/domain/alerts/policy";
+import { ALERT_LEASE_MS, planAlerts } from "@/domain/alerts/policy";
 import { EncryptedContactSchema, decryptContact } from "@/integrations/security/contacts";
 import { formatAlertBundle } from "@/domain/alerts/messages";
 import { transaction } from "./transaction";
@@ -45,7 +45,6 @@ export function createAlertDeliveryRepository(pool: Pool, encryption: { key: str
         );
         if (!result.rowCount) return null;
         const sub = subscriptionSchema.parse(result.rows[0]);
-        if (sub.lastAlertAt && nowMs - sub.lastAlertAt.getTime() < ALERT_INTERVAL_MS) return null;
         await client.query(
           "update private.alert_deliveries set status='expired',lease_id=null,lease_until=null where subscription_id=$1 and status='pending' and expires_at<=$2",
           [subscriptionId, new Date(nowMs)],

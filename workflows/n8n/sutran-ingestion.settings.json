@@ -6,5 +6,5 @@
   "saveManualExecutions": true,
   "saveDataErrorExecution": "all",
   "saveDataSuccessExecution": "all",
-  "executionTimeout": 150
+  "executionTimeout": 330
 }

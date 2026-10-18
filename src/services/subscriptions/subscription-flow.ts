@@ -4,6 +4,7 @@ import { roadContextResponseSchema } from "@peruroad/road-data/context/contracts
 import type { SubscriptionRouter, SubscriptionRange } from "@/contracts/notifications";
 import type { SubscriptionRepository, SubscriptionAction } from "@/db/subscriptions";
 import { keyedDigest, phoneKey } from "@/integrations/security/contacts";
+import { createRouteFlow } from "./route-flow";
 import { logger } from "@/lib/logger";
 export function senderKey(from: string, pepper: string) {
   return phoneKey(from, pepper) ?? keyedDigest(from, pepper, "zavu-contact-v1");
@@ -18,6 +19,7 @@ export function createSubscriptionFlow(deps: {
   now: () => number;
   newId?: () => string;
 }): SubscriptionRouter {
+  const route = createRouteFlow(deps);
   return {
     async touch(message) {
       const now = deps.now();
@@ -25,6 +27,20 @@ export function createSubscriptionFlow(deps: {
       await deps.repository.touch(senderKey(message.from, deps.pepper), new Date(at).toISOString());
     },
     async handle(message, requestId, intent) {
+      const key = senderKey(message.from, deps.pepper);
+      const eventKey = createHash("sha256").update(`subscription:${message.messageId}`).digest("hex");
+      const act = (action: SubscriptionAction) =>
+        deps.repository.act({
+          key,
+          eventKey,
+          destination: message.from,
+          action,
+          now: new Date(deps.now()).toISOString(),
+          isTeam: deps.teamKeys.includes(key),
+          isTest: deps.testKeys.includes(key),
+        });
+      const routed = await route(message, requestId, { key, eventKey, isTest: deps.testKeys.includes(key) }, act);
+      if (routed) return routed;
       if (message.messageType !== "text") return null;
       const text = message.text.trim();
       const normalized = text
@@ -35,7 +51,6 @@ export function createSubscriptionFlow(deps: {
       const activate = /^ACTIVAR\s+([A-F0-9]{8})$/.exec(normalized);
       const subscribe = /^(SUSCRIBIR|AVISAME)(?:\s|$)/.test(normalized) || intent === "subscribe";
       if (!stop && !activate && !subscribe) return null;
-      const key = senderKey(message.from, deps.pepper);
       let action: SubscriptionAction;
       if (stop) action = { kind: "stop" };
       else if (activate) action = { kind: "activate", code: activate[1] ?? "" };
@@ -84,15 +99,7 @@ export function createSubscriptionFlow(deps: {
         }
         action = { kind: "prepare", range, code: (deps.newId ?? randomUUID)().replaceAll("-", "").slice(0, 8).toUpperCase(), isTest };
       }
-      return deps.repository.act({
-        key,
-        eventKey: createHash("sha256").update(`subscription:${message.messageId}`).digest("hex"),
-        destination: message.from,
-        action,
-        now: new Date(deps.now()).toISOString(),
-        isTeam: deps.teamKeys.includes(key),
-        isTest: deps.testKeys.includes(key),
-      });
+      return act(action);
     },
   };
 }

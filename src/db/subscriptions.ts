@@ -3,14 +3,19 @@ import { z } from "zod";
 import { encryptContact, decryptContact, EncryptedContactSchema } from "@/integrations/security/contacts";
 import { subscriptionRangeSchema, type SubscriptionRange } from "@/contracts/notifications";
 import { transaction } from "./transaction";
+import { actRoute, readRouteState } from "./route-intake";
+import type { RouteAction } from "@/contracts/route-subscriptions";
+import { subscriptionProposal } from "@/domain/subscriptions/messages";
 import { actWeeklyPreference, type WeeklyPreferenceAction } from "./weekly-preferences";
 export type SubscriptionAction =
   | { kind: "prepare"; range: SubscriptionRange; code: string; isTest: boolean }
   | { kind: "activate"; code: string }
   | { kind: "stop" }
+  | RouteAction
   | WeeklyPreferenceAction;
 export function createSubscriptionRepository(pool: Pool, encryption: { key: string; version: string }) {
   return {
+    routeState: (key: string, eventKey: string, now: string) => readRouteState(pool, encryption, key, eventKey, now),
     async bounds(revision: string) {
       const result = await pool.query(
         'select min(distance_from_origin_start_km)::float8 as "startKm",max(distance_from_origin_end_km)::float8 as "endKm" from public.segments where geometry_revision=$1',
@@ -46,9 +51,17 @@ export function createSubscriptionRepository(pool: Pool, encryption: { key: stri
         }
         let reply: string;
         const action = input.action;
-        if (action.kind === "weeklyPrepare" || action.kind === "weeklyActivate" || action.kind === "weeklyStop") {
+        if (
+          action.kind === "routeStart" ||
+          action.kind === "routeCancel" ||
+          action.kind === "routeOrigin" ||
+          action.kind === "routeDestination"
+        ) {
+          reply = await actRoute(client, encryption, input.key, action, input.now);
+        } else if (action.kind === "weeklyPrepare" || action.kind === "weeklyActivate" || action.kind === "weeklyStop") {
           reply = await actWeeklyPreference(client, input.key, action, input.now);
         } else if (action.kind === "stop") {
+          await client.query("delete from private.route_intake where phone_key=$1", [input.key]);
           await client.query("update public.subscriptions set opted_out_at=$2 where phone_key=$1 and opted_out_at is null", [
             input.key,
             input.now,
@@ -71,11 +84,12 @@ export function createSubscriptionRepository(pool: Pool, encryption: { key: stri
             "Alertas canceladas. También se canceló el PDF semanal. No recibirás nuevas notificaciones automáticas. Para volver, escribe SUSCRIBIR.";
         } else if (action.kind === "prepare") {
           const range = subscriptionRangeSchema.parse(action.range);
+          await client.query("delete from private.route_intake where phone_key=$1", [input.key]);
           await client.query(
             `insert into private.subscription_intake(phone_key,code,range,is_test,expires_at) values($1,$2,$3::jsonb,$4,$5::timestamptz+interval '30 minutes') on conflict(phone_key) do update set code=excluded.code,range=excluded.range,is_test=excluded.is_test,expires_at=excluded.expires_at`,
             [input.key, action.code, JSON.stringify(range), action.isTest, input.now],
           );
-          reply = `${action.isTest ? "DEMO · " : ""}Tramo: ${range.label}. Alertas de cambios viales y exposición climática estimada, como máximo cada 30 minutos, solo con novedades y sin horario de silencio. WhatsApp; fuera de 24 h requiere plantilla aprobada. Responde ACTIVAR ${action.code} para autorizarlo, o BAJA. Las distancias siguen el eje disponible, no km oficiales.`;
+          reply = subscriptionProposal(range, action.code, action.isTest);
         } else {
           const pending = await client.query(
             'select code,range,is_test as "isTest",expires_at as "expiresAt" from private.subscription_intake where phone_key=$1',
@@ -121,7 +135,7 @@ export function createSubscriptionRepository(pool: Pool, encryption: { key: stri
                 z.uuid().parse(saved.rows[0]?.id),
               ]);
               await client.query("delete from private.subscription_intake where phone_key=$1", [input.key]);
-              reply = `${draft.isTest ? "DEMO · " : ""}Suscripción activa: ${draft.range.label}. Revisaremos novedades cada 30 minutos, a cualquier hora; sin novedades no se envía nada. BAJA cancela. No se enviarán fotos ni llamadas. Si WhatsApp no permite enviar, la entrega quedará pendiente; ESTADO y EXPOSICION siguen disponibles.`;
+              reply = `${draft.isTest ? "DEMO · " : ""}Suscripción activa: ${draft.range.label}. Avisaremos cuando detectemos novedades en este tramo: reportes SIN CONFIRMAR, cambios SUTRAN y posibles huaicos estimados. Sin novedades no enviamos nada. STOP o BAJA cancela. Los PDF de esta ruta requieren autorizar SEMANAL por separado. No se enviarán fotos ni llamadas. Si WhatsApp no permite enviar, la entrega quedará pendiente; ESTADO y EXPOSICION siguen disponibles.`;
             }
           }
         }

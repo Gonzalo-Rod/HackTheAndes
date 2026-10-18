@@ -94,3 +94,17 @@ describe("plain Spanish driver alerts", () => {
     expect(plan.selected).toHaveLength(0);
   });
 });
+it("summarizes a large climate change batch without losing the uncertainty or opt-out", () => {
+  const selected = Array.from({ length: 40 }, (_, i) => candidate({ key: `exposure:${i}`, kind: "exposure", startKm: i, endKm: i + 1 }));
+  const body = formatAlertBundle(selected, false);
+  expect(body).toContain("37 tramos más");
+  expect(body).toContain("no un evento confirmado");
+  expect(body).toContain("BAJA: cancelar");
+  expect(body.length).toBeLessThanOrEqual(MAX_ALERT_MESSAGE_CHARACTERS);
+});
+it("attributes a new official alert with unknown traffic status without claiming closure", () => {
+  const text = officialAlertText("unknown", "Synthetic notice", "km aprox. 20");
+  expect(text).toContain("SUTRAN");
+  expect(text).toContain("desconocido");
+  expect(text).not.toContain("vía cerrada");
+});

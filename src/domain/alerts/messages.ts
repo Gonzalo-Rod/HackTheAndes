@@ -32,8 +32,13 @@ function peruTime(timestamp: string) {
     hourCycle: "h23",
   }).format(new Date(timestamp));
 }
-export function officialAlertText(status: "normal" | "restringido" | "interrumpido", title: string, location: string): string {
-  const condition = { normal: "informa tránsito normal", restringido: "paso restringido", interrumpido: "vía cerrada" }[status];
+export function officialAlertText(status: "normal" | "restringido" | "interrumpido" | "unknown", title: string, location: string): string {
+  const condition = {
+    normal: "informa tránsito normal",
+    restringido: "paso restringido",
+    interrumpido: "vía cerrada",
+    unknown: "nuevo aviso; estado de tránsito desconocido",
+  }[status];
   return `SUTRAN: ${condition}, ${location}. ${shortText(title, 65)}`;
 }
 export function communityAlertText(type: string, location: string, isTest: boolean): string {
@@ -50,7 +55,8 @@ export function formatAlertBundle(selected: AlertCandidate[], isTest: boolean): 
       .map((c) => c.forecastUntil)
       .filter((t): t is string => t !== undefined)
       .sort()[0];
-    lines.push(`Atención por lluvias · km aprox. del mapa: ${ranges.join(", ")} (no oficiales).`);
+    lines.push(`Atención por lluvias · km aprox. del mapa: ${ranges.slice(0, 3).join(", ")} (no oficiales).`);
+    if (ranges.length > 3) lines.push(`Y ${ranges.length - 3} tramos más de tu ruta. EXPOSICION: detalles.`);
     if (until) lines.push(`Hasta ${peruTime(until)} (hora Perú).`);
     lines.push("Lluvia prevista en zonas propensas a huaicos o derrumbes. Es una estimación, no un evento confirmado.");
   }

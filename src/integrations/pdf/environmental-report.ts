@@ -42,6 +42,7 @@ export async function renderEnvironmentalPdf(raw: EnvironmentalReport): Promise<
   const clean = (s: string) =>
     s
       .replace(/[–—−]/g, "-")
+      .replace(/→/g, " a ")
       .replace(/\u00a0/g, " ")
       .replace(/[^\u0020-\u007e\u00a1-\u00ff]/g, "");
   function newPage() {

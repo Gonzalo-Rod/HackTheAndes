@@ -52,7 +52,13 @@
       },
       "executeOnce": true,
       "onError": "stopWorkflow",
-      "retryOnFail": false
+      "retryOnFail": false,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "lQd0aYS0zCckQKI7",
+          "name": "PeruRoad ingestion job"
+        }
+      }
     },
     {
       "id": "6415854e-8717-48e1-a4ea-4d03668974cc",
@@ -120,6 +126,41 @@
         "width": 1200,
         "height": 300
       }
+    },
+    {
+      "id": "source-change-route-alerts",
+      "name": "Deliver newly detected route alerts",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [960, 80],
+      "executeOnce": true,
+      "retryOnFail": false,
+      "onError": "stopWorkflow",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "lQd0aYS0zCckQKI7",
+          "name": "PeruRoad ingestion job"
+        }
+      },
+      "parameters": {
+        "method": "POST",
+        "url": "https://peruroad-climate-git-feat-data-model-gozlie.vercel.app/api/jobs/alerts",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 170000,
+          "redirect": {
+            "redirect": {
+              "followRedirects": false
+            }
+          },
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      }
     }
   ],
   "connections": {
@@ -147,7 +188,13 @@
     },
     "Backend confirmed completion": {
       "main": [
-        [],
+        [
+          {
+            "node": "Deliver newly detected route alerts",
+            "type": "main",
+            "index": 0
+          }
+        ],
         [
           {
             "node": "Fail unconfirmed ingestion",
@@ -177,7 +224,7 @@
     "saveManualExecutions": true,
     "saveDataErrorExecution": "all",
     "saveDataSuccessExecution": "all",
-    "executionTimeout": 150
+    "executionTimeout": 330
   },
   "active": false,
   "nodeGroups": [
@@ -187,7 +234,8 @@
       "nodeNames": [
         "Archive SUTRAN through backend",
         "Backend confirmed completion",
-        "Fail unconfirmed ingestion"
+        "Fail unconfirmed ingestion",
+        "Deliver newly detected route alerts"
       ],
       "description": "Calls the authenticated backend and marks any unconfirmed ingestion as failed."
     }

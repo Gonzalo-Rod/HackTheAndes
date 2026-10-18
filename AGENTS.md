@@ -23,6 +23,13 @@ validation and environmental explanations/indicators in the Team Plan checkpoint
 Weekly reports now use separately authorized driver PDF attachments; see
 `docs/integration/weekly-environmental-pdf.md`. Do not enroll existing short-alert
 subscribers automatically or replace PDF delivery with a public report link.
+**Latest alert update:** source changes trigger route-filtered WhatsApp alerts;
+include active public community reports as explicitly unconfirmed, without treating
+the placeholder confidence score as verification. `RUTA` selects origin/destination
+on the captured PE-22 axis; static pins are not continuous phone tracking. Keep
+estimated possible-huaico alerts, duplicate suppression, five-minute recovery,
+typed activation and STOP/BAJA cancellation. Do not reintroduce the 30-minute
+delivery cooldown; see `docs/integration/driver-notifications.md`.
 Payments, Qatom and Yape remain outside the participant-authorized implementation
 scope. Do not treat proposed
 integrations, metrics, or predictions as verified results. Before writing code,

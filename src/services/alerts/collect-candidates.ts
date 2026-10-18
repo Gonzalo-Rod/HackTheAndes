@@ -6,8 +6,8 @@ import type { ExposureLayer } from "@/contracts/exposure";
 import { ExposureLayerSchema } from "@/contracts/exposure";
 import { alertCandidateSchema, type AlertCandidate } from "@/contracts/notifications";
 import { readAlertLandmarks } from "@/db/alert-landmarks";
+import { isCommunityAlertEligible } from "@/domain/alerts/policy";
 import { alertLocation, officialAlertText, communityAlertText } from "@/domain/alerts/messages";
-import { COMMUNITY_ALERT_CONFIDENCE } from "@/domain/alerts/policy";
 /** Matches C's 30-minute complete-poll freshness boundary. */
 const OFFICIAL_MAX_AGE_MS = 30 * 60_000;
 /** Community evidence expires from notifications after three hours without another report. */
@@ -34,7 +34,7 @@ export async function collectAlertCandidates(
   ) {
     for (const item of official.alerts) {
       const a = item.alert;
-      if (!a.location || a.expired || a.notYetValid || a.roadStatus === "unknown") continue;
+      if (!a.location || a.expired || a.notYetValid) continue;
       const located = roadContextResponseSchema.parse(await deps.context({ kind: "pin", ...a.location }, requestId));
       if (
         located.kind !== "location" ||
@@ -49,7 +49,7 @@ export async function collectAlertCandidates(
         key: `sutran:${a.externalId}`,
         fingerprint: `${a.roadStatus}:${a.title.slice(0, 200)}`,
         kind: "official",
-        level: a.roadStatus === "interrumpido" ? 3 : a.roadStatus === "restringido" ? 2 : 0,
+        level: a.roadStatus === "interrumpido" ? 3 : a.roadStatus === "restringido" ? 2 : a.roadStatus === "unknown" ? 1 : 0,
         startKm: km,
         endKm: km,
         expiresAt: new Date(Date.parse(official.asOf) + OFFICIAL_MAX_AGE_MS).toISOString(),
@@ -78,9 +78,8 @@ export async function collectAlertCandidates(
     )
     .parse(community.rows);
   for (const row of rows) {
-    if (!row.isTest && (row.isTeam || row.confidence < COMMUNITY_ALERT_CONFIDENCE)) continue;
-    // Demonstrations only go to explicit test subscriptions. Production unverified scores do not qualify.
-    if (row.status !== "active") continue;
+    if (!isCommunityAlertEligible(row)) continue;
+    // Participant policy includes unconfirmed public reports, always labeled; team/demo data stays isolated.
     candidates.push({
       key: `community:${row.id}`,
       fingerprint: `${row.status}:${row.type}`,

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { planAlerts, ALERT_INTERVAL_MS } from "./policy";
+import { planAlerts, isCommunityAlertEligible } from "./policy";
 import type { AlertCandidate } from "@/contracts/notifications";
 const NOW = Date.parse("2026-10-18T03:30:00Z");
 const range = { startKm: 10, endKm: 30, isTest: false };
@@ -15,8 +15,7 @@ const candidate = (v: Partial<AlertCandidate> = {}): AlertCandidate => ({
   isTest: false,
   ...v,
 });
-describe("30-minute material alert policy without quiet hours", () => {
-  it("uses a 30-minute interval", () => expect(ALERT_INTERVAL_MS).toBe(1800000));
+describe("Event-triggered material alert policy without quiet hours", () => {
   it("allows a relevant closure at 22:30 Lima", () => expect(planAlerts([candidate()], {}, range, NOW).selected).toHaveLength(1));
   it("does not repeat unchanged conditions", () =>
     expect(planAlerts([candidate()], { "source:one": { fingerprint: "closed", level: 3 } }, range, NOW).selected).toHaveLength(0));
@@ -57,4 +56,20 @@ describe("30-minute material alert policy without quiet hours", () => {
     expect(p.selected).toHaveLength(3);
     expect(planAlerts(c, p.checkpoint, range, NOW).selected).toHaveLength(2);
   });
+});
+
+it("delivers new reported events before a large climate batch without losing the climate backlog", () => {
+  const exposure = Array.from({ length: 40 }, (_, i) => candidate({ key: `exposure:${i}`, kind: "exposure", level: 3 }));
+  const report = candidate({ key: "community:new", kind: "community", level: 2 });
+  const first = planAlerts([...exposure, report], {}, range, NOW);
+  expect(first.selected.map((c) => c.key)).toEqual(["community:new"]);
+  const second = planAlerts([...exposure, report], first.checkpoint, range, NOW + 1);
+  expect(second.selected).toHaveLength(40);
+  expect(planAlerts([...exposure, report], second.checkpoint, range, NOW + 2).selected).toHaveLength(0);
+});
+it("allows unconfirmed public reports, keeping team/test isolation and inactive reports out", () => {
+  expect(isCommunityAlertEligible({ isTest: false, isTeam: false, status: "active" })).toBe(true);
+  expect(isCommunityAlertEligible({ isTest: false, isTeam: true, status: "active" })).toBe(false);
+  expect(isCommunityAlertEligible({ isTest: true, isTeam: true, status: "active" })).toBe(true);
+  expect(isCommunityAlertEligible({ isTest: false, isTeam: false, status: "cleared" })).toBe(false);
 });

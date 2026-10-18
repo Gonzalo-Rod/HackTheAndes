@@ -21,7 +21,7 @@ The main environmental workflow is implemented on the
 [shared Preview](https://peruroad-climate-git-feat-data-model-gozlie.vercel.app/?vista=pronostico)
 in `feat/data-model`: SUTRAN ingestion/history, rainfall and terrain inputs,
 versioned exposure assessments, dated dashboard windows, WhatsApp text/audio
-reports with explicit confirmation, subscriptions, conditional 30-minute alerts
+reports with explicit confirmation, subscriptions, conditional route alerts
 without quiet hours, and hourly climate refresh. The participant verified DEMO
 report publication, subscription activation, alert receipt and voice reporting.
 These are participant demonstrations, not independent user traction or validated
@@ -33,8 +33,8 @@ and reliability, not adding a transport planner. Remaining work, in order:
 1. **B — Trustworthy environmental reports:** reviewed corroboration/confidence,
    community/SUTRAN matching and clearing, two-minute mixed-input grouping, and
    extraction checks on real anonymized messages. Initial community dedupe and a
-   conservative unconfirmed score already exist; production community alerts
-   must not be unlocked by the score placeholder.
+   conservative unconfirmed score already exist. The participant now permits clearly
+   labeled unconfirmed public alerts; the placeholder score must never imply verification.
 2. **B — Reliable notifications:** verify approved-template delivery outside the
    24-hour conversation window and record scheduled-run/failure evidence. DEMO
    delivery is verified; out-of-window delivery is not. SMS is not an automatic
@@ -216,13 +216,13 @@ People near an incident send it to our Zavu WhatsApp number.
 ### F3. Subscribe and WhatsApp alerts (P0)
 
 - *"Avísame de la Central"* or *"Avísame Chosica–La Oroya"* creates a subscription for a km range; the bot confirms the range. Explicit opt-in; *"BAJA"* opts out at any time.
-- **Current delivery scope:** subscriptions and conditional alerts are implemented; a consenting participant verified a DEMO alert. Production community alerts still require the reviewed confidence policy, and delivery outside the 24-hour conversation window remains unverified. Paid packaging remains future commercial context under the existing payments exclusion.
+- **Current delivery scope:** subscriptions and conditional alerts are implemented; a consenting participant verified a DEMO alert. Participant update: include unconfirmed public reports with a clear label; confidence/clearing remains separate unfinished work. Delivery outside the 24-hour conversation window remains unverified. Paid packaging remains future commercial context under the existing payments exclusion.
 - **Triggers:**
-  - a new incident in the range with confidence ≥ the alert threshold (official SUTRAN incidents qualify directly);
+  - a newly detected SUTRAN notice or active public community report in the selected range; community reports stay explicitly **unconfirmed**, including initial reports;
   - an incident in the range is cleared;
   - a fresh, complete climate-exposure assessment for a linked segment in the subscribed range crosses a documented attention threshold, labeled **estimated climate exposure**;
   - a new, valid and temporally eligible SENAMHI advisory covers the range, attributed to SENAMHI and separate from our assessment.
-- **Noise control:** retain evaluation every 30 minutes and at most one bundled message per subscription per 30 minutes, only when relevant conditions change. **Participant update:** no quiet hours; alerts may arrive at any time. Unchanged conditions produce no message. Stale/incomplete assessment inputs suppress new automated climate-exposure escalation.
+- **Route and delivery update:** `RUTA` collects origin/destination by static pins, catalog places or approximate map kilometers, follows the available PE-22 axis, and requires typed activation. Only events intersecting that range qualify until `STOP`/`BAJA`; no continuous GPS, alternate-road navigation, ETA or F9 departure engine is implied. Evaluate after committed community publication, complete SUTRAN polling and hourly climate refresh; retain a five-minute recovery job, with no 30-minute delivery cooldown or quiet hours. Fingerprints suppress repeats; reported events take priority over a bounded climate notice, and stale/incomplete inputs suppress new climate escalation.
 - **Outside the 24-hour window:** an approved WhatsApp utility template, e.g. *"Alerta PeruRoad: {tipo} en {tramo}, {estado}. Responde ESTADO para más detalles."* Pending/unapproved templates leave delivery pending; SMS requires separate consent and implementation.
 
 ### F4. Trip watch and call alerts (P2; Route Pass and Company Predictions)
@@ -748,7 +748,7 @@ reports, calls and voice replies are optional; no departure flow is required.
 | 1 | Webhook → store report (download media) → crude extraction → incident → acknowledgment reply | A real WhatsApp message shows on the public map |
 | 2 | OpenAI transcription and schema-validated extraction (implemented); complete 2-minute grouping and real-message validation; preserve pin/gazetteer confirmation and missing-input follow-up | Tests pass on 10–20 real anonymized messages; synthetic fixtures remain labeled |
 | 2 | Dedupe against community and SUTRAN incidents; confidence v1; clearing logic | Tests for dedupe and confidence pass |
-| 2 | Subscriptions and alert engine (F3): free closure alerts vs pass alerts, conditional 30-minute bundling without quiet hours, approved-template fallback outside the 24 h window (SMS requires separate consent); send helper with retry | A subscriber receives an alert for a new incident |
+| 2 | Subscriptions and alert engine (F3): free closure alerts vs pass alerts, source-triggered route alerts with duplicate suppression, five-minute recovery and no quiet hours, approved-template fallback outside the 24 h window (SMS requires separate consent); send helper with retry | A subscriber receives an alert for a new incident |
 | 3 | Ask by WhatsApp (F2): short text replies with environmental exposure, source dates and map link; voice replies optional | Status/exposure questions receive source-grounded summaries |
 | Deferred / excluded | Departure questions (F9) are deferred; *PASE* payments are excluded | Neither flow is a delivery requirement; responses must not fabricate availability |
 | 4 | Weekly PDF opt-in, cancellation and document delivery; approved reply-PDF notice outside the conversation window (F6) | One consenting driver receives the PDF attachment; approval and receipt recorded separately |
@@ -841,7 +841,7 @@ excluding team members and test numbers.
 | 0:00–0:20 | **Problem.** One driver's story from our interviews + one figure (e.g. days the Central was closed during Yaku) |
 | 0:20–0:35 | **What it is.** PeruRoad Climate in one sentence |
 | 0:35–1:10 | **Environmental dashboard.** Show forecast rainfall overlapping susceptible terrain, a dated six-hour possible-huaico estimate, source freshness and assessed/unknown stretches. Current SUTRAN impacts remain separate context; historical reconstruction is optional and labeled |
-| 1:10–2:00 | **Live.** Send an explicitly labeled DEMO environmental voice report → review location → typed confirmation → unconfirmed DEMO marker. Show the consenting participant's recorded alert check, or run an eligible DEMO notification; do not imply one unverified public report triggers a production alert |
+| 1:10–2:00 | **Live.** Send an explicitly labeled DEMO environmental voice report → review location → typed confirmation → unconfirmed DEMO marker. Show the consenting participant's recorded alert check, or run an eligible DEMO notification; keep the participant-approved unverified-report alert explicitly labeled and separate from verified evidence |
 | 2:00–2:25 | **How it works.** Forecast rain + official susceptibility + valid advisories; code computes exposure, the LLM explains verified inputs; show source freshness, coverage and evaluation limits |
 | 2:25–2:45 | **Preparedness and value.** Explain which supported stretches need attention during the selected forecast window, why, and how subscribed people receive concise notices. Show actual user evidence and limitations; departure planning is deferred and payments excluded |
 | 2:45–3:00 | **Users and next steps.** Real usage numbers, interview quotes, Piura/Tumbes and more corridors |

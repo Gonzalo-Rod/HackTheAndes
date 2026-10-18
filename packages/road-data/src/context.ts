@@ -7,3 +7,4 @@ export {
 } from "./config/env.ts";
 export { createRoadContextClient } from "./integrations/peruroad/road-context-client.ts";
 export type { RoadContextClientResult } from "./integrations/peruroad/road-context-client.ts";
+export { createCorridorRoute } from "./domain/road-data/corridor-route.ts";

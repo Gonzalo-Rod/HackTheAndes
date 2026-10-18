@@ -5,6 +5,7 @@ const revision = "a".repeat(64),
   now = Date.parse("2026-10-18T03:00:00Z");
 function setup() {
   const repository: SubscriptionRepository = {
+    routeState: vi.fn(async () => ({ reply: null, draft: null })),
     bounds: vi.fn(async () => ({ startKm: 0, endKm: 174 })),
     touch: vi.fn(async () => {}),
     act: vi.fn(async (input) => input.action.kind),

@@ -1,3 +1,4 @@
+import { evaluateAlertsAfterChange } from "@/services/alerts/after-change";
 import { weeklyRuntime } from "@/services/weekly-reports/runtime";
 import { loadNotificationConfiguration } from "@/config/env";
 import { createZavuAudioSource } from "@/integrations/zavu/audio";
@@ -64,6 +65,7 @@ export function createZavuWebhook() {
     information: createDefaultRoadInformation(config.publicAppUrl),
     intentParser,
     reports: createReportFlow({
+      onPublication: evaluateAlertsAfterChange,
       repository: createReportRepository(database(), { key: platform.CONTACT_ENCRYPTION_KEY, version: platform.CONTACT_KEY_VERSION }),
       extractor: intentConfig ? createOpenAiReportExtractor(intentConfig) : null,
       intentParser,

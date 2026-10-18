@@ -3,8 +3,8 @@ const schedule = trigger({
   type: "n8n-nodes-base.scheduleTrigger",
   version: 1.4,
   config: {
-    name: "Every 30 minutes",
-    parameters: { rule: { interval: [{ field: "minutes", minutesInterval: 30 }] } },
+    name: "Every 5 minutes (recovery)",
+    parameters: { rule: { interval: [{ field: "minutes", minutesInterval: 5 }] } },
     position: [0, 0],
   },
   output: [{}],
@@ -39,7 +39,7 @@ const request = node({
   },
   output: [{ state: "example-only" }],
 });
-export default workflow("peruroad-driver-alerts", "PeruRoad — driver-alerts (30 minutes)")
+export default workflow("peruroad-driver-alerts", "PeruRoad — alert delivery recovery (5 minutes)")
   .add(schedule)
   .to(request)
   .add(manual)

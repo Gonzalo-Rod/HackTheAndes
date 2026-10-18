@@ -36,6 +36,7 @@ export interface ReportFlowDependencies {
   testPhoneKeys: readonly string[];
   now: () => number;
   newId?: () => string;
+  onPublication?: (requestId: string) => void;
 }
 const reply = (text: string): ReportRouting => ({ kind: "reply", text });
 const normalize = (text: string) =>
@@ -88,7 +89,8 @@ export function createReportFlow(deps: ReportFlowDependencies): ReportRouter {
     async route(message, requestId) {
       const senderKey = phoneKey(message.from, deps.pepper) ?? keyedDigest(message.from, deps.pepper, "zavu-contact-v1");
       const eventKey = createHash("sha256").update(`zavu:${message.messageId}`).digest("hex");
-      return deps.repository.run(senderKey, async (session) => {
+      let published = false;
+      const result = await deps.repository.run(senderKey, async (session) => {
         const replay = await session.replay(eventKey);
         if (replay) return replay;
         const nowMs = deps.now();
@@ -121,6 +123,7 @@ export function createReportFlow(deps: ReportFlowDependencies): ReportRouter {
             now,
             reply: (publication) => {
               if (!publication) throw new Error("Publication result missing");
+              published = true;
               return reply(publicationReply(publication, confirmed, deps.publicUrl));
             },
           });
@@ -205,6 +208,9 @@ export function createReportFlow(deps: ReportFlowDependencies): ReportRouter {
         }
         return save(reply(notice ?? draftPrompt(next)), next);
       });
+      // Notification work starts only after the report transaction commits.
+      if (published) deps.onPublication?.(requestId);
+      return result;
     },
   };
 }

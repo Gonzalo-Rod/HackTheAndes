@@ -3,41 +3,13 @@ import { randomUUID } from "node:crypto";
 import { createExposureRepository, refreshExposureWeather } from "@peruroad/road-data/exposure";
 import { createPrecipitationProvider, createDataSnapshotRepository, weatherCaptureSchema } from "@peruroad/road-data/weather";
 import { database } from "@/db/pool";
-import { createAlertDeliveryRepository } from "@/db/alert-deliveries";
-import { loadGeometryRevision, loadPlatformConfiguration, loadNotificationConfiguration, loadZavuConfiguration } from "@/config/env";
-import { createMessagingRoadContext } from "@/services/inbound/road-information";
-import { loadExposureView } from "@/services/platform/exposure";
 import { getJson } from "@/integrations/http/fetch-json";
-import { createZavuClient } from "@/integrations/zavu/client";
-import { createZavuTemplateSender } from "@/integrations/zavu/templates";
-import { collectAlertCandidates } from "./collect-candidates";
-import { createAlertDispatcher } from "./deliver-alerts";
 import { platformRoute, failure } from "@/services/platform/http";
+import { loadGeometryRevision } from "@/config/env";
+import { runAlertEvaluation } from "./runtime";
 export const evaluateAlerts = platformRoute("alerts.job", async (request) => {
   authorizeJob(request);
-  const requestId = randomUUID(),
-    config = loadZavuConfiguration(),
-    platform = loadPlatformConfiguration(),
-    notification = loadNotificationConfiguration();
-  const context = createMessagingRoadContext();
-  const candidates = await collectAlertCandidates(
-    {
-      pool: database(),
-      context: (input, id) => context.execute(input, id),
-      exposure: () => loadExposureView(24),
-      revision: loadGeometryRevision(),
-    },
-    Date.now(),
-    requestId,
-  );
-  const dispatch = createAlertDispatcher({
-    repository: createAlertDeliveryRepository(database(), { key: platform.CONTACT_ENCRYPTION_KEY, version: platform.CONTACT_KEY_VERSION }),
-    messaging: createZavuClient(config),
-    templates: createZavuTemplateSender({ ...config, templateId: notification.templateId }),
-    revision: loadGeometryRevision(),
-    now: Date.now,
-  });
-  return Response.json({ requestId, ...(await dispatch(candidates, requestId)) });
+  return Response.json(await runAlertEvaluation());
 });
 export const refreshClimate = platformRoute("climate.refresh", async (request) => {
   authorizeJob(request);

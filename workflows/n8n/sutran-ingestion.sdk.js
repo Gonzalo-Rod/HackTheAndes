@@ -1,4 +1,4 @@
-import { workflow, node, trigger, sticky, newCredential, ifElse, expr } from "@n8n/workflow-sdk";
+import { workflow, node, trigger, sticky, ifElse, expr } from "@n8n/workflow-sdk";
 
 const schedule = trigger({
   type: "n8n-nodes-base.scheduleTrigger",
@@ -29,7 +29,7 @@ const ingest = node({
     retryOnFail: false,
     onError: "stopWorkflow",
     credentials: {
-      httpHeaderAuth: newCredential("PeruRoad ingestion job"),
+      httpHeaderAuth: { id: "lQd0aYS0zCckQKI7", name: "PeruRoad ingestion job" },
     },
     parameters: {
       method: "POST",
@@ -122,8 +122,33 @@ const failed = node({
   output: [],
 });
 
+const notify = node({
+  type: "n8n-nodes-base.httpRequest",
+  version: 4.5,
+  config: {
+    name: "Deliver newly detected route alerts",
+    position: [960, 80],
+    executeOnce: true,
+    retryOnFail: false,
+    onError: "stopWorkflow",
+    credentials: { httpHeaderAuth: { id: "lQd0aYS0zCckQKI7", name: "PeruRoad ingestion job" } },
+    parameters: {
+      method: "POST",
+      url: "https://peruroad-climate-git-feat-data-model-gozlie.vercel.app/api/jobs/alerts",
+      authentication: "genericCredentialType",
+      genericAuthType: "httpHeaderAuth",
+      options: {
+        timeout: 170000,
+        redirect: { redirect: { followRedirects: false } },
+        response: { response: { responseFormat: "json" } },
+      },
+    },
+  },
+  output: [{ checked: 0, sent: 0, pending: 0, failed: 0 }],
+});
+
 const setup = sticky(
-  "## SUTRAN archive — every 10 minutes\nCalls the deployed HTTPS /api/jobs/sutran endpoint using the saved PeruRoad ingestion job Header Auth credential. Keep job secrets only in the credential store and database credentials only in the backend.\n\nOnly HTTP 200 with status complete succeeds. Partial results and HTTP failures stop the workflow visibly; there are no automatic POST retries. Each execution has its own backend audit ID.\n\nLive manual executions 4 and 5 were verified against Supabase on October 17, 2026. Timezone: America/Lima; HTTP timeout: 130 seconds; workflow timeout: 150 seconds. Verify automatic executions after publishing. Weather/risk and alert evaluation remain separate pending work.",
+  "## SUTRAN archive — every 10 minutes\nCalls the deployed HTTPS /api/jobs/sutran endpoint using the saved PeruRoad ingestion job Header Auth credential. Keep job secrets only in the credential store and database credentials only in the backend.\n\nOnly HTTP 200 with status complete succeeds. Partial results and HTTP failures stop the workflow visibly; there are no automatic POST retries. Each execution has its own backend audit ID.\n\nLive manual executions 4 and 5 were verified against Supabase on October 17, 2026. Timezone: America/Lima; HTTP timeout: 130 seconds; workflow timeout: 150 seconds. Verify automatic executions after publishing. Successful complete polls immediately evaluate new route alerts; unchanged conditions stay silent. Alert delivery also has independent recovery.",
   undefined,
   { position: [0, -320], width: 1200, height: 300, color: 5 },
 );
@@ -131,10 +156,10 @@ const setup = sticky(
 export default workflow("peruroad-sutran-ingestion", "PeruRoad — SUTRAN ingestion (10 minutes)")
   .add(schedule)
   .to(ingest)
-  .to(completed.onFalse(failed))
+  .to(completed.onTrue(notify).onFalse(failed))
   .add(manual)
   .to(ingest)
   .add(setup)
-  .group("SUTRAN archive", [ingest, completed, failed], {
+  .group("SUTRAN archive", [ingest, completed, failed, notify], {
     description: "Calls the authenticated backend and marks any unconfirmed ingestion as failed.",
   });

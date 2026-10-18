@@ -232,3 +232,28 @@ it("recognizes a spoken REPORTE DE PRUEBA marker without treating it as traction
   await s.flow.route(s.message("REPORTE DE PRUEBA. Hay un derrumbe"), "req");
   expect(s.getDraft()?.isTest).toBe(true);
 });
+it("requests notification evaluation only after a publication commits, never for a replay", async () => {
+  const s = await prepare();
+  const signal = vi.fn();
+  s.deps.onPublication = signal;
+  await pin(s);
+  const code = s.getDraft()?.confirmationCode;
+  const confirm = s.message(`CONFIRMAR ${code}`, "synthetic-confirm-trigger");
+  await s.flow.route(confirm, "req");
+  expect(signal).toHaveBeenCalledExactlyOnceWith("req");
+  await s.flow.route(confirm, "req");
+  expect(signal).toHaveBeenCalledOnce();
+});
+it("does not signal a source change when the publication transaction rolls back", async () => {
+  const s = await prepare();
+  await pin(s);
+  const signal = vi.fn();
+  s.deps.onPublication = signal;
+  const original = s.deps.repository.run;
+  s.deps.repository.run = async (key, work) => {
+    await original(key, work);
+    throw new Error("Synthetic commit failure");
+  };
+  await expect(s.flow.route(s.message(`CONFIRMAR ${s.getDraft()?.confirmationCode}`), "req")).rejects.toThrow("commit failure");
+  expect(signal).not.toHaveBeenCalled();
+});
