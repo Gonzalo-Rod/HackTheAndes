@@ -5,9 +5,9 @@ preparedness for rainfall-related hazards along the Rímac–PE-22 corridor. It
 combines forecast rainfall with mapped terrain susceptibility and valid official
 advisories, while retaining live road conditions and WhatsApp alerts for drivers.
 **Tasks 1–2 are implemented:** deterministic assessment, immutable Supabase
-persistence, a validated bundled fallback and `GET /api/exposure`. Driver subscriptions, conditional 30-minute alert evaluation and hourly weather
-refresh are implemented in the [notification integration](../integration/driver-notifications.md);
-the [dashboard forecast view](../integration/dashboard-forecast.md) displays dated six-hour estimated items and supported map stretches. Departure planning remains a later integration step.
+persistence, a validated bundled fallback and `GET /api/exposure`. Driver origin/destination subscriptions, source-triggered alert evaluation with
+five-minute recovery, and hourly weather refresh are implemented in the [notification integration](../integration/driver-notifications.md);
+the [dashboard forecast view](../integration/dashboard-forecast.md) displays dated six-hour estimated items and supported map stretches. Departure planning is deferred beyond hackathon delivery.
 Live delivery checks are recorded in the local progress log.
 
 ## Users and decisions
@@ -157,11 +157,13 @@ rainfall amounts, susceptibility, source age and rule limitations in `EXPOSICION
 which links the dashboard. Official kilometer references must remain distinct from
 uncalibrated distances along the captured road geometry. See the
 [short notification policy](../integration/driver-notifications.md#short-driver-notices). Do not imply live driver GPS;
-trip position remains a schedule estimate unless a person explicitly shares a pin.
+a shared pin locates a route endpoint once and does not enable continuous tracking.
 
 Keep explicit opt-in, opt-out, deduplication, bundling and approved provider
-delivery mechanisms. The participant now requires evaluation every 30 minutes,
-only material updates and **no quiet hours**. B owns messaging/subscription policy;
+delivery mechanisms. Evaluate after committed report publication and source refreshes,
+with five-minute recovery, no 30-minute delivery cooldown and **no quiet hours**.
+Public reports may trigger a clearly unconfirmed notice; they remain separate from
+estimated possible-huaico conditions and verified source statements. B owns messaging/subscription policy;
 C supplies validated assessments and changes. Stale/incomplete inputs suppress new automated
 climate-exposure escalation and expose an unavailable state. The same assessment
 cannot generate repeated alerts on every poll.
@@ -181,9 +183,9 @@ so the interface must not imply second-by-second weather observations.
 Keep the 3D road map, susceptibility/advisory layers, rainfall windows, route
 profiles, incident panels and history. Separate official conditions, estimated
 exposure, unverified reports and retrospective reconstruction. A segment with no
-usable assessment stays unknown. The departure planner can compare estimated
-exposure at assumed arrival times while showing confirmed restrictions separately;
-it cannot certify a safe departure or infer closure duration from alert expiry.
+usable assessment stays unknown. Driver routes filter these messages to the captured PE-22 interval; they do not
+choose alternative roads or provide departure recommendations. Departure planning
+remains deferred; source expiry cannot establish reopening or closure duration.
 
 ## Evaluation and next implementation order
 
