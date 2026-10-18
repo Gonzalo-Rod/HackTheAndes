@@ -1,6 +1,6 @@
 import type { AlertPassCheckout, AlertPassPayments } from "@/contracts/alert-passes";
 import type { AlertPassRequestRepository } from "@/db/alert-pass-requests";
-import { passDeadline } from "@/domain/subscriptions/alert-pass";
+import { passDeadline, passPrice } from "@/domain/subscriptions/alert-pass";
 import { logger } from "@/lib/logger";
 
 export function createAlertPassPayments(deps: {
@@ -38,7 +38,7 @@ export function createAlertPassPayments(deps: {
           return "Qatom no está disponible para preparar el enlace. No se activaron nuevas alertas. Escribe PAGAR para reintentar; no se realizó un cobro desde este chat.";
         }
       }
-      return `Pase por 7 días desde tu solicitud. Pago único: USD 0,001. Vence ${passDeadline(request.expiresAt.toISOString())} (Perú), sin renovación automática. Completa el pago en Qatom: ${url}\nSe habilita al verificar Qatom el cobro. Después escribe RUTA para elegir tu tramo sin otro pago, o PAGO para consultar. BAJA cancela las notificaciones.`;
+      return `Pase por 7 días desde tu solicitud. Pago único: ${passPrice()}. Vence ${passDeadline(request.expiresAt.toISOString())} (Perú), sin renovación automática. Completa el pago en Qatom: ${url}\nSe habilita al verificar Qatom el cobro. Después escribe RUTA para elegir tu tramo sin otro pago, o PAGO para consultar. BAJA cancela las notificaciones.`;
     },
   };
 }

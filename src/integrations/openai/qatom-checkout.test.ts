@@ -4,7 +4,7 @@ const requestId = "abcdef12-0000-4000-8000-000000000000";
 const checkout = {
   name: "Weekly alerts",
   description: "Seven days",
-  price: 0.001,
+  price: 0.01,
   checkout_url: "https://checkout.m.todaq.net/checkout/synthetic",
 };
 function body(overrides: Record<string, unknown> = {}) {
@@ -50,7 +50,7 @@ it.each([
   { error: { message: "failed" } },
   { arguments: JSON.stringify({ catalog_item_id: 124, arguments: { request_id: requestId } }) },
   { arguments: JSON.stringify({ catalog_item_id: 123, arguments: { request_id: "abcdef12-0000-4000-8000-000000000001" } }) },
-  { output: JSON.stringify({ ...checkout, price: 0.01 }) },
+  { output: JSON.stringify({ ...checkout, price: 0.001 }) },
   { output: JSON.stringify({ ...checkout, checkout_url: "https://evil.example/checkout" }) },
   { output: JSON.stringify({ ...checkout, checkout_url: "https://pay.m.todaq.net.evil.example/checkout" }) },
 ])("rejects changed calls, failed tools, changed prices and unsafe links: %j", async (overrides) => {
@@ -74,7 +74,7 @@ it("bounds a stalled Responses request", async () => {
 });
 
 it("accepts the live Qatom receipt from the MCP call while ignoring assistant prose", async () => {
-  const receipt = `Checkout session created for "Weekly alerts"\nPrice: $0.001 USD\nURL: ${checkout.checkout_url}`;
+  const receipt = `Checkout session created for "Weekly alerts"\nPrice: $0.01 USD\nURL: ${checkout.checkout_url}`;
   const response = body({ output: receipt });
   response.output.push({
     type: "message",

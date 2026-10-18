@@ -35,8 +35,9 @@ it does not start alerts. RUTA selects origin/destination with an existing valid
 pass, confirmed by RUTA ACTIVAR. Route changes and STOP preserve the remaining
 pass time and never create another charge or extend expiry. STOP disables route
 notifications and PDFs; route replacement still requires fresh weekly consent.
-**October 18 payment authorization:** implement a one-time 0.001 USD-TDN Qatom
-pass for seven elapsed days from the original WhatsApp request, using OpenAI
+**October 18 payment authorization (price updated by the participant):** implement
+a one-time 0.01 USD-TDN Qatom pass for seven elapsed days from the original
+WhatsApp request, using OpenAI
 Responses with Qatom MCP guest checkout, verified fulfilment and server-enforced
 expiry. See `docs/integration/qatom-alert-passes.md`; this supersedes the earlier
 payment exclusion only for weekly WhatsApp alerts. Yape remains excluded. Do not treat proposed

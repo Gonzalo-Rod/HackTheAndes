@@ -23,7 +23,9 @@ function setup(overrides: Record<string, unknown> = {}) {
 }
 it("reuses a persisted link without another OpenAI request", async () => {
   const s = setup({ url: "https://checkout.m.todaq.net/saved", leaseId: null });
-  expect(await s.service.checkout("key", "trace")).toContain("/saved");
+  const reply = await s.service.checkout("key", "trace");
+  expect(reply).toContain("/saved");
+  expect(reply).toContain("Pago único: USD 0,01");
   expect(s.provider.create).not.toHaveBeenCalled();
 });
 it.each([{ status: "cancelled" }, { status: "expired" }, { expiresAt: new Date(now) }])(

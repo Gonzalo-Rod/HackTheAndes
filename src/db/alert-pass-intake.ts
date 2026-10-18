@@ -1,6 +1,6 @@
 import type { PoolClient } from "pg";
 import type { SubscriptionRange } from "@/contracts/notifications";
-import { alertPassWindow, passDeadline } from "@/domain/subscriptions/alert-pass";
+import { alertPassWindow, passDeadline, passPrice } from "@/domain/subscriptions/alert-pass";
 import { encryptContact } from "@/integrations/security/contacts";
 
 export async function prepareAlertPass(
@@ -39,5 +39,5 @@ export async function prepareAlertPass(
     ],
   );
   await client.query("delete from private.subscription_intake where phone_key=$1", [input.key]);
-  return `Solicitud de alertas por 7 días: USD 0,001, pago único con Qatom. Vence el ${passDeadline(window.expiresAt)} (Perú), contando desde tu solicitud, sin renovación automática. Aún no está activa. Escribe PAGAR para obtener el enlace o BAJA para cancelar.`;
+  return `Solicitud de alertas por 7 días: ${passPrice()}, pago único con Qatom. Vence el ${passDeadline(window.expiresAt)} (Perú), contando desde tu solicitud, sin renovación automática. Aún no está activa. Escribe PAGAR para obtener el enlace o BAJA para cancelar.`;
 }

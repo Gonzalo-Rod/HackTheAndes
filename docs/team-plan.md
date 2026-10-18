@@ -1,8 +1,8 @@
 # Hack the Andes — Team Plan
 
 **October 18 participant authorization:** implement weekly WhatsApp alert access
-for a single 0.001 USD-TDN payment through Qatom, with OpenAI Responses calling
-Qatom MCP. The pass ends 168 elapsed hours after the original request and does
+for a single 0.01 USD-TDN payment through Qatom (participant-updated price), with
+OpenAI Responses calling Qatom MCP. The pass ends 168 elapsed hours after the original request and does
 not renew. This supersedes earlier payment exclusions below only for this feature;
 Yape and other commercial plans remain excluded. The implementation, rollout,
 configuration and launch-verification boundaries are documented in

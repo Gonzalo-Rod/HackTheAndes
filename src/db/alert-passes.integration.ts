@@ -46,7 +46,7 @@ function purchase(transactionId = randomUUID()): SettledPurchase {
   return {
     transaction_id: transactionId,
     catalog_item_id: 123,
-    amount: "0.001",
+    amount: "0.01",
     dq: "synthetic-usd",
     settled_at: new Date(now + 1).toISOString(),
     dispatch_status: "pending",
@@ -83,7 +83,7 @@ afterAll(async () => {
 });
 it("requires settled payment after typed consent and stores a durable request", async () => {
   const p = await prepare();
-  expect(p.reply).toContain("USD 0,001");
+  expect(p.reply).toContain("USD 0,01");
   expect(p.reply).toContain("Aún no está activa");
   expect((await pool.query("select id from public.subscriptions where phone_key=$1", [p.key])).rowCount).toBe(0);
   const a = await requests.claim(p.key, now + 2, p.activationEvent),

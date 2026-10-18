@@ -5,7 +5,7 @@ const id = "b2b0d2c6-1f4e-4a90-9a1e-2c9a4a7f0f11";
 const sale = {
   transaction_id: id,
   catalog_item_id: 123,
-  amount: "0.001",
+  amount: "0.01",
   dq: "synthetic",
   settled_at: "2026-10-18T04:00:00Z",
   dispatch_status: "pending",
@@ -55,9 +55,9 @@ it.each([{ access_token: "synthetic", expires_at: 0 }, { access_token: "syntheti
     expect(fetchImpl).toHaveBeenCalledTimes(1);
   },
 );
-it("does not use malformed settled-sale data", async () => {
+it.each(["0.001", "1.000"])("rejects a settled sale at the previous or unrelated price %s", async (amount) => {
   const fetchImpl = vi.fn<typeof fetch>(async (_url, init) =>
-    Response.json(init?.method === "POST" ? token : { purchase: { ...sale, amount: "1.000" } }),
+    Response.json(init?.method === "POST" ? token : { purchase: { ...sale, amount } }),
   );
   await expect(createQatomPurchaseVerifier(config, { fetchImpl }, () => 0).purchase(id, "trace")).rejects.toThrow();
 });

@@ -1,7 +1,12 @@
 import { z } from "zod";
-import { checkoutUrlSchema } from "@/contracts/alert-passes";
+import { ALERT_PASS_PRICE, checkoutUrlSchema } from "@/contracts/alert-passes";
 
-const checkoutSchema = z.object({ name: z.string(), description: z.string(), price: z.literal(0.001), checkout_url: checkoutUrlSchema });
+const checkoutSchema = z.object({
+  name: z.string(),
+  description: z.string(),
+  price: z.literal(Number(ALERT_PASS_PRICE)),
+  checkout_url: checkoutUrlSchema,
+});
 
 function decodeCheckoutText(text: string): unknown {
   try {

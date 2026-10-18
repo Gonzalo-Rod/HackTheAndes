@@ -1,5 +1,6 @@
 import catalog from "../../../qatom/catalog.json";
 import { ALERT_PASS_DURATION_MS, ALERT_PASS_PRICE } from "@/contracts/alert-passes";
+import { passPrice } from "@/domain/subscriptions/alert-pass";
 
 export function alertPlan() {
   return Response.json(
@@ -14,7 +15,7 @@ export function alertPlan() {
       activation: "Typed ACTIVAR consent, followed by a verified settled Qatom payment",
       cancel_commands: ["STOP", "BAJA"],
       summary:
-        "Pago único de USD 0,001 por alertas hasta 7 días desde la solicitud, sin renovación automática. Reportar y consultar ESTADO o EXPOSICION sigue siendo gratuito.",
+        `Pago único de ${passPrice()} por alertas hasta 7 días desde la solicitud, sin renovación automática. Reportar y consultar ESTADO o EXPOSICION sigue siendo gratuito.`,
     },
     { headers: { "Cache-Control": "public, max-age=300" } },
   );

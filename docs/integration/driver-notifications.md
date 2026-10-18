@@ -36,7 +36,8 @@ Photos, video, voice replies and calls are outside this implementation.
    accepted in-flight provider message cannot be recalled.
 
 Only consenting subscribers with a current weekly pass receive proactive messages.
-The October 18 authorization adds a one-time USD 0.001 Qatom purchase for seven
+The October 18 authorization, with the participant's price update, adds a
+one-time USD 0.01 Qatom purchase for seven
 elapsed days from the original request, using OpenAI Responses and Qatom MCP;
 see [payment setup and verification](qatom-alert-passes.md). `SUSCRIBIR`
 requests payment after typed consent; `RUTA` requires an existing pass and never

@@ -1,7 +1,12 @@
 import { z } from "zod";
 import catalog from "../../qatom/catalog.json";
 
-export const ALERT_PASS_PRICE = z.literal("0.001").parse(catalog.items[0].price);
+// Qatom supports positive USD-TDN prices with at most three decimal places.
+export const ALERT_PASS_PRICE = z
+  .string()
+  .regex(/^(?:0|[1-9]\d*)(?:\.\d{1,3})?$/)
+  .refine((value) => Number.isFinite(Number(value)) && Number(value) > 0)
+  .parse(catalog.items[0].price);
 export const ALERT_PASS_DURATION_MS = 7 * 24 * 60 * 60_000;
 export const alertPassInputSchema = z.object({ request_id: z.uuid() }).strict();
 export const settledPurchaseSchema = z.object({

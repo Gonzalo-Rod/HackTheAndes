@@ -97,7 +97,7 @@ in the [training handoff](docs/data/logistic-pipeline.md). No real-data model ha
 been trained or evaluated in this integration, and no real
 WhatsApp report or real user validation is claimed. The October 18 participant
 authorization adds a [Qatom weekly alert pass](docs/integration/qatom-alert-passes.md):
-`SUSCRIBIR 7 DIAS`, a one-time USD 0.001 checkout through OpenAI Responses and
+`SUSCRIBIR 7 DIAS`, a one-time USD 0.01 checkout through OpenAI Responses and
 Qatom MCP, verified payment activation, and expiry 168 hours from the request
 without renewal. This implementation requires the migration, seller item and
 server-only configuration (including separate MCP-agent and seller-API credentials) before live payments; no paid launch is claimed.

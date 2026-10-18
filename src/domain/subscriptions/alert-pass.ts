@@ -28,6 +28,9 @@ export function validAlertPurchase(
     expected.now < Date.parse(expected.expiresAt)
   );
 }
+export function passPrice() {
+  return `USD ${ALERT_PASS_PRICE.replace(".", ",")}`;
+}
 export function passDeadline(expiresAt: string) {
   return new Intl.DateTimeFormat("es-PE", {
     timeZone: "America/Lima",

@@ -90,7 +90,7 @@ link and complete payment there. `PAGAR` retrieves the saved link; `PAGO` report
 the verified result. Receiving a link or sending `ACTIVAR` alone does not prove
 that access is active. Purchasing access **does not start alerts**.
 
-The pass costs **USD 0.001 once**, lasts **168 elapsed hours from the original
+The pass costs **USD 0.01 once**, lasts **168 elapsed hours from the original
 purchase request**, and has no automatic renewal. Paying later does not move the
 expiry forward. `SUSCRIBIR UNA SEMANA` and `SUSCRIBIR POR UNA SEMANA` are accepted
 aliases. If you already have a valid pass, `SUSCRIBIR` directs you to `RUTA`
@@ -180,7 +180,7 @@ attachments are not interpreted as reports. If audio fails, send text instead.
 | `REPORTE PRUEBA <description>` | Create a clearly labeled demonstration report, excluded from impact counts. `REPORTE DE PRUEBA` and `REPORTAR PRUEBA` also work. |
 | `RUTA PRUEBA` | Propose a demonstration route using an existing DEMO pass and the same endpoint steps. |
 | `SUSCRIBIR PRUEBA` | Request a demonstration pass; choose the route separately afterward. |
-| `SUSCRIBIR PAGO PRUEBA` | For a configured test phone only: deliberately request a **real USD 0.001 checkout**, labeled PRUEBA DE PAGO REAL. This is not the free DEMO flow. |
+| `SUSCRIBIR PAGO PRUEBA` | For a configured test phone only: deliberately request a **real USD 0.01 checkout**, labeled PRUEBA DE PAGO REAL. This is not the free DEMO flow. |
 
 Only server-configured test phones can activate **free DEMO subscriptions**.
 Typing `PRUEBA` from another phone does not bypass payment. Test activity does
