@@ -130,7 +130,22 @@ follow-ups, dedupe/confidence/clearing, and messaging provider. This interface
 makes C's existing location and official-source inputs available for that work;
 no real WhatsApp conversation has been verified through it yet.
 
-Risk alerts, departure decisions and weekly-report delivery require later
-interfaces. Weather, catchments, ML training/evaluation and the dispatch engine
-remain pending. Do not turn current-condition data into risk scores or dispatch
-recommendations. The Team Plan's agreed ML notification checkpoint remains.
+The participant-approved [climate-exposure direction](../data/climate-exposure.md)
+retains **driver WhatsApp alerts and live conditions**. Weather, catchment and
+susceptibility inputs and the assessment service are prepared. The root application
+now exposes `GET /api/exposure?horizonHours=24|72`; see the [assessment contract](../data/climate-exposure.md).
+The existing road-context endpoint remains unchanged. Its alert-change contract,
+departure planning and messaging integration are the next checkpoint; the public
+exposure read keeps `automatedAlertUse: false` until that integration is designed.
+
+B will consume C's versioned assessments for the driver's confirmed subscription
+stretch. Keep three bases distinct: confirmed road-condition changes, estimated
+climate-exposure advisories, and attributed valid official advisories. Community
+reports retain verification labels. Messages include the relevant time window,
+source/data age, reasons and map link. Preserve consent, opt-out, idempotency,
+bundling and quiet hours; stale/incomplete assessments cannot cause a new automated
+exposure escalation. No exposure decrease or missing incident clears a road.
+
+Shared contracts and every consumer must be updated together before wiring those
+messages. The logistic pipeline remains deferred research rather than a delivery
+dependency. No new messaging capability or real delivery is claimed by this handoff.

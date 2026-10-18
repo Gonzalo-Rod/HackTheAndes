@@ -256,3 +256,22 @@ archive features never become supervised examples automatically. The compiled
 `/training` scorer consumes an explicitly experimental JSON artifact; it does not
 assign operational warning levels or activate the risk API. Tests with synthetic
 fixtures verify the code path without claiming real-data forecast skill.
+
+## Climate-exposure assessment
+
+The experimental assessment combines catchment forecast rainfall and INGEMMET
+susceptibility through versioned engineering attention rules. It returns 24/72-hour
+summaries and six-hour windows, preserving reasons, source times, spatial
+uncertainty and unknown coverage. It does not predict disruption probabilities.
+
+- Server entry point: `@peruroad/road-data/exposure`.
+- Shared schemas/types: `@peruroad/road-data/exposure/contracts`.
+- `npm run exposure:prepare`: prepare the validated, reproducible gzip bundle.
+- `npm run exposure:prepare -- --verify`: verify it matches committed inputs.
+- `npm run db:import-exposure`: persist an immutable batch using server credentials.
+
+The root application reads it at `/api/exposure?horizonHours=24|72`. Stale or future
+sources lose their public categories; the original time windows remain unchanged.
+Driver-alert and dashboard integration are the next checkpoint. See the
+[assessment and API guide](../../docs/data/climate-exposure.md) for the initial
+threshold policy, manual data refresh, persistence, limitations and integration order.

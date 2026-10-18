@@ -1,8 +1,9 @@
 # Historical PE-22 event discovery
 
 Checked October 17, 2026. These are **candidate labels for review**, not a complete
-training set or a verified assessment of forecast performance. No ML model has
-been chosen or trained.
+training set or a verified assessment of forecast performance. Regularized logistic
+regression has since been chosen and its pipeline implemented; real-data fitting
+remains blocked. See the [current training attempt](ml-readiness.md#training-attempt-and-additional-source-checks--october-17-2026).
 
 ## Implemented capture and preparation
 
@@ -102,7 +103,7 @@ deduplicated extraction and source/date/location verification before training.
 One candidate in the 2025 holdout is insufficient for a credible year-based skill
 claim. Verify coverage against other official reports and investigate whether
 concession-managed incidents are missing or differently classified. Expand the
-period/source audit before selecting a target, algorithm or temporal evaluation.
+period/source audit to support the agreed target, algorithm and temporal evaluation.
 No published event on a date does **not** establish an observed negative.
 
 Exact-time warning evaluation cannot use date-only records as though their event

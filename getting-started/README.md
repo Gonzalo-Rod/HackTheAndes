@@ -114,7 +114,9 @@ publish the entire log. The history may become public.
 ## Working documents
 
 - [Team Plan](../docs/team-plan.md): the chosen product direction and full MVP
-  scope, with the current rubric and a 30-hour implementation schedule.
+  surfaces, with the approved climate-exposure pivot, current rubric and 30-hour schedule.
+- [Climate exposure](../docs/data/climate-exposure.md): the current assessment,
+  live-condition and driver WhatsApp alert plan, including implementation status.
 - [PROGRESS.md](PROGRESS.md): local history of decisions, implementation, checks,
   blockers, and next steps, with one short paragraph per update.
 - [PROGRESS_TEMPLATE.md](PROGRESS_TEMPLATE.md): a template for a 2-to-4-sentence

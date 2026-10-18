@@ -1,5 +1,9 @@
 # Logistic-regression training pipeline
 
+**Deferred research:** the participant-approved [climate-exposure pivot](climate-exposure.md)
+retains live conditions and driver alerts without depending on classifier training.
+This pipeline, its label requirements and frozen evaluation policy are preserved.
+
 The pipeline predicts **rainfall-related road-disruption onset**, using existing
 weather forecasts as inputs. It is implemented and tested, but currently refuses
 to fit real data: we lack verified negative windows and historically available

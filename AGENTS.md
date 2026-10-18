@@ -10,8 +10,12 @@ required external identifiers unchanged.
 
 Before working, read `getting-started/README.md`, `docs/team-plan.md`,
 and the recent entries in `getting-started/PROGRESS.md`. The Team Plan is the
-team's chosen product direction: follow its original approach and full MVP scope,
-with the updated five-criterion rubric and 30-hour schedule. Do not treat proposed
+team's chosen product direction: follow the participant-approved climate-exposure
+pivot, retaining driver WhatsApp alerts, live road conditions and the planned
+product surfaces, with the updated five-criterion rubric and 30-hour schedule.
+See `docs/data/climate-exposure.md` for the assessment and alert boundaries.
+Payments, Qatom and Yape remain outside the participant-authorized implementation
+scope. Do not treat proposed
 integrations, metrics, or predictions as verified results. Before writing code,
 read the engineering principles and quality rules below.
 
@@ -20,6 +24,13 @@ The chosen track is **Climate and Territory**
 technical complexity, 25% functionality, 20% technical quality, 15% problem and
 impact, and 10% clarity. Do not replace it with the older rubric still shown in
 the online guide at the time of our initial review.
+
+Climate exposure combines forecast rainfall, mapped susceptibility and valid
+official advisories to prioritize attention. Keep estimated exposure, official
+advisories, confirmed incidents and unverified community reports distinct in APIs,
+the map and messages. Missing/stale data never establishes safety or clearance.
+The logistic pipeline remains deferred research; do not make fitting it a delivery
+gate or describe exposure scores as calibrated disruption probabilities.
 
 ## Engineering principles
 

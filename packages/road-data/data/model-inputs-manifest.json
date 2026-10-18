@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "geometryRevision": "7cf50ab57642d874064bed07753c8783a705f9ae13cec6378c8bea1f72966c90",
-  "preparedAt": "2026-10-17T23:52:47.995Z",
+  "preparedAt": "2026-10-18T00:59:08.348Z",
   "artifacts": [
     {
       "file": "weather/live.json.gz",
-      "sha256": "53b5ba37c114cc58cc843b2ca63fc05b2b82d66d44778056d2da71320b8684f0"
+      "sha256": "788ea9d5f0ead3d8b0b222e6f55a13ba0ff085d99d975b2d08a544db0f1e3d5f"
     },
     {
       "file": "weather/previous_runs-2023-12-24-2023-12-31.json.gz",
@@ -76,7 +76,7 @@
           "variable": "precipitation",
           "totalHours": 2892,
           "knownHours": 2892,
-          "firstKnown": "2026-10-10T23:00:00.000Z"
+          "firstKnown": "2026-10-11T00:00:00.000Z"
         }
       ]
     },

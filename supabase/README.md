@@ -11,7 +11,7 @@ Project: [HackTheAndes](https://supabase.com/dashboard/project/cdqnintcqryfbfjjl
 region `us-west-2`. Existing project API keys were retrieved; no additional
 project, subscription, API key, or administrator-password reset was created.
 
-Ten migrations have been applied after rollback-only dry runs. They create
+Eleven migrations have been applied after rollback-only dry runs. They create
 PostGIS and the application tables. Operational tables have RLS and no browser
 grants; `incident_updates` is the explicitly browser-readable revision signal. A scoped `peruroad_backend` login has application
 table permissions and its own RLS policies, without superuser, database/role
@@ -185,3 +185,16 @@ earlier relational foundation; these captures use `data_snapshots` to preserve
 complete null-bearing hourly matrices without inventing issue times or rainfall.
 See the [input handoff](../docs/data/model-inputs.md) and
 [ML checkpoint](../docs/data/ml-readiness.md).
+
+## Climate-exposure assessment storage
+
+Migration `20261018003000_climate_exposure.sql` adds immutable, server-only
+`climate_exposure_assessments`. The complete numerical input bundle, versioned
+policy, provenance hashes and result are stored together; retries preserve the
+original batch, and current reads select the newest weather capture for the pinned
+geometry and policy. Repository reads verify checksums and replay the stored inputs.
+Browser roles have no access and the backend has no update privilege.
+
+Run `npm --prefix packages/road-data run db:import-exposure` after preparing the
+validated bundle. See the [assessment guide](../docs/data/climate-exposure.md) for
+manual refresh, public API projection, freshness masking and the B/D checkpoint.

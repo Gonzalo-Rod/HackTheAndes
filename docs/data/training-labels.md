@@ -1,5 +1,9 @@
 # Road-disruption training labels
 
+**Deferred research:** the [approved climate-exposure direction](climate-exposure.md)
+uses a separate operational assessment. These reviewed labels remain unchanged;
+unknown/background periods have not become verified negatives.
+
 The target is **the onset of a rainfall-related road disruption affecting a road
 segment linked to a catchment**, within a 6-, 24- or 72-hour forecast window.
 It covers documented restrictions or interruptions caused by debris flows,

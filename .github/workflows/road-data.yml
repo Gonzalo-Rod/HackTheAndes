@@ -29,6 +29,7 @@ jobs:
       - run: npm run build
       - run: npm run test:exports
       - run: npm run model-inputs:check -- --verify
+      - run: npm run exposure:prepare -- --verify
       - run: npm run ml:labels:check -- --verify
       - run: npm run ml:prepare
       - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6

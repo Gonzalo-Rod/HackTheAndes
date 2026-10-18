@@ -2,7 +2,9 @@
 
 **Track:** Clima y Territorio
 **Project name:** *PeruRoad Climate*
-**One line:** A 3D road-risk dashboard for the Carretera Central that combines official climate, hazard and road data with incident reports sent by people on the road over WhatsApp, warns drivers by WhatsApp message or phone call, and tells transport companies whether to dispatch a vehicle now, later, or not at all.
+**One line:** A climate-exposure and preparedness dashboard for the Rímac–Carretera Central corridor that combines forecast rainfall, official terrain susceptibility and advisories with live road conditions and WhatsApp field reports, helping response teams prioritize attention and drivers receive relevant route alerts.
+
+**Participant-approved pivot, October 17, 2026:** retain the 3D map, live road conditions, WhatsApp reporting and driver alerts, and planned route/dispatch views. The core output becomes transparent **estimated climate exposure and attention priority**; disruption-model training is deferred research. [The implementation brief](data/climate-exposure.md) defines source, freshness, alert and uncertainty boundaries. This is the current direction wherever older risk/prediction terminology remains. Planned behavior is not a claim of implementation. Payments, Qatom and Yape remain outside the participant-authorized implementation scope; commercial sections below are future context.
 
 ---
 
@@ -11,12 +13,12 @@
 ### Objectives
 
 1. **Integrate** official data that today lives on separate platforms (SENAMHI, ENFEN, MTC, CENEPRED, INGEMMET, SUTRAN, ANA) and community reports into one 3D dashboard of the corridor.
-2. **Estimate** the exposure of each road segment to huaicos, landslides and floods, and show **real-time** status plus a **24–72 h forecast** risk level.
+2. **Estimate** rainfall-related climate exposure for mapped catchments and linked road segments using forecast rain, INGEMMET susceptibility and valid SENAMHI advisories; show **live source-reported conditions** alongside **24–72 h estimated exposure** and explicit unknown coverage.
 3. **Collect and verify** reports from people near incidents through WhatsApp (text, voice note, photo, location).
-4. **Warn** people before they reach a hazard: WhatsApp alerts for subscribers and phone calls for drivers on a registered trip.
-5. **Support dispatch decisions:** for a planned departure of a truck, bus or car, recommend *go / wait / do not go* from the risk the vehicle would meet on each segment at the time it gets there, so companies avoid stranded vehicles, lost hours and cargo delays.
+4. **Notify** consenting drivers about confirmed route conditions, applicable official advisories and estimated climate exposure for their subscribed stretch; retain phone calls as the existing optional trip-watch feature.
+5. **Support departure planning:** compare estimated climate exposure at assumed arrival times with current source-reported restrictions, helping dispatchers review timing and uncertainty before sending a vehicle.
 6. **Make it sustainable:** a free channel for drivers and residents, and time-based paid access: day passes for drivers and dashboard or prediction subscriptions for companies, sold through Qatom.
-7. **Evaluate** the early-warning model honestly: archived forecasts issued before each event, on periods separate from calibration (section 4).
+7. **Evaluate** exposure rules, input coverage/freshness and alert delivery honestly. Keep historical reconstruction and deferred ML experiments separate from operational claims (section 4).
 8. **Test with real users** during the event and document what we learned.
 
 ### Rubric
@@ -42,7 +44,7 @@ Source: the organizers' evaluation sheet ("Cómo se evalúa a los equipos", Hack
 
 | Criterion | Weight | Score 1 → 5 on the sheet | How we aim for a 5 |
 |---|---|---|---|
-| **Technical complexity** | 30% | 1: an API wrapper or simple CRUD · 3: integrates APIs, data or a model with its own logic · 5: real data, models or orchestrated services, non-trivial architecture | Real official data (SUTRAN, Open-Meteo, SENAMHI) + catchment-based risk model + time-aware dispatch decision + report verification pipeline + orchestrated services (Zavu, n8n, Qatom) + held-out forecast evaluation |
+| **Technical complexity** | 30% | 1: an API wrapper or simple CRUD · 3: integrates APIs, data or a model with its own logic · 5: real data, models or orchestrated services, non-trivial architecture | Real official data + geospatial rainfall/susceptibility assessment + time-aware route comparison + verified report pipeline + orchestrated ingestion and driver alerts, with tested rules and explicit uncertainty |
 | **Functionality** | 25% | 1: fails live · 3: runs with toy data · 5: real data, and it holds up to questions outside the script | Live from the public URL with today's SUTRAN incidents and real reports; a judge can send their own WhatsApp message or ask for a dispatch decision for any departure time |
 | **Technical quality** | 20% | 1: fragile, or secrets in the repo · 3: organized, with shortcuts · 5: handles errors, edge cases and credentials | `.env.example` and no secrets in the repo; every external call has a timeout, retry and visible fallback; signed webhooks; encrypted contacts; tests for extraction, dedupe, confidence, risk and dispatch decision |
 | **Problem and impact** | 15% | 1: generic topic · 5: a specific user and evidence of the problem | Drivers and dispatchers on the Carretera Central; interviews at the terminal; real reports, passes and waitlist sign-ups recorded in the product |
@@ -84,7 +86,9 @@ Official institutions publish meteorological, geological and road data, but on d
 - **Operations staff at logistics and bus companies** (dispatchers), who decide when trucks and buses leave and need to warn drivers already on the road.
 - **Decision-makers** (municipalities, regional emergency centers / COER, MTC, Provías), who need to know which segments require attention and how many kilometers and population centers are exposed.
 
-**Track fit:** Clima y Territorio (huaicos, rain, alerts), with a transport impact.
+**Track fit:** Climate and Territory: rainfall exposure, debris flows, slope failures and preparedness are the core environmental problem. Road conditions and driver alerts connect that problem to concrete impacts and actions; traffic crashes remain separately identified context.
+
+**Additional operational user:** maintenance and municipal emergency teams can inspect areas where forecast rainfall overlaps susceptible terrain. Driver subscriptions, reporting and dispatch workflows remain in scope.
 
 ### Geographic scope
 
@@ -118,8 +122,8 @@ Access is sold **by time, not by message**: a driver pays for the days they will
 
 ### Priority tiers
 
-- **P0, core (must work at the core checkpoint):** F1, F3, F5a, F8 and the risk model (section 4).
-- **P1, complete MVP (must work at the feature freeze):** F9 dispatch decision, F7 passes and payment, F10 traction page and waitlist, F5b, F2.
+- **P0, core (must work at the core checkpoint):** F1, F3, F5a, F8 and the climate-exposure assessment (section 4).
+- **P1, complete MVP (must work at the feature freeze):** F9 departure planning, F10 traction page and waitlist, F5b, F2. F7 commercial payment flows remain excluded from this implementation.
 - **Last task before the freeze:** F6 weekly report. It is built only after P1 works, and it is cut if time runs out.
 - **P2, only after all of the above:** F4 call alerts, then the items under "Second priority". The Zavu voice check (section 6) still runs at the start so the decision on F4 can be made at the core checkpoint.
 
@@ -142,20 +146,20 @@ People near an incident send it to our Zavu WhatsApp number.
 
 ### F2. Ask by WhatsApp (P1)
 
-- *"¿Cómo está la Central hasta Huancayo?"* → intent and stretch detected → reply with active incidents ordered by km (with confidence label and source), the highest risk level in the next 24 h for that stretch with its top reason, and any active SENAMHI warning.
+- *"¿Cómo está la Central hasta Huancayo?"* → intent and stretch detected → reply with active source-reported incidents, estimated climate exposure for supported parts of the stretch and the next 24 h, reasons, unknown coverage and any applicable valid SENAMHI advisory.
 - Text reply of at most ~600 characters with a link to the stretch on the public dashboard.
 - If the question arrived as a voice note, the answer is also sent as a voice note (ElevenLabs text-to-speech).
 
 ### F3. Subscribe and WhatsApp alerts (P0)
 
 - *"Avísame de la Central"* or *"Avísame Chosica–La Oroya"* creates a subscription for a km range; the bot confirms the range. Explicit opt-in; *"BAJA"* opts out at any time.
-- **Free subscribers** receive closure alerts (*interrumpido*, official or confirmed). **Route Pass holders and company numbers** receive every trigger below.
+- **Current delivery scope:** consenting drivers are to receive confirmed road-condition alerts and climate-exposure advisories for their subscribed stretch. Delivery remains pending integration and verification. Paid packaging below remains future commercial context under the existing payments exclusion.
 - **Triggers:**
   - a new incident in the range with confidence ≥ the alert threshold (official SUTRAN incidents qualify directly);
   - an incident in the range is cleared;
-  - the 24 h risk level of a segment in the range rises to naranja or rojo;
-  - a new SENAMHI warning covers the range.
-- **Noise control:** at most one message per subscription every 30 minutes (alerts are bundled); no messages 22:00–05:00 except rojo.
+  - a fresh, complete climate-exposure assessment for a linked segment in the subscribed range crosses a documented attention threshold, labeled **estimated climate exposure**;
+  - a new, valid and temporally eligible SENAMHI advisory covers the range, attributed to SENAMHI and separate from our assessment.
+- **Noise control:** retain at most one bundled message per subscription every 30 minutes, deduplication and quiet hours (22:00–05:00); ordinary exposure updates wait until quiet hours end. Any urgent exception requires an explicit reviewed policy and is not inferred from an estimated category. Stale/incomplete assessment inputs suppress new automated climate-exposure escalation.
 - **Outside the 24-hour window:** an approved WhatsApp utility template, e.g. *"Alerta PeruRoad: {tipo} en {tramo}, {estado}. Responde ESTADO para más detalles."* SMS fallback until it is approved.
 
 ### F4. Trip watch and call alerts (P2; Route Pass and Company Predictions)
@@ -166,9 +170,9 @@ A driver on the road cannot read WhatsApp; a short call reaches them. This uses 
   - a driver writes *"Salgo a Huancayo mañana a las 4"*, or a company dispatcher adds it in the dashboard (driver phone, origin, destination, departure time);
   - the driver gives explicit consent by replying *"SÍ"* on WhatsApp before any call.
 - **Route and timing:** the trip is mapped to the PE-22 segments between origin and destination, with an estimated time window per segment from the departure time and an average speed (default 40 km/h, configurable). The position is an **estimate from the schedule, not GPS**, and is labeled that way.
-- **Trigger:** an incident with confidence ≥ 0.6 (or any SUTRAN "interrumpido" incident), or a rojo risk level, on a segment the driver is expected to reach in the next 3 hours and has not yet passed.
+- **Trigger:** a source-reported incident meeting the reviewed confidence policy on a segment the consenting driver is expected to reach in the next 3 hours. Any official-advisory trigger needs verified temporal eligibility and a reviewed call policy; estimated exposure alone does not authorize an urgent call.
 - **Action:**
-  - before departure: WhatsApp message (no call unless rojo or interrumpido);
+  - before departure: WhatsApp message; calls require the explicit trip-watch consent and reviewed urgent-condition policy;
   - on the road: an outbound call with a per-call greeting, e.g. *"Hola, te llama PeruRoad. Hay un derrumbe reportado cerca del km 74, en San Mateo, a unos 40 minutos de tu ruta. No necesitas responder si estás manejando; te enviamos el detalle por WhatsApp."*
 - **Agent tools during the call:** `get_stretch_status(km range)` reads our API; `confirm_incident(incident_id, answer)` records *"sí, lo estoy viendo"* as a report that feeds confidence.
 - **Call limits:** at most 2 minutes, one call per incident per trip, voicemail → short message, and a WhatsApp follow-up after every call. The transcript is stored and linked to the incident.
@@ -181,13 +185,13 @@ A driver on the road cannot read WhatsApp; a short call reaches them. This uses 
 - Opening fly-in from Peru to PE-22 on 3D terrain with hillshade.
 - **Layers (toggle):**
   - incidents: icon by type, color by confidence, official (SUTRAN, with its road status interrumpido / restringido / normal) vs community, *"no confirmado"* label;
-  - risk per 1-km segment (24 h);
+  - estimated climate exposure on linked 1-km segments (24 h), with unknown/unavailable coverage visible;
   - rainfall heat map (last 24 h accumulated);
   - upstream catchments, rivers and quebrada crossings;
   - SENAMHI warnings;
   - official susceptibility / hazard zones.
 - **Incident panel (click):** type, km, first seen, last confirmed, number of independent reporters, confidence and what it is based on, source (WhatsApp / SUTRAN with its reporting entity, e.g. the concessionaire or PNP), photo, status history.
-- **Segment panel (click):** risk level, top 2–3 reasons, inputs, forecast issue time, weather model and grid resolution.
+- **Segment panel (click):** estimated exposure, top reasons, forecast window and rainfall, official susceptibility, source times/validity, weather model/grid, geometry confidence and missing coverage. Unknown forecast issue times remain unknown.
 - **Live updates:** a new incident appears within seconds of the WhatsApp report (Supabase Realtime or polling).
 
 **F5b. Paid view (P1; Company Dashboard and Company Predictions)**
@@ -241,7 +245,7 @@ A driver on the road cannot read WhatsApp; a short call reaches them. This uses 
 - **Hourly:**
   - Open-Meteo forecast and recent precipitation for catchment sample points;
   - SENAMHI warnings;
-  - then the risk recalculation endpoint, then alert evaluation (F3, F4).
+  - then the climate-exposure recalculation endpoint, then alert evaluation (F3, F4).
 - **Static, loaded once and documented:**
   - road segments with km references (MTC national network, as served by SUTRAN's `road-network/segments` endpoint and GeoJSON, or OpenStreetMap);
   - rivers and quebradas (ANA, also served by SUTRAN's hydrography endpoint and GeoJSON);
@@ -250,7 +254,7 @@ A driver on the road cannot read WhatsApp; a short call reaches them. This uses 
 - **Daily:** El Niño status (SUTRAN's `/public/nino` summary of SENAMHI / ENFEN) for the second-priority El Niño layer.
 - Each layer records its source, retrieval time and whether it is a live feed or a snapshot. Requests to public government services are cached and kept infrequent.
 
-### F9. Dispatch decision: go / wait / do not go (P1; Route Pass and Company Predictions)
+### F9. Departure planning and route exposure (P1; planned company/driver views)
 
 The core use case for companies: a dispatcher has a bus, truck or car ready to leave and needs to decide whether to send it now, later, or not at all. A stranded vehicle costs fuel, driver hours, missed deliveries and passenger complaints.
 
@@ -260,19 +264,13 @@ The core use case for companies: a dispatcher has a bus, truck or car ready to l
   - vehicle type: bus, truck or car;
   - optional: the company's own cost per hour of a stopped vehicle.
 - **Travel timing:** the route is split into PE-22 segments, and the expected arrival time at each segment comes from an average speed per vehicle type. The speeds are configurable defaults, stated as assumptions in the answer.
-- **Risk at arrival time:** for each segment, the risk level of its catchments **for the time window when the vehicle gets there** (the model computes levels for each 6-hour window of the next 72 h, section 4), plus active incidents on that segment (SUTRAN road status and community incidents weighted by confidence).
-- **Decision rules (deterministic, in code):**
-  - **No salir:** a segment is *interrumpido* (official, or community with confidence ≥ 0.8), or its risk level is rojo when the vehicle would arrive;
-  - **Esperar:** a segment is *restringido*, or naranja at arrival time; the answer proposes the best later departure;
-  - **Salir:** otherwise, with any amarillo segments listed as cautions.
-- **Best departure window:** the same check runs for every departure hour in the next 24 h (72 h in the dashboard). The earliest departure with *Salir* and the lowest maximum level is recommended.
-- **Output:**
-  - the recommendation, the 2–3 segments and reasons behind it, and the confidence (forecast lead time and rainfall grid resolution);
-  - the best departure window;
-  - if the company entered its cost per hour, the **cost at stake**: that cost × the expected duration of the closures on the route (from SUTRAN validity dates or our archive), labeled as an estimate.
-- **Departure chart (dashboard):** a heat map with route km on one axis and departure hour on the other, colored by the risk the vehicle would meet. It shows at a glance when the route is safe to start.
-- **Record and feedback:** every decision is stored with its inputs; after the trip, the company can mark the outcome (passed / delayed / stopped), which later feeds evaluation.
-- **Wording:** this is decision support with stated uncertainty, not a guarantee; the company makes the final call.
+- **Exposure at arrival time:** compare forecast exposure windows on supported catchments/segments against assumed arrival times. Preserve official closures/restrictions as separate current facts and label community evidence by confidence.
+- **Decision support:** a source-reported closure identifies a currently blocked route; restrictions require review. Estimated climate exposure can suggest extra attention or a lower-exposure departure window under the documented rule set. It cannot establish that a future closure will occur or that departure is safe. Missing inputs return an unavailable/insufficient-data result.
+- **Departure comparison:** show the maximum estimated exposure and unknown coverage for each feasible departure within the captured forecast horizon. Do not recommend an optimum when required route/time inputs are missing, or silently extend the 72-hour forecast.
+- **Output:** named stretches, source conditions and observation times, exposure reasons, assumed travel times, forecast validity and uncertainty. A decrease in exposure never reopens an incident.
+- **Cost context:** a company may enter its cost per delay hour; do not infer closure duration from alert expiry or validity dates. Total delay-cost estimates require a separately supported duration.
+- **Departure chart:** route distance versus departure time, displaying estimated exposure and unknown cells, with current restrictions separately identified.
+- **Record and feedback:** store inputs and results; real trip feedback can later support evaluation. The company makes the operational decision.
 
 ### F10. Traction page and company waitlist (P1)
 
@@ -301,80 +299,70 @@ Other corridors (including Lima–Arequipa), frost alerts, native mobile app, fu
 
 ---
 
-## 4. Early warning (the technical core)
+## 4. Climate exposure and preparedness (the technical core)
 
-**What we claim:** a *risk level* per catchment for the next 24–72 h, shown on the road segments it affects, with a plain-language reason. We do **not** claim to predict a huaico at an exact time and place, and we only claim advance-warning ability to the extent the forecast evaluation below supports it.
+**Current approved output:** estimated rainfall-related exposure and attention
+priority over supported catchments and linked road segments for the next 24/72
+hours, with six-hour windows for route planning. The [implementation brief](data/climate-exposure.md)
+defines the assessment, driver alerts and source boundaries. Live SUTRAN status,
+community-report verification and valid official advisories remain distinct.
 
-**Key design point:** huaicos on the Carretera Central are triggered by rain **upstream in the Andes**, not by rain in Lima. For every point where a quebrada crosses the road, the model uses rainfall over its **actual upstream catchment**, not at the road.
+### Spatial inputs and precision
 
-### Spatial resolution: display precision is not prediction precision
+Intersect mapped INGEMMET susceptibility with road geometry and catchment samples,
+then combine it with area-weighted forecast rainfall. Retain official classes and
+record unknown coverage. The existing HydroBASINS fallback has 11 coarse unions,
+68 mapped crossings and links on 38 of 174 segments; associations are approximate,
+and crossing sub-basins include downstream territory. See [catchment limitations](data/pe22-catchments.md).
 
-- The road is split into **1-km segments** for display, aggregation and location of reports. This does **not** make the weather inputs accurate to 1 km.
-- Rainfall comes from numerical weather models with grid cells of roughly 9–25 km depending on the model (e.g. ECMWF IFS at about 9 km). In steep Andean terrain, local convective rain is poorly resolved at that scale.
-- The **unit of prediction is the catchment**, and the effective precision is limited by the rainfall grid. Each risk level stores the model and grid used; the map and documentation state this resolution.
+One-kilometer display segments do not establish one-kilometer prediction accuracy.
+Current operational rainfall uses the roughly 25-km IFS 0.25-degree grid; slopes
+are sampled estimates and official road chainage remains uncalibrated. Unlinked
+segments stay unknown. Preferred future DEM delineation can improve the fallback,
+but its existence or accuracy must not be assumed.
 
-### Upstream catchments
+### Assessment v1 and driver alerts
 
-Road and stream geometry alone do not define where water comes from. We delineate catchments explicitly:
+| Input | Role |
+|---|---|
+| Forecast rainfall, next 24/72 h and six-hour windows | Changing weather signal over the mapped catchment |
+| Recent model-estimated rainfall, last 72/168 h | Antecedent wet-weather context, explicitly modeled |
+| INGEMMET susceptibility | Static terrain predisposition, with regional-map precision |
+| Catchment associations and sampled terrain | Spatial context with coverage and confidence |
+| Valid SENAMHI activation advisory | Attributed official context, with its own severity and validity |
+| Current SUTRAN/community incidents | Source-reported impacts, separately identified and verified |
 
-1. **Crossing points:** intersect PE-22 with mapped streams and quebradas (OpenStreetMap, ANA) to get pour points.
-2. **Delineation (preferred):** one-time offline delineation from a hydrologically conditioned DEM / flow-direction grid (e.g. HydroSHEDS or MERIT Hydro) using the WhiteboxTools CLI. Output: one polygon per crossing, committed to the repository as GeoJSON with the script that produced it.
-3. **Fallback:** HydroSHEDS HydroBASINS level 12 polygons plus their upstream topology (`NEXT_DOWN`), cross-checked against ANA hydrographic units. Coarser; documented as such.
-4. **Sampling:** rainfall is averaged over grid points inside each catchment, weighted by area.
+Code computes deterministic, versioned attention rules and stores the inputs,
+reasons, source times, rule version and coverage; an LLM may explain those facts.
+The first categories, thresholds and freshness limits are implemented and
+documented in the assessment brief. These are attention criteria, not fitted
+landslide thresholds or calibrated disruption probabilities. Unknown issuance
+metadata stays unknown. Current SENAMHI captures remain ineligible for automated
+risk use until temporal checks support it.
 
-Small quebradas below the resolution of the delineation are grouped and flagged as lower-confidence.
+F3 retains subscribed-driver WhatsApp alerts: confirmed road-condition changes,
+fresh estimated climate-exposure escalation, and applicable official advisories.
+Each message identifies its basis, stretch, observation/forecast window and source,
+links the map, and respects consent, deduplication and notification policy. Missing
+or stale inputs do not generate a new exposure escalation or imply safety.
 
-### Model v1: trained machine learning with a transparent baseline
+### Evaluation and research
 
-**Participant decision, October 17, 2026:** train a machine-learning model for
-risk forecasting. Keep a transparent rainfall/rule-based model as the evaluation
-baseline. Before beginning the forecasting implementation, notify the participant
-and agree on the prediction target, labeled dataset, features, algorithm, and
-time-based validation split. The checkpoint update below records the subsequent
-implementation decision; a trained model remains pending.
+The delivery checks are rule boundaries, spatial matches, source freshness/validity,
+unknown-data behavior and the consenting-user report → map → subscriber flow.
+Publish measured coverage and delivery results without presenting them as disaster
+prediction skill. Yaku 2023 remains a retrospective reconstruction, explicitly
+labeled and separate from live conditions and forecasts.
 
-**Training checkpoint update:** the participant approved reviewing labels and
-building the regularized logistic-regression pipeline for rainfall-related
-road-disruption onset. The initial five-feature design, fixed 2024 chronological
-training/validation split and separate 2025 evaluation are recorded in
-[the pipeline handoff](data/logistic-pipeline.md). The reviewed registry supports
-six positive events but only two mapped positives in one episode, with no verified
-negative windows or as-of feature records. The pipeline therefore reports blocked
-readiness; no real-data model or operational warning thresholds have been fitted.
-
-For each catchment, every hour:
-
-| Input | Source | Why |
-|---|---|---|
-| Forecast rain, next 24 h and 72 h, over the catchment | Open-Meteo forecast API | Trigger |
-| Rain already fallen, last 3 and 7 days, over the catchment | Open-Meteo recent / historical | Wet soil fails faster |
-| Susceptibility class (mass movement / flooding) | INGEMMET / CENEPRED layers | Some slopes fail first |
-| Catchment area and slope | Delineation output, DEM | Size and steepness affect response |
-| Active SENAMHI warning for the province | SENAMHI | Official signal |
-| Recent incidents nearby | SUTRAN, MTC, our WhatsApp reports | Ground truth |
-
-**Output:** a level (verde / amarillo / naranja / rojo) for the next 24 h and 72 h, and for each 6-hour window of the next 72 h (used by the dispatch decision, F9), plus the top 2–3 reasons, e.g. *"72 mm forecast over the Quebrada X catchment in the next 48 h + soil already wet + high-susceptibility zone"*.
-
-- **Code computes the score; the LLM only writes the explanation** in plain Spanish. The score must be reproducible and auditable: each stored score records its inputs, model, grid and forecast issue time.
-- **Model fitting, tuning, and risk-level thresholds use training/validation data
-  only**, and are frozen before evaluation on the held-out season. Historical
-  features must reflect information available at the forecast issue time.
-
-### Evaluation
-
-Reconstructing an event from rainfall that actually fell does not prove it could have been predicted. We separate the two:
-
-**A. Reconstruction of Cyclone Yaku (Feb–Mar 2023)** — for the timeline replay only.
-- Uses observed / reanalysis rainfall (Open-Meteo Historical Weather API).
-- Shows how risk levels would have evolved given the rain that fell. Labeled **"reconstrucción"** on the map; never presented as evidence of advance warning.
-- Open-Meteo's archived lead-time forecasts for most models start in **January 2024**, so true forecast-based evaluation of 2023 is not possible with them. (JMA models are archived from 2018 in the Previous Runs API; if their resolution is usable, a 2023 forecast check is an optional extra.)
-
-**B. Forecast evaluation (2024–2026 rainy seasons)** — the only basis for advance-warning claims.
-- **Inputs:** forecasts as they were issued **before** each day, from Open-Meteo's **Previous Runs API** (fixed lead times of 1–7 days, e.g. `precipitation_previous_day1`, `_previous_day2`, `_previous_day3`). Not the Historical Forecast API, which stitches the first hours of each run and so approximates observed conditions.
-- **Ground truth:** recorded huaicos and road closures on PE-22 with date and location (INDECI emergency records, SUTRAN, news archives). SUTRAN's public API only returns current alerts, so past seasons come from INDECI and news.
-- **Split:** fit the ML model and tune its hyperparameters and risk thresholds within one rainy season (e.g. Jan–Apr 2024), using chronological training/validation subsets; evaluate on a different season (e.g. Jan–Apr 2025, and 2026 if records allow). No feature, model, or threshold changes after looking at the evaluation period.
-- **Metrics per lead time (1, 2, 3 days):** events flagged in advance / total events, false alarms per season, and comparison against a simple baseline (e.g. SENAMHI warning alone, or rainfall threshold only).
-- **Reporting:** results are published as they come out, including weak ones. If there are too few recorded events to measure skill, the report says so and makes no advance-warning claim.
+**Deferred logistic research:** the participant previously approved a regularized
+logistic pipeline for rainfall-related road-disruption onset. Its implementation,
+reviewed labels and frozen 2024/2025 policy remain in [the training handoff](data/logistic-pipeline.md).
+Six reviewed positives, only two mapped in one episode, zero verified non-event
+windows and zero historically eligible feature rows leave real fitting blocked.
+The approved exposure pivot removes that fitting task from the delivery path;
+no uncertain background periods become verified negatives. Further weather-focused
+ML needs a separate target and evaluation design. No real-data model or hazard
+forecast-accuracy result has been produced.
 
 ---
 
@@ -391,6 +379,8 @@ People on the road ──► Zavu (WhatsApp / SMS / email / voice) ──► sig
                                               │  n8n job endpoints (authenticated)
                                               ├─ Report pipeline: ElevenLabs STT → LLM extraction
                                               │  → snap to PE-22 → dedupe → confidence
+                                              ├─ Climate-exposure assessment (forecast + susceptibility)
+                                              │  → stored reasons, source times and unknown coverage
                                               ├─ Alert engine: subscriptions (F3) + trips (F4)
                                               │  → Zavu message / template / call
                                               ├─ Dispatch decision engine (F9) + pass checks (F7)
@@ -405,7 +395,7 @@ People on the road ──► Zavu (WhatsApp / SMS / email / voice) ──► sig
                           weekly_reports · api_calls
                                                           ▲
 n8n ── every 10 min: SUTRAN alerts (PE-22) → upsert + status archive → alert evaluation
-    ├─ hourly: Open-Meteo, SENAMHI pulls → risk recalculation → alert evaluation
+    ├─ hourly: Open-Meteo, eligible SENAMHI context → exposure assessment → alert evaluation
     └─ weekly: report generation → delivery (email / WhatsApp template) → delivery log
 
 Qatom ── sells Route Passes and company plans (time-based access); later lists
@@ -541,7 +531,7 @@ Four technical roles; section 8c lists each member's tasks. Pitch, user outreach
 |---|---|
 | **A. Platform, payments and API** | Repo, deploy, schema, CI, security helpers, read APIs and Realtime, passes and payment (F7), paid-access gate, admin page, traction and waitlist backend (F10), dispatch-decision API, agent API on Qatom |
 | **B. Messaging and voice agent** | Zavu webhook, templates and voice agent, ElevenLabs, extraction, geocoding, dedupe, confidence, alert engine (F1–F3), WhatsApp flows for passes and dispatch decisions, weekly report delivery (F6), trips and calls (F4) |
-| **C. Data and model** | Data integration checks, SUTRAN ingestion and archive, segments, catchments, risk model, dispatch decision engine (F9), reconstruction and forecast evaluation, n8n jobs (ingestion and weekly report) |
+| **C. Data and model** | Data integration checks, SUTRAN ingestion and archive, segments, catchments, climate-exposure assessment, dispatch decision engine (F9), reconstruction and exposure evaluation, n8n jobs (ingestion and weekly report) |
 | **D. Frontend and visualization** | Next.js UI, MapLibre 3D map, layers, heat map, timeline, indicators and charts, route profile, stretch selector, departure planner and chart (F9), `/impacto` and waitlist form (F10), purchase screens, report page (F6), export, live updates |
 
 AI coding tools are used for boilerplate. The risk, confidence and evaluation logic is written and understood by the team.
@@ -563,9 +553,9 @@ submission and final checks forward to finish at least 30 minutes before it.
 | **H0–2** | Align and set up | Read this doc; section 6 checks started (including one Zavu test call to a +51 number) and the WhatsApp alert and weekly-report templates submitted; Zavu number live; Qatom provider account created and time-based sale checked; Route Pass test price set; repo, database and deploy working; demo script written |
 | **H2–8** | Thin skeleton, end to end | A WhatsApp message creates a pin on the map (even if extraction is crude); SUTRAN PE-22 alerts on the map and archived; PE-22 segments and catchment crossing points loaded; first Open-Meteo pull |
 | **H8–10** | **Launch to real users** | Number shared in WhatsApp groups (drivers, family, friends who travel the Central); waitlist form live; usage recorded in the database from the first real user |
-| **H10–18 (night)** | Core (P0) | Extraction + dedupe + confidence; catchments delineated; risk model v1; subscriptions + alerts; SENAMHI ingestion; Yaku 2023 reconstruction data, 2024–2025 archived forecasts and event records loaded |
+| **H10–18 (night)** | Core (P0) | Extraction + dedupe + confidence; catchments delineated; climate-exposure assessment v1; subscriptions + alerts; SENAMHI ingestion; Yaku 2023 reconstruction data, 2024–2025 archived forecasts and event records loaded |
 | **H18** | **Core integration checkpoint** | The live reporting → dashboard → subscriber alert flow works from start to finish; go / no-go decision on F4 call alerts based on the Zavu voice check |
-| **H18–24** | Complete MVP (P1) + evaluation, then F6 | Dispatch decision (F9); passes and payment (F7); `/impacto` page (F10); ask by WhatsApp; paid dashboard view (timeline, 72 h forecast, indicators, route profile, stretch selector, export); calibration and held-out forecast evaluation done; **then, as the last task, the weekly report (F6)**; F4 only if all of this already works |
+| **H18–24** | Complete MVP (P1) + evaluation, then F6 | Dispatch decision (F9); passes and payment (F7); `/impacto` page (F10); ask by WhatsApp; paid dashboard view (timeline, 72 h forecast, indicators, route profile, stretch selector, export); exposure rules, source coverage and alert transitions verified; **then, as the last task, the weekly report (F6)**; F4 only if all of this already works |
 | **H18–22 (in parallel)** | **Terminal visit** | One or two members go to the Central bus/colectivo terminals (e.g. Yerbateros): ~10 interviews, sign-ups, willingness-to-pay answers, photos/video |
 | **H22–29 (in parallel)** | Pitch preparation | Slides, real usage evidence, 5 or more timed rehearsals, and Q&A preparation completed |
 | **H24** | **Feature freeze** | Full MVP works end to end; no new features after this point |
@@ -603,7 +593,7 @@ This section covers technical work only. Pitch, user outreach and traction tasks
 |---|---|---|
 | **A** | Platform, payments and API | Repo, deploy, database schema, CI, security helpers, read APIs and Realtime, passes and payment (F7), paid-access gate, admin page, traction and waitlist backend (F10), dispatch-decision API, agent API on Qatom |
 | **B** | Messaging and voice agent | Zavu (WhatsApp, SMS, email, calls), ElevenLabs, report pipeline (F1), ask (F2), subscriptions and alert engine (F3), WhatsApp conversations for passes and dispatch decisions, report delivery (F6), call alerts (F4) |
-| **C** | Data and model | SUTRAN and weather ingestion (F8), segments, gazetteer, catchments, hazard layers, risk model, dispatch decision engine (F9), Yaku reconstruction, forecast evaluation, weekly report data (F6), n8n workflows |
+| **C** | Data and model | SUTRAN and weather ingestion (F8), segments, gazetteer, catchments, hazard layers, climate-exposure assessment, dispatch decision engine (F9), Yaku reconstruction, exposure evaluation, weekly report data (F6), n8n workflows |
 | **D** | Frontend and visualization | Public and paid dashboard (F5a, F5b), departure planner and chart (F9), `/impacto` page and waitlist form (F10), purchase and access-code screens, report page (F6) |
 
 Write each member's name next to their letter at the start of phase 0.
@@ -613,7 +603,7 @@ Write each member's name next to their letter at the start of phase 0.
 | F1 Report by WhatsApp | B | C (gazetteer, segments) |
 | F2 Ask by WhatsApp | B | C (risk), A (read API) |
 | F3 Alerts | B | C (alert evaluation trigger), A (pass checks) |
-| F4 Call alerts (P2) | B | C (risk at arrival time) |
+| F4 Call alerts (P2) | B | C (exposure at assumed arrival time) |
 | F5a / F5b Dashboard | D | A (read APIs, Realtime), C (layers, indicators) |
 | F6 Weekly report (last) | C | B (delivery), D (page), A (job auth) |
 | F7 Passes and payment | A | B (WhatsApp flow), D (purchase screens) |
@@ -629,8 +619,8 @@ The times assume work starts on Saturday at 13:30 and end at the Sunday 09:00 de
 |---|---|---|---|
 | **0. Setup and contracts** | Sat 13:30–15:00 | Repo, deploy, database, Zavu number, templates submitted, API contracts agreed, SUTRAN polling started | 15:00: everyone can deploy; contracts in the repo |
 | **1. Thin skeleton** | 15:00–19:00 | A WhatsApp message becomes a pin on the public map; SUTRAN incidents visible; waitlist form stores sign-ups | 19:00: the public URL is usable by real people |
-| **2. Core (P0)** | 19:00–01:00 | F1, F3, F5a, F8 and the risk model working on real data | Sun 01:00: **core checkpoint**; go / no-go on F4 |
-| **3. Complete MVP (P1)** | 01:00–04:30 | F9, F7, F10, F5b, F2 and the forecast evaluation | 04:30: P1 works end to end |
+| **2. Core (P0)** | 19:00–01:00 | F1, F3, F5a, F8 and the climate-exposure assessment working on real data | Sun 01:00: **core checkpoint**; go / no-go on F4 |
+| **3. Complete MVP (P1)** | 01:00–04:30 | F9, F10, F5b, F2 and exposure/alert verification; commercial F7 remains excluded | 04:30: P1 works end to end |
 | **4. Weekly report (F6), the last feature** | 04:30–05:30 | One weekly report generated by n8n and delivered; F4 only if it was a *go* | 05:30: **feature freeze** |
 | **5. Harden** | 05:30–07:00 | Error handling, edge cases, tests, demo data, setup instructions | 07:00: **code freeze** |
 | **6. Final validation** | 07:00–08:30 | Fresh-session check of every flow on the public URL; only fixes for blockers | 08:30: ready to submit (deadline 09:00) |
@@ -638,7 +628,7 @@ The times assume work starts on Saturday at 13:30 and end at the Sunday 09:00 de
 **Stand-ups (5 minutes):** at 15:00, 19:00, 22:00, 01:00, 04:30, 05:30 and 07:00. Each member says what is done, what is blocked, and what is next. During the night (01:00–05:00), each member takes one 90-minute rest, staggered so that at least two members are always working, and never during a checkpoint.
 
 **Working rules:**
-- One feature branch per task, small pull requests reviewed by one other member, and deploy on merge to `main`.
+- Follow `AGENTS.md`: C and its platform integration stay on `feat/data-model` with the consolidated PR; other members retain their branches. Teammate review and passing CI are required before merge to `main`.
 - The API contracts (JSON shapes for incidents, segments, risk, dispatch decision, passes, stats) are written in phase 0. Each member builds against mocks until the owner delivers.
 - Secrets live in the hosting platform and `.env.local`; the repo has only `.env.example`.
 - Every external call (Zavu, ElevenLabs, LLM, SUTRAN, Open-Meteo, Qatom) goes through A's shared wrapper with a timeout, a retry and a visible fallback.
@@ -685,10 +675,10 @@ The times assume work starts on Saturday at 13:30 and end at the Sunday 09:00 de
 | 0–1 | PE-22 geometry and 1-km segments with km references and elevation; place-to-km gazetteer for B | Segments in PostGIS; gazetteer merged |
 | 1 | Open-Meteo forecast pull for sample points; downloads of Previous Runs (Jan–Apr 2024 and 2025) and Historical Weather (Feb–Mar 2023) | Data stored |
 | 1–2 | Crossing points; catchment delineation (WhiteboxTools) or HydroBASINS fallback; rivers, susceptibility and SENAMHI layers exported as GeoJSON for D | Catchments linked to segments; layers load on the map |
-| 2 | Train risk model v1: 24 h, 72 h and 6-hour windows, stored inputs, model, grid and reasons; hourly n8n job → recalculation → alert evaluation (B's engine) | Risk levels on every PE-22 segment, hourly |
+| 2 | Implement versioned climate-exposure rules: 24/72-hour summaries and six-hour windows, stored inputs/reasons, source validity and coverage; hourly refresh → assessment → B alert evaluation | Mapped areas have reproducible assessments; unsupported segments stay unknown; freshness and rule tests pass |
 | 2 | Yaku 2023 reconstruction series; list of dated PE-22 events for 2024 and 2025 | Data ready for the timeline and the evaluation |
-| 3 | **Dispatch decision engine (F9):** travel timing per vehicle type, risk at arrival time, decision rules, best departure window, cost at stake; unit tests for each rule | The engine returns a decision for any departure in the next 72 h |
-| 3 | Train/tune on 2024, evaluate on 2025 per lead time against the transparent baseline; write the results, including weak ones | Evaluation documented in the repo |
+| 3 | **Departure planning engine (F9):** assumed travel timing, estimated exposure at arrival, separate source-reported restrictions and unknown-data behavior; tests for each rule | Supported departures return traceable comparisons within the captured forecast horizon; insufficient data is explicit |
+| 3 | Validate exposure rules, source freshness/coverage, map associations and alert changes; document reconstruction and deferred ML blockers separately | Evidence and limitations documented; no unsupported forecast-skill claim |
 | 3 | Indicator queries for D: km exposed per level, incidents by type and source, closure hours, rainfall per catchment, departure-chart matrix | Endpoints return real numbers |
 | 4 | **F6 weekly report:** n8n weekly workflow, report data endpoint, LLM summary written only from the computed numbers | One report generated |
 | 5 | Data documentation: sources, terms, retrieval method, resolution limits, evaluation; check that the scripts reproduce the outputs | Scripts run from a clean database |
@@ -699,7 +689,7 @@ The times assume work starts on Saturday at 13:30 and end at the Sunday 09:00 de
 |---|---|---|
 | 0 | UI shell and routing; MapLibre 3D terrain and fly-in from Peru to PE-22; mocks that follow the API contracts | Map renders on the public URL |
 | 1 | Live incidents layer (community and SUTRAN) and incident panel; waitlist form (F10) | A WhatsApp report appears live; the form stores sign-ups |
-| 2 | Segment risk layer and panel; rainfall heat map; catchments and rivers; SENAMHI and susceptibility layers; observed / forecast / estimated labels and *"no confirmado"* | F5a complete on real data |
+| 2 | Estimated climate-exposure layer and panel; rainfall, catchments, susceptibility and valid SENAMHI advisories; live conditions, unknown coverage and *"no confirmado"* kept distinct | F5a complete on real data with source/age/uncertainty visible |
 | 3 | Access-code entry and company plan purchase screens (A's backend); **departure planner and departure chart (F9)** | A dispatcher gets a decision and chart with the demo access code |
 | 3 | Paid view: timeline with Yaku reconstruction mode, 24 h / 72 h toggle, stretch selector, indicator panel, route profile, rainfall-vs-risk chart, export | F5b works with the demo access code |
 | 3 | `/impacto` page reading `/api/stats` (F10) | Counts render and match the API |
@@ -708,7 +698,7 @@ The times assume work starts on Saturday at 13:30 and end at the Sunday 09:00 de
 
 ### If we fall behind
 
-At the 01:00 checkpoint, cut in this order until the plan fits: F4 calls → Qatom agent API → voice-note replies → response layer and export → F6 weekly report → rainfall-vs-risk chart. Never cut: F1, F3, F5a, F8, the risk model, F9, the payment flow (with the Yape fallback) and `/impacto`.
+At the 01:00 checkpoint, apply the existing optional-feature cut order: F4 calls → voice-note replies → response layer and export → F6 weekly report → rainfall-vs-exposure chart. Keep F1, F3 driver alerts, F5a, F8 live conditions, the climate-exposure assessment, F9 departure support and `/impacto`. Payments/Qatom/Yape remain excluded; classifier training is deferred research.
 
 ---
 
@@ -757,18 +747,18 @@ excluding team members and test numbers.
 | 0:20–0:35 | **What it is.** PeruRoad Climate in one sentence |
 | 0:35–1:10 | **Dashboard.** 3D map flies from Peru into the Central; today's SUTRAN incidents, rainfall heat map, catchments, 72 h risk on the route profile, and the Yaku 2023 reconstruction on the timeline, labeled as such |
 | 1:10–2:00 | **Live.** A WhatsApp voice note "huaico en el km 52" → pin appears live → confidence updates → a subscribed phone receives the alert → (if F4 is delivered) a phone on a registered trip rings and the agent explains the hazard ahead |
-| 2:00–2:25 | **How it works.** Catchment-based design, code scores / LLM explains, confidence model, held-out forecast evaluation result and its limits |
-| 2:25–2:45 | **Who pays.** A dispatcher plans tonight's bus to Huancayo: the dashboard answers *wait until 04:00* with reasons and the departure chart; Route Pass by days for drivers, company plans for dashboard and predictions; real passes and waitlist from `/impacto` |
+| 2:00–2:25 | **How it works.** Forecast rain + official susceptibility + valid advisories; code computes exposure, the LLM explains verified inputs; show source freshness, coverage and evaluation limits |
+| 2:25–2:45 | **Decision and product value.** Show supported route-exposure comparisons and current restrictions with reasons; show actual waitlist/usage evidence. Describe commercial plans as hypotheses; payments remain excluded. |
 | 2:45–3:00 | **Users and next steps.** Real usage numbers, interview quotes, Piura/Tumbes and more corridors |
 
 **Anticipated questions:**
 - What about false reports? (confidence score, reputation, "no confirmado", matching SUTRAN incidents, confirmation from nearby users and calls)
-- How accurate is the early warning? (held-out forecast evaluation per lead time, false alarms, baseline comparison, rainfall grid resolution)
+- What does the assessment establish? (estimated climate exposure and attention priority; tested rules, source coverage and freshness; no fitted disruption probabilities or verified hazard-prediction accuracy)
 - Why is the Yaku replay not proof of prediction? (it uses rain that actually fell; advance-warning claims come only from archived forecasts on held-out seasons)
-- Why not just use SENAMHI warnings or the SUTRAN map? (warnings are by province and SUTRAN shows confirmed incidents; we use SUTRAN as an input and add per-catchment forecasts, live reports from the road, and delivery on WhatsApp and by call)
+- Why combine these sources? (official advisories, static susceptibility, forecast rainfall and live road impacts answer different questions; we attribute each and connect supported areas to driver subscriptions)
 - Isn't calling a driver who is driving dangerous? (consent first, short hands-free message that needs no answer, WhatsApp follow-up, pre-departure alerts preferred)
 - Who pays, and why would reporters keep reporting for free? (drivers pay for a Route Pass only for the days they travel; companies pay for dashboard access or dispatch predictions; reporting and closure alerts stay free)
-- How reliable is a *go / wait* decision? (deterministic rules over risk at arrival time and live incidents; it states the forecast lead time and grid resolution, and the company decides)
+- What can departure planning establish? (estimated exposure at assumed arrival times plus current source-reported restrictions; unknown coverage is visible and the company makes the decision)
 - Can you sell government data? (we sell derived risk scores and merged incidents and link official incidents to their public source; source terms are listed in the README)
 - How do you store phone numbers? (encrypted delivery reference or provider contact ID, HMAC key for matching, opt-out)
 - What does the AI do vs. our code?
@@ -780,7 +770,7 @@ excluding team members and test numbers.
 
 | Risk | Mitigation |
 |---|---|
-| No huaicos this weekend (October = dry season) | Accept all road incidents (rockfalls, blockades, accidents, roadworks; SUTRAN already lists such incidents on PE-22); show huaicos through the 2023 reconstruction |
+| No environmental event during the demo | Show real forecast exposure and current conditions as they are; retain non-climate traffic incidents as separate context and use an explicitly labeled Yaku reconstruction or test fixture for the hazard flow |
 | SUTRAN's undocumented API changes, rate-limits or goes down | Cache and poll every 10 minutes at most; keep our own archive; fall back to the last snapshot, labeled with its time |
 | WhatsApp template approval is slow or rejected | Submit at H0; alerts by SMS meanwhile; WhatsApp replies inside the 24 h window still work |
 | Zavu Voice Agents (beta) cannot call +51 numbers, sound poor in Spanish, or cost too much | Test at H0; fallback ElevenLabs Agents via Twilio; otherwise F4 stays WhatsApp-only and is presented as future work |
@@ -791,7 +781,7 @@ excluding team members and test numbers.
 | The deadline (Sunday 09:00) leaves less time than 30 hours | Clock schedule in section 8c; cut order applied at the 01:00 checkpoint |
 | Monetization work takes time from the core | Payments handled by the provider or Yape; entitlements are a `pass` table and an access code; P1 starts only after the core checkpoint |
 | Data terms do not allow resale | Sell derived products only; list each source's terms; drop a source from the API if its terms forbid it |
-| Too few dated incidents to evaluate forecasts | Report the count and make no advance-warning claim |
+| Too few dated incidents to train/evaluate a disruption classifier | Deliver transparent climate-exposure assessment; retain the blocked classifier as research and make no calibrated hazard-prediction claim |
 | Rainfall grid too coarse for small quebradas | State the resolution; group small catchments and flag them low-confidence |
 | Catchment delineation fails or is slow | HydroBASINS level 12 fallback, documented |
 | Government data has no usable feed | Static snapshot, documented |
@@ -799,7 +789,7 @@ excluding team members and test numbers.
 | Live demo breaks (Wi-Fi, API slowness) | Pre-loaded data, cached responses, phone hotspot, backup video |
 | Phone numbers leak | Encrypted delivery reference, HMAC matching key, no raw numbers in logs, secrets outside the repo |
 | Scope creep | Section 3 priority tiers are the contract. Nothing from P2 until P1 works end to end; no new features after the H24 freeze |
-| Panic from wrong alerts | Observed / forecast / estimated labels, confidence levels, and wording that gives risk, not certainty |
+| Misleading alerts | Separate estimated climate exposure, valid official advisories and verified incidents; show sources, times and unknowns, and suppress new automated exposure escalation on stale/incomplete data |
 
 ---
 
@@ -808,13 +798,13 @@ excluding team members and test numbers.
 - [ ] A real person, not on our team, reported something by WhatsApp and it appeared on the dashboard
 - [ ] A subscriber received an alert outside the 24-hour window (template approved) or by SMS fallback
 - [ ] SUTRAN PE-22 incidents ingested every 10 minutes and archived for the whole event
-- [ ] Risk level runs hourly over all PE-22 catchments
-- [ ] Held-out forecast evaluation computed and documented (or documented as not possible, with the reason)
+- [ ] Climate exposure refreshes hourly over supported catchments; unsupported segments and stale/missing inputs stay explicitly unknown/unavailable
+- [ ] Exposure rules, source coverage/freshness and alert transitions verified; deferred ML and unavailable forecast-skill evaluation documented with reasons
 - [ ] Yaku 2023 reconstruction on the timeline, labeled as a reconstruction
 - [ ] Section 6 checks recorded with results and fallbacks used
 - [ ] Public 3D dashboard with heat map and live incidents works from the public URL; paid view (timeline, indicators, route profile, export) works with the demo access code
-- [ ] A dispatch decision (go / wait / do not go) with best departure window works in the dashboard and on WhatsApp
-- [ ] A Route Pass can be bought and activated (Qatom or Yape), and expires on time
+- [ ] Departure planning shows source-reported restrictions and estimated exposure at assumed arrival times, with unknown inputs and no safe-route guarantee
+- [ ] Existing demo entitlements work where required; real pass sales, Qatom and Yape remain excluded from this implementation
 - [ ] `/impacto` shows real counts from outside the team; the company waitlist form stores sign-ups
 - [ ] One weekly report generated and delivered by n8n (last task; documented as cut if time ran out)
 - [ ] If F4 is delivered: a consenting phone on a registered trip received a call about a hazard ahead, and the call transcript is linked to the incident

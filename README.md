@@ -1,6 +1,7 @@
 # PeruRoad Climate
 
-PE-22 road conditions and climate context for travelers and dispatchers. This
+Climate exposure, preparedness and live PE-22 road conditions for drivers,
+dispatchers and response teams. This
 integration branch combines Role D's map snapshot (`400bb8d`) with A's application
 backend and C's independent data package. Follow [the Team Plan](docs/team-plan.md)
 and [repository instructions](AGENTS.md) before changing shared contracts.
@@ -84,11 +85,15 @@ dated snapshot fallbacks. See the [model-input handoff](docs/data/model-inputs.m
 and [ML checkpoint](docs/data/ml-readiness.md) for coverage, reproduction and the
 unresolved labels/forecast-availability decisions before training.
 
-Risk prediction, dispatch decisions and weekly generation still require C's
-model/data implementation. Their unavailable states do not mean low risk. The
-regularized logistic-regression pipeline is implemented; real-data fitting remains
-blocked by the reviewed-label and historical availability gaps described in the
-[training handoff](docs/data/logistic-pipeline.md). No real-data model has been
-trained or evaluated in this integration, and no real
+The participant approved a [climate-exposure and preparedness pivot](docs/data/climate-exposure.md)
+that retains live road conditions, the map and WhatsApp alerts for drivers. The
+assessment service combines forecast rainfall and mapped susceptibility, with
+official advisories kept separate pending eligibility. Immutable assessments and
+`GET /api/exposure` provide attention categories, reasons and explicit unknown
+coverage. B/D wiring, alert delivery, hourly scheduling, departure planning and
+weekly generation remain pending; existing unavailable responses do not mean low exposure or a safe
+road. The logistic pipeline remains deferred research, blocked by the evidence gaps
+in the [training handoff](docs/data/logistic-pipeline.md). No real-data model has
+been trained or evaluated in this integration, and no real
 WhatsApp report or real user validation is claimed. Payments and Qatom are outside
 the participant-authorized implementation scope for this step.

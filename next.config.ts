@@ -13,6 +13,7 @@ const nextConfig: NextConfig = {
       "./node_modules/@peruroad/road-data/data/pe22/catchment-terrain.json",
       "./node_modules/@peruroad/road-data/data/weather/*.gz",
       "./node_modules/@peruroad/road-data/data/events/pe22-events.json",
+      "./node_modules/@peruroad/road-data/data/exposure/*.gz",
     ],
   },
   partialPrefetching: true,
