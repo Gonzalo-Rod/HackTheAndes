@@ -1,4 +1,5 @@
-import { randomUUID, createHash, timingSafeEqual } from "node:crypto";
+import { authorizeJob } from "@/services/jobs/authorize";
+import { randomUUID } from "node:crypto";
 import { createExposureRepository, refreshExposureWeather } from "@peruroad/road-data/exposure";
 import { createPrecipitationProvider, createDataSnapshotRepository, weatherCaptureSchema } from "@peruroad/road-data/weather";
 import { database } from "@/db/pool";
@@ -12,14 +13,8 @@ import { createZavuTemplateSender } from "@/integrations/zavu/templates";
 import { collectAlertCandidates } from "./collect-candidates";
 import { createAlertDispatcher } from "./deliver-alerts";
 import { platformRoute, failure } from "@/services/platform/http";
-function authorize(request: Request) {
-  const secret = loadNotificationConfiguration().jobSecret;
-  const actual = request.headers.get("authorization") ?? "";
-  const hash = (x: string) => createHash("sha256").update(x).digest();
-  if (!timingSafeEqual(hash(actual), hash(`Bearer ${secret}`))) failure(401, "unauthorized", "Autenticación requerida.");
-}
 export const evaluateAlerts = platformRoute("alerts.job", async (request) => {
-  authorize(request);
+  authorizeJob(request);
   const requestId = randomUUID(),
     config = loadZavuConfiguration(),
     platform = loadPlatformConfiguration(),
@@ -45,7 +40,7 @@ export const evaluateAlerts = platformRoute("alerts.job", async (request) => {
   return Response.json({ requestId, ...(await dispatch(candidates, requestId)) });
 });
 export const refreshClimate = platformRoute("climate.refresh", async (request) => {
-  authorize(request);
+  authorizeJob(request);
   const repository = createExposureRepository(database());
   const previous = await repository.readLatest(loadGeometryRevision());
   if (!previous) failure(503, "exposure_unavailable", "No hay una base espacial disponible.");

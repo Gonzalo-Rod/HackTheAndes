@@ -130,3 +130,11 @@ export function loadNotificationConfiguration() {
     jobSecret: parsed.data.ROAD_DATA_JOB_SECRET,
   };
 }
+
+export function loadWeeklyReportConfiguration() {
+  const parsed = z
+    .object({ ZAVU_WEEKLY_REPORT_TEMPLATE_ID: z.string().min(1).optional() })
+    .safeParse({ ZAVU_WEEKLY_REPORT_TEMPLATE_ID: process.env.ZAVU_WEEKLY_REPORT_TEMPLATE_ID || undefined });
+  if (!parsed.success) throw new Error("Invalid ZAVU_WEEKLY_REPORT_TEMPLATE_ID configuration");
+  return { templateId: parsed.data.ZAVU_WEEKLY_REPORT_TEMPLATE_ID ?? null };
+}

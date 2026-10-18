@@ -165,6 +165,10 @@
     "./exposure/contracts": {
       "types": "./dist/contracts/exposure-public.d.ts",
       "default": "./dist/contracts/exposure-public.js"
+    },
+    "./reports": {
+      "types": "./dist/reports.d.ts",
+      "default": "./dist/reports.js"
     }
   },
   "files": [

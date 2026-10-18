@@ -90,7 +90,7 @@ that retains live road conditions, the map and WhatsApp alerts for drivers. The
 assessment service combines forecast rainfall and mapped susceptibility, with
 official advisories kept separate pending eligibility. Immutable assessments and
 `GET /api/exposure` provide attention categories, reasons and explicit unknown
-coverage. The [dashboard forecast view](docs/integration/dashboard-forecast.md) now shows dated six-hour possible-huaico estimates and mapped stretches; departure planning and weekly generation remain pending;
+coverage. The [dashboard forecast view](docs/integration/dashboard-forecast.md) now shows dated six-hour possible-huaico estimates and mapped stretches; departure planning is deferred; [weekly environmental PDFs](docs/integration/weekly-environmental-pdf.md) provide separate driver opt-in, stored attachments and n8n scheduling, with delivery checks recorded separately;
 voice input, subscriptions, conditional alerts and hourly climate refresh now have a separate integration; existing unavailable responses do not mean low exposure or a safe
 road. The logistic pipeline remains deferred research, blocked by the evidence gaps
 in the [training handoff](docs/data/logistic-pipeline.md). No real-data model has

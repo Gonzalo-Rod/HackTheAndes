@@ -14,6 +14,15 @@ team's chosen product direction: follow the participant-approved climate-exposur
 pivot, retaining driver WhatsApp alerts, live road conditions and the planned
 product surfaces, with the updated five-criterion rubric and 30-hour schedule.
 See `docs/data/climate-exposure.md` for the assessment and alert boundaries.
+**Latest participant decision:** environmental monitoring and preparedness take
+priority. Departure planning (F9), its engine, WhatsApp departure questions and
+D's planner/chart are deferred beyond hackathon delivery; do not treat them as
+remaining completion requirements. Preserve existing honest unavailable API
+responses. Prioritize report verification, reliable alerts, exposure/coverage
+validation and environmental explanations/indicators in the Team Plan checkpoint.
+Weekly reports now use separately authorized driver PDF attachments; see
+`docs/integration/weekly-environmental-pdf.md`. Do not enroll existing short-alert
+subscribers automatically or replace PDF delivery with a public report link.
 Payments, Qatom and Yape remain outside the participant-authorized implementation
 scope. Do not treat proposed
 integrations, metrics, or predictions as verified results. Before writing code,
@@ -182,8 +191,8 @@ Run the full list again at the 05:30 feature freeze and the 07:00 code freeze.
 | Input validation | All external input is parsed with zod before use. Unknown WhatsApp message types, empty messages, oversized media and malformed payloads are handled explicitly | Tests with invalid and unexpected payloads for each webhook and public API route |
 | Paid access | Every paid route and paid WhatsApp feature checks an active pass on the server. Client-side checks are only cosmetic | Tests for no pass, an expired pass, an active pass and the wrong organization |
 | Public endpoints | Public write endpoints (waitlist, report intake) are rate-limited and validate input size | A manual check with repeated requests returns 429 |
-| Required tests | Unit tests (Vitest) cover: **extraction** (normalizing LLM output on 10–20 real anonymized road messages, including bad LLM output), **dedupe**, **confidence**, **risk** and **dispatch decision** (one test per rule and the boundary values), plus webhook signatures, encryption and entitlements | `npm test` passes locally and in CI. Tests run without network access or real credentials, using the fakes behind the interfaces |
-| Edge cases | Each domain module tests its edge cases: a place outside PE-22, a pin more than 500 m from the road, a voice note that fails to transcribe, a duplicate webhook, a SUTRAN response that is empty or changed, a departure outside the 72 h forecast range, a pass that expires during a trip, and Lima time zone boundaries | Named test cases exist for each item that applies to the module |
+| Required tests | Unit tests (Vitest) cover: **extraction** (normalizing LLM output on 10–20 real anonymized road messages, including bad LLM output), **dedupe**, **confidence**, **climate exposure** and **alert eligibility** (one test per rule and boundary; deferred dispatch requires tests only if later implemented), plus webhook signatures, encryption and entitlements | `npm test` passes locally and in CI. Tests run without network access or real credentials, using the fakes behind the interfaces |
+| Edge cases | Each domain module tests its edge cases: a place outside PE-22, a pin more than 500 m from the road, a voice note that fails to transcribe, a duplicate webhook, a SUTRAN response that is empty or changed, a query outside the captured forecast range, a pass that expires during a trip, and Lima time zone boundaries | Named test cases exist for each item that applies to the module |
 | CI | Every pull request runs lint, type check (`tsc --noEmit`), tests and the secrets scan | A pull request cannot merge with a red check |
 | Reproducible setup | A fresh clone runs with the README steps, `.env.example` and the database migrations. The demo uses seeded data, not manual database edits | A member who did not write the feature follows the README on a clean checkout before the code freeze |
 

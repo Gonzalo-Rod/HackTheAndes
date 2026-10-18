@@ -113,8 +113,9 @@ publish the entire log. The history may become public.
 
 ## Working documents
 
-- [Team Plan](../docs/team-plan.md): the chosen product direction and full MVP
-  surfaces, with the approved climate-exposure pivot, current rubric and 30-hour schedule.
+- [Team Plan](../docs/team-plan.md): the chosen product direction, current implementation checkpoint
+  and remaining environmental priorities, with departure planning deferred, the
+  current rubric and 30-hour schedule.
 - [Climate exposure](../docs/data/climate-exposure.md): the current assessment,
   live-condition and driver WhatsApp alert plan, including implementation status.
 - [PROGRESS.md](PROGRESS.md): local history of decisions, implementation, checks,

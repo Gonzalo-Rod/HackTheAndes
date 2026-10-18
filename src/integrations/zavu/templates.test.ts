@@ -28,3 +28,14 @@ it("never sends an unapproved template", async () => {
   expect(await createZavuTemplateSender(config, f).sendTemplate(message)).toMatchObject({ ok: false, error: "window_closed" });
   expect(f).toHaveBeenCalledOnce();
 });
+it("sends static weekly notices without invented body variables", async () => {
+  const fetchImpl = vi.fn<typeof fetch>(async (_url, init) => {
+    if (init?.method === "GET") return Response.json({ id: "template-id", status: "approved" });
+    const body = JSON.parse(String(init?.body)) as { content: Record<string, unknown> };
+    expect(body.content).toEqual({ templateId: "template-id" });
+    return Response.json({ message: { id: "synthetic-weekly-notice" } });
+  });
+  expect(await createZavuTemplateSender({ ...config, summaryVariable: false }, fetchImpl).sendTemplate(message)).toMatchObject({
+    ok: true,
+  });
+});

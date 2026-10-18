@@ -1,3 +1,4 @@
+import { weeklyRuntime } from "@/services/weekly-reports/runtime";
 import { loadNotificationConfiguration } from "@/config/env";
 import { createZavuAudioSource } from "@/integrations/zavu/audio";
 import { createOpenAiTranscriber } from "@/integrations/openai/transcriber";
@@ -35,6 +36,7 @@ export function createZavuWebhook() {
   const limiter = createRateLimiter(database());
   const intentParser = intentConfig ? createOpenAiIntentParser(intentConfig) : null;
   const deps = {
+    weekly: weeklyRuntime().commands,
     subscriptions: createSubscriptionFlow({
       repository: createSubscriptionRepository(database(), encryption),
       context: (input, id) => context.execute(input, id),

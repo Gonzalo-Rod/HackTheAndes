@@ -3,8 +3,12 @@ import { z } from "zod";
 import { encryptContact, decryptContact, EncryptedContactSchema } from "@/integrations/security/contacts";
 import { subscriptionRangeSchema, type SubscriptionRange } from "@/contracts/notifications";
 import { transaction } from "./transaction";
+import { actWeeklyPreference, type WeeklyPreferenceAction } from "./weekly-preferences";
 export type SubscriptionAction =
-  { kind: "prepare"; range: SubscriptionRange; code: string; isTest: boolean } | { kind: "activate"; code: string } | { kind: "stop" };
+  | { kind: "prepare"; range: SubscriptionRange; code: string; isTest: boolean }
+  | { kind: "activate"; code: string }
+  | { kind: "stop" }
+  | WeeklyPreferenceAction;
 export function createSubscriptionRepository(pool: Pool, encryption: { key: string; version: string }) {
   return {
     async bounds(revision: string) {
@@ -42,7 +46,9 @@ export function createSubscriptionRepository(pool: Pool, encryption: { key: stri
         }
         let reply: string;
         const action = input.action;
-        if (action.kind === "stop") {
+        if (action.kind === "weeklyPrepare" || action.kind === "weeklyActivate" || action.kind === "weeklyStop") {
+          reply = await actWeeklyPreference(client, input.key, action, input.now);
+        } else if (action.kind === "stop") {
           await client.query("update public.subscriptions set opted_out_at=$2 where phone_key=$1 and opted_out_at is null", [
             input.key,
             input.now,
@@ -53,7 +59,16 @@ export function createSubscriptionRepository(pool: Pool, encryption: { key: stri
             "update private.alert_deliveries set status='cancelled',lease_id=null,lease_until=null where status='pending' and subscription_id in(select id from public.subscriptions where phone_key=$1)",
             [input.key],
           );
-          reply = "Alertas canceladas. No recibirás nuevas notificaciones automáticas. Para volver, escribe SUSCRIBIR.";
+          await client.query(
+            "delete from private.weekly_pdf_preferences where subscription_id in(select id from public.subscriptions where phone_key=$1)",
+            [input.key],
+          );
+          await client.query(
+            "update private.weekly_pdf_deliveries set status='cancelled',lease_id=null,lease_until=null where subscription_id in(select id from public.subscriptions where phone_key=$1) and status='pending'",
+            [input.key],
+          );
+          reply =
+            "Alertas canceladas. También se canceló el PDF semanal. No recibirás nuevas notificaciones automáticas. Para volver, escribe SUSCRIBIR.";
         } else if (action.kind === "prepare") {
           const range = subscriptionRangeSchema.parse(action.range);
           await client.query(
@@ -100,6 +115,9 @@ export function createSubscriptionRepository(pool: Pool, encryption: { key: stri
                 ],
               );
               await client.query("delete from private.subscription_checkpoints where subscription_id=$1", [
+                z.uuid().parse(saved.rows[0]?.id),
+              ]);
+              await client.query("delete from private.weekly_pdf_preferences where subscription_id=$1", [
                 z.uuid().parse(saved.rows[0]?.id),
               ]);
               await client.query("delete from private.subscription_intake where phone_key=$1", [input.key]);

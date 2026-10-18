@@ -4,7 +4,61 @@
 **Project name:** *PeruRoad Climate*
 **One line:** A climate-exposure and preparedness dashboard for the Rímac–Carretera Central corridor that combines forecast rainfall, official terrain susceptibility and advisories with live road conditions and WhatsApp field reports, helping response teams prioritize attention and drivers receive relevant route alerts.
 
-**Participant-approved pivot, October 17, 2026:** retain the 3D map, live road conditions, WhatsApp reporting and driver alerts, and planned route/dispatch views. The core output becomes transparent **estimated climate exposure and attention priority**; disruption-model training is deferred research. [The implementation brief](data/climate-exposure.md) defines source, freshness, alert and uncertainty boundaries. This is the current direction wherever older risk/prediction terminology remains. Planned behavior is not a claim of implementation. Payments, Qatom and Yape remain outside the participant-authorized implementation scope; commercial sections below are future context.
+**Participant-approved pivot, October 17, 2026:** retain the 3D map, live road conditions, WhatsApp reporting and driver alerts. The core output becomes transparent **estimated climate exposure and attention priority**; disruption-model training is deferred research. [The implementation brief](data/climate-exposure.md) defines source, freshness, alert and uncertainty boundaries. This is the current direction wherever older risk/prediction terminology remains. Planned behavior is not a claim of implementation. Payments, Qatom and Yape remain outside the participant-authorized implementation scope; commercial sections below are future context.
+
+**Participant-approved focus update, October 17, 2026:** environmental monitoring
+and preparedness are the delivery priority: **where forecast rainfall overlaps
+susceptible terrain, during which windows, and who needs to be informed**. Departure
+planning (F9), its API engine, WhatsApp questions and dashboard planner/chart are
+**deferred beyond the hackathon delivery scope**. Existing unavailable responses
+remain honest compatibility boundaries; no implementation or removal is required
+for those endpoints. This update supersedes older dispatch/departure promises,
+including those retained in commercial background sections.
+
+### Implementation checkpoint and remaining priorities
+
+The main environmental workflow is implemented on the
+[shared Preview](https://peruroad-climate-git-feat-data-model-gozlie.vercel.app/?vista=pronostico)
+in `feat/data-model`: SUTRAN ingestion/history, rainfall and terrain inputs,
+versioned exposure assessments, dated dashboard windows, WhatsApp text/audio
+reports with explicit confirmation, subscriptions, conditional 30-minute alerts
+without quiet hours, and hourly climate refresh. The participant verified DEMO
+report publication, subscription activation, alert receipt and voice reporting.
+These are participant demonstrations, not independent user traction or validated
+huaico forecasting. `main` is unchanged and still requires teammate review.
+
+The central product flow exists; completion now means strengthening its evidence
+and reliability, not adding a transport planner. Remaining work, in order:
+
+1. **B — Trustworthy environmental reports:** reviewed corroboration/confidence,
+   community/SUTRAN matching and clearing, two-minute mixed-input grouping, and
+   extraction checks on real anonymized messages. Initial community dedupe and a
+   conservative unconfirmed score already exist; production community alerts
+   must not be unlocked by the score placeholder.
+2. **B — Reliable notifications:** verify approved-template delivery outside the
+   24-hour conversation window and record scheduled-run/failure evidence. DEMO
+   delivery is verified; out-of-window delivery is not. SMS is not an automatic
+   fallback and requires separate consent and implementation.
+3. **C — Environmental assessment validation:** review rainfall/terrain and
+   catchment associations, source freshness, rule boundaries and alert changes;
+   document resolution and coverage. Currently 38 of 174 segments have supported
+   catchment links and 136 remain unknown. Improve coverage only with defensible
+   spatial evidence; full coverage and predictive accuracy are not assumed.
+4. **C with D — Environmental indicators and explanations:** complete missing
+   aggregates for exposed kilometers by attention category and forecast window,
+   assessed/unknown coverage, rainfall by catchment, and environmental reports by
+   type/source. Preserve current road restrictions as separate context. Existing
+   rainfall/exposure APIs are reused; no departure matrix is required.
+5. **All roles — Delivery readiness:** synchronize handoff documentation, verify
+   clean-database reproduction and a fresh-session/phone-width walkthrough,
+   gather evidence from a consenting user outside the team, and finish review,
+   pitch and submission. Existing tests and participant checks are evidence, not
+   substitutes for these remaining checks.
+
+Weekly report generation/delivery (F6) was selected for implementation after the core workflow; the driver-PDF scope and verification boundaries are in section F6. Photos,
+payments/Qatom/Yape remain excluded; calls and voice replies remain optional;
+disruption-classifier training remains deferred research. The rubric and 30-hour
+schedule stay unchanged; their remaining milestones follow these priorities.
 
 ---
 
@@ -14,10 +68,10 @@
 
 1. **Integrate** official data that today lives on separate platforms (SENAMHI, ENFEN, MTC, CENEPRED, INGEMMET, SUTRAN, ANA) and community reports into one 3D dashboard of the corridor.
 2. **Estimate** rainfall-related climate exposure for mapped catchments and linked road segments using forecast rain, INGEMMET susceptibility and valid SENAMHI advisories; show **live source-reported conditions** alongside **24–72 h estimated exposure** and explicit unknown coverage.
-3. **Collect and verify** reports from people near incidents through WhatsApp (text, voice note, photo, location).
+3. **Collect and verify** environmental field reports through WhatsApp (text, voice note and location); photos are excluded.
 4. **Notify** consenting drivers about confirmed route conditions, applicable official advisories and estimated climate exposure for their subscribed stretch; retain phone calls as the existing optional trip-watch feature.
-5. **Support departure planning:** compare estimated climate exposure at assumed arrival times with current source-reported restrictions, helping dispatchers review timing and uncertainty before sending a vehicle.
-6. **Make it sustainable:** a free channel for drivers and residents, and time-based paid access: day passes for drivers and dashboard or prediction subscriptions for companies, sold through Qatom.
+5. **Support environmental preparedness:** identify supported stretches where forecast rainfall overlaps susceptible terrain, show dated attention windows and unknown coverage, and deliver relevant notices to consenting subscribers.
+6. **Explore sustainability:** keep reporting and subscribed environmental notices accessible; collect organizational needs through the waitlist. Commercial plans below are hypotheses, with payments excluded from this delivery.
 7. **Evaluate** exposure rules, input coverage/freshness and alert delivery honestly. Keep historical reconstruction and deferred ML experiments separate from operational claims (section 4).
 8. **Test with real users** during the event and document what we learned.
 
@@ -44,10 +98,10 @@ Source: the organizers' evaluation sheet ("Cómo se evalúa a los equipos", Hack
 
 | Criterion | Weight | Score 1 → 5 on the sheet | How we aim for a 5 |
 |---|---|---|---|
-| **Technical complexity** | 30% | 1: an API wrapper or simple CRUD · 3: integrates APIs, data or a model with its own logic · 5: real data, models or orchestrated services, non-trivial architecture | Real official data + geospatial rainfall/susceptibility assessment + time-aware route comparison + verified report pipeline + orchestrated ingestion and driver alerts, with tested rules and explicit uncertainty |
-| **Functionality** | 25% | 1: fails live · 3: runs with toy data · 5: real data, and it holds up to questions outside the script | Live from the public URL with today's SUTRAN incidents and real reports; a judge can send their own WhatsApp message or ask for a dispatch decision for any departure time |
-| **Technical quality** | 20% | 1: fragile, or secrets in the repo · 3: organized, with shortcuts · 5: handles errors, edge cases and credentials | `.env.example` and no secrets in the repo; every external call has a timeout, retry and visible fallback; signed webhooks; encrypted contacts; tests for extraction, dedupe, confidence, risk and dispatch decision |
-| **Problem and impact** | 15% | 1: generic topic · 5: a specific user and evidence of the problem | Drivers and dispatchers on the Carretera Central; interviews at the terminal; real reports, passes and waitlist sign-ups recorded in the product |
+| **Technical complexity** | 30% | 1: an API wrapper or simple CRUD · 3: integrates APIs, data or a model with its own logic · 5: real data, models or orchestrated services, non-trivial architecture | Real official data + geospatial rainfall/susceptibility assessment + dated exposure windows + report verification pipeline + orchestrated ingestion and driver alerts, with tested rules and explicit uncertainty |
+| **Functionality** | 25% | 1: fails live · 3: runs with toy data · 5: real data, and it holds up to questions outside the script | Live from the public URL with today's SUTRAN incidents and real reports; a judge can inspect dated exposure windows and sources, send a WhatsApp report, and review explicit unknown coverage |
+| **Technical quality** | 20% | 1: fragile, or secrets in the repo · 3: organized, with shortcuts · 5: handles errors, edge cases and credentials | `.env.example` and no secrets in the repo; every external call has a timeout, retry and visible fallback; signed webhooks; encrypted contacts; tests for extraction, dedupe, confidence, exposure rules, freshness and alert eligibility |
+| **Problem and impact** | 15% | 1: generic topic · 5: a specific user and evidence of the problem | People exposed to rainfall-related hazards along the corridor and maintenance/emergency teams; real interviews, reports, subscriptions and waitlist sign-ups, excluding team/test activity |
 | **Clarity** | 10% | 1: it is unclear what they did · 5: what, why and what was left out | Rehearsed 3-minute demo; decisions, tradeoffs and cut features stated in the README and the pitch |
 
 **Traction bonus (added on top, does not replace technical work):**
@@ -68,7 +122,7 @@ Using AI is not evidence by itself; every design decision is explained in the re
 - **The AI does a narrow job** (transcription, extraction and explanations), wrapped in our own deterministic logic with a verification step.
 - **One corridor done deeply** (PE-22) rather than all of Peru done shallowly.
 - **Observed, forecast and estimated information are always distinguished.** Potential scenarios are never shown as confirmed damage.
-- **Every chart answers a decision question** (e.g. "should this truck leave tonight?", "which stretch needs a crew?"). A visualization that does not support a decision is cut.
+- **Every chart answers a decision question** (e.g. "where does forecast rain overlap susceptible terrain?", "which supported stretch needs attention during this window?"). A visualization that does not support a decision is cut.
 - **People who report never pay.** The WhatsApp channel stays free; organizations that use the aggregated data pay.
 
 ---
@@ -88,7 +142,7 @@ Official institutions publish meteorological, geological and road data, but on d
 
 **Track fit:** Climate and Territory: rainfall exposure, debris flows, slope failures and preparedness are the core environmental problem. Road conditions and driver alerts connect that problem to concrete impacts and actions; traffic crashes remain separately identified context.
 
-**Additional operational user:** maintenance and municipal emergency teams can inspect areas where forecast rainfall overlaps susceptible terrain. Driver subscriptions, reporting and dispatch workflows remain in scope.
+**Additional operational user:** maintenance and municipal emergency teams can inspect areas where forecast rainfall overlaps susceptible terrain. Driver subscriptions and reporting remain in scope; departure/dispatch workflows are deferred.
 
 ### Geographic scope
 
@@ -105,6 +159,11 @@ The opening view shows Peru in 3D; analysis and live features focus on PE-22.
 ## 3. What we build
 
 ### Product surfaces and plans
+
+**Commercial background only:** the paid packaging below preserves earlier ideas;
+it does not add payment, departure-planning, call or voice-reply requirements to
+the approved delivery scope. Current priorities are the environmental workflow
+and the implementation checkpoint above.
 
 Access is sold **by time, not by message**: a driver pays for the days they will be on the road, and a company pays for a period of dashboard access or predictions.
 
@@ -123,8 +182,8 @@ Access is sold **by time, not by message**: a driver pays for the days they will
 ### Priority tiers
 
 - **P0, core (must work at the core checkpoint):** F1, F3, F5a, F8 and the climate-exposure assessment (section 4).
-- **P1, complete MVP (must work at the feature freeze):** F9 departure planning, F10 traction page and waitlist, F5b, F2. F7 commercial payment flows remain excluded from this implementation.
-- **Last task before the freeze:** F6 weekly report. It is built only after P1 works, and it is cut if time runs out.
+- **P1, delivery readiness (must work at the feature freeze):** environmental report confidence/clearing, reliable F3 delivery, exposure/coverage validation, environmental indicators and explanations in F5b, F2, and F10 traction/waitlist. F9 is deferred; F7 commercial payment flows remain excluded.
+- **Last optional task before the freeze:** F6 weekly report. It is built only after validation and P1 work are complete, and it is cut if time runs out.
 - **P2, only after all of the above:** F4 call alerts, then the items under "Second priority". The Zavu voice check (section 6) still runs at the start so the decision on F4 can be made at the core checkpoint.
 
 ### F1. Report by WhatsApp (P0)
@@ -135,10 +194,10 @@ OpenAI credential; photos are excluded from the current implementation. See
 
 People near an incident send it to our Zavu WhatsApp number.
 
-- **Accepted inputs:** text, voice note (OGG/Opus), photo, location pin, or a mix. Messages from the same sender within 2 minutes are grouped into one report.
+- **Accepted inputs:** text, voice note (OGG/Opus) and location pin. Two-minute mixed-input grouping remains to be implemented; photos are excluded.
 - **Pipeline:**
   1. Zavu webhook → signature verified → raw message stored (media downloaded from `mediaUrl`).
-  2. Voice note → speech-to-text (ElevenLabs Scribe, Spanish).
+  2. Voice note → speech-to-text (OpenAI, Spanish; implemented using the existing credential).
   3. LLM structured extraction: `type` (huaico / derrumbe / inundación / bloqueo / accidente / obra / otro), `place_text`, `km` if stated, `direction`, `severity` (1–3), `lanes_blocked`, `observed_at`, `still_active`.
   4. **Location:** a shared pin is snapped to PE-22 (accepted within 500 m); otherwise `place_text` is matched against a PE-22 gazetteer (towns, bridges, quebradas, km markers: Chosica, Ricardo Palma, Matucana, San Mateo, Ticlio, Casapalca, Morococha, La Oroya…); otherwise the bot asks *"¿Puedes compartir tu ubicación?"*.
   5. **Dedupe:** same type, within ±2 km and 3 h of an active incident (community or SUTRAN) → merged into it; otherwise a new incident.
@@ -146,25 +205,25 @@ People near an incident send it to our Zavu WhatsApp number.
   7. **Reply:** *"Gracias. Registramos un derrumbe cerca del km 74 (San Mateo). Estado: no confirmado, 1 reporte."*
 - **Clearing:** *"ya limpiaron"* / *"ya pasa"* marks the incident as clearing; it becomes cleared after 2 independent reports, an official source, or decay.
 - **Unclear messages:** if type or location cannot be extracted, the bot asks one follow-up question instead of guessing.
-- **Photos** are stored and shown in the incident panel; reporter identity is never shown.
+- **Privacy and scope:** reporter identity is never shown; photos are excluded and audio is not retained after transcription.
 
 ### F2. Ask by WhatsApp (P1)
 
 - *"¿Cómo está la Central hasta Huancayo?"* → intent and stretch detected → reply with active source-reported incidents, estimated climate exposure for supported parts of the stretch and the next 24 h, reasons, unknown coverage and any applicable valid SENAMHI advisory.
 - Text reply of at most ~600 characters with a link to the stretch on the public dashboard.
-- If the question arrived as a voice note, the answer is also sent as a voice note (ElevenLabs text-to-speech).
+- Voice questions receive text replies. Synthesized voice replies are optional future work, not a delivery requirement.
 
 ### F3. Subscribe and WhatsApp alerts (P0)
 
 - *"Avísame de la Central"* or *"Avísame Chosica–La Oroya"* creates a subscription for a km range; the bot confirms the range. Explicit opt-in; *"BAJA"* opts out at any time.
-- **Current delivery scope:** consenting drivers are to receive confirmed road-condition alerts and climate-exposure advisories for their subscribed stretch. Delivery remains pending integration and verification. Paid packaging below remains future commercial context under the existing payments exclusion.
+- **Current delivery scope:** subscriptions and conditional alerts are implemented; a consenting participant verified a DEMO alert. Production community alerts still require the reviewed confidence policy, and delivery outside the 24-hour conversation window remains unverified. Paid packaging remains future commercial context under the existing payments exclusion.
 - **Triggers:**
   - a new incident in the range with confidence ≥ the alert threshold (official SUTRAN incidents qualify directly);
   - an incident in the range is cleared;
   - a fresh, complete climate-exposure assessment for a linked segment in the subscribed range crosses a documented attention threshold, labeled **estimated climate exposure**;
   - a new, valid and temporally eligible SENAMHI advisory covers the range, attributed to SENAMHI and separate from our assessment.
 - **Noise control:** retain evaluation every 30 minutes and at most one bundled message per subscription per 30 minutes, only when relevant conditions change. **Participant update:** no quiet hours; alerts may arrive at any time. Unchanged conditions produce no message. Stale/incomplete assessment inputs suppress new automated climate-exposure escalation.
-- **Outside the 24-hour window:** an approved WhatsApp utility template, e.g. *"Alerta PeruRoad: {tipo} en {tramo}, {estado}. Responde ESTADO para más detalles."* SMS fallback until it is approved.
+- **Outside the 24-hour window:** an approved WhatsApp utility template, e.g. *"Alerta PeruRoad: {tipo} en {tramo}, {estado}. Responde ESTADO para más detalles."* Pending/unapproved templates leave delivery pending; SMS requires separate consent and implementation.
 
 ### F4. Trip watch and call alerts (P2; Route Pass and Company Predictions)
 
@@ -219,17 +278,31 @@ A driver on the road cannot read WhatsApp; a short call reaches them. This uses 
 - **Export:** incidents and risk as CSV / GeoJSON for the selected stretch and period.
 - **Weekly reports archive** (F6).
 
-### F6. Weekly report (last task before the freeze; company plans; n8n)
+### F6. Weekly environmental PDF (participant-requested implementation)
 
-- **Schedule:** n8n cron every Monday 07:00 (America/Lima), plus a manual trigger for the demo.
-- **Flow:** n8n calls an authenticated endpoint (`/api/reports/weekly?org=…`) → the app computes the numbers → the LLM writes a 5-bullet summary **from those numbers only** → stored as an HTML page visible only to the paying organization (`/reports/{id}`) → n8n delivers it by email (Zavu email channel) or by a WhatsApp utility template with the link → n8n logs delivery and retries on failure.
-- **Content per subscribed stretch:**
-  - incidents of the last 7 days by type, source and km, restriction / closure hours, and comparison with the previous week;
-  - SENAMHI warnings issued;
-  - the 72 h risk outlook per segment, plus a 7-day rainfall outlook labeled as lower confidence beyond 72 h;
-  - top critical points.
+**Delivery update:** send PDF attachments to drivers who separately opt in, instead
+of organization report links. See [weekly PDF integration](integration/weekly-environmental-pdf.md).
 
-### F7. Passes and payment (P1)
+- **Consent:** an active selected stretch is required, followed by `SEMANAL` and
+  typed `SEMANAL ACTIVAR <code>`. Existing short-alert consent does not enroll a
+  driver. `SEMANAL BAJA` cancels PDFs only; `BAJA` cancels all notifications.
+- **Schedule:** Mondays 07:00 Peru; six-hour pending/catch-up processing and a
+  manual DEMO-only trigger. `PDF` requests an attachment or retrieves pending work.
+- **Content:** actual archive period and start, environmental records by source,
+  modeled rainfall where hours are complete, current captured 72-hour estimated
+  exposure, assessed/unknown kilometers, sources and limitations. Missing history
+  and closure durations remain unavailable; no complete-week coverage is inferred.
+- **Summary:** the optional LLM selects/orders existing computed facts only;
+  deterministic wording is the visible fallback. Code generates and stores the PDF.
+- **Delivery:** within WhatsApp's window, send the PDF directly. Outside it, an
+  approved utility notice asks the driver to reply `PDF`, followed by the attachment.
+  No report link or SMS fallback is sent. Provider acceptance, phone receipt and
+  template approval are separate checks.
+- **Owners:** C owns report data, n8n and generation; B owns consent/delivery; A
+  supports server-only storage, job authorization and bounded file access. D's
+  organization report page is future work, not required for this driver-PDF flow.
+
+### F7. Passes and payment (excluded; commercial background only)
 
 - **Route Pass by WhatsApp:**
   - the driver writes *"PASE 4"* (or picks 1, 4 or 7 days from a WhatsApp list) and states the route, e.g. *"Lima–Huancayo"*;
@@ -260,9 +333,11 @@ A driver on the road cannot read WhatsApp; a short call reaches them. This uses 
 - **Daily:** El Niño status (SUTRAN's `/public/nino` summary of SENAMHI / ENFEN) for the second-priority El Niño layer.
 - Each layer records its source, retrieval time and whether it is a live feed or a snapshot. Requests to public government services are cached and kept infrequent.
 
-### F9. Departure planning and route exposure (P1; planned company/driver views)
+### F9. Departure planning and route exposure (deferred; outside hackathon delivery scope)
 
-The core use case for companies: a dispatcher has a bus, truck or car ready to leave and needs to decide whether to send it now, later, or not at all. A stranded vehicle costs fuel, driver hours, missed deliveries and passenger complaints.
+**Status:** deferred by the participant to keep the product focused on environmental monitoring and preparedness. The design below is retained as future context only; no engine, WhatsApp departure flow, dashboard planner, departure matrix or successful dispatch endpoint is required at the feature freeze. Existing unavailable responses remain unchanged.
+
+A possible future use case is a dispatcher comparing route exposure at assumed arrival times; it requires separate travel assumptions and evaluation.
 
 - **Input** (dashboard form *"Planificar salida"*, or WhatsApp *"¿Sale el bus de las 22:00 a Huancayo?"*):
   - origin and destination on the corridor (preset places: Lima, Chosica, Matucana, San Mateo, La Oroya, Huancayo…);
@@ -292,6 +367,8 @@ The dashboard, messages and calls always distinguish **observed** events (offici
 
 ### Second priority (only after P1 works end to end)
 
+- F9 departure planning and its B/D interfaces are deferred beyond hackathon delivery, not part of the remaining overnight work.
+
 - F4 trip watch and call alerts, then confirmation calls.
 - Data API for AI agents on Qatom, paid per call (F7).
 - Estimated delay and alternative routes when a closure is confirmed (SUTRAN publishes official alternative routes).
@@ -309,7 +386,7 @@ Other corridors (including Lima–Arequipa), frost alerts, native mobile app, fu
 
 **Current approved output:** estimated rainfall-related exposure and attention
 priority over supported catchments and linked road segments for the next 24/72
-hours, with six-hour windows for route planning. The [implementation brief](data/climate-exposure.md)
+hours, with six-hour windows for environmental attention and preparedness. The [implementation brief](data/climate-exposure.md)
 defines the assessment, driver alerts and source boundaries. Live SUTRAN status,
 community-report verification and valid official advisories remain distinct.
 
@@ -380,18 +457,18 @@ People on the road ──► Zavu (WhatsApp / SMS / email / voice) ──► sig
         │ alerts, calls      │  │ voice agent tools (HTTPS)           ▼
         └────────────────────┘  └──────────── Next.js app (TypeScript, App Router, Vercel)
                                               ├─ Route handlers: Zavu webhook, incidents,
-                                              │  segments, risk, indicators, dispatch decisions,
+                                              │  segments, exposure, indicators,
                                               │  trips, passes, waitlist, reports, /api/v1 data API,
                                               │  n8n job endpoints (authenticated)
-                                              ├─ Report pipeline: ElevenLabs STT → LLM extraction
+                                              ├─ Report pipeline: OpenAI STT → LLM extraction
                                               │  → snap to PE-22 → dedupe → confidence
                                               ├─ Climate-exposure assessment (forecast + susceptibility)
                                               │  → stored reasons, source times and unknown coverage
                                               ├─ Alert engine: subscriptions (F3) + trips (F4)
                                               │  → Zavu message / template / call
-                                              ├─ Dispatch decision engine (F9) + pass checks (F7)
+                                              ├─ Source/coverage validation + report verification
                                               └─ Web UI: MapLibre 3D terrain, layers, heat map,
-                                                 timeline, indicators, departure planner,
+                                                 dated exposure windows, environmental indicators,
                                                  /impacto traction page, paid-access gate
                                                           │
                                          Postgres + PostGIS (Supabase, Realtime)
@@ -421,14 +498,14 @@ segmentation and overlays (PostGIS SQL + TypeScript / Turf.js), evaluation scrip
 | Geospatial processing | PostGIS SQL, TypeScript scripts (Turf.js), WhiteboxTools CLI for catchments |
 | Data formats | GeoJSON (vectors), GeoTIFF (DEM, rasters during preprocessing), vector tiles if layers get large |
 | Messaging and calls | Zavu (WhatsApp, SMS fallback, email, Voice Agents) |
-| Voice-note transcription | ElevenLabs (Scribe speech-to-text; text-to-speech for voice-note replies) |
+| Voice-note transcription | OpenAI speech-to-text using the existing credential; synthesized replies optional |
 | Scheduled jobs, alerts and weekly reports | n8n |
 | Payments for passes and subscriptions; agent data API | Qatom (Yape with manual activation as fallback) |
 
 ### Stack decisions
 
 - **Calls use Zavu Voice Agents.** Zavu already runs our WhatsApp channel and includes telephony, speech recognition and speech synthesis for calls, so a call is one API request with no extra provider or phone number. We considered ElevenLabs Agents and the Grok Voice Agent API; both need a separate telephony provider (e.g. Twilio or a SIP trunk). ElevenLabs Agents over Twilio remains the fallback if the Zavu voice check fails.
-- **ElevenLabs only for voice notes.** Zavu receives and sends WhatsApp audio, but its documentation does not describe transcription of inbound voice notes, so ElevenLabs transcribes them. If the H0 check shows Zavu transcribes inbound audio, we drop ElevenLabs.
+- **Voice-note transcription uses OpenAI.** The implemented adapter transcribes bounded authenticated audio using the existing credential, then enters the confirmed-report flow. ElevenLabs and synthesized voice replies are optional alternatives, not required dependencies.
 - **No separate agent host (Maritime) and no external memory service (Memory Cloud).** Agent logic runs in Next.js route handlers and the voice agent runs on Zavu. Reporter history and reputation are Postgres queries, which keeps the confidence score deterministic and auditable.
 - **n8n cloud uses HTTP Request nodes** to call Zavu, SUTRAN and our endpoints. The Zavu community node only installs on self-hosted n8n.
 - **SUTRAN's public JSON API instead of scraping its map.** The map is backed by an unauthenticated JSON API with CORS enabled; it is not documented as a public API, so we cache it, poll it gently, and keep our own archive in case it changes.
@@ -438,7 +515,7 @@ segmentation and overlays (PostGIS SQL + TypeScript / Turf.js), evaluation scrip
 | Tool | Our use |
 |---|---|
 | **Zavu** | The whole messaging channel: inbound reports, queries, WhatsApp alerts and templates, SMS fallback, weekly report email, and outbound call alerts through Voice Agents |
-| **ElevenLabs** | Transcribe WhatsApp voice notes; voice-note replies to drivers |
+| **ElevenLabs** | Optional alternative only; current voice transcription uses OpenAI |
 | **n8n** | SUTRAN, Open-Meteo and SENAMHI ingestion, risk recalculation and alert evaluation, weekly report generation and delivery |
 | **Qatom** | Sells Route Passes and company plans; later, the data API that agents pay per call |
 
@@ -453,7 +530,7 @@ segmentation and overlays (PostGIS SQL + TypeScript / Turf.js), evaluation scrip
 - **subscription**: id, contact_ref, phone_key (HMAC), road, km range, channel, consent_at, opted_out_at, is_team
 - **organization**: id, name, access_code_hash, report_channel, report_stretches, cost_per_hour (optional, entered by the company)
 - **pass**: id, phone_key or organization_id, plan (route_pass / company_dashboard / company_predictions), days, route (from/to), starts_at, expires_at, payment_method (qatom / yape), payment_ref, amount, status
-- **dispatch_decision**: id, organization_id or phone_key, origin, destination, depart_at, vehicle_type, recommendation (salir / esperar / no_salir), reasons[], segment_levels, best_window, cost_at_stake, model_inputs, created_at, outcome (passed / delayed / stopped)
+- **dispatch_decision (deferred design only)**: id, organization_id or phone_key, origin, destination, depart_at, vehicle_type, recommendation (salir / esperar / no_salir), reasons[], segment_levels, best_window, cost_at_stake, model_inputs, created_at, outcome (passed / delayed / stopped)
 - **waitlist**: id, company, contact_name, role, fleet_size, routes, contact_ref, consent_at, created_at
 - **trip**: id, organization_id (optional), contact_ref, phone_key, origin_km, destination_km, depart_at, avg_speed_kmh, status, call_consent_at
 - **call**: id, trip_id, incident_id, provider_call_id, purpose (alert / confirmation), status, duration_s, transcript, outcome
@@ -535,10 +612,10 @@ Four technical roles; section 8c lists each member's tasks. Pitch, user outreach
 
 | Role | Owns |
 |---|---|
-| **A. Platform, payments and API** | Repo, deploy, schema, CI, security helpers, read APIs and Realtime, passes and payment (F7), paid-access gate, admin page, traction and waitlist backend (F10), dispatch-decision API, agent API on Qatom |
-| **B. Messaging and voice agent** | Zavu webhook, templates and voice agent, ElevenLabs, extraction, geocoding, dedupe, confidence, alert engine (F1–F3), WhatsApp flows for passes and dispatch decisions, weekly report delivery (F6), trips and calls (F4) |
-| **C. Data and model** | Data integration checks, SUTRAN ingestion and archive, segments, catchments, climate-exposure assessment, dispatch decision engine (F9), reconstruction and exposure evaluation, n8n jobs (ingestion and weekly report) |
-| **D. Frontend and visualization** | Next.js UI, MapLibre 3D map, layers, heat map, timeline, indicators and charts, route profile, stretch selector, departure planner and chart (F9), `/impacto` and waitlist form (F10), purchase screens, report page (F6), export, live updates |
+| **A. Platform, payments and API** | Repo, deploy, schema, CI, security helpers, read APIs and Realtime, passes and payment (F7), paid-access gate, admin page, traction and waitlist backend (F10) (payments/Qatom excluded; F9 deferred) |
+| **B. Messaging and voice agent** | Zavu webhook, templates and voice agent, OpenAI transcription, extraction, geocoding, dedupe, confidence, alert engine (F1–F3), weekly report delivery (F6), trips and calls (F4) |
+| **C. Data and model** | Data integration checks, SUTRAN ingestion and archive, segments, catchments, climate-exposure assessment, environmental indicators and coverage validation, reconstruction and exposure evaluation, n8n jobs (ingestion and weekly report) |
+| **D. Frontend and visualization** | Next.js UI, MapLibre 3D map, layers, heat map, timeline, indicators and charts, route profile, stretch selector, dated environmental exposure windows and coverage, `/impacto` and waitlist form (F10), purchase screens, report page (F6), export, live updates |
 
 AI coding tools are used for boilerplate. The risk, confidence and evaluation logic is written and understood by the team.
 
@@ -561,7 +638,7 @@ submission and final checks forward to finish at least 30 minutes before it.
 | **H8–10** | **Launch to real users** | Number shared in WhatsApp groups (drivers, family, friends who travel the Central); waitlist form live; usage recorded in the database from the first real user |
 | **H10–18 (night)** | Core (P0) | Extraction + dedupe + confidence; catchments delineated; climate-exposure assessment v1; subscriptions + alerts; SENAMHI ingestion; Yaku 2023 reconstruction data, 2024–2025 archived forecasts and event records loaded |
 | **H18** | **Core integration checkpoint** | The live reporting → dashboard → subscriber alert flow works from start to finish; go / no-go decision on F4 call alerts based on the Zavu voice check |
-| **H18–24** | Complete MVP (P1) + evaluation, then F6 | Dispatch decision (F9); passes and payment (F7); `/impacto` page (F10); ask by WhatsApp; paid dashboard view (timeline, 72 h forecast, indicators, route profile, stretch selector, export); exposure rules, source coverage and alert transitions verified; **then, as the last task, the weekly report (F6)**; F4 only if all of this already works |
+| **H18–24** | Environmental delivery readiness (P1), then optional F6 | Confidence/clearing and report grouping; template delivery verification; exposure rules, spatial coverage/freshness and alert transitions; missing environmental indicators and explanations; `/impacto` (F10) and WhatsApp queries; **then, optionally, F6 weekly report**. F9 deferred and payments excluded; no new transport features |
 | **H18–22 (in parallel)** | **Terminal visit** | One or two members go to the Central bus/colectivo terminals (e.g. Yerbateros): ~10 interviews, sign-ups, willingness-to-pay answers, photos/video |
 | **H22–29 (in parallel)** | Pitch preparation | Slides, real usage evidence, 5 or more timed rehearsals, and Q&A preparation completed |
 | **H24** | **Feature freeze** | Full MVP works end to end; no new features after this point |
@@ -597,10 +674,10 @@ This section covers technical work only. Pitch, user outreach and traction tasks
 
 | Member | Technical area | Owns |
 |---|---|---|
-| **A** | Platform, payments and API | Repo, deploy, database schema, CI, security helpers, read APIs and Realtime, passes and payment (F7), paid-access gate, admin page, traction and waitlist backend (F10), dispatch-decision API, agent API on Qatom |
-| **B** | Messaging and voice agent | Zavu (WhatsApp, SMS, email, calls), ElevenLabs, report pipeline (F1), ask (F2), subscriptions and alert engine (F3), WhatsApp conversations for passes and dispatch decisions, report delivery (F6), call alerts (F4) |
-| **C** | Data and model | SUTRAN and weather ingestion (F8), segments, gazetteer, catchments, hazard layers, climate-exposure assessment, dispatch decision engine (F9), Yaku reconstruction, exposure evaluation, weekly report data (F6), n8n workflows |
-| **D** | Frontend and visualization | Public and paid dashboard (F5a, F5b), departure planner and chart (F9), `/impacto` page and waitlist form (F10), purchase and access-code screens, report page (F6) |
+| **A** | Platform, payments and API | Repo, deploy, database schema, CI, security helpers, read APIs and Realtime, passes and payment (F7), paid-access gate, admin page, traction and waitlist backend (F10) (payments/Qatom excluded; F9 deferred) |
+| **B** | Messaging and voice agent | Zavu (WhatsApp, SMS, email, calls), OpenAI transcription, report pipeline (F1), ask (F2), subscriptions and alert engine (F3), report delivery (F6), call alerts (F4) |
+| **C** | Data and model | SUTRAN and weather ingestion (F8), segments, gazetteer, catchments, hazard layers, climate-exposure assessment, environmental indicators and coverage validation, Yaku reconstruction, exposure evaluation, weekly report data (F6), n8n workflows |
+| **D** | Frontend and visualization | Public and paid dashboard (F5a, F5b), dated environmental exposure windows and coverage, `/impacto` page and waitlist form (F10), purchase and access-code screens, report page (F6) |
 
 Write each member's name next to their letter at the start of phase 0.
 
@@ -614,7 +691,7 @@ Write each member's name next to their letter at the start of phase 0.
 | F6 Weekly report (last) | C | B (delivery), D (page), A (job auth) |
 | F7 Passes and payment | A | B (WhatsApp flow), D (purchase screens) |
 | F8 Official data ingestion | C | A (schema) |
-| F9 Dispatch decision | C (engine) | A (API and entitlement), B (WhatsApp), D (planner and chart) |
+| F9 Departure planning — deferred | No current delivery owner | Future C engine / A API / B WhatsApp / D planner; not a completion gate |
 | F10 Traction page and waitlist | A (backend) | D (page and form) |
 
 ### Phases (clock times, America/Lima)
@@ -626,8 +703,8 @@ The times assume work starts on Saturday at 13:30 and end at the Sunday 09:00 de
 | **0. Setup and contracts** | Sat 13:30–15:00 | Repo, deploy, database, Zavu number, templates submitted, API contracts agreed, SUTRAN polling started | 15:00: everyone can deploy; contracts in the repo |
 | **1. Thin skeleton** | 15:00–19:00 | A WhatsApp message becomes a pin on the public map; SUTRAN incidents visible; waitlist form stores sign-ups | 19:00: the public URL is usable by real people |
 | **2. Core (P0)** | 19:00–01:00 | F1, F3, F5a, F8 and the climate-exposure assessment working on real data | Sun 01:00: **core checkpoint**; go / no-go on F4 |
-| **3. Complete MVP (P1)** | 01:00–04:30 | F9, F10, F5b, F2 and exposure/alert verification; commercial F7 remains excluded | 04:30: P1 works end to end |
-| **4. Weekly report (F6), the last feature** | 04:30–05:30 | One weekly report generated by n8n and delivered; F4 only if it was a *go* | 05:30: **feature freeze** |
+| **3. Environmental readiness (P1)** | 01:00–04:30 | Report confidence/clearing/grouping, template delivery check, spatial/exposure validation, F5b environmental indicators, F2 and F10; F9 deferred and F7 excluded | 04:30: remaining environmental reliability and evidence checks recorded, with limitations explicit |
+| **4. Final evidence; optional F6** | 04:30–05:30 | Finish environmental demo/evidence first; generate/deliver F6 only if validation is complete and time remains | 05:30: **feature freeze**; unfinished optional work explicitly cut |
 | **5. Harden** | 05:30–07:00 | Error handling, edge cases, tests, demo data, setup instructions | 07:00: **code freeze** |
 | **6. Final validation** | 07:00–08:30 | Fresh-session check of every flow on the public URL; only fixes for blockers | 08:30: ready to submit (deadline 09:00) |
 
@@ -635,11 +712,13 @@ The times assume work starts on Saturday at 13:30 and end at the Sunday 09:00 de
 
 **Working rules:**
 - Follow `AGENTS.md`: C and its platform integration stay on `feat/data-model` with the consolidated PR; other members retain their branches. Teammate review and passing CI are required before merge to `main`.
-- The API contracts (JSON shapes for incidents, segments, risk, dispatch decision, passes, stats) are written in phase 0. Each member builds against mocks until the owner delivers.
+- Shared contracts cover incidents, segments, exposure, source metadata and stats. Existing dispatch contracts stay compatible but unavailable; F9 is deferred and requires no engine or consumer work in this delivery.
 - Secrets live in the hosting platform and `.env.local`; the repo has only `.env.example`.
 - Every external call (Zavu, ElevenLabs, LLM, SUTRAN, Open-Meteo, Qatom) goes through A's shared wrapper with a timeout, a retry and a visible fallback.
 
 ### Member A: platform, payments and API
+
+Payment/Qatom/Yape tasks below remain excluded background; F9 is deferred.
 
 | Phase | Task | Done when |
 |---|---|---|
@@ -652,28 +731,35 @@ The times assume work starts on Saturday at 13:30 and end at the Sunday 09:00 de
 | 2 | `/api/stats` for `/impacto` (F10) with the exclusion rules (team, test numbers, automated traffic) | Counts match a manual SQL check |
 | 3 | Passes and payment (F7): Qatom checkout and confirmation, or Yape pending → manual confirmation; pass activation, expiry job, 12 h reminder (sent through B's send helper); company plan purchase backend | A test payment activates a pass that expires on time |
 | 3 | Protected admin page: pending Yape confirmations, active passes and subscriptions | The team can confirm a payment from the page |
-| 3 | `/api/dispatch-decision` endpoint wrapping C's engine, with entitlement check, input validation and rate limiting | D and B get decisions from the same endpoint |
+| Deferred | F9 dispatch API integration | Preserve the honest unavailable response; no successful decision is required for delivery |
 | 4 | Authentication for n8n job endpoints; storage and access control for weekly reports (F6) | n8n calls succeed only with the job secret |
 | 4 | Qatom agent API listing (second priority, only if P1 is done) | One paid call recorded |
 | 5 | Quality pass: secrets scan, error responses, edge cases (expired pass, duplicate payment, bad input), tests for payments and entitlements green; seeded demo organization and access code; README setup instructions | A fresh clone runs with the README steps |
 
 ### Member B: messaging and voice agent
 
+Prioritize report trust, grouping and reliable environmental notices. Weekly
+reports, calls and voice replies are optional; no departure flow is required.
+
 | Phase | Task | Done when |
 |---|---|---|
-| 0 | Zavu: number live, signed webhook endpoint, WhatsApp templates submitted (alert, pass expiry, weekly report); test call to a +51 number; agent-scope check; ElevenLabs transcription test on a real voice note; LLM provider configured | Results recorded in `PROGRESS.md` |
-| 1 | Message router: report, ask, *AVÍSAME*, *BAJA*, *PASE*, departure questions, fallback help message | Each command reaches its handler |
+| 0 | Zavu number and signed webhook; alert utility template submitted; OpenAI transcription and LLM configured; voice calls/replies optional and payment templates excluded | Actual setup and participant audio test results recorded in `PROGRESS.md`; template delivery approval checked separately |
+| 1 | Message router: environmental report, status/exposure query, subscriptions, *BAJA* and fallback help; *PASE* excluded and departure questions deferred | Supported commands reach their handler without promising unavailable features |
 | 1 | Webhook → store report (download media) → crude extraction → incident → acknowledgment reply | A real WhatsApp message shows on the public map |
-| 2 | ElevenLabs transcription; LLM structured extraction with a fixed schema; 2-minute message grouping; location (pin snapping and C's gazetteer); follow-up question when type or place is missing | Tests pass on 10–20 real road messages |
+| 2 | OpenAI transcription and schema-validated extraction (implemented); complete 2-minute grouping and real-message validation; preserve pin/gazetteer confirmation and missing-input follow-up | Tests pass on 10–20 real anonymized messages; synthetic fixtures remain labeled |
 | 2 | Dedupe against community and SUTRAN incidents; confidence v1; clearing logic | Tests for dedupe and confidence pass |
 | 2 | Subscriptions and alert engine (F3): free closure alerts vs pass alerts, conditional 30-minute bundling without quiet hours, approved-template fallback outside the 24 h window (SMS requires separate consent); send helper with retry | A subscriber receives an alert for a new incident |
-| 3 | Ask by WhatsApp (F2), with a voice-note reply when the question was a voice note | *"¿Cómo está la Central?"* gets a correct summary |
-| 3 | WhatsApp flows for *PASE* (calls A's payment module) and *"¿Sale el bus de las 22:00 a Huancayo?"* (calls `/api/dispatch-decision`) | Both flows work end to end on a phone |
-| 4 | Weekly report delivery endpoint (Zavu email or WhatsApp template) used by n8n (F6) | One report delivered |
+| 3 | Ask by WhatsApp (F2): short text replies with environmental exposure, source dates and map link; voice replies optional | Status/exposure questions receive source-grounded summaries |
+| Deferred / excluded | Departure questions (F9) are deferred; *PASE* payments are excluded | Neither flow is a delivery requirement; responses must not fabricate availability |
+| 4 | Weekly PDF opt-in, cancellation and document delivery; approved reply-PDF notice outside the conversation window (F6) | One consenting driver receives the PDF attachment; approval and receipt recorded separately |
 | 4 | Call alerts (F4) only if the 01:00 decision was *go*: trip registration, call consent, trigger evaluation, `POST /v1/calls` with greeting, agent tool endpoints, transcript storage | One consenting phone received a call |
-| 5 | Failure handling for Zavu, ElevenLabs and the LLM (timeouts, fallbacks, user-facing error messages); cached responses for the demo | The pipeline survives an external API failure |
+| 5 | Verify Zavu, OpenAI transcription and LLM failure handling (timeouts, safe retries, Spanish fallbacks); confirm out-of-window utility-template delivery | Failures produce visible recovery states; record actual delivery evidence |
 
 ### Member C: data and model
+
+The assessment/refresh pipeline is implemented. Remaining priorities are evidence,
+spatial/temporal validation, missing environmental aggregates and reproduction;
+F9 is deferred and F6 is last and optional.
 
 | Phase | Task | Done when |
 |---|---|---|
@@ -683,28 +769,31 @@ The times assume work starts on Saturday at 13:30 and end at the Sunday 09:00 de
 | 1–2 | Crossing points; catchment delineation (WhiteboxTools) or HydroBASINS fallback; rivers, susceptibility and SENAMHI layers exported as GeoJSON for D | Catchments linked to segments; layers load on the map |
 | 2 | Implement versioned climate-exposure rules: 24/72-hour summaries and six-hour windows, stored inputs/reasons, source validity and coverage; hourly refresh → assessment → B alert evaluation | Mapped areas have reproducible assessments; unsupported segments stay unknown; freshness and rule tests pass |
 | 2 | Yaku 2023 reconstruction series; list of dated PE-22 events for 2024 and 2025 | Data ready for the timeline and the evaluation |
-| 3 | **Departure planning engine (F9):** assumed travel timing, estimated exposure at arrival, separate source-reported restrictions and unknown-data behavior; tests for each rule | Supported departures return traceable comparisons within the captured forecast horizon; insufficient data is explicit |
+| 3 | **Environmental assessment validation:** review catchment/terrain associations and rainfall overlap, explicit assessed/unknown coverage, dated windows and uncertainty; improve spatial links only where supported | Reproducible evidence supports every assessed association; unsupported segments remain unknown; no full-coverage or forecasting-skill claim |
 | 3 | Validate exposure rules, source freshness/coverage, map associations and alert changes; document reconstruction and deferred ML blockers separately | Evidence and limitations documented; no unsupported forecast-skill claim |
-| 3 | Indicator queries for D: km exposed per level, incidents by type and source, closure hours, rainfall per catchment, departure-chart matrix | Endpoints return real numbers |
-| 4 | **F6 weekly report:** n8n weekly workflow, report data endpoint, LLM summary written only from the computed numbers | One report generated |
+| 3 | Complete missing environmental indicators for D: km by attention category/window, assessed/unknown coverage, rainfall per catchment and environmental reports by type/source; keep observed restriction/closure durations separate | Real, traceable aggregates reuse existing APIs; no departure-chart matrix |
+| 4 | **F6 weekly PDF:** environmental aggregates, stored PDF, bounded fact selection and n8n weekly/retry/DEMO workflows | One reproducible PDF generated with actual coverage and no invented figures |
 | 5 | Data documentation: sources, terms, retrieval method, resolution limits, evaluation; check that the scripts reproduce the outputs | Scripts run from a clean database |
 
 ### Member D: frontend and visualization
+
+Focus remaining work on environmental explanations, indicators and device checks;
+purchase screens are excluded, F9 is deferred and F6 is optional.
 
 | Phase | Task | Done when |
 |---|---|---|
 | 0 | UI shell and routing; MapLibre 3D terrain and fly-in from Peru to PE-22; mocks that follow the API contracts | Map renders on the public URL |
 | 1 | Live incidents layer (community and SUTRAN) and incident panel; waitlist form (F10) | A WhatsApp report appears live; the form stores sign-ups |
 | 2 | Estimated climate-exposure layer and panel; rainfall, catchments, susceptibility and valid SENAMHI advisories; live conditions, unknown coverage and *"no confirmado"* kept distinct | F5a complete on real data with source/age/uncertainty visible |
-| 3 | Access-code entry and company plan purchase screens (A's backend); **departure planner and departure chart (F9)** | A dispatcher gets a decision and chart with the demo access code |
+| 3 | Environmental exposure windows, reasons, source freshness and assessed/unknown coverage; preserve demo access where required | Users can inspect when/where attention is elevated and why; F9 planner/chart deferred and purchase screens excluded |
 | 3 | Paid view: timeline with Yaku reconstruction mode, 24 h / 72 h toggle, stretch selector, indicator panel, route profile, rainfall-vs-risk chart, export | F5b works with the demo access code |
 | 3 | `/impacto` page reading `/api/stats` (F10) | Counts render and match the API |
-| 4 | **F6 report page** and reports archive, with C | A generated report opens in the dashboard |
+| Future | Organization report page/archive | Driver PDFs are delivered as attachments; a new report page is not required |
 | 5 | Loading, empty and error states; performance on the presentation laptop; phone-width check | Fresh-session walkthrough passes |
 
 ### If we fall behind
 
-At the 01:00 checkpoint, apply the existing optional-feature cut order: F4 calls → voice-note replies → response layer and export → F6 weekly report → rainfall-vs-exposure chart. Keep F1, F3 driver alerts, F5a, F8 live conditions, the climate-exposure assessment, F9 departure support and `/impacto`. Payments/Qatom/Yape remain excluded; classifier training is deferred research.
+At the 01:00 checkpoint, apply the existing optional-feature cut order: F4 calls → voice-note replies → response layer and export → F6 weekly report → rainfall-vs-exposure chart. Keep F1, F3 driver alerts, F5a, F8 live conditions, climate-exposure assessment/validation and `/impacto`. F9 departure support is already deferred and must not consume the remaining delivery time. Payments/Qatom/Yape remain excluded; classifier training is deferred research.
 
 ---
 
@@ -727,7 +816,7 @@ excluding team members and test numbers.
 - Subscribers to alerts
 - Returning users (used it more than once)
 - Route Passes sold and companies on the waitlist
-- Dispatch decisions requested
+- Environmental exposure views/queries only if instrumented; no inferred preparedness benefit or dispatch completion count
 - Calls placed and answered (if F4 is delivered)
 - Interviews done + the top 3 things we learned and changed
 
@@ -751,10 +840,10 @@ excluding team members and test numbers.
 |---|---|
 | 0:00–0:20 | **Problem.** One driver's story from our interviews + one figure (e.g. days the Central was closed during Yaku) |
 | 0:20–0:35 | **What it is.** PeruRoad Climate in one sentence |
-| 0:35–1:10 | **Dashboard.** 3D map flies from Peru into the Central; today's SUTRAN incidents, rainfall heat map, catchments, 72 h risk on the route profile, and the Yaku 2023 reconstruction on the timeline, labeled as such |
-| 1:10–2:00 | **Live.** A WhatsApp voice note "huaico en el km 52" → pin appears live → confidence updates → a subscribed phone receives the alert → (if F4 is delivered) a phone on a registered trip rings and the agent explains the hazard ahead |
+| 0:35–1:10 | **Environmental dashboard.** Show forecast rainfall overlapping susceptible terrain, a dated six-hour possible-huaico estimate, source freshness and assessed/unknown stretches. Current SUTRAN impacts remain separate context; historical reconstruction is optional and labeled |
+| 1:10–2:00 | **Live.** Send an explicitly labeled DEMO environmental voice report → review location → typed confirmation → unconfirmed DEMO marker. Show the consenting participant's recorded alert check, or run an eligible DEMO notification; do not imply one unverified public report triggers a production alert |
 | 2:00–2:25 | **How it works.** Forecast rain + official susceptibility + valid advisories; code computes exposure, the LLM explains verified inputs; show source freshness, coverage and evaluation limits |
-| 2:25–2:45 | **Decision and product value.** Show supported route-exposure comparisons and current restrictions with reasons; show actual waitlist/usage evidence. Describe commercial plans as hypotheses; payments remain excluded. |
+| 2:25–2:45 | **Preparedness and value.** Explain which supported stretches need attention during the selected forecast window, why, and how subscribed people receive concise notices. Show actual user evidence and limitations; departure planning is deferred and payments excluded |
 | 2:45–3:00 | **Users and next steps.** Real usage numbers, interview quotes, Piura/Tumbes and more corridors |
 
 **Anticipated questions:**
@@ -764,7 +853,7 @@ excluding team members and test numbers.
 - Why combine these sources? (official advisories, static susceptibility, forecast rainfall and live road impacts answer different questions; we attribute each and connect supported areas to driver subscriptions)
 - Isn't calling a driver who is driving dangerous? (consent first, short hands-free message that needs no answer, WhatsApp follow-up, pre-departure alerts preferred)
 - Who pays, and why would reporters keep reporting for free? (drivers pay for a Route Pass only for the days they travel; companies pay for dashboard access or dispatch predictions; reporting and closure alerts stay free)
-- What can departure planning establish? (estimated exposure at assumed arrival times plus current source-reported restrictions; unknown coverage is visible and the company makes the decision)
+- Why is this an environmental product? (rainfall and terrain determine estimated exposure; the map explains where/when attention is needed, and reports/notifications connect that evidence to preparedness. Departure planning is deferred)
 - Can you sell government data? (we sell derived risk scores and merged incidents and link official incidents to their public source; source terms are listed in the README)
 - How do you store phone numbers? (encrypted delivery reference or provider contact ID, HMAC key for matching, opt-out)
 - What does the AI do vs. our code?
@@ -778,7 +867,7 @@ excluding team members and test numbers.
 |---|---|
 | No environmental event during the demo | Show real forecast exposure and current conditions as they are; retain non-climate traffic incidents as separate context and use an explicitly labeled Yaku reconstruction or test fixture for the hazard flow |
 | SUTRAN's undocumented API changes, rate-limits or goes down | Cache and poll every 10 minutes at most; keep our own archive; fall back to the last snapshot, labeled with its time |
-| WhatsApp template approval is slow or rejected | Submit at H0; alerts by SMS meanwhile; WhatsApp replies inside the 24 h window still work |
+| WhatsApp template approval is slow or rejected | Record the delivery limitation; keep approved in-window replies working and retry pending deliveries within their validity. No SMS without separate consent and implementation |
 | Zavu Voice Agents (beta) cannot call +51 numbers, sound poor in Spanish, or cost too much | Test at H0; fallback ElevenLabs Agents via Twilio; otherwise F4 stays WhatsApp-only and is presented as future work |
 | Calls distract drivers | Explicit call consent, ≤2 min hands-free message that needs no reply, one call per incident per trip, pre-departure alerts by WhatsApp |
 | Drivers ignore calls from an unknown or foreign number | Save-the-contact message at trip registration; WhatsApp follow-up after each call |
@@ -802,17 +891,17 @@ excluding team members and test numbers.
 ## 12. Definition of done
 
 - [ ] A real person, not on our team, reported something by WhatsApp and it appeared on the dashboard
-- [ ] A subscriber received an alert outside the 24-hour window (template approved) or by SMS fallback
+- [ ] A consenting subscriber received an alert outside the 24-hour window using an approved WhatsApp template; if blocked, record approval/delivery as unverified rather than claiming completion (SMS requires separate consent and implementation)
 - [ ] SUTRAN PE-22 incidents ingested every 10 minutes and archived for the whole event
 - [ ] Climate exposure refreshes hourly over supported catchments; unsupported segments and stale/missing inputs stay explicitly unknown/unavailable
 - [ ] Exposure rules, source coverage/freshness and alert transitions verified; deferred ML and unavailable forecast-skill evaluation documented with reasons
 - [ ] Yaku 2023 reconstruction on the timeline, labeled as a reconstruction
 - [ ] Section 6 checks recorded with results and fallbacks used
 - [ ] Public 3D dashboard with heat map and live incidents works from the public URL; paid view (timeline, indicators, route profile, export) works with the demo access code
-- [ ] Departure planning shows source-reported restrictions and estimated exposure at assumed arrival times, with unknown inputs and no safe-route guarantee
+- [ ] Dated environmental exposure windows explain rainfall/susceptibility reasons and assessed/unknown coverage; no departure planner or dispatch decision is required (F9 deferred)
 - [ ] Existing demo entitlements work where required; real pass sales, Qatom and Yape remain excluded from this implementation
 - [ ] `/impacto` shows real counts from outside the team; the company waitlist form stores sign-ups
-- [ ] One weekly report generated and delivered by n8n (last task; documented as cut if time ran out)
+- [ ] A separately consenting driver receives a weekly environmental PDF attachment; n8n schedule/retries and any template-approval limitation are recorded
 - [ ] If F4 is delivered: a consenting phone on a registered trip received a call about a hazard ahead, and the call transcript is linked to the incident
 - [ ] README with architecture, decisions, data sources and their terms, resolution limits, and what AI was used for
 - [ ] Backup video recorded

@@ -37,6 +37,9 @@ it("handles an oversized or unavailable attachment", async () => {
   s.source.download.mockRejectedValue(new Error("Unavailable"));
   expect(await s.service.convert(message, "request")).toMatchObject({ ok: false, reply: expect.stringContaining("8 MB") });
 });
-it.each(["CONFIRMAR ABCDEF12", "ACTIVAR ABCDEF12"])("requires typed confirmation instead of executing speech: %s", async (text) => {
-  expect((await setup(text).service.convert(message, "request")).ok).toBe(false);
-});
+it.each(["CONFIRMAR ABCDEF12", "ACTIVAR ABCDEF12", "SEMANAL ACTIVAR ABCDEF12"])(
+  "requires typed confirmation instead of executing speech: %s",
+  async (text) => {
+    expect((await setup(text).service.convert(message, "request")).ok).toBe(false);
+  },
+);

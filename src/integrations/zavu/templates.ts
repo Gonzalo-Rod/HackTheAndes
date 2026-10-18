@@ -4,7 +4,7 @@ import type { TemplateSender } from "@/integrations/messaging/types";
 import { err, ok } from "@/lib/result";
 import { toSendFailure } from "./client";
 export function createZavuTemplateSender(
-  config: { apiKey: string; senderId: string; templateId: string | null },
+  config: { apiKey: string; senderId: string; templateId: string | null; summaryVariable?: boolean },
   fetchImpl?: typeof fetch,
 ): TemplateSender {
   return {
@@ -29,7 +29,10 @@ export function createZavuTemplateSender(
             messageType: "template",
             fallbackEnabled: false,
             idempotencyKey: message.idempotencyKey,
-            content: { templateId: config.templateId, templateVariables: { "1": message.text.replace(/\s+/g, " ").slice(0, 950) } },
+            content: {
+              templateId: config.templateId,
+              ...(config.summaryVariable === false ? {} : { templateVariables: { "1": message.text.replace(/\s+/g, " ").slice(0, 950) } }),
+            },
           },
           {
             provider: "zavu",

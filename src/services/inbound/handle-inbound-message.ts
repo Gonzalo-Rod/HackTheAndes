@@ -27,6 +27,7 @@ export interface InboundDependencies {
   reports?: ReportRouter;
   subscriptions?: SubscriptionRouter;
   voice?: VoiceInput;
+  weekly?: import("@/contracts/weekly-pdf").WeeklyRouter;
 }
 async function intentReply(intent: MessageIntent, information: RoadInformation, requestId: string): Promise<string> {
   switch (intent.kind) {
@@ -51,6 +52,8 @@ export async function chooseReply(message: InboundMessageData, deps: InboundDepe
       ? `Nota de voz interpretada. ${await chooseReply(result.message, { ...deps, voice: undefined }, requestId)}`
       : result.reply;
   }
+  const weekly = await deps.weekly?.handle(message, requestId);
+  if (weekly) return weekly;
   const subscription = await deps.subscriptions?.handle(message, requestId);
   if (subscription) return subscription;
   const routed = await deps.reports?.route(message, requestId);

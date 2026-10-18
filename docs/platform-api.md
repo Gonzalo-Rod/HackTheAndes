@@ -78,7 +78,7 @@ Use these application helpers for the remaining report/subscription work:
 
 Cryptographic choices follow [Node.js crypto](https://nodejs.org/docs/latest-v24.x/api/crypto.html).
 The signed webhook and source-grounded query handlers are implemented and tested.
-Transcription, full confidence and automatic alert delivery remain pending.
+Voice transcription, explicit subscriptions and conditional alert delivery are implemented; full confidence remains pending. [Weekly driver PDFs](integration/weekly-environmental-pdf.md) add separate consent and attachment delivery.
 Text-report publication uses [explicit reporter confirmation](integration/whatsapp-reports.md). The participant confirmed both source-query replies after shared webhook
 cutover; see the [recorded verification](integration/zavu-messaging.md#recorded-verification).
 
@@ -109,8 +109,7 @@ imports the committed PE-22 geometry before those checks.
 
 A's risk/dispatch boundaries and report access control are ready for C's outputs;
 catchment weather, spatial overlays and historical candidates now have validated
-read APIs and dated outage fallbacks. Hourly weather/model automation, ML training,
-dispatch and report generation remain pending; see the [ML checkpoint](data/ml-readiness.md).
+read APIs and dated outage fallbacks. Hourly weather/exposure automation is implemented; ML training and dispatch are deferred. Weekly driver-PDF generation uses a separate protected outbox; see the [ML checkpoint](data/ml-readiness.md).
 The participant requested a checkpoint before ML selection/training. Main remains
 unmerged until teammate review and passing CI. Payments, Qatom and payment
 administration are explicitly excluded.
@@ -137,7 +136,6 @@ does not currently consume these providers. On October 17, 2026, all four were
 configured as sensitive variables for the `feat/data-model` Preview only.
 The [shared WhatsApp integration](integration/zavu-messaging.md) implements the
 signed webhook, durable delivery leases, Zavu replies and a structured OpenAI
-intent parser backed by C's source services. Text reports now publish after explicit location/code confirmation. Media processing
-and automatic subscriptions remain pending B. The participant confirmed receiving both `ESTADO`
+intent parser backed by C's source services. Text reports now publish after explicit location/code confirmation. Voice processing, subscriptions and conditional alerts are implemented; photos remain excluded. The participant confirmed receiving both `ESTADO`
 and `EXPOSICION` replies from the shared deployment on October 17, 2026; this is a
 query-delivery check, not external-user traction or report/alert verification.

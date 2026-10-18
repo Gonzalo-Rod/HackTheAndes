@@ -24,7 +24,7 @@ export function createVoiceInput(deps: {
             };
           await deps.cache.save(key, text);
         }
-        if (/^\s*(CONFIRMAR|ACTIVAR)\b/i.test(text))
+        if (/^\s*(CONFIRMAR|ACTIVAR|SEMANAL\s+ACTIVAR)\b/i.test(text))
           return { ok: false, reply: "Para confirmar una publicación o suscripción, escribe el código en un mensaje de texto." };
         return { ok: true, message: { ...message, messageType: "text", text } };
       } catch (error) {
