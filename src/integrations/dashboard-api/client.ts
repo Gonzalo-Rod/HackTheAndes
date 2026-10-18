@@ -129,3 +129,12 @@ export async function fetchCatchmentWeather() {
     "lluvia por cuenca",
   );
 }
+
+export async function fetchExposure() {
+  const { ExposureLayerSchema } = await import("@/contracts/exposure");
+  return parseOrThrow(
+    ExposureLayerSchema,
+    await getJson("/api/exposure?horizonHours=72", { provider: PROVIDER, operation: "dashboard.exposure", retries: 0 }),
+    "exposición climática",
+  );
+}

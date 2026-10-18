@@ -6,8 +6,8 @@ integration of D's `400bb8d` snapshot. C remains in `packages/road-data`; the ol
 
 The participant-approved [climate-exposure plan](data/climate-exposure.md) retains
 live conditions and driver WhatsApp alerts. The assessment and persisted public
-read are implemented at `/api/exposure`; alert-change
-interfaces and B/D wiring are the next step. Existing risk/dispatch unavailable
+read are implemented at `/api/exposure`; driver alerts and the
+[dated dashboard forecast view](integration/dashboard-forecast.md) now consume these assessments. Existing risk/dispatch unavailable
 responses and source-data contracts below are unchanged. Estimated exposure,
 official advisories and confirmed incidents must remain distinct when those
 consumers are updated. Disruption-classifier training is deferred research.
@@ -26,7 +26,7 @@ in `src/contracts/platform.ts` and `src/contracts/road-alerts.ts`.
 | `GET /api/catchments` | Public | Coarse upstream HydroBASINS polygons with weights, dates and low-confidence notice; dated bundled fallback on DB failure. See [catchment handoff](data/pe22-catchments.md). |
 | `GET /api/weather/catchments` | Public | Capture-anchored catchment rainfall history and forecast windows, with dated fallback. |
 | `GET /api/hazards` | Public | Static susceptibility and official warnings; separate from model risk. |
-| `GET /api/exposure?horizonHours=24\|72` | Public | Estimated climate attention, provenance, 24/72-hour and six-hour windows. Validated DB/bundle reads; stale/future categories masked to unknown. Automatic alert use disabled. |
+| `GET /api/exposure?horizonHours=24\|72` | Public | Estimated climate attention, provenance, 24/72-hour and six-hour windows. Validated DB/bundle reads; stale/future categories masked to unknown. Fresh usable database assessments can trigger conditional alerts; stale/snapshot inputs are ineligible. |
 | `GET /api/history/events` | Public | Sanitized candidate events with incomplete-coverage/training flags. |
 | `GET /api/history/weather?dataset=...` | Public | Allowlisted archived forecasts, retrospective references and Yaku reconstruction. See [model inputs](data/model-inputs.md). |
 | `GET /api/corridor` | Public | D's corridor contract adapted to C's segments. Town positions remain approximate OSM references; an explicitly dated bundled fallback survives DB outages. |

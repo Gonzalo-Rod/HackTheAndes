@@ -35,7 +35,7 @@ export function EventList({
     <section className="pr-events" aria-labelledby="events-title">
       <header className="pr-events__head">
         <h2 id="events-title" className="pr-dock-title">
-          Eventos
+          Eventos reportados
         </h2>
         <span className="pr-count pr-count--strong">{alerts.length}</span>
         <span className="pr-events__hint">Última actualización</span>

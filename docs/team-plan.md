@@ -186,6 +186,8 @@ A driver on the road cannot read WhatsApp; a short call reaches them. This uses 
 ### F5. 3D dashboard (MapLibre GL JS)
 
 **F5a. Public view (P0)**
+
+**Participant update:** add `possible_huaico` forecast items labeled *Posible huaico · estimación*, with dated six-hour windows, approximate mapped kilometer ranges and rainfall/susceptibility reasons. Keep them distinct from observed incidents, road status, the historical event timeline and impact counts. See the [dashboard integration](integration/dashboard-forecast.md).
 - Opening fly-in from Peru to PE-22 on 3D terrain with hillshade.
 - **Layers (toggle):**
   - incidents: icon by type, color by confidence, official (SUTRAN, with its road status interrumpido / restringido / normal) vs community, *"no confirmado"* label;

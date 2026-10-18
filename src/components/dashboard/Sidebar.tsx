@@ -8,6 +8,7 @@ import type { SidebarTab } from "./types";
 
 const TABS: { value: SidebarTab; label: string; icon: IconName }[] = [
   { value: "capas", label: "Capas", icon: "layers" },
+  { value: "pronostico", label: "Pronóstico", icon: "clock" },
   { value: "detalle", label: "Detalle", icon: "info" },
   { value: "fuentes", label: "Fuentes", icon: "source" },
 ];
@@ -19,9 +20,10 @@ interface SidebarProps {
   layersContent: ReactNode;
   detailContent: ReactNode;
   sourcesContent: ReactNode;
+  forecastContent: ReactNode;
 }
 
-export function Sidebar({ tab, hasSelection, onTabChange, layersContent, detailContent, sourcesContent }: SidebarProps) {
+export function Sidebar({ tab, hasSelection, onTabChange, layersContent, detailContent, sourcesContent, forecastContent }: SidebarProps) {
   return (
     <aside className="pr-sidebar" aria-label="Panel lateral">
       <div className="pr-tabs" role="tablist" aria-label="Secciones del panel">
@@ -46,6 +48,7 @@ export function Sidebar({ tab, hasSelection, onTabChange, layersContent, detailC
         {tab === "capas" && layersContent}
         {tab === "detalle" && detailContent}
         {tab === "fuentes" && sourcesContent}
+        {tab === "pronostico" && forecastContent}
       </div>
     </aside>
   );

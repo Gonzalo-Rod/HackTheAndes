@@ -1,8 +1,11 @@
 "use client";
+import { bindNetworkTooltip } from "./network-tooltip";
 import type { HazardLayer } from "@/contracts/model-inputs";
+import type { ForecastMapData } from "@/domain/exposure/forecast-map";
+import { addForecastLayers, setForecastData, bindForecastSelection } from "./forecast-layers";
 import { setHazardData } from "./hazard-layers";
 
-import type { Map as MLMap, MapLayerMouseEvent, Popup } from "maplibre-gl";
+import type { Map as MLMap, Popup } from "maplibre-gl";
 import { useEffect, useImperativeHandle, useRef, useState, type Ref } from "react";
 
 import type { CatchmentLayer } from "@/contracts/catchments";
@@ -43,6 +46,9 @@ export interface MapViewProps {
   rainSegments: RainSegment[];
   catchments: CatchmentLayer | null;
   hazards: HazardLayer | null;
+  forecastData: ForecastMapData;
+  selectedForecastId: string | null;
+  onForecastSelect: (id: string) => void;
   highlightRegionKey: string | null;
   profileKm: number | null;
   padding: ScreenPadding;
@@ -70,6 +76,7 @@ export function MapView(props: MapViewProps) {
   const cameraRef = useRef<CameraController | null>(null);
   const markersRef = useRef(new Map<string, MarkerEntry>());
   const readyRef = useRef(false);
+  const pendingBoundsRef = useRef<[number, number, number, number] | null>(null);
   const [mapReady, setMapReady] = useState(false);
   const latest = useRef(props);
 
@@ -130,10 +137,16 @@ export function MapView(props: MapViewProps) {
         map.resize();
         map.fitBounds(PERU_BOUNDS, { padding: 24, animate: false });
         addThematicLayers(map, window.location.origin);
+        addForecastLayers(map);
+        bindForecastSelection(map, (id) => latest.current.onForecastSelect(id));
         if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) stopFlow = startFlowAnimation(map);
         readyRef.current = true;
         setMapReady(true);
         latest.current.onReady();
+        if (pendingBoundsRef.current) {
+          cameraRef.current?.flyToBounds(pendingBoundsRef.current);
+          pendingBoundsRef.current = null;
+        }
       });
       let cullFrame = 0;
       map.on("move", () => {
@@ -153,24 +166,8 @@ export function MapView(props: MapViewProps) {
       map.on("wheel", stopOnUserInput);
       map.on("click", () => latest.current.onSelect(null));
 
-      // Hovering the national network shows the official road code, surface and condition.
       tooltip = new ml.Popup({ closeButton: false, closeOnClick: false, className: "pr-map-tip", offset: 10, maxWidth: "260px" });
-      map.on("mousemove", "network-line", (event: MapLayerMouseEvent) => {
-        const properties = event.features?.[0]?.properties as { road?: string; surface?: string; condition?: string } | undefined;
-        if (!properties || !tooltip) return;
-        map.getCanvas().style.cursor = "help";
-        const node = document.createElement("div");
-        const title = document.createElement("strong");
-        title.textContent = `Red vial nacional · ${properties.road ?? "—"}`;
-        const meta = document.createElement("span");
-        meta.textContent = `${properties.surface ?? "Sin dato"} · estado ${String(properties.condition ?? "sin dato").toLowerCase()} (MTC)`;
-        node.append(title, meta);
-        tooltip.setLngLat(event.lngLat).setDOMContent(node).addTo(map);
-      });
-      map.on("mouseleave", "network-line", () => {
-        map.getCanvas().style.cursor = "";
-        tooltip?.remove();
-      });
+      bindNetworkTooltip(map, tooltip);
     }
 
     init().catch((error: unknown) => {
@@ -247,6 +244,10 @@ export function MapView(props: MapViewProps) {
   }, [mode]);
 
   useEffect(() => {
+    if (mapRef.current && readyRef.current) setForecastData(mapRef.current, props.forecastData, layers.exposure, props.selectedForecastId);
+  }, [props.forecastData, props.selectedForecastId, layers.exposure, mapReady]);
+
+  useEffect(() => {
     if (mapRef.current && readyRef.current) {
       setCatchmentData(mapRef.current, catchments);
       setHazardData(mapRef.current, props.hazards);
@@ -289,7 +290,10 @@ export function MapView(props: MapViewProps) {
       flyToPeru: () => camera()?.flyToPeru(),
       flyToCorridor: () => camera()?.flyToCorridor(),
       flyToAlert: (alert) => camera()?.flyToAlert([alert.lng, alert.lat]),
-      flyToBounds: (bbox) => camera()?.flyToBounds(bbox),
+      flyToBounds: (bbox) => {
+        if (readyRef.current) camera()?.flyToBounds(bbox);
+        else pendingBoundsRef.current = bbox;
+      },
       flyToKm: (km) => camera()?.flyToKm(km),
       startTour: () => camera()?.startTour(),
       stopTour: () => camera()?.stopTour(),

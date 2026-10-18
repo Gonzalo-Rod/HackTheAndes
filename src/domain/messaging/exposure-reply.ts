@@ -10,9 +10,11 @@ function limaTime(timestamp: string): string {
   return new Intl.DateTimeFormat("es-PE", { timeZone: "America/Lima", dateStyle: "short", timeStyle: "short" }).format(new Date(timestamp));
 }
 export function formatExposureReply(view: ExposureLayer, publicUrl: string, segmentId?: string): string {
+  const mapUrl = new URL(publicUrl);
+  mapUrl.searchParams.set("vista", "pronostico");
   const ageMinutes = Math.ceil(view.meta.ageSeconds / 60);
   const header = `Exposición climática estimada PE-22 (24 h). Datos: ${limaTime(view.data.sources.weatherCapturedAt)} (Lima), hace ${ageMinutes} min.`;
-  const footer = `Criterios experimentales, no probabilidad de huaico ni confirmación de cierre o vía segura. Lluvia de modelo (~25 km) y susceptibilidad INGEMMET; enlaces a cuencas de baja confianza. Mapa: ${publicUrl}`;
+  const footer = `Criterios experimentales, no probabilidad de huaico ni confirmación de cierre o vía segura. Lluvia de modelo (~25 km) y susceptibilidad INGEMMET; enlaces a cuencas de baja confianza. Mapa: ${mapUrl.toString()}`;
   if (view.meta.state !== "ready" || !view.meta.operationallyUsable)
     return `${header}\nEvaluación no disponible o desactualizada. No se puede inferir riesgo bajo.\n${footer}`;
   if (segmentId) {

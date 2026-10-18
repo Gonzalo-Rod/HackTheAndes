@@ -6,6 +6,7 @@ import "./globals.css";
 import "@/styles/dashboard.css";
 import "@/styles/panels.css";
 import "@/styles/map.css";
+import "@/styles/forecast.css";
 import "@/styles/responsive.css";
 import "@/styles/platform.css";
 

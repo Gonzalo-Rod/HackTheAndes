@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, type Ref } from "react";
+import { useEffect, useRef, useState, type Ref } from "react";
 
 import { Icon } from "@/components/icons";
 import { MapView, type MapViewHandle, type MapViewProps } from "@/components/map/MapView";
@@ -14,13 +14,26 @@ import { MapStateOverlay, type MapStateOverlayProps } from "./MapStateOverlay";
 import { TourHud } from "./TourHud";
 import type { LayerState, MapMode } from "./types";
 
+/** A stalled base-map provider must leave a usable forecast-list fallback. */
+const MAP_LOADING_TIMEOUT_MS = 20_000;
 const BASE_PADDING = { top: 64, right: 48, bottom: 64, left: 48 };
 /** Extra bottom padding so a flown-to alert is not hidden behind the selected-alert card. */
 const CALLOUT_PADDING = { ...BASE_PADDING, bottom: 190 };
 
 type PassThrough = Pick<
   MapViewProps,
-  "hazards" | "catchments" | "alerts" | "hiddenIds" | "hoveredId" | "corridorAlerts" | "rainSegments" | "highlightRegionKey" | "onHover"
+  | "forecastData"
+  | "selectedForecastId"
+  | "onForecastSelect"
+  | "hazards"
+  | "catchments"
+  | "alerts"
+  | "hiddenIds"
+  | "hoveredId"
+  | "corridorAlerts"
+  | "rainSegments"
+  | "highlightRegionKey"
+  | "onHover"
 >;
 
 interface MapAreaProps extends PassThrough {
@@ -31,6 +44,8 @@ interface MapAreaProps extends PassThrough {
   mode: MapMode;
   corridor: CorridorData | null;
   profileKm: number | null;
+  forecastLabel: string | null;
+  onForecastOpen: () => void;
   now: number | null;
   status: Omit<MapStateOverlayProps, "mapReady" | "mapError">;
   onSelect: (id: string | null) => void;
@@ -55,8 +70,13 @@ export function MapArea({
   rainSegments,
   catchments,
   hazards,
+  forecastData,
+  selectedForecastId,
+  onForecastSelect,
   highlightRegionKey,
   profileKm,
+  forecastLabel,
+  onForecastOpen,
   status,
   onSelect,
   onHover,
@@ -73,6 +93,15 @@ export function MapArea({
   const [tourKm, setTourKm] = useState<number | null>(null);
   const [orbiting, setOrbiting] = useState(false);
 
+  useEffect(() => {
+    if (mapReady || mapError) return;
+    const timer = window.setTimeout(
+      () => setMapError("El mapa está tardando demasiado. Los horarios y tramos estimados siguen en Pronóstico."),
+      MAP_LOADING_TIMEOUT_MS,
+    );
+    return () => window.clearTimeout(timer);
+  }, [mapReady, mapError]);
+
   return (
     <div className="pr-mapwrap" ref={wrapRef}>
       <MapView
@@ -88,13 +117,19 @@ export function MapArea({
         rainSegments={rainSegments}
         catchments={catchments}
         hazards={hazards}
+        forecastData={forecastData}
+        selectedForecastId={selectedForecastId}
+        onForecastSelect={onForecastSelect}
         highlightRegionKey={highlightRegionKey}
         profileKm={profileKm}
         padding={BASE_PADDING}
         focusPadding={CALLOUT_PADDING}
         onSelect={onSelect}
         onHover={onHover}
-        onReady={() => setMapReady(true)}
+        onReady={() => {
+          setMapReady(true);
+          setMapError(null);
+        }}
         onError={setMapError}
         onBearingChange={(b) => setBearing(b)}
         onTourProgress={(km) => {
@@ -115,6 +150,12 @@ export function MapArea({
         onZoom={(delta) => handle()?.zoomBy(delta)}
       />
       <MapLegend layers={layers} />
+      {layers.exposure && forecastLabel && (
+        <button type="button" className="pr-forecast-maplabel" onClick={onForecastOpen}>
+          Pronóstico · {forecastLabel}
+          <strong>Exposición climática estimada</strong>
+        </button>
+      )}
       <div className="pr-maptools">
         <button
           type="button"

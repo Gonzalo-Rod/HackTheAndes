@@ -1,66 +1,32 @@
 "use client";
+import { useClimateForecast } from "@/hooks/use-climate-forecast";
+import { ClimateForecastPanel } from "./ClimateForecastPanel";
+import { formatForecastWindow } from "@/domain/exposure/forecast-events";
+import type { ForecastEvent } from "@/domain/exposure/forecast-events";
 import { useModelInputs } from "@/hooks/use-model-inputs";
 import { useCatchments } from "@/hooks/use-catchments";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import { CAUSE_ORDER } from "@/components/alert-meta";
-import { CauseStatusChart } from "@/components/charts/CauseStatusChart";
-import { CumulativeChart } from "@/components/charts/CumulativeChart";
-import { ElevationProfile } from "@/components/charts/ElevationProfile";
 import { Icon } from "@/components/icons";
 import type { MapViewHandle } from "@/components/map/MapView";
-import { boundsOfPoints } from "@/domain/geo/measure";
-import { elevationAtKm, nearestPlace, placeAlertsOnCorridor } from "@/domain/road-alerts/corridor-placement";
-import {
-  causeStatusMatrix,
-  EMPTY_FILTERS,
-  facetCounts,
-  filterAlerts,
-  hasActiveFilters,
-  regionOptions,
-  sortByRecentAction,
-  summarizeAlerts,
-  toggleValue,
-  type AlertFilters,
-} from "@/domain/road-alerts/filters";
-import {
-  countBefore,
-  cumulativeByDay,
-  hiddenAtCursor,
-  nextEventTime,
-  previousEventTime,
-  timelineWindow,
-  type TimelineRange,
-} from "@/domain/road-alerts/timeline";
-import { rainAtKm, rainSegments } from "@/domain/weather/rain";
-import { countByRoad } from "@/domain/road-alerts/staleness";
-import { useAlertDetail } from "@/hooks/use-alert-detail";
+import { DashboardObservedDock } from "./DashboardObservedDock";
+import { useIncidentDashboard } from "@/hooks/use-incident-dashboard";
 import { useCorridorRain } from "@/hooks/use-corridor-rain";
 import { useCommunityIncidents } from "@/hooks/use-community-incidents";
 import { useCorridor } from "@/hooks/use-corridor";
 import { useNow } from "@/hooks/use-now";
 import { useRoadAlerts } from "@/hooks/use-road-alerts";
-import { useTimelinePlayback } from "@/hooks/use-timeline-playback";
 
 import { AlertDetail } from "./AlertDetail";
-import { EventList } from "./EventList";
 import { FilterBar } from "./FilterBar";
 import { LayersPanel } from "./LayersPanel";
 import { MapArea } from "./MapArea";
 import { Sidebar } from "./Sidebar";
 import { SourcesPanel } from "./SourcesPanel";
 import { SummaryPanel } from "./SummaryPanel";
-import { Timeline } from "./Timeline";
 import { TopBar } from "./TopBar";
-import { DEFAULT_LAYERS, type MapMode, type Scope, type SidebarTab } from "./types";
-
-const PE22 = "PE-22";
-const EMPTY_SET: ReadonlySet<string> = new Set();
-/** Padding (degrees) around a region's alerts when the map flies to them. */
-const REGION_FIT_PADDING_DEG = 0.6;
-
-const readDeepLink = () => (typeof window === "undefined" ? null : new URLSearchParams(window.location.search).get("alerta"));
+import { DEFAULT_LAYERS, type MapMode, type SidebarTab } from "./types";
 
 export function Dashboard() {
   const alertsState = useRoadAlerts();
@@ -70,113 +36,82 @@ export function Dashboard() {
   const catchments = useCatchments();
   const modelInputs = useModelInputs();
   const now = useNow();
+  const forecast = useClimateForecast(now);
   const mapRef = useRef<MapViewHandle>(null);
 
-  const [scope, setScope] = useState<Scope>("pais");
-  const [filters, setFilters] = useState<AlertFilters>(EMPTY_FILTERS);
-  const [selectedId, setSelectedId] = useState<string | null>(readDeepLink);
-  const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [layers, setLayers] = useState(DEFAULT_LAYERS);
   const [mode, setMode] = useState<MapMode>("3d");
-  const [tabChoice, setTabChoice] = useState<SidebarTab | null>(null); // null = automatic
-  const [range, setRange] = useState<TimelineRange>("30d");
-  const [cursorMs, setCursorMs] = useState<number | null>(null); // null = today
-  const [profileKm, setProfileKm] = useState<number | null>(null);
-  const [tourKm, setTourKm] = useState<number | null>(null);
-  const [detailReload, setDetailReload] = useState(0);
+  const [tabChoice, setTabChoice] = useState<SidebarTab | null>(null);
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("vista") !== "pronostico") return;
+    const timer = window.setTimeout(() => setTabChoice("pronostico"), 0);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   const corridor = corridorState.status === "ready" ? corridorState.data : null;
   const allAlerts = useMemo(() => [...(alertsState.data?.alerts ?? []), ...community.alerts], [alertsState.data, community.alerts]);
-  const scopedFilters = useMemo(() => ({ ...filters, roadCode: scope === "pe22" ? PE22 : null }), [filters, scope]);
-  const filtered = useMemo(() => sortByRecentAction(filterAlerts(allAlerts, scopedFilters)), [allAlerts, scopedFilters]);
-  const facets = useMemo(() => facetCounts(allAlerts, scopedFilters), [allAlerts, scopedFilters]);
-  const regions = useMemo(() => regionOptions(allAlerts), [allAlerts]);
-  const summary = useMemo(() => summarizeAlerts(filtered), [filtered]);
-  const matrix = useMemo(() => causeStatusMatrix(filtered, CAUSE_ORDER), [filtered]);
-  const corridorAlerts = useMemo(() => (corridor ? placeAlertsOnCorridor(filtered, corridor) : []), [filtered, corridor]);
   const rain = rainState.data;
-  const rainBands = useMemo(() => (rain && corridor ? rainSegments(rain.samples, corridor.kmTotal) : []), [rain, corridor]);
-  const timeWindow = useMemo(() => timelineWindow(filtered, range, now ?? 0), [filtered, range, now]);
-  const cumulative = useMemo(() => (now ? cumulativeByDay(filtered, timeWindow) : []), [filtered, timeWindow, now]);
-  const hiddenIds = useMemo(() => (cursorMs === null ? EMPTY_SET : hiddenAtCursor(filtered, cursorMs)), [filtered, cursorMs]);
-  const playback = useTimelinePlayback(timeWindow, cursorMs, setCursorMs);
-
-  const selected = allAlerts.find((a) => a.id === selectedId) ?? null;
-  const detail = useAlertDetail(selected?.id ?? null, detailReload);
+  const incident = useIncidentDashboard({ allAlerts, corridor, rain, now, mapRef });
+  const {
+    scope,
+    filters,
+    setSelectedId,
+    hoveredId,
+    setHoveredId,
+    profileKm,
+    tourKm,
+    setTourKm,
+    setDetailReload,
+    filtered,
+    facets,
+    regions,
+    summary,
+    corridorAlerts,
+    rainBands,
+    hiddenIds,
+    selected,
+    detail,
+    filtersActive,
+    roadCounts,
+    pe22Count,
+    corridorContext,
+    changeScope,
+    changeFilters,
+    clearFilters,
+  } = incident;
+  const { select: selectIncident } = incident;
+  const { select: selectForecast } = forecast;
   const tab: SidebarTab = tabChoice ?? (selected ? "detalle" : "capas");
-  const filtersActive = hasActiveFilters(filters);
-  const roadCounts = useMemo(() => countByRoad(allAlerts), [allAlerts]);
-  const pe22Count = allAlerts.filter((a) => a.roadCode === PE22).length;
-  const placedSelected = selected ? corridorAlerts.find((c) => c.alert.id === selected.id) : undefined;
-  const near = placedSelected && corridor ? nearestPlace(corridor.places, placedSelected.km) : null;
-  const corridorContext =
-    placedSelected && corridor && near
-      ? {
-          km: placedSelected.km,
-          elevationM: elevationAtKm(corridor.profile, placedSelected.km),
-          nearestPlace: near.place.name,
-          deltaKm: near.deltaKm,
-          rain: rain ? rainAtKm(rain.samples, placedSelected.km) : null,
-        }
-      : null;
-
   const select = useCallback(
     (id: string | null) => {
-      setSelectedId(id);
-      setTabChoice(null);
-      window.history.replaceState(null, "", id ? `?alerta=${encodeURIComponent(id)}` : window.location.pathname);
-      const alert = id ? allAlerts.find((a) => a.id === id) : undefined;
-      if (alert) mapRef.current?.flyToAlert(alert);
+      selectIncident(id);
+      selectForecast(null);
+      setTabChoice((previous) => (id === null && previous === "pronostico" ? previous : null));
     },
-    [allAlerts],
+    [selectIncident, selectForecast],
   );
-
-  // Fly to a deep-linked alert once its data has arrived (the camera ignores calls before the map loads).
-  const deepLinkHandled = useRef(readDeepLink() === null);
-  useEffect(() => {
-    if (deepLinkHandled.current || !selected) return;
-    deepLinkHandled.current = true;
-    const timer = window.setTimeout(() => mapRef.current?.flyToAlert(selected), 1200);
-    return () => window.clearTimeout(timer);
-  }, [selected]);
-
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return;
       mapRef.current?.stopTour();
-      setSelectedId(null);
+      select(null);
       setTabChoice(null);
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, []);
+  }, [select]);
 
-  const changeScope = (next: Scope) => {
-    setScope(next);
-    if (next === "pe22") mapRef.current?.flyToCorridor();
-    else mapRef.current?.flyToPeru();
-  };
-
-  const changeFilters = (next: AlertFilters) => {
-    if (next.regionKey && next.regionKey !== filters.regionKey) {
-      const points = allAlerts.filter((a) => a.regionKey === next.regionKey).map((a): [number, number] => [a.lng, a.lat]);
-      const bbox = boundsOfPoints(points, REGION_FIT_PADDING_DEG);
-      if (bbox) mapRef.current?.flyToBounds(bbox);
-    }
-    setFilters(next);
-  };
-
-  const stepTimeline = (direction: -1 | 1) => {
-    playback.stop();
-    const from = cursorMs ?? timeWindow.endMs;
-    const target = direction === 1 ? nextEventTime(filtered, from) : previousEventTime(filtered, from);
-    if (target !== null) setCursorMs(target);
-    else if (direction === 1) setCursorMs(null);
+  const focusForecast = (event: ForecastEvent) => {
+    forecast.select(event.id);
+    setSelectedId(null);
+    setTabChoice("pronostico");
+    setLayers((previous) => ({ ...previous, exposure: true }));
+    const bounds = forecast.map.bounds[event.id];
+    if (bounds) mapRef.current?.flyToBounds(bounds);
   };
 
   const loading = alertsState.status === "loading";
   const emptyReason = loading || filtered.length ? null : filtersActive ? "filters" : "none";
-  const clearFilters = () => setFilters(EMPTY_FILTERS);
 
   return (
     <div className="pr-app">
@@ -219,6 +154,14 @@ export function Dashboard() {
           rainSegments={rainBands}
           catchments={catchments.data}
           hazards={modelInputs.hazards.data}
+          forecastData={forecast.map.data}
+          forecastLabel={forecast.window ? formatForecastWindow(forecast.window) : null}
+          onForecastOpen={() => setTabChoice("pronostico")}
+          selectedForecastId={forecast.selected?.id ?? null}
+          onForecastSelect={(id) => {
+            forecast.select(id);
+            setTabChoice("pronostico");
+          }}
           highlightRegionKey={filters.regionKey}
           profileKm={tourKm ?? profileKm}
           now={now}
@@ -256,6 +199,17 @@ export function Dashboard() {
           onTabChange={setTabChoice}
           layersContent={
             <>
+              <button
+                type="button"
+                className="pr-forecast-entry"
+                onClick={() => {
+                  setTabChoice("pronostico");
+                  mapRef.current?.flyToCorridor();
+                }}
+              >
+                <strong>Posibles huaicos · estimación</strong>
+                <span>Ver fechas y franjas →</span>
+              </button>
               <SummaryPanel
                 summary={summary}
                 scope={scope}
@@ -299,6 +253,14 @@ export function Dashboard() {
               </div>
             )
           }
+          forecastContent={
+            <ClimateForecastPanel
+              forecast={forecast}
+              visible={layers.exposure}
+              onToggle={() => setLayers((previous) => ({ ...previous, exposure: !previous.exposure }))}
+              onFocus={focusForecast}
+            />
+          }
           sourcesContent={
             <SourcesPanel
               meta={alertsState.data?.meta ?? null}
@@ -310,59 +272,15 @@ export function Dashboard() {
           }
         />
 
-        <div className="pr-dock">
-          <div className="pr-dock__main">
-            <Timeline
-              alerts={filtered}
-              window={timeWindow}
-              range={range}
-              cursorMs={cursorMs}
-              playing={playback.playing}
-              earlierCount={countBefore(filtered, timeWindow.startMs)}
-              selectedId={selected?.id ?? null}
-              onRangeChange={setRange}
-              onCursorChange={(ms) => {
-                playback.stop();
-                setCursorMs(ms);
-              }}
-              onTogglePlay={playback.toggle}
-              onStep={stepTimeline}
-              onSelect={select}
-              onHover={setHoveredId}
-            />
-            <div className="pr-charts">
-              <CumulativeChart points={cumulative} window={timeWindow} cursorMs={cursorMs} onPickDay={setCursorMs} />
-              <CauseStatusChart
-                rows={matrix}
-                activeCauses={filters.causes}
-                onToggleCause={(cause) => setFilters({ ...filters, causes: toggleValue(filters.causes, cause) })}
-              />
-              <ElevationProfile
-                corridor={corridor}
-                rainBands={rainBands}
-                placed={corridorAlerts}
-                hiddenIds={hiddenIds}
-                activeKm={tourKm}
-                selectedId={selected?.id ?? null}
-                onHoverKm={setProfileKm}
-                onPickKm={(km) => mapRef.current?.flyToKm(km)}
-                onSelectAlert={select}
-              />
-            </div>
-          </div>
-          <EventList
-            alerts={filtered}
-            hiddenIds={hiddenIds}
-            selectedId={selected?.id ?? null}
-            hoveredId={hoveredId}
-            now={now}
-            loading={loading}
-            emptyReason={emptyReason}
-            onSelect={select}
-            onHover={setHoveredId}
-            onClearFilters={clearFilters}
-          />
-        </div>
+        <DashboardObservedDock
+          incident={incident}
+          corridor={corridor}
+          mapRef={mapRef}
+          now={now}
+          loading={loading}
+          emptyReason={emptyReason}
+          onSelect={select}
+        />
       </main>
     </div>
   );

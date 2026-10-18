@@ -7,7 +7,7 @@ advisories, while retaining live road conditions and WhatsApp alerts for drivers
 **Tasks 1–2 are implemented:** deterministic assessment, immutable Supabase
 persistence, a validated bundled fallback and `GET /api/exposure`. Driver subscriptions, conditional 30-minute alert evaluation and hourly weather
 refresh are implemented in the [notification integration](../integration/driver-notifications.md);
-dashboard exposure wiring and departure planning remain later integration steps.
+the [dashboard forecast view](../integration/dashboard-forecast.md) displays dated six-hour estimated items and supported map stretches. Departure planning remains a later integration step.
 Live delivery checks are recorded in the local progress log.
 
 ## Users and decisions

@@ -59,6 +59,19 @@ export function MapLegend({ layers }: { layers: LayerState }) {
               </span>
             </div>
           )}
+          {layers.exposure && (
+            <div className="pr-legend__group pr-legend__group--wide">
+              <span className="pr-legend__title">Pronóstico · ventana seleccionada</span>
+              <span className="pr-legend__row">
+                <span className="pr-legend__line pr-legend__line--forecast" />
+                Posible huaico · estimación
+              </span>
+              <span className="pr-legend__row">
+                <span className="pr-legend__line" style={{ background: "#8b8680" }} />
+                Sin evaluación (no es riesgo bajo)
+              </span>
+            </div>
+          )}
           {layers.network && layers.networkColorBy === "condition" && (
             <div className="pr-legend__group pr-legend__group--wide">
               <span className="pr-legend__title">Red nacional · conservación</span>

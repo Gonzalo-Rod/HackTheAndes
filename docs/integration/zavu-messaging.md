@@ -140,3 +140,12 @@ cutover. Keep any phone details out of logs, screenshots and committed fixtures.
 Protocol references: [Zavu webhook security](https://docs.zavu.dev/guides/receiving-messages/security),
 [Zavu sending](https://docs.zavu.dev/api-reference/send-a-message),
 [OpenAI Structured Outputs](https://developers.openai.com/api/docs/guides/structured-outputs?api-mode=responses).
+
+## Dated dashboard estimates
+
+`EXPOSICION` now links to `?vista=pronostico`, where the dashboard displays
+possible-huaico estimates in six-hour windows with approximate mapped kilometer
+ranges, rainfall, susceptibility and uncertainty. WhatsApp alert eligibility
+continues to use the 24-hour summary; the finer dashboard windows are conditions
+for attention, not predicted occurrence times. See the
+[forecast integration guide](dashboard-forecast.md).
