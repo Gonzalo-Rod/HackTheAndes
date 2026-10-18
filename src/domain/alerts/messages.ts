@@ -44,12 +44,13 @@ export function formatAlertBundle(selected: AlertCandidate[], isTest: boolean): 
   const lines = [`${isTest ? "DEMO · " : ""}PeruRoad · PE-22`];
   for (const candidate of selected.filter((c) => c.kind !== "exposure")) lines.push(shortText(candidate.text, 145));
   if (exposure.length) {
-    const locations = [...new Set(exposure.map((c) => shortText(c.locationLabel ?? alertLocation(c.startKm, c.endKm, []), 80)))];
+    const distance = (km: number) => Number(km.toFixed(1)).toString();
+    const ranges = [...new Set(exposure.map((c) => `${distance(c.startKm)}–${distance(c.endKm)}`))];
     const until = exposure
       .map((c) => c.forecastUntil)
       .filter((t): t is string => t !== undefined)
       .sort()[0];
-    lines.push(`Atención por lluvias: ${locations.join("; ")}.`);
+    lines.push(`Atención por lluvias · km aprox. del mapa: ${ranges.join(", ")} (no oficiales).`);
     if (until) lines.push(`Hasta ${peruTime(until)} (hora Perú).`);
     lines.push("Lluvia prevista en zonas propensas a huaicos o derrumbes. Es una estimación, no un evento confirmado.");
   }

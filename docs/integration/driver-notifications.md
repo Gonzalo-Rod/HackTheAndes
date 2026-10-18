@@ -37,7 +37,7 @@ remains eligible on a later evaluation. Retries reuse the delivery's provider ke
 - **Estimated climate exposure:** a fresh database assessment, supported segment,
   complete required inputs and an escalation to `priority` or `high_attention`.
   An unchanged category is silent even when a new forecast batch arrives. The
-  driver notice gives the approximate location and forecast end time in Peru time,
+  driver notice gives approximate kilometer ranges and the forecast end time in Peru time,
   with a short estimated/not-confirmed warning. `EXPOSICION` supplies rainfall, source
   times, susceptibility and experimental association details. It is not a probability.
 - **Community:** initial unconfirmed reports have confidence 0.2 and do not trigger
@@ -55,11 +55,14 @@ is no longer eligible, and expire at their source validity boundary.
 ## Short driver notices
 
 Notifications use deterministic plain Spanish, not LLM paraphrasing. One climate
-explanation covers the selected updates; repeated nearby landmark labels appear
-once. Names come only from the same geometry revision's imported catalog, within
-2 km along the road segment, and are explicitly approximate. Where no landmark
-qualifies, retain distance from the map origin with **not official kilometers**;
-never invent a town or translate an uncalibrated distance into a highway marker.
+explanation covers the selected updates. Per the participant's preference, climate
+notices use approximate kilometer ranges instead of requiring a named landmark;
+separate ranges stay separate, so unsupported gaps are never presented as assessed.
+These are distances from the mapped route's origin, labeled **km aprox. del mapa
+(no oficiales)**. Official road-kilometer calibration remains unavailable.
+Road-condition and community notices can still use nearby catalog landmarks from
+the same geometry revision, within 2 km along the segment and explicitly approximate.
+Never invent a town or translate an uncalibrated distance into a highway marker.
 Forecast validity uses `America/Lima`, without raw UTC timestamps or internal
 category names. The up-to-three-update bundle stays within 650 characters;
 `ESTADO` and `EXPOSICION` provide the detailed evidence and map links. DEMO,
@@ -69,13 +72,13 @@ The original three-segment example becomes:
 
 ```text
 DEMO · PeruRoad · PE-22
-Atención por lluvias: cerca del puente CARLOS GRAÑA; cerca del puente HUACHIPA.
+Atención por lluvias · km aprox. del mapa: 2–3, 4–5, 10–11 (no oficiales).
 Hasta 18/10, 21:00 (hora Perú).
 Lluvia prevista en zonas propensas a huaicos o derrumbes. Es una estimación, no un evento confirmado.
 Antes de salir, consulta ESTADO. EXPOSICION: detalles. BAJA: cancelar.
 ```
 
-This is a formatting example using catalog landmarks, not a new observed event.
+This is a formatting example using mapped segment ranges, not a new observed event.
 Presentation changes do not reset condition checkpoints or trigger new alerts.
 Already pending deliveries retain their original body/provider key for safe retry.
 

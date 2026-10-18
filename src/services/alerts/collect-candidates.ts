@@ -119,7 +119,6 @@ export async function collectAlertCandidates(
           ),
         ).toISOString(),
         text: "Lluvia prevista en zonas propensas a huaicos o derrumbes; estimación, no evento confirmado.",
-        locationLabel: alertLocation(segment.distanceFromOriginStartKm, segment.distanceFromOriginEndKm, landmarks),
         forecastUntil: window.validUntil,
         isTest: false,
       });

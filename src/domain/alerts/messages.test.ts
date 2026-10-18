@@ -12,30 +12,31 @@ const candidate = (overrides: Partial<AlertCandidate> = {}): AlertCandidate => (
   endKm: 3,
   expiresAt: until,
   forecastUntil: until,
-  locationLabel: "cerca del puente CARLOS GRAÑA",
   text: "Technical evidence stays in the assessment",
   isTest: false,
   ...overrides,
 });
 describe("plain Spanish driver alerts", () => {
-  it("combines repeated climate explanations and nearby labels into one short notice", () => {
+  it("combines repeated climate explanations while retaining separate approximate kilometer ranges", () => {
     const body = formatAlertBundle(
-      [
-        candidate(),
-        candidate({ key: "exposure:two", startKm: 4, endKm: 5 }),
-        candidate({ key: "exposure:three", startKm: 10, endKm: 11, locationLabel: "cerca del puente HUACHIPA" }),
-      ],
+      [candidate(), candidate({ key: "exposure:two", startKm: 4, endKm: 5 }), candidate({ key: "exposure:three", startKm: 10, endKm: 11 })],
       true,
     );
     expect(body).toContain("DEMO · PeruRoad · PE-22");
-    expect(body.match(/CARLOS GRAÑA/g)).toHaveLength(1);
-    expect(body).toContain("HUACHIPA");
+    expect(body).toContain("km aprox. del mapa: 2–3, 4–5, 10–11 (no oficiales)");
+    expect(body).not.toContain("2–11");
     expect(body.match(/Lluvia prevista/g)).toHaveLength(1);
     expect(body).toContain("Hasta 18/10, 21:00 (hora Perú)");
     expect(body).toContain("estimación, no un evento confirmado");
     expect(body).toContain("EXPOSICION: detalles. BAJA: cancelar.");
     expect(body).not.toMatch(/priority|high_attention|susceptibilidad|INGEMMET|\.\d+Z|mm\/24|Technical evidence/);
     expect(body.length).toBeLessThan(450);
+  });
+  it("shows fractional distances without requiring a named reference point or repeating a range", () => {
+    const item = candidate({ startKm: 23.4, endKm: 24.5 });
+    const body = formatAlertBundle([item, { ...item, key: "exposure:duplicate" }], false);
+    expect(body).toContain("km aprox. del mapa: 23.4–24.5 (no oficiales)");
+    expect(body.match(/23\.4–24\.5/g)).toHaveLength(1);
   });
   it("keeps each distinct source and unconfirmed report label in a mixed bundle", () => {
     const body = formatAlertBundle(
@@ -59,7 +60,8 @@ describe("plain Spanish driver alerts", () => {
           key: `exposure:${i}`,
           kind: i < climateCount ? "exposure" : "official",
           text: `SUTRAN: ${long}`,
-          locationLabel: `${i}${"Lugar ".repeat(16)}`.slice(0, 100),
+          startKm: 170.1 + i,
+          endKm: 170.9 + i,
         }),
       );
       const body = formatAlertBundle(items, true);
@@ -82,7 +84,7 @@ describe("plain Spanish driver alerts", () => {
     expect(officialAlertText("normal", "Tránsito restablecido", "cerca del peaje CORCONA")).toContain("SUTRAN: informa tránsito normal");
   });
   it("changing presentation does not retrigger an unchanged condition", () => {
-    const alert = candidate({ locationLabel: "a clearer place label", text: "shorter wording" });
+    const alert = candidate({ text: "shorter wording" });
     const plan = planAlerts(
       [alert],
       { [alert.key]: { fingerprint: alert.fingerprint, level: alert.level } },

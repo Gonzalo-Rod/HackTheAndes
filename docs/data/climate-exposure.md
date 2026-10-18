@@ -151,7 +151,7 @@ Subscriptions use a driver-confirmed stretch or route. The planned categories ar
 | Official advisory | An applicable, currently valid SENAMHI advisory with verified product identity and temporal eligibility | Attribute the advisory to SENAMHI and preserve its severity and validity. |
 | Community report | Report pipeline evidence meeting B's confidence/notification policy | Preserve `no confirmado` until independently verified; never describe it as an official event. |
 
-The proactive climate notice uses plain Spanish: approximate place, forecast
+The proactive climate notice uses plain Spanish: approximate mapped kilometer ranges, forecast
 window and an estimated/not-confirmed warning. Group repeated explanations; put
 rainfall amounts, susceptibility, source age and rule limitations in `EXPOSICION`,
 which links the dashboard. Official kilometer references must remain distinct from
