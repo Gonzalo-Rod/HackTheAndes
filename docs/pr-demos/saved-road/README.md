@@ -15,3 +15,5 @@ not the real service. Drivers use the repository's test numbers and are printed 
 
 Not shown: EXPOSICION replies (they need the exposure database) and any UI. The feature is
 WhatsApp-only, so there is no dashboard screenshot.
+
+`screenshot.png` and `demo.webm` show a terminal player replaying that exact asciicast, not a WhatsApp UI. The recording runs the real demo with `DEMO_PAUSE_MS=1800` to leave time to read each response. Output and timings come from the original process. No replies were invented, and no live WhatsApp message was sent.

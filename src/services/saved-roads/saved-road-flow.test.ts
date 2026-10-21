@@ -120,7 +120,9 @@ it("still answers, and says so, when Atomic Memory is down or slow", async () =>
   await send("GUARDAR CARRETERA PE-32");
   fixture.fail = "http_503";
   expect(await send("ESTADO")).toBe("No pude consultar tu carretera guardada; muestro la respuesta para todo el Perú.\nSUTRAN Perú");
-  expect(await send("GUARDAR CARRETERA PE-22")).toBe(SAVED_ROAD_REPLIES.saveFailed);
+  expect(await send("GUARDAR CARRETERA PE-22")).toBe(
+    "No pude confirmar que se guardó la carretera. Consulta MI CARRETERA antes de reintentar. ESTADO PE-22 sigue funcionando.",
+  );
   expect(await send("OLVIDAR CARRETERA")).toBe(SAVED_ROAD_REPLIES.forgetFailed);
   expect(await send("MI CARRETERA")).toBe(SAVED_ROAD_REPLIES.readFailed);
   fixture.fail = "timeout";
@@ -150,7 +152,9 @@ it("treats a 200 with no stored or updated IDs as unconfirmed and keeps the prev
     init?.method === "POST"
       ? new Response(JSON.stringify({ stored_memory_ids: [], updated_memory_ids: [] }), { status: 200 })
       : realFetch(input, init);
-  expect(await send("GUARDAR CARRETERA PE-32")).toBe(SAVED_ROAD_REPLIES.saveFailed);
+  expect(await send("GUARDAR CARRETERA PE-32")).toBe(
+    "No pude confirmar que se guardó la carretera. Consulta MI CARRETERA antes de reintentar. ESTADO PE-22 sigue funcionando.",
+  );
   expect(fixture.memories.map((memory) => memory.metadata.roadCode)).toEqual(["PE-22"]);
   expect(fixture.requests.some((request) => request.method === "DELETE")).toBe(false);
 });
@@ -162,7 +166,9 @@ it("keeps the previous road when the list response is malformed instead of treat
   fixture.fetch = async (input, init) =>
     init?.method === "GET" ? new Response(JSON.stringify({ results: [] }), { status: 200 }) : realFetch(input, init);
   expect(await send("OLVIDAR CARRETERA")).toBe(SAVED_ROAD_REPLIES.forgetFailed);
-  expect(await send("GUARDAR CARRETERA PE-32")).toBe(SAVED_ROAD_REPLIES.saveFailed);
+  expect(await send("GUARDAR CARRETERA PE-32")).toBe(
+    "No pude confirmar que se guardó la carretera. Consulta MI CARRETERA antes de reintentar. ESTADO PE-22 sigue funcionando.",
+  );
   expect(fixture.memories.map((memory) => memory.metadata.roadCode)).toEqual(["PE-22"]);
 });
 

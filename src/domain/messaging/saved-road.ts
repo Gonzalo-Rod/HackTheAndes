@@ -43,7 +43,7 @@ export const SAVED_ROAD_REPLIES = {
   forgotten: "Borré tu carretera guardada. ESTADO y EXPOSICION vuelven a responder para todo el Perú.",
   forgetFailed: "No pude borrar tu carretera guardada ahora; puede seguir guardada. Intenta OLVIDAR CARRETERA más tarde.",
   readFailed: "No pude consultar tu carretera guardada ahora. Intenta más tarde; no se cambió nada.",
-  saveFailed: "No pude guardar la carretera ahora. No quedó guardada; intenta más tarde. ESTADO PE-22 sigue funcionando.",
+  saveFailed: "No pude confirmar que se guardó la carretera. Consulta MI CARRETERA antes de reintentar. ESTADO PE-22 sigue funcionando.",
 } as const;
 
 export function savedReply(roadCode: string, previous: string | null): string {

@@ -10,7 +10,7 @@ No WhatsApp message is sent and no external service is called.
   [fixture store] Driver A (user_id ae241447a9a7...): PE-22
 
 === 2. A bare ESTADO now answers for the saved road ===
-{"level":"warn","ts":"2026-10-21T04:49:41.915Z","operation":"roadAlerts.current","provider":"sutran","requestId":"demo-2","result":"fallback","fallback":"snapshot","errorCode":"upstream_unavailable"}
+{"level":"warn","ts":"2026-10-21T04:53:31.401Z","operation":"roadAlerts.current","provider":"sutran","requestId":"demo-2","result":"fallback","fallback":"snapshot","errorCode":"upstream_unavailable"}
 
 > Driver A: ESTADO
   SUTRAN · datos guardados del 17/10/26, 2:53 p. m. (Lima); la fuente no respondió y pueden haber cambiado.
@@ -30,7 +30,7 @@ No WhatsApp message is sent and no external service is called.
 
 > Driver A: MI CARRETERA
   Tu carretera guardada es PE-32. ESTADO y EXPOSICION responden por ella; ESTADO PERU muestra todo el país. GUARDAR CARRETERA PE-xx la cambia y OLVIDAR CARRETERA la borra.
-{"level":"warn","ts":"2026-10-21T04:49:41.927Z","operation":"roadAlerts.current","provider":"sutran","requestId":"demo-5","result":"fallback","fallback":"snapshot","errorCode":"upstream_unavailable"}
+{"level":"warn","ts":"2026-10-21T04:53:36.819Z","operation":"roadAlerts.current","provider":"sutran","requestId":"demo-5","result":"fallback","fallback":"snapshot","errorCode":"upstream_unavailable"}
 
 > Driver A: ESTADO
   SUTRAN · datos guardados del 17/10/26, 2:53 p. m. (Lima); la fuente no respondió y pueden haber cambiado.
@@ -41,7 +41,7 @@ No WhatsApp message is sent and no external service is called.
   Respondí por tu carretera guardada PE-32. ESTADO PERU muestra todo el país; OLVIDAR CARRETERA la borra.
 
 === 4. Nationwide answer stays one command away ===
-{"level":"warn","ts":"2026-10-21T04:49:41.928Z","operation":"roadAlerts.current","provider":"sutran","requestId":"demo-6","result":"fallback","fallback":"snapshot","errorCode":"upstream_unavailable"}
+{"level":"warn","ts":"2026-10-21T04:53:38.621Z","operation":"roadAlerts.current","provider":"sutran","requestId":"demo-6","result":"fallback","fallback":"snapshot","errorCode":"upstream_unavailable"}
 
 > Driver A: ESTADO PERU
   SUTRAN · datos guardados del 17/10/26, 2:53 p. m. (Lima); la fuente no respondió y pueden haber cambiado.
@@ -66,9 +66,9 @@ No WhatsApp message is sent and no external service is called.
   [fixture store] Driver A (user_id ae241447a9a7...): PE-32
 
 === 6. Atomic Memory outage (fixture answers 503): replies degrade, nothing is claimed ===
-{"level":"warn","ts":"2026-10-21T04:49:41.929Z","operation":"atomicmemory.list","provider":"atomicmemory","requestId":"demo-9","target":"atomicmemory-fixture.invalid/v1/memories/list","durationMs":0,"attempts":1,"result":"error","errorKind":"http","status":503}
-{"level":"warn","ts":"2026-10-21T04:49:41.929Z","requestId":"demo-9","operation":"saved_road.recall","provider":"atomicmemory","result":"fallback","errorType":"UpstreamError"}
-{"level":"warn","ts":"2026-10-21T04:49:41.929Z","operation":"roadAlerts.current","provider":"sutran","requestId":"demo-9","result":"fallback","fallback":"snapshot","errorCode":"upstream_unavailable"}
+{"level":"warn","ts":"2026-10-21T04:53:44.028Z","operation":"atomicmemory.list","provider":"atomicmemory","requestId":"demo-9","target":"atomicmemory-fixture.invalid/v1/memories/list","durationMs":0,"attempts":1,"result":"error","errorKind":"http","status":503}
+{"level":"warn","ts":"2026-10-21T04:53:44.028Z","requestId":"demo-9","operation":"saved_road.recall","provider":"atomicmemory","result":"fallback","errorType":"UpstreamError"}
+{"level":"warn","ts":"2026-10-21T04:53:44.028Z","operation":"roadAlerts.current","provider":"sutran","requestId":"demo-9","result":"fallback","fallback":"snapshot","errorCode":"upstream_unavailable"}
 
 > Driver A: ESTADO
   No pude consultar tu carretera guardada; muestro la respuesta para todo el Perú.
@@ -83,13 +83,13 @@ No WhatsApp message is sent and no external service is called.
   Escribe ESTADO PE-22 (u otro código) para ver una carretera.
   La ausencia de alertas no confirma vía libre. Exposición estimada y reportes no confirmados son información separada.
   https://peruroad.invalid/
-{"level":"warn","ts":"2026-10-21T04:49:41.930Z","operation":"atomicmemory.list","provider":"atomicmemory","requestId":"demo-10","target":"atomicmemory-fixture.invalid/v1/memories/list","durationMs":0,"attempts":1,"result":"error","errorKind":"http","status":503}
-{"level":"warn","ts":"2026-10-21T04:49:41.930Z","requestId":"demo-10","operation":"saved_road.recall","provider":"atomicmemory","result":"fallback","errorType":"UpstreamError"}
+{"level":"warn","ts":"2026-10-21T04:53:45.830Z","operation":"atomicmemory.list","provider":"atomicmemory","requestId":"demo-10","target":"atomicmemory-fixture.invalid/v1/memories/list","durationMs":1,"attempts":1,"result":"error","errorKind":"http","status":503}
+{"level":"warn","ts":"2026-10-21T04:53:45.830Z","requestId":"demo-10","operation":"saved_road.recall","provider":"atomicmemory","result":"fallback","errorType":"UpstreamError"}
 
 > Driver A: MI CARRETERA
   No pude consultar tu carretera guardada ahora. Intenta más tarde; no se cambió nada.
-{"level":"warn","ts":"2026-10-21T04:49:41.930Z","operation":"atomicmemory.list","provider":"atomicmemory","requestId":"demo-11","target":"atomicmemory-fixture.invalid/v1/memories/list","durationMs":0,"attempts":1,"result":"error","errorKind":"http","status":503}
-{"level":"warn","ts":"2026-10-21T04:49:41.930Z","requestId":"demo-11","operation":"saved_road.list","provider":"atomicmemory","result":"fallback","errorType":"UpstreamError"}
+{"level":"warn","ts":"2026-10-21T04:53:47.632Z","operation":"atomicmemory.list","provider":"atomicmemory","requestId":"demo-11","target":"atomicmemory-fixture.invalid/v1/memories/list","durationMs":0,"attempts":1,"result":"error","errorKind":"http","status":503}
+{"level":"warn","ts":"2026-10-21T04:53:47.632Z","requestId":"demo-11","operation":"saved_road.list","provider":"atomicmemory","result":"fallback","errorType":"UpstreamError"}
 
 > Driver A: OLVIDAR CARRETERA
   No pude borrar tu carretera guardada ahora; puede seguir guardada. Intenta OLVIDAR CARRETERA más tarde.

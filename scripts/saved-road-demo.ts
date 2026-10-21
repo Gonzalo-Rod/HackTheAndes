@@ -39,6 +39,8 @@ const offlineSutran: RoadAlertsProvider = {
 };
 
 async function main(): Promise<void> {
+  const pauseMs = Number(process.env.DEMO_PAUSE_MS ?? "0");
+  if (!Number.isInteger(pauseMs) || pauseMs < 0 || pauseMs > 5000) throw new Error("DEMO_PAUSE_MS must be an integer from 0 to 5000");
   // Routine per-call info logs would bury the conversation; warnings and errors stay visible on stderr.
   console.info = () => undefined;
 
@@ -93,6 +95,7 @@ async function main(): Promise<void> {
       `demo-${sequence}`,
     );
     console.log(`\n> ${driver}: ${text}\n${reply.replace(/^/gm, "  ")}`);
+    if (pauseMs) await new Promise((resolve) => setTimeout(resolve, pauseMs));
   }
   function showStore(): void {
     const subjects = Object.fromEntries(Object.entries(DRIVERS).map(([name, phone]) => [memorySubject(phone, DEMO_PEPPER), name]));
