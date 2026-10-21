@@ -181,3 +181,32 @@ export function loadQatomApiConfiguration() {
   return result.data;
 }
 export type QatomApiConfiguration = ReturnType<typeof loadQatomApiConfiguration>;
+
+/** HTTPS, or plain HTTP only to a Core on this machine (Connected Local), so the key never crosses a network unencrypted. */
+function isAllowedMemoryUrl(value: string): boolean {
+  if (!URL.canParse(value)) return false;
+  const url = new URL(value);
+  // The key is sent to this origin: no embedded credentials, query or fragment that could alter the target.
+  if (url.username || url.password || url.search || url.hash) return false;
+  return url.protocol === "https:" || (url.protocol === "http:" && ["127.0.0.1", "localhost", "[::1]"].includes(url.hostname));
+}
+export type AtomicMemoryConfiguration =
+  | { kind: "disabled" }
+  /** Names of the invalid or missing variables, never their values. */
+  | { kind: "invalid"; variables: string[] }
+  | { kind: "enabled"; apiUrl: string; apiKey: string };
+
+/**
+ * Optional saved-road memory. Unlike required providers, a half or invalid configuration disables
+ * only this feature (the caller logs it): it must never stop the WhatsApp webhook from starting.
+ */
+export function loadAtomicMemoryConfiguration(): AtomicMemoryConfiguration {
+  const apiUrl = process.env.ATOMICMEMORY_API_URL || undefined;
+  const apiKey = process.env.ATOMICMEMORY_API_KEY || undefined;
+  if (!apiUrl && !apiKey) return { kind: "disabled" };
+  const result = z
+    .object({ ATOMICMEMORY_API_URL: z.url().refine(isAllowedMemoryUrl), ATOMICMEMORY_API_KEY: z.string().min(1) })
+    .safeParse({ ATOMICMEMORY_API_URL: apiUrl, ATOMICMEMORY_API_KEY: apiKey });
+  if (!result.success) return { kind: "invalid", variables: [...new Set(result.error.issues.map((issue) => issue.path.join(".")))] };
+  return { kind: "enabled", apiUrl: new URL(result.data.ATOMICMEMORY_API_URL).origin, apiKey: result.data.ATOMICMEMORY_API_KEY };
+}

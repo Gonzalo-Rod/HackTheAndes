@@ -60,6 +60,7 @@ variables for the **root `peruroad-climate` project**:
 | `OPENAI_API_KEY` | Optional intent parser; explicit commands work without it. |
 | `OPENAI_INTENT_MODEL` | Optional snapshot; defaults to `gpt-4.1-mini-2025-04-14`. |
 | `PUBLIC_APP_URL` | HTTPS dashboard origin used in replies. Defaults to the shared feature Preview; set Production's origin before activating a Production webhook. |
+| `ATOMICMEMORY_API_URL`, `ATOMICMEMORY_API_KEY` | Optional [saved road](saved-road-memory.md). Both empty disables it; a half or invalid pair disables only this feature with a startup warning. |
 | `DATABASE_URL`, `DATABASE_SSL_MODE` | Scoped server-only Postgres configuration. Required; there is no deployed in-memory completion fallback. |
 
 The existing feature Preview already had the four provider variables configured;
@@ -115,6 +116,7 @@ and safe result/error types. Synthetic tests do not count as user traction.
 | SUTRAN storage/poll unavailable | Source unavailable; no inference of a clear road. Stale polls are explicitly dated. |
 | Exposure database unavailable | Validated dated bundle with the same freshness projection. Missing/stale/unsupported exposure stays unavailable. |
 | Zavu send timeout, rate limit, rejected send or closed WhatsApp window | Safe error log and retryable webhook failure; no silent success or unapproved alternate channel. Approved-template fallback is implemented for proactive alerts; pending approval never becomes an unapproved send. |
+| Atomic Memory absent, timeout, 429/5xx or changed response | Bare `ESTADO`/`EXPOSICION` give the national answer with a note that the saved road could not be read; save/forget say nothing changed or that the road may remain saved. |
 | Database lease storage unavailable | HTTP 503 and provider redelivery; never a cross-instance memory fallback. |
 
 ## Reproduce and verify

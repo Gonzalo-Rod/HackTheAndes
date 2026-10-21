@@ -8,7 +8,13 @@ import { createVoiceInput } from "@/services/audio/voice-input";
 import { createSubscriptionRepository } from "@/db/subscriptions";
 import { createSubscriptionFlow, senderKey } from "@/services/subscriptions/subscription-flow";
 import { keyedDigest } from "@/integrations/security/contacts";
-import { loadGeometryRevision, loadOpenAiConfiguration, loadPlatformConfiguration, loadZavuConfiguration } from "@/config/env";
+import {
+  loadAtomicMemoryConfiguration,
+  loadGeometryRevision,
+  loadOpenAiConfiguration,
+  loadPlatformConfiguration,
+  loadZavuConfiguration,
+} from "@/config/env";
 import { database } from "@/db/pool";
 import { locateOnRoads } from "@/db/road-locator";
 import { loadForecastRoads } from "@/services/platform/forecast-roads";
@@ -25,6 +31,25 @@ import { createRateLimiter } from "@/db/request-limits";
 import { createReportFlow } from "@/services/reports/report-flow";
 import { createOpenAiReportExtractor } from "@/integrations/openai/report-extractor";
 import { alertPassPayments } from "@/services/subscriptions/payment-runtime";
+import { createAtomicMemoryRoadStore } from "@/integrations/atomicmemory/saved-road-store";
+import { createSavedRoadFlow } from "@/services/saved-roads/saved-road-flow";
+
+/** Saved road is optional: missing or invalid configuration disables it without blocking WhatsApp replies. */
+function savedRoadRouter(pepper: string) {
+  const memory = loadAtomicMemoryConfiguration();
+  if (memory.kind === "enabled")
+    return createSavedRoadFlow({ store: createAtomicMemoryRoadStore({ apiUrl: memory.apiUrl, apiKey: memory.apiKey }), pepper });
+  if (memory.kind === "invalid")
+    logger.warn({
+      operation: "inbound.setup",
+      provider: "atomicmemory",
+      result: "skipped",
+      reason: "saved_road_invalid_config",
+      variables: memory.variables,
+    });
+  else logger.info({ operation: "inbound.setup", provider: "atomicmemory", result: "skipped", reason: "saved_road_not_configured" });
+  return undefined;
+}
 
 export function createZavuWebhook() {
   const config = loadZavuConfiguration();
@@ -40,6 +65,7 @@ export function createZavuWebhook() {
   const limiter = createRateLimiter(database());
   const intentParser = intentConfig ? createOpenAiIntentParser(intentConfig) : null;
   const deps = {
+    savedRoads: savedRoadRouter(platform.PHONE_KEY_PEPPER),
     weekly: weeklyRuntime().commands,
     subscriptions: createSubscriptionFlow({
       repository: createSubscriptionRepository(database(), encryption),
