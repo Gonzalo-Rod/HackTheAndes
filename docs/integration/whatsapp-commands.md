@@ -19,6 +19,10 @@ voice notes cannot authorize publication, subscriptions or weekly PDFs.
 | `EXPOSICION` | Compare estimated climate exposure over the next 24 hours across every road with an estimate, most exposed first. Alias: `CLIMA`. |
 | `EXPOSICION <road>` | Estimated exposure for one registered road, e.g. `EXPOSICION PE-32`; uncovered roads list the covered ones. |
 | `EXPOSICION <place>` | Check estimated exposure near a recognized PE-22 place. `CLIMA <place>` also works. |
+| `ESTADO PERU` / `EXPOSICION PERU` | Always the nationwide answer, even with a saved road. Aliases: `TODO`, `NACIONAL`. |
+| `GUARDAR CARRETERA <road>` | Optional, typed only: save one road code so a bare `ESTADO`/`EXPOSICION` answers for it. Alias: `RECORDAR CARRETERA`. Needs Atomic Memory configured; see [saved road](saved-road-memory.md). |
+| `MI CARRETERA` | Show the saved road. |
+| `OLVIDAR CARRETERA` | Delete the saved road. Alias: `BORRAR CARRETERA`. |
 | `REPORTE <description>` | Start a community report. Alias: `REPORTAR <description>`. |
 | `CONFIRMAR <code>` | Publish the current report after reviewing its proposed location. The report remains unconfirmed by an authority. |
 | `CANCELAR` | Discard a report draft, or the route being entered if route selection is active. Alias: `CANCEL`. This does not stop an active subscription. |

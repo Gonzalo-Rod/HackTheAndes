@@ -51,6 +51,7 @@ export interface RequestOptions {
 
 type HttpMethod =
   | { method: "GET" }
+  | { method: "DELETE" }
   | { method: "POST"; body: unknown }
   | { method: "FORM"; body: FormData }
   | { method: "URLENCODED"; body: URLSearchParams };
@@ -88,7 +89,8 @@ async function readErrorBody(response: Response): Promise<unknown> {
 }
 
 function buildInit(request: HttpMethod, options: RequestOptions, signal: AbortSignal): RequestInit {
-  if (request.method === "GET") return { method: "GET", headers: options.headers, signal, cache: "no-store", redirect: options.redirect };
+  if (request.method === "GET" || request.method === "DELETE")
+    return { method: request.method, headers: options.headers, signal, cache: "no-store", redirect: options.redirect };
   if (request.method === "FORM")
     return { method: "POST", body: request.body, headers: options.headers, signal, redirect: options.redirect };
   if (request.method === "URLENCODED")
@@ -105,6 +107,7 @@ function buildInit(request: HttpMethod, options: RequestOptions, signal: AbortSi
     body: JSON.stringify(request.body),
     signal,
     cache: "no-store",
+    redirect: options.redirect,
   };
 }
 
@@ -197,6 +200,14 @@ async function requestWithRetry<T>(
 /** GET a JSON document. Throws UpstreamError after the retry budget is spent. */
 export function getJson(url: string, options: RequestOptions): Promise<unknown> {
   return requestWithRetry(url, { method: "GET" }, options, (response) => response.json() as Promise<unknown>);
+}
+
+/** DELETE a resource; DELETE is idempotent, so the normal retry budget applies. */
+export function deleteJson(url: string, options: RequestOptions): Promise<unknown> {
+  return requestWithRetry(url, { method: "DELETE" }, options, async (response) => {
+    const text = await response.text();
+    return text ? (JSON.parse(text) as unknown) : null;
+  });
 }
 
 /** GET a binary document (used by the offline data build for terrain tiles). */

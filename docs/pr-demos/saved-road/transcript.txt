@@ -1,0 +1,107 @@
+PeruRoad saved road: LOCAL FIXTURE DEMO
+Atomic Memory: in-process fixture (src/test-fixtures/atomic-memory.ts), not the real service.
+SUTRAN: disabled; ESTADO uses the bundled real snapshot via the real alerts service.
+No WhatsApp message is sent and no external service is called.
+
+=== 1. Driver A saves PE-22 (typed opt-in) ===
+
+> Driver A: GUARDAR CARRETERA PE-22
+  Guardé PE-22 como tu carretera. Ahora ESTADO y EXPOSICION responden por PE-22; ESTADO PERU muestra todo el país. Solo se guarda el código de la vía con un identificador derivado de tu número, no el número. OLVIDAR CARRETERA lo borra. No activa alertas ni rutas.
+  [fixture store] Driver A (user_id ae241447a9a7...): PE-22
+
+=== 2. A bare ESTADO now answers for the saved road ===
+{"level":"warn","ts":"2026-10-21T04:53:31.401Z","operation":"roadAlerts.current","provider":"sutran","requestId":"demo-2","result":"fallback","fallback":"snapshot","errorCode":"upstream_unavailable"}
+
+> Driver A: ESTADO
+  SUTRAN · datos guardados del 17/10/26, 2:53 p. m. (Lima); la fuente no respondió y pueden haber cambiado.
+  PE-22: 2 alertas vigentes (0 interrumpidas y 0 restringidas).
+  • Tránsito normal (km 96, Lima): Accidente KM 96
+  • Tránsito normal (km 64+800, Lima): Trabajos de mantenimiento KM 64+800
+  La ausencia de alertas no confirma vía libre. Exposición estimada y reportes no confirmados son información separada.
+  https://peruroad.invalid/?carretera=PE-22
+  
+  Respondí por tu carretera guardada PE-22. ESTADO PERU muestra todo el país; OLVIDAR CARRETERA la borra.
+
+=== 3. Correction: Driver A switches to PE-32 ===
+
+> Driver A: guardar carretera pe 32
+  Guardé PE-32 como tu carretera. Reemplaza a PE-22. Ahora ESTADO y EXPOSICION responden por PE-32; ESTADO PERU muestra todo el país. Solo se guarda el código de la vía con un identificador derivado de tu número, no el número. OLVIDAR CARRETERA lo borra. No activa alertas ni rutas.
+  [fixture store] Driver A (user_id ae241447a9a7...): PE-32
+
+> Driver A: MI CARRETERA
+  Tu carretera guardada es PE-32. ESTADO y EXPOSICION responden por ella; ESTADO PERU muestra todo el país. GUARDAR CARRETERA PE-xx la cambia y OLVIDAR CARRETERA la borra.
+{"level":"warn","ts":"2026-10-21T04:53:36.819Z","operation":"roadAlerts.current","provider":"sutran","requestId":"demo-5","result":"fallback","fallback":"snapshot","errorCode":"upstream_unavailable"}
+
+> Driver A: ESTADO
+  SUTRAN · datos guardados del 17/10/26, 2:53 p. m. (Lima); la fuente no respondió y pueden haber cambiado.
+  Sin alertas vigentes de SUTRAN en PE-32 en esta consulta.
+  La ausencia de alertas no confirma vía libre. Exposición estimada y reportes no confirmados son información separada.
+  https://peruroad.invalid/?carretera=PE-32
+  
+  Respondí por tu carretera guardada PE-32. ESTADO PERU muestra todo el país; OLVIDAR CARRETERA la borra.
+
+=== 4. Nationwide answer stays one command away ===
+{"level":"warn","ts":"2026-10-21T04:53:38.621Z","operation":"roadAlerts.current","provider":"sutran","requestId":"demo-6","result":"fallback","fallback":"snapshot","errorCode":"upstream_unavailable"}
+
+> Driver A: ESTADO PERU
+  SUTRAN · datos guardados del 17/10/26, 2:53 p. m. (Lima); la fuente no respondió y pueden haber cambiado.
+  9 alertas vigentes en el Perú: 1 interrumpida y 2 restringidas.
+  • INTERRUMPIDO (PE-20, km 04, Callao): Obras por pérdida de calzada
+  • Restringido (PE-1N, km 1281+260, Tumbes): Mantenimiento de puente tumbes KM 1281+260
+  • Restringido (PE-5ND, km 41+948 - 41+982, Amazonas): KM 41+948
+  • Tránsito normal (PE-1S, km 202+500, Ica): Choque de vehiculos KM 202+500
+  • Tránsito normal (PE-3S, km 6, Junín): Accidente KM 06
+  Carreteras con más alertas: PE-1S (2), PE-22 (2), PE-3S (2), PE-1N (1).
+  Escribe ESTADO PE-22 (u otro código) para ver una carretera.
+  La ausencia de alertas no confirma vía libre. Exposición estimada y reportes no confirmados son información separada.
+  https://peruroad.invalid/
+
+=== 5. Isolation: Driver B has no saved road ===
+
+> Driver B: MI CARRETERA
+  No tienes una carretera guardada. Escribe GUARDAR CARRETERA PE-22 para que ESTADO y EXPOSICION respondan por esa vía.
+
+> Driver B: OLVIDAR CARRETERA
+  No tienes una carretera guardada. Escribe GUARDAR CARRETERA PE-22 para que ESTADO y EXPOSICION respondan por esa vía.
+  [fixture store] Driver A (user_id ae241447a9a7...): PE-32
+
+=== 6. Atomic Memory outage (fixture answers 503): replies degrade, nothing is claimed ===
+{"level":"warn","ts":"2026-10-21T04:53:44.028Z","operation":"atomicmemory.list","provider":"atomicmemory","requestId":"demo-9","target":"atomicmemory-fixture.invalid/v1/memories/list","durationMs":0,"attempts":1,"result":"error","errorKind":"http","status":503}
+{"level":"warn","ts":"2026-10-21T04:53:44.028Z","requestId":"demo-9","operation":"saved_road.recall","provider":"atomicmemory","result":"fallback","errorType":"UpstreamError"}
+{"level":"warn","ts":"2026-10-21T04:53:44.028Z","operation":"roadAlerts.current","provider":"sutran","requestId":"demo-9","result":"fallback","fallback":"snapshot","errorCode":"upstream_unavailable"}
+
+> Driver A: ESTADO
+  No pude consultar tu carretera guardada; muestro la respuesta para todo el Perú.
+  SUTRAN · datos guardados del 17/10/26, 2:53 p. m. (Lima); la fuente no respondió y pueden haber cambiado.
+  9 alertas vigentes en el Perú: 1 interrumpida y 2 restringidas.
+  • INTERRUMPIDO (PE-20, km 04, Callao): Obras por pérdida de calzada
+  • Restringido (PE-1N, km 1281+260, Tumbes): Mantenimiento de puente tumbes KM 1281+260
+  • Restringido (PE-5ND, km 41+948 - 41+982, Amazonas): KM 41+948
+  • Tránsito normal (PE-1S, km 202+500, Ica): Choque de vehiculos KM 202+500
+  • Tránsito normal (PE-3S, km 6, Junín): Accidente KM 06
+  Carreteras con más alertas: PE-1S (2), PE-22 (2), PE-3S (2), PE-1N (1).
+  Escribe ESTADO PE-22 (u otro código) para ver una carretera.
+  La ausencia de alertas no confirma vía libre. Exposición estimada y reportes no confirmados son información separada.
+  https://peruroad.invalid/
+{"level":"warn","ts":"2026-10-21T04:53:45.830Z","operation":"atomicmemory.list","provider":"atomicmemory","requestId":"demo-10","target":"atomicmemory-fixture.invalid/v1/memories/list","durationMs":1,"attempts":1,"result":"error","errorKind":"http","status":503}
+{"level":"warn","ts":"2026-10-21T04:53:45.830Z","requestId":"demo-10","operation":"saved_road.recall","provider":"atomicmemory","result":"fallback","errorType":"UpstreamError"}
+
+> Driver A: MI CARRETERA
+  No pude consultar tu carretera guardada ahora. Intenta más tarde; no se cambió nada.
+{"level":"warn","ts":"2026-10-21T04:53:47.632Z","operation":"atomicmemory.list","provider":"atomicmemory","requestId":"demo-11","target":"atomicmemory-fixture.invalid/v1/memories/list","durationMs":0,"attempts":1,"result":"error","errorKind":"http","status":503}
+{"level":"warn","ts":"2026-10-21T04:53:47.632Z","requestId":"demo-11","operation":"saved_road.list","provider":"atomicmemory","result":"fallback","errorType":"UpstreamError"}
+
+> Driver A: OLVIDAR CARRETERA
+  No pude borrar tu carretera guardada ahora; puede seguir guardada. Intenta OLVIDAR CARRETERA más tarde.
+  [fixture store] Driver A (user_id ae241447a9a7...): PE-32
+
+=== 7. Driver A forgets the road (deletion confirmed by readback) ===
+
+> Driver A: OLVIDAR CARRETERA
+  Borré tu carretera guardada. ESTADO y EXPOSICION vuelven a responder para todo el Perú.
+  [fixture store] empty
+
+> Driver A: MI CARRETERA
+  No tienes una carretera guardada. Escribe GUARDAR CARRETERA PE-22 para que ESTADO y EXPOSICION respondan por esa vía.
+
+Fixture HTTP calls handled in-process: {"GET":13,"POST":2,"DELETE":1}

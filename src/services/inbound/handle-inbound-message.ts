@@ -6,6 +6,14 @@ import { logger } from "@/lib/logger";
 import type { RoadInformation } from "./road-information";
 import type { SubscriptionRouter, VoiceInput } from "@/contracts/notifications";
 import type { ReportRouter } from "@/contracts/reports";
+import type { SavedRoadRouter } from "@/contracts/saved-roads";
+import {
+  parseSavedRoadCommand,
+  RECALL_FAILED_NOTE,
+  recalledFooter,
+  SAVED_ROAD_REPLIES,
+  type SavedRoadCommand,
+} from "@/domain/messaging/saved-road";
 
 export const REPLIES = {
   help: HELP_REPLY,
@@ -29,7 +37,11 @@ export interface InboundDependencies {
   subscriptions?: SubscriptionRouter;
   voice?: VoiceInput;
   weekly?: import("@/contracts/weekly-pdf").WeeklyRouter;
+  /** Optional opt-in saved road (Atomic Memory); absent when the provider is not configured. */
+  savedRoads?: SavedRoadRouter;
 }
+/** Voice transcripts can query and delete, but cannot consent to storing data. */
+type MessageOrigin = "typed" | "voice";
 async function intentReply(intent: MessageIntent, information: RoadInformation, requestId: string): Promise<string> {
   switch (intent.kind) {
     case "status":
@@ -46,13 +58,42 @@ async function intentReply(intent: MessageIntent, information: RoadInformation, 
       return REPLIES.help;
   }
 }
-export async function chooseReply(message: InboundMessageData, deps: InboundDependencies, requestId: string): Promise<string> {
+/** A bare ESTADO / EXPOSICION answers for the saved road; road-specific and other intents are unchanged. */
+async function answer(intent: MessageIntent, message: InboundMessageData, deps: InboundDependencies, requestId: string): Promise<string> {
+  if ((intent.kind !== "status" && intent.kind !== "exposure") || intent.place !== null || !deps.savedRoads)
+    return intentReply(intent, deps.information, requestId);
+  const recalled = await deps.savedRoads.recall(message, requestId);
+  if (recalled.kind === "none") return intentReply(intent, deps.information, requestId);
+  if (recalled.kind === "unavailable") return `${RECALL_FAILED_NOTE}\n${await intentReply(intent, deps.information, requestId)}`;
+  const reply = await intentReply({ ...intent, place: recalled.roadCode }, deps.information, requestId);
+  return `${reply}\n\n${recalledFooter(recalled.roadCode, intent.kind)}`;
+}
+async function savedRoadReply(
+  command: SavedRoadCommand,
+  message: InboundMessageData,
+  deps: InboundDependencies,
+  requestId: string,
+  origin: MessageOrigin,
+): Promise<string> {
+  if (command.kind === "national") return intentReply({ kind: command.query, place: null }, deps.information, requestId);
+  if (!deps.savedRoads) return SAVED_ROAD_REPLIES.unavailable;
+  if (origin === "voice" && (command.kind === "save" || command.kind === "save_invalid")) return SAVED_ROAD_REPLIES.voice;
+  return deps.savedRoads.handle(command, message, requestId);
+}
+export async function chooseReply(
+  message: InboundMessageData,
+  deps: InboundDependencies,
+  requestId: string,
+  origin: MessageOrigin = "typed",
+): Promise<string> {
   if (message.messageType === "audio" && deps.voice) {
     const result = await deps.voice.convert(message, requestId);
     return result.ok
-      ? `Nota de voz interpretada. ${await chooseReply(result.message, { ...deps, voice: undefined }, requestId)}`
+      ? `Nota de voz interpretada. ${await chooseReply(result.message, { ...deps, voice: undefined }, requestId, "voice")}`
       : result.reply;
   }
+  const savedRoad = message.messageType === "text" ? parseSavedRoadCommand(message.text) : null;
+  if (savedRoad) return savedRoadReply(savedRoad, message, deps, requestId, origin);
   const weekly = await deps.weekly?.handle(message, requestId);
   if (weekly) return weekly;
   const subscription = await deps.subscriptions?.handle(message, requestId);
@@ -65,7 +106,7 @@ export async function chooseReply(message: InboundMessageData, deps: InboundDepe
         (await deps.subscriptions?.handle(message, requestId, routed.intent.kind)) ??
         intentReply(routed.intent, deps.information, requestId)
       );
-    return routed.intent ? intentReply(routed.intent, deps.information, requestId) : REPLIES.parserUnavailable;
+    return routed.intent ? answer(routed.intent, message, deps, requestId) : REPLIES.parserUnavailable;
   }
   if (message.messageType === "location") {
     const content = message.content;
@@ -77,9 +118,9 @@ export async function chooseReply(message: InboundMessageData, deps: InboundDepe
   if (message.messageType !== "text") return REPLIES.unsupported;
   if (!message.text.trim()) return REPLIES.empty;
   const command = parseCommand(message.text);
-  if (command) return intentReply(command, deps.information, requestId);
+  if (command) return answer(command, message, deps, requestId);
   const intent = await deps.intentParser?.parse(message.text, requestId);
-  return intent ? intentReply(intent, deps.information, requestId) : REPLIES.parserUnavailable;
+  return intent ? answer(intent, message, deps, requestId) : REPLIES.parserUnavailable;
 }
 export async function handleInboundMessage(message: InboundMessageData, deps: InboundDependencies, requestId: string): Promise<void> {
   await deps.subscriptions?.touch(message);
